@@ -1,0 +1,182 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://marqeta.com/schemas/cardholder.json",
+  "title": "Marqeta Cardholder",
+  "description": "A Marqeta cardholder (user) record representing an individual who holds one or more payment cards on the Marqeta platform. Cardholders can have funds loaded onto their general purpose account (GPA), be subject to KYC verification, and be organized into account holder groups for applying shared spending controls.",
+  "type": "object",
+  "required": ["token", "status", "created_time"],
+  "properties": {
+    "token": {
+      "type": "string",
+      "description": "Unique identifier for the cardholder on the Marqeta platform.",
+      "maxLength": 36
+    },
+    "first_name": {
+      "type": "string",
+      "description": "Cardholder's first name.",
+      "maxLength": 40
+    },
+    "middle_name": {
+      "type": "string",
+      "description": "Cardholder's middle name.",
+      "maxLength": 40
+    },
+    "last_name": {
+      "type": "string",
+      "description": "Cardholder's last name.",
+      "maxLength": 40
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "Cardholder's email address."
+    },
+    "phone": {
+      "type": "string",
+      "description": "Cardholder's phone number in E.164 format.",
+      "pattern": "^\\+?[1-9]\\d{1,14}$"
+    },
+    "status": {
+      "type": "string",
+      "description": "Current account status of the cardholder.",
+      "enum": ["ACTIVE", "SUSPENDED", "CLOSED", "UNVERIFIED", "LIMITED"]
+    },
+    "kyc_required": {
+      "type": "string",
+      "description": "KYC verification requirement level for this cardholder.",
+      "enum": ["NOT_REQUIRED", "CONDITIONAL", "ALWAYS"]
+    },
+    "address1": {
+      "type": "string",
+      "description": "Primary street address line.",
+      "maxLength": 255
+    },
+    "address2": {
+      "type": "string",
+      "description": "Secondary address line (apartment, suite, unit).",
+      "maxLength": 255
+    },
+    "city": {
+      "type": "string",
+      "description": "City of residence.",
+      "maxLength": 40
+    },
+    "state": {
+      "type": "string",
+      "description": "State or province of residence (two-letter abbreviation for US states).",
+      "maxLength": 32
+    },
+    "zip": {
+      "type": "string",
+      "description": "ZIP or postal code.",
+      "maxLength": 10
+    },
+    "country": {
+      "type": "string",
+      "description": "Two-letter ISO 3166-1 alpha-2 country code.",
+      "pattern": "^[A-Z]{2}$"
+    },
+    "birth_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Cardholder's date of birth (YYYY-MM-DD)."
+    },
+    "ssn": {
+      "type": "string",
+      "description": "Social Security Number (last 4 or full 9 digits). Used for KYC identity verification.",
+      "pattern": "^(\\d{4}|\\d{9})$"
+    },
+    "passport_number": {
+      "type": "string",
+      "description": "Passport number for non-US identity verification.",
+      "maxLength": 40
+    },
+    "passport_expiration_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Passport expiration date (YYYY-MM-DD)."
+    },
+    "nationality": {
+      "type": "string",
+      "description": "Cardholder's nationality (two-letter ISO country code).",
+      "pattern": "^[A-Z]{2}$"
+    },
+    "corporate_card_holder": {
+      "type": "boolean",
+      "description": "If true, this cardholder is designated as a corporate card holder."
+    },
+    "account_holder_group_token": {
+      "type": "string",
+      "description": "Token of the account holder group this cardholder belongs to.",
+      "maxLength": 36
+    },
+    "authentication": {
+      "$ref": "#/$defs/CardholderAuthentication"
+    },
+    "identifications": {
+      "type": "array",
+      "description": "List of government-issued identity documents associated with this cardholder.",
+      "items": {
+        "$ref": "#/$defs/Identification"
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Key-value pairs of custom metadata associated with this cardholder. Maximum 20 pairs, values must be strings.",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "maxProperties": 20
+    },
+    "created_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when the cardholder was created."
+    },
+    "last_modified_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when the cardholder record was last modified."
+    }
+  },
+  "$defs": {
+    "CardholderAuthentication": {
+      "type": "object",
+      "description": "Authentication configuration for this cardholder.",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Email address used for authentication notifications."
+        },
+        "last_four_digits": {
+          "type": "string",
+          "description": "Last four digits of the card used for authentication.",
+          "pattern": "^\\d{4}$"
+        }
+      }
+    },
+    "Identification": {
+      "type": "object",
+      "description": "Government-issued identification document for KYC purposes.",
+      "required": ["type", "value"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Type of identification document.",
+          "enum": ["SSN", "PASSPORT", "DRIVERS_LICENSE", "SIN", "NIN"]
+        },
+        "value": {
+          "type": "string",
+          "description": "Identification document number or value.",
+          "maxLength": 255
+        },
+        "expiration_date": {
+          "type": "string",
+          "format": "date",
+          "description": "Expiration date of the document (YYYY-MM-DD)."
+        }
+      }
+    }
+  }
+}

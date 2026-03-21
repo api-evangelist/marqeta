@@ -1,0 +1,2707 @@
+openapi: 3.1.0
+info:
+  title: Marqeta Core API
+  description: >-
+    The Marqeta Core API is a RESTful interface that enables developers to build
+    and manage card payment programs programmatically. It provides endpoints for
+    creating and managing users (cardholders) and businesses, issuing physical and
+    virtual payment cards, defining spending controls via authorization controls
+    and velocity controls, processing and retrieving transactions, managing
+    funding sources, and configuring webhooks for real-time event notifications.
+    The API supports use cases including prepaid cards, expense management, earned
+    wage access, buy now pay later programs, and credit card issuance. Authentication
+    uses HTTP Basic Auth with an application token as the username and an access
+    token as the password. All requests and responses use JSON over HTTPS.
+  version: '3.0.38'
+  contact:
+    name: Marqeta Support
+    url: https://www.marqeta.com/company/contact
+    email: support@marqeta.com
+  termsOfService: https://www.marqeta.com/api-terms
+externalDocs:
+  description: Marqeta Core API Documentation
+  url: https://www.marqeta.com/docs/core-api/introduction
+servers:
+  - url: https://sandbox-api.marqeta.com/v3
+    description: Sandbox Server
+  - url: https://api.marqeta.com/v3
+    description: Production Server
+tags:
+  - name: Users
+    description: >-
+      Create and manage cardholders (users) on the Marqeta platform. Users
+      represent the individuals who will be issued payment cards and hold
+      funding balances.
+  - name: User Transitions
+    description: >-
+      Manage state transitions for user accounts, including activation,
+      suspension, and closure of cardholder accounts.
+  - name: Businesses
+    description: >-
+      Create and manage business account holders on the Marqeta platform.
+      Businesses can hold cards and funding balances just like individual users.
+  - name: Cards
+    description: >-
+      Issue and manage physical and virtual payment cards. Cards are derived
+      from card products and inherit their spending controls and configurations.
+  - name: Card Products
+    description: >-
+      Define card product templates that control card behavior, spending
+      controls, fulfillment options, and association with funding sources.
+  - name: Card Transitions
+    description: >-
+      Manage state transitions for payment cards, including activation,
+      suspension, termination, and lost or stolen status.
+  - name: Transactions
+    description: >-
+      Retrieve and search transaction records for card activity including
+      authorizations, clearing, declines, and GPA orders.
+  - name: Account Holder Groups
+    description: >-
+      Define groups that organize users and businesses for applying shared
+      spending controls and configurations.
+  - name: Authorization Controls
+    description: >-
+      Create and manage authorization controls that restrict where and how
+      cards can be used, including merchant category and geographic limits.
+  - name: Velocity Controls
+    description: >-
+      Define velocity controls that limit spending amounts and transaction
+      counts over configurable time windows.
+  - name: Balances
+    description: >-
+      Retrieve general purpose account (GPA) balance information for users,
+      businesses, and cards.
+  - name: GPA Orders
+    description: >-
+      Create and retrieve general purpose account (GPA) funding orders to
+      load money onto cardholder accounts.
+  - name: Account Holder Funding Sources
+    description: >-
+      Manage ACH bank account funding sources attached to individual cardholders
+      and businesses for loading funds.
+  - name: Program Funding Sources
+    description: >-
+      Manage program-level funding sources used to load funds into the program
+      reserve account.
+  - name: Program Reserve
+    description: >-
+      Retrieve and manage the program reserve account balance and transactions
+      used for funding cardholder GPAs.
+  - name: Funding via ACH
+    description: >-
+      Initiate and manage ACH bank transfer funding operations for cardholder
+      and program accounts.
+  - name: KYC Verification
+    description: >-
+      Submit and retrieve Know Your Customer (KYC) verification results for
+      users and businesses on the platform.
+  - name: Webhooks
+    description: >-
+      Create, retrieve, update, and delete webhook configurations that deliver
+      real-time event notifications to your endpoint.
+  - name: Bulk Card Orders
+    description: >-
+      Submit and manage bulk physical card orders for large-volume card
+      issuance programs.
+  - name: Digital Wallets Management
+    description: >-
+      Manage digital wallet tokens and provisioning for Apple Pay, Google Pay,
+      and Samsung Pay support on issued cards.
+  - name: MCC Groups
+    description: >-
+      Create and manage merchant category code (MCC) groups used in
+      authorization controls to allow or block merchant categories.
+  - name: Merchant Groups
+    description: >-
+      Create and manage named lists of specific merchants for use in
+      authorization controls.
+  - name: Accepted Countries
+    description: >-
+      Create and manage accepted country lists that restrict card usage to
+      specific geographic regions.
+  - name: PINs
+    description: >-
+      Create and reveal card PINs for physical card activation and ATM usage.
+  - name: Fees
+    description: >-
+      Define fee configurations that can be applied to cardholder accounts
+      for service charges, monthly fees, or transaction fees.
+  - name: Real-Time Fee Groups
+    description: >-
+      Create and manage groups of fees that are applied in real time during
+      transaction authorization.
+  - name: Program Transfers
+    description: >-
+      Create and retrieve program transfer records for moving funds between
+      cardholder GPAs and the program reserve.
+  - name: Auto Reload
+    description: >-
+      Configure automatic reload rules that replenish cardholder GPA balances
+      when they fall below a defined threshold.
+  - name: Credit Accounts
+    description: >-
+      Manage credit accounts for cardholders, including account lifecycle,
+      credit limits, billing cycles, and statements.
+  - name: Payments
+    description: >-
+      Submit and manage credit account payments, including scheduled payments
+      and payment source management.
+  - name: Credit Products
+    description: >-
+      Define credit product configurations including APR, credit limits, fees,
+      and billing cycle parameters.
+  - name: Policies
+    description: >-
+      Manage policy configurations for document delivery, APR, fees, and
+      rewards associated with credit products.
+security:
+  - basicAuth: []
+paths:
+  /users:
+    get:
+      operationId: listUsers
+      summary: List users
+      description: >-
+        Returns a paginated list of all users (cardholders) associated with
+        your program. Supports filtering by first name, last name, email,
+        phone, SSN, corporate card holder status, and passport number.
+      tags:
+        - Users
+      parameters:
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/start_index'
+        - $ref: '#/components/parameters/fields'
+        - $ref: '#/components/parameters/sort_by'
+      responses:
+        '200':
+          description: A paginated list of users.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createUser
+      summary: Create a user
+      description: >-
+        Creates a new user (cardholder) on the Marqeta platform. The user
+        can then be issued payment cards and have funds loaded onto their
+        general purpose account. Required fields include first name, last name,
+        and email or phone. Optional KYC identity fields may be required
+        depending on your program configuration.
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+      responses:
+        '201':
+          description: User created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /users/{token}:
+    get:
+      operationId: getUser
+      summary: Retrieve a user
+      description: >-
+        Returns the details of a specific user identified by their token.
+        Includes personal information, account status, KYC verification
+        status, and metadata.
+      tags:
+        - Users
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - $ref: '#/components/parameters/fields'
+      responses:
+        '200':
+          description: User details retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: updateUser
+      summary: Update a user
+      description: >-
+        Updates an existing user record with new personal information,
+        address, contact details, or metadata. Only fields provided in
+        the request body are updated; omitted fields retain their current values.
+      tags:
+        - Users
+      parameters:
+        - $ref: '#/components/parameters/token'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+      responses:
+        '200':
+          description: User updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /usertransitions:
+    post:
+      operationId: createUserTransition
+      summary: Create a user transition
+      description: >-
+        Transitions a user account to a new state. Valid transitions include
+        activating, suspending, unsuspending, or closing a user account.
+        The reason code and reason description fields provide context for
+        the state change and are included in audit logs.
+      tags:
+        - User Transitions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserTransitionRequest'
+      responses:
+        '201':
+          description: User transition created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserTransitionResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /usertransitions/user/{user_token}:
+    get:
+      operationId: listUserTransitions
+      summary: List user transitions
+      description: >-
+        Returns a paginated list of all state transitions for a specific user,
+        ordered from most recent to oldest. Use this endpoint to audit the
+        complete state history of a cardholder account.
+      tags:
+        - User Transitions
+      parameters:
+        - name: user_token
+          in: path
+          required: true
+          description: Unique identifier of the user.
+          schema:
+            type: string
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/start_index'
+        - $ref: '#/components/parameters/fields'
+        - $ref: '#/components/parameters/sort_by'
+      responses:
+        '200':
+          description: A paginated list of user transitions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserTransitionListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /cards:
+    get:
+      operationId: listCards
+      summary: List cards for a user
+      description: >-
+        Returns a paginated list of cards associated with a specific user
+        or business token. Use the user_token or business_token query
+        parameter to filter results to a particular account holder.
+      tags:
+        - Cards
+      parameters:
+        - name: user_token
+          in: query
+          description: Filter cards by user token.
+          schema:
+            type: string
+        - name: business_token
+          in: query
+          description: Filter cards by business token.
+          schema:
+            type: string
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/start_index'
+        - $ref: '#/components/parameters/fields'
+        - $ref: '#/components/parameters/sort_by'
+      responses:
+        '200':
+          description: A paginated list of cards.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createCard
+      summary: Create a card
+      description: >-
+        Issues a new payment card to a user or business based on a card
+        product configuration. The card product token determines the card
+        type, network, and behavior. Cards can be virtual or physical,
+        and physical cards require a fulfillment address.
+      tags:
+        - Cards
+      parameters:
+        - name: show_cvv_number
+          in: query
+          description: >-
+            If true, the response includes the card CVV2 value. This is only
+            returned once at card creation.
+          schema:
+            type: boolean
+        - name: show_pan
+          in: query
+          description: >-
+            If true, the response includes the full 16-digit PAN. This is only
+            returned once at card creation.
+          schema:
+            type: boolean
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CardRequest'
+      responses:
+        '201':
+          description: Card issued successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /cards/{token}:
+    get:
+      operationId: getCard
+      summary: Retrieve a card
+      description: >-
+        Returns the details of a specific card identified by its token,
+        including the card product association, account holder, state,
+        expiration, and last four digits of the PAN.
+      tags:
+        - Cards
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - $ref: '#/components/parameters/fields'
+      responses:
+        '200':
+          description: Card details retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: updateCard
+      summary: Update a card
+      description: >-
+        Updates metadata or configuration fields on an existing card.
+        Card state changes should be performed using the card transitions
+        endpoint rather than this endpoint.
+      tags:
+        - Cards
+      parameters:
+        - $ref: '#/components/parameters/token'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CardUpdateRequest'
+      responses:
+        '200':
+          description: Card updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /cardtransitions:
+    post:
+      operationId: createCardTransition
+      summary: Create a card transition
+      description: >-
+        Transitions a card to a new state such as ACTIVE, SUSPENDED,
+        TERMINATED, or LOST/STOLEN. Every card begins in UNACTIVATED state
+        and must be explicitly activated. The channel and reason code fields
+        are required and indicate how and why the transition occurred.
+      tags:
+        - Card Transitions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CardTransitionRequest'
+      responses:
+        '201':
+          description: Card transition created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardTransitionResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /cardtransitions/card/{card_token}:
+    get:
+      operationId: listCardTransitions
+      summary: List card transitions
+      description: >-
+        Returns a paginated list of all state transitions for a specific card,
+        ordered from most recent to oldest. Use this endpoint to review the
+        complete lifecycle history of a payment card.
+      tags:
+        - Card Transitions
+      parameters:
+        - name: card_token
+          in: path
+          required: true
+          description: Unique identifier of the card.
+          schema:
+            type: string
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/start_index'
+        - $ref: '#/components/parameters/fields'
+        - $ref: '#/components/parameters/sort_by'
+      responses:
+        '200':
+          description: A paginated list of card transitions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardTransitionListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /cardproducts:
+    get:
+      operationId: listCardProducts
+      summary: List card products
+      description: >-
+        Returns a paginated list of all card products configured for your
+        program. Card products define the behavior, network affiliation,
+        spending controls, and fulfillment options for cards derived from them.
+      tags:
+        - Card Products
+      parameters:
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/start_index'
+        - $ref: '#/components/parameters/fields'
+        - $ref: '#/components/parameters/sort_by'
+      responses:
+        '200':
+          description: A paginated list of card products.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardProductListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createCardProduct
+      summary: Create a card product
+      description: >-
+        Creates a new card product that serves as a template for issuing
+        payment cards. The card product defines the card network, card type
+        (physical or virtual), fulfillment options, funding source, and
+        applicable controls.
+      tags:
+        - Card Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CardProductRequest'
+      responses:
+        '201':
+          description: Card product created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardProductResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /cardproducts/{token}:
+    get:
+      operationId: getCardProduct
+      summary: Retrieve a card product
+      description: >-
+        Returns the complete configuration of a specific card product,
+        including network settings, spending controls, fulfillment
+        configuration, and associated funding source.
+      tags:
+        - Card Products
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - $ref: '#/components/parameters/fields'
+      responses:
+        '200':
+          description: Card product details retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardProductResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: updateCardProduct
+      summary: Update a card product
+      description: >-
+        Updates the configuration of an existing card product. Changes
+        to a card product apply to newly issued cards; existing cards
+        retain the configuration at the time of issuance unless
+        explicitly updated.
+      tags:
+        - Card Products
+      parameters:
+        - $ref: '#/components/parameters/token'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CardProductRequest'
+      responses:
+        '200':
+          description: Card product updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardProductResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /transactions:
+    get:
+      operationId: listTransactions
+      summary: List transactions
+      description: >-
+        Returns a paginated list of transactions filtered by various criteria
+        including user token, business token, card token, type, state, and
+        date range. Transactions include authorizations, clearing events,
+        declines, balance inquiries, and GPA orders.
+      tags:
+        - Transactions
+      parameters:
+        - name: user_token
+          in: query
+          description: Filter transactions by user token.
+          schema:
+            type: string
+        - name: business_token
+          in: query
+          description: Filter transactions by business token.
+          schema:
+            type: string
+        - name: card_token
+          in: query
+          description: Filter transactions by card token.
+          schema:
+            type: string
+        - name: type
+          in: query
+          description: Filter transactions by type (e.g., authorization, clearing).
+          schema:
+            type: string
+        - name: state
+          in: query
+          description: Filter transactions by state (e.g., PENDING, COMPLETION).
+          schema:
+            type: string
+        - name: start_date
+          in: query
+          description: Return transactions on or after this date (format YYYY-MM-DD).
+          schema:
+            type: string
+            format: date
+        - name: end_date
+          in: query
+          description: Return transactions on or before this date (format YYYY-MM-DD).
+          schema:
+            type: string
+            format: date
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/start_index'
+        - $ref: '#/components/parameters/fields'
+        - $ref: '#/components/parameters/sort_by'
+      responses:
+        '200':
+          description: A paginated list of transactions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /transactions/{token}:
+    get:
+      operationId: getTransaction
+      summary: Retrieve a transaction
+      description: >-
+        Returns the full details of a specific transaction identified by
+        its token, including amount, merchant information, card details,
+        response codes, and any related transactions.
+      tags:
+        - Transactions
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - $ref: '#/components/parameters/fields'
+      responses:
+        '200':
+          description: Transaction details retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /balances/{token}:
+    get:
+      operationId: getBalance
+      summary: Retrieve GPA balance
+      description: >-
+        Returns the general purpose account (GPA) balance for a user or
+        business identified by their token. The response includes available
+        balance, cached balance, credit balance, pending credits, and
+        impacted amount.
+      tags:
+        - Balances
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - $ref: '#/components/parameters/fields'
+      responses:
+        '200':
+          description: GPA balance retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BalanceResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /gpaorders:
+    get:
+      operationId: listGpaOrders
+      summary: List GPA orders
+      description: >-
+        Returns a paginated list of GPA funding orders. GPA orders represent
+        fund loads to cardholder general purpose accounts from a funding
+        source such as a program ACH or program reserve.
+      tags:
+        - GPA Orders
+      parameters:
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/start_index'
+        - $ref: '#/components/parameters/fields'
+        - $ref: '#/components/parameters/sort_by'
+      responses:
+        '200':
+          description: A paginated list of GPA orders.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GpaOrderListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createGpaOrder
+      summary: Create a GPA order
+      description: >-
+        Creates a GPA funding order to load money onto a cardholder's
+        general purpose account. The funding source must be a program-level
+        ACH account or the program reserve. Specify the user token or
+        business token of the account to fund.
+      tags:
+        - GPA Orders
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GpaOrderRequest'
+      responses:
+        '201':
+          description: GPA order created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GpaOrderResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /gpaorders/{token}:
+    get:
+      operationId: getGpaOrder
+      summary: Retrieve a GPA order
+      description: >-
+        Returns the details of a specific GPA funding order including the
+        amount loaded, the funding source used, the target account holder,
+        and the current state of the transaction.
+      tags:
+        - GPA Orders
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - $ref: '#/components/parameters/fields'
+      responses:
+        '200':
+          description: GPA order retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GpaOrderResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /authcontrols:
+    get:
+      operationId: listAuthControls
+      summary: List authorization controls
+      description: >-
+        Returns a paginated list of authorization controls associated with
+        your program. Authorization controls restrict where cards can be
+        used based on merchant category codes, geographic regions, or
+        specific merchant identifiers.
+      tags:
+        - Authorization Controls
+      parameters:
+        - name: card_product_token
+          in: query
+          description: Filter authorization controls by card product token.
+          schema:
+            type: string
+        - name: user_token
+          in: query
+          description: Filter authorization controls by user token.
+          schema:
+            type: string
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/start_index'
+        - $ref: '#/components/parameters/fields'
+      responses:
+        '200':
+          description: A paginated list of authorization controls.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthControlListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createAuthControl
+      summary: Create an authorization control
+      description: >-
+        Creates a new authorization control for a card product or individual
+        user. Authorization controls can allow or deny transactions based on
+        MCC groups, merchant groups, merchant identifiers, or geographic
+        restrictions. Controls can be permanent or time-limited.
+      tags:
+        - Authorization Controls
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthControlRequest'
+      responses:
+        '201':
+          description: Authorization control created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthControlResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /authcontrols/{token}:
+    get:
+      operationId: getAuthControl
+      summary: Retrieve an authorization control
+      description: >-
+        Returns the full configuration of a specific authorization control
+        including its association, MCC or merchant group, geographic limits,
+        and active date range.
+      tags:
+        - Authorization Controls
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - $ref: '#/components/parameters/fields'
+      responses:
+        '200':
+          description: Authorization control retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthControlResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: updateAuthControl
+      summary: Update an authorization control
+      description: >-
+        Updates the configuration of an existing authorization control.
+        You can modify the MCC group, merchant group, geographic restriction,
+        and active date range of the control.
+      tags:
+        - Authorization Controls
+      parameters:
+        - $ref: '#/components/parameters/token'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthControlRequest'
+      responses:
+        '200':
+          description: Authorization control updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthControlResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /velocitycontrols:
+    get:
+      operationId: listVelocityControls
+      summary: List velocity controls
+      description: >-
+        Returns a paginated list of velocity controls for your program.
+        Velocity controls limit the amount and number of transactions a
+        cardholder can make within configurable time windows such as daily,
+        weekly, monthly, or lifetime.
+      tags:
+        - Velocity Controls
+      parameters:
+        - name: card_product_token
+          in: query
+          description: Filter velocity controls by card product token.
+          schema:
+            type: string
+        - name: user_token
+          in: query
+          description: Filter velocity controls by user token.
+          schema:
+            type: string
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/start_index'
+        - $ref: '#/components/parameters/fields'
+      responses:
+        '200':
+          description: A paginated list of velocity controls.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VelocityControlListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createVelocityControl
+      summary: Create a velocity control
+      description: >-
+        Creates a new velocity control for a card product or individual user.
+        Velocity controls define spending limits by amount and transaction
+        count over a defined time window. Multiple controls can be applied
+        and all must pass for a transaction to be approved.
+      tags:
+        - Velocity Controls
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VelocityControlRequest'
+      responses:
+        '201':
+          description: Velocity control created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VelocityControlResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /velocitycontrols/{token}:
+    get:
+      operationId: getVelocityControl
+      summary: Retrieve a velocity control
+      description: >-
+        Returns the configuration of a specific velocity control including
+        its association, amount limit, transaction count limit, and the
+        time window over which limits are measured.
+      tags:
+        - Velocity Controls
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - $ref: '#/components/parameters/fields'
+      responses:
+        '200':
+          description: Velocity control retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VelocityControlResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: updateVelocityControl
+      summary: Update a velocity control
+      description: >-
+        Updates the configuration of an existing velocity control. You can
+        modify the amount limit, transaction count limit, currency, and
+        the time window over which limits are measured.
+      tags:
+        - Velocity Controls
+      parameters:
+        - $ref: '#/components/parameters/token'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VelocityControlRequest'
+      responses:
+        '200':
+          description: Velocity control updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VelocityControlResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /webhooks:
+    get:
+      operationId: listWebhooks
+      summary: List webhooks
+      description: >-
+        Returns a paginated list of all webhook configurations for your
+        program. Each webhook configuration specifies a delivery endpoint
+        URL, authentication credentials, and the event types to deliver.
+      tags:
+        - Webhooks
+      parameters:
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/start_index'
+        - $ref: '#/components/parameters/fields'
+      responses:
+        '200':
+          description: A paginated list of webhook configurations.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createWebhook
+      summary: Create a webhook
+      description: >-
+        Creates a new webhook configuration to receive real-time event
+        notifications at your endpoint. Specify the destination URL,
+        basic auth credentials for your endpoint, and an array of event
+        type strings to subscribe to. Event types support wildcards
+        (e.g., transaction.* or cardtransition.*).
+      tags:
+        - Webhooks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookRequest'
+      responses:
+        '201':
+          description: Webhook configuration created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /webhooks/{token}:
+    get:
+      operationId: getWebhook
+      summary: Retrieve a webhook
+      description: >-
+        Returns the configuration of a specific webhook, including the
+        endpoint URL, active status, event subscriptions, and the
+        authentication credentials used to call your endpoint.
+      tags:
+        - Webhooks
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - $ref: '#/components/parameters/fields'
+      responses:
+        '200':
+          description: Webhook configuration retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: updateWebhook
+      summary: Update a webhook
+      description: >-
+        Updates an existing webhook configuration. You can modify the
+        endpoint URL, basic auth credentials, event subscriptions,
+        and active status of the webhook.
+      tags:
+        - Webhooks
+      parameters:
+        - $ref: '#/components/parameters/token'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookRequest'
+      responses:
+        '200':
+          description: Webhook configuration updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /webhooks/{token}/resend/{event_type}/{resource_token}:
+    post:
+      operationId: resendWebhookEvent
+      summary: Resend a webhook event
+      description: >-
+        Resends a specific webhook event notification to the configured
+        endpoint. Use this endpoint to replay a missed or failed delivery
+        by providing the event type and the resource token of the object
+        associated with the event.
+      tags:
+        - Webhooks
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - name: event_type
+          in: path
+          required: true
+          description: The event type to resend (e.g., transaction.clearing).
+          schema:
+            type: string
+        - name: resource_token
+          in: path
+          required: true
+          description: Token of the resource associated with the event.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Webhook event resent successfully.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /kyc:
+    post:
+      operationId: createKycVerification
+      summary: Create a KYC verification
+      description: >-
+        Submits a Know Your Customer (KYC) verification request for a user
+        or business. The Marqeta platform evaluates the provided identity
+        data against configured KYC rules and returns a verification result.
+      tags:
+        - KYC Verification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KycRequest'
+      responses:
+        '201':
+          description: KYC verification request submitted successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KycResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /kyc/user/{user_token}:
+    get:
+      operationId: listKycForUser
+      summary: List KYC verifications for a user
+      description: >-
+        Returns a paginated list of all KYC verification records submitted
+        for a specific user, including the verification result and
+        any failed fields.
+      tags:
+        - KYC Verification
+      parameters:
+        - name: user_token
+          in: path
+          required: true
+          description: Unique identifier of the user.
+          schema:
+            type: string
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/start_index'
+      responses:
+        '200':
+          description: A paginated list of KYC verifications.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KycListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /fundingsources/ach:
+    post:
+      operationId: createAchFundingSource
+      summary: Create an ACH funding source
+      description: >-
+        Creates an ACH bank account funding source for a specific user or
+        business. The bank account can then be used to load funds onto
+        the cardholder's GPA. You must provide the routing number, account
+        number, and account type.
+      tags:
+        - Account Holder Funding Sources
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AchFundingSourceRequest'
+      responses:
+        '201':
+          description: ACH funding source created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AchFundingSourceResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /fundingsources/ach/{funding_source_token}:
+    get:
+      operationId: getAchFundingSource
+      summary: Retrieve an ACH funding source
+      description: >-
+        Returns the details of a specific ACH funding source including the
+        routing number, last four digits of the account number, account
+        type, and verification status.
+      tags:
+        - Account Holder Funding Sources
+      parameters:
+        - name: funding_source_token
+          in: path
+          required: true
+          description: Unique identifier of the ACH funding source.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ACH funding source retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AchFundingSourceResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /fundingsources/program/ach:
+    post:
+      operationId: createProgramAchFundingSource
+      summary: Create a program ACH funding source
+      description: >-
+        Creates a program-level ACH funding source. Program funding sources
+        are used to load the program reserve account and can then be used
+        to fund cardholder GPAs via GPA orders.
+      tags:
+        - Program Funding Sources
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AchFundingSourceRequest'
+      responses:
+        '201':
+          description: Program ACH funding source created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AchFundingSourceResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /programreserve/balances:
+    get:
+      operationId: getProgramReserveBalance
+      summary: Retrieve program reserve balance
+      description: >-
+        Returns the current balance of the program reserve account. The
+        program reserve is the central funding pool from which cardholder
+        GPAs are funded via GPA orders.
+      tags:
+        - Program Reserve
+      responses:
+        '200':
+          description: Program reserve balance retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BalanceResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /businesses:
+    get:
+      operationId: listBusinesses
+      summary: List businesses
+      description: >-
+        Returns a paginated list of all business account holders associated
+        with your program. Businesses represent corporate entities that can
+        hold cards and funding balances.
+      tags:
+        - Businesses
+      parameters:
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/start_index'
+        - $ref: '#/components/parameters/fields'
+        - $ref: '#/components/parameters/sort_by'
+      responses:
+        '200':
+          description: A paginated list of businesses.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusinessListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createBusiness
+      summary: Create a business
+      description: >-
+        Creates a new business account holder on the Marqeta platform.
+        Business entities can be issued cards and have funds loaded onto
+        their general purpose account.
+      tags:
+        - Businesses
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BusinessRequest'
+      responses:
+        '201':
+          description: Business created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusinessResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /businesses/{token}:
+    get:
+      operationId: getBusiness
+      summary: Retrieve a business
+      description: >-
+        Returns the details of a specific business account holder including
+        legal name, address, tax ID, account status, and KYC verification
+        status.
+      tags:
+        - Businesses
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - $ref: '#/components/parameters/fields'
+      responses:
+        '200':
+          description: Business details retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusinessResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: updateBusiness
+      summary: Update a business
+      description: >-
+        Updates an existing business account holder record with new
+        information including legal name, address, contact details, or
+        metadata.
+      tags:
+        - Businesses
+      parameters:
+        - $ref: '#/components/parameters/token'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BusinessRequest'
+      responses:
+        '200':
+          description: Business updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusinessResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: >-
+        HTTP Basic Authentication. Use your application token as the username
+        and your access token as the password. Credentials are base64-encoded
+        in the Authorization header per RFC 7617.
+  parameters:
+    token:
+      name: token
+      in: path
+      required: true
+      description: Unique identifier of the resource.
+      schema:
+        type: string
+    count:
+      name: count
+      in: query
+      description: Number of resources to return per page. Maximum is 10.
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 10
+        default: 5
+    start_index:
+      name: start_index
+      in: query
+      description: Zero-based index of the first resource to return for pagination.
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+    fields:
+      name: fields
+      in: query
+      description: >-
+        Comma-delimited list of fields to return. If not specified, all
+        fields are returned.
+      schema:
+        type: string
+    sort_by:
+      name: sort_by
+      in: query
+      description: >-
+        Field to sort results by. Prefix with a hyphen to sort in descending
+        order (e.g., -created_time).
+      schema:
+        type: string
+  responses:
+    BadRequest:
+      description: >-
+        Bad request. The request body or query parameters contain invalid
+        values or are missing required fields.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: >-
+        Unauthorized. The provided application token and access token
+        credentials are invalid or missing.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: >-
+        Not found. The requested resource does not exist or is not
+        accessible with the provided credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    ErrorResponse:
+      type: object
+      description: Standard error response returned by the Marqeta Core API.
+      properties:
+        error_code:
+          type: string
+          description: Machine-readable error code identifying the type of error.
+        error_message:
+          type: string
+          description: Human-readable description of the error.
+    PaginatedResponse:
+      type: object
+      description: Base pagination envelope for list responses.
+      properties:
+        count:
+          type: integer
+          description: Number of resources returned in this page.
+        start_index:
+          type: integer
+          description: Zero-based index of the first resource returned.
+        end_index:
+          type: integer
+          description: Zero-based index of the last resource returned.
+        is_more:
+          type: boolean
+          description: True if additional pages of results are available.
+    Address:
+      type: object
+      description: Mailing or residential address for a user, business, or card fulfillment.
+      properties:
+        address1:
+          type: string
+          description: Primary street address line.
+        address2:
+          type: string
+          description: Secondary address line (apartment, suite, unit, etc.).
+        city:
+          type: string
+          description: City name.
+        state:
+          type: string
+          description: Two-letter US state abbreviation or non-US province/region.
+          maxLength: 32
+        postal_code:
+          type: string
+          description: ZIP or postal code.
+        country:
+          type: string
+          description: Two-letter ISO 3166-1 alpha-2 country code.
+          pattern: '^[A-Z]{2}$'
+    UserRequest:
+      type: object
+      description: >-
+        Request body for creating or updating a user (cardholder) on the
+        Marqeta platform.
+      properties:
+        token:
+          type: string
+          description: >-
+            Optional unique identifier for the user. If not provided, a token
+            is generated automatically.
+          maxLength: 36
+        first_name:
+          type: string
+          description: User's first name.
+          maxLength: 40
+        last_name:
+          type: string
+          description: User's last name.
+          maxLength: 40
+        email:
+          type: string
+          format: email
+          description: User's email address.
+        phone:
+          type: string
+          description: User's phone number in E.164 format.
+        address1:
+          type: string
+          description: Primary street address line.
+        address2:
+          type: string
+          description: Secondary address line.
+        city:
+          type: string
+          description: City name.
+        state:
+          type: string
+          description: Two-letter US state abbreviation.
+        zip:
+          type: string
+          description: US ZIP code.
+        country:
+          type: string
+          description: Two-letter ISO 3166-1 alpha-2 country code.
+        birth_date:
+          type: string
+          format: date
+          description: User's date of birth (YYYY-MM-DD).
+        ssn:
+          type: string
+          description: >-
+            User's Social Security Number (last 4 digits or full 9 digits).
+            Required for certain KYC configurations.
+          pattern: '^(\d{4}|\d{9})$'
+        corporate_card_holder:
+          type: boolean
+          description: >-
+            If true, this user is a corporate card holder. Defaults to false.
+        metadata:
+          type: object
+          description: >-
+            Key-value pairs of custom metadata to associate with the user.
+            Values must be strings. Maximum 20 key-value pairs.
+          additionalProperties:
+            type: string
+        account_holder_group_token:
+          type: string
+          description: >-
+            Token of the account holder group to associate with this user.
+    UserResponse:
+      type: object
+      description: User (cardholder) resource returned by the Marqeta Core API.
+      properties:
+        token:
+          type: string
+          description: Unique identifier of the user.
+        first_name:
+          type: string
+          description: User's first name.
+        last_name:
+          type: string
+          description: User's last name.
+        email:
+          type: string
+          description: User's email address.
+        phone:
+          type: string
+          description: User's phone number.
+        status:
+          type: string
+          description: Current account status of the user.
+          enum: [ACTIVE, SUSPENDED, CLOSED, UNVERIFIED, LIMITED]
+        kyc_required:
+          type: string
+          description: KYC verification requirement status.
+          enum: [NOT_REQUIRED, CONDITIONAL, ALWAYS]
+        created_time:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp when the user was created.
+        last_modified_time:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp when the user was last modified.
+        address1:
+          type: string
+          description: Primary street address.
+        city:
+          type: string
+          description: City name.
+        state:
+          type: string
+          description: State abbreviation.
+        zip:
+          type: string
+          description: ZIP code.
+        country:
+          type: string
+          description: Country code.
+        metadata:
+          type: object
+          description: Custom metadata associated with the user.
+          additionalProperties:
+            type: string
+    UserListResponse:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              description: Array of user records.
+              items:
+                $ref: '#/components/schemas/UserResponse'
+    UserTransitionRequest:
+      type: object
+      description: Request body for creating a user state transition.
+      required:
+        - status
+        - reason_code
+        - channel
+        - user_token
+      properties:
+        token:
+          type: string
+          description: Optional unique identifier for this transition record.
+        status:
+          type: string
+          description: Target status for the user account.
+          enum: [ACTIVE, SUSPENDED, CLOSED, UNVERIFIED, LIMITED]
+        reason_code:
+          type: string
+          description: >-
+            Code indicating the reason for the transition. See Marqeta
+            documentation for the list of valid reason codes.
+        reason:
+          type: string
+          description: Human-readable description of the reason for the transition.
+          maxLength: 255
+        channel:
+          type: string
+          description: Channel through which the transition was initiated.
+          enum: [API, IVR, FRAUD, ADMIN, SYSTEM]
+        user_token:
+          type: string
+          description: Token of the user to transition.
+    UserTransitionResponse:
+      type: object
+      description: User transition record returned by the Marqeta Core API.
+      properties:
+        token:
+          type: string
+          description: Unique identifier of this transition record.
+        status:
+          type: string
+          description: New status applied to the user.
+        reason_code:
+          type: string
+          description: Reason code for the transition.
+        reason:
+          type: string
+          description: Human-readable reason for the transition.
+        channel:
+          type: string
+          description: Channel through which the transition occurred.
+        created_time:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp when the transition was created.
+        user_token:
+          type: string
+          description: Token of the user that was transitioned.
+    UserTransitionListResponse:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              description: Array of user transition records.
+              items:
+                $ref: '#/components/schemas/UserTransitionResponse'
+    CardRequest:
+      type: object
+      description: Request body for issuing a new payment card.
+      required:
+        - card_product_token
+        - user_token
+      properties:
+        token:
+          type: string
+          description: Optional unique identifier for the card.
+          maxLength: 36
+        card_product_token:
+          type: string
+          description: Token of the card product to derive the card from.
+        user_token:
+          type: string
+          description: Token of the user to issue the card to.
+        fulfillment:
+          type: object
+          description: Fulfillment address for physical card delivery.
+          properties:
+            shipping:
+              type: object
+              description: Shipping address and method for physical card delivery.
+              properties:
+                method:
+                  type: string
+                  description: Shipping method for the card.
+                  enum: [LOCAL_MAIL, GROUND, TWO_DAY, OVERNIGHT]
+                recipient_address:
+                  $ref: '#/components/schemas/Address'
+        metadata:
+          type: object
+          description: Custom metadata to associate with the card.
+          additionalProperties:
+            type: string
+    CardUpdateRequest:
+      type: object
+      description: Request body for updating a card's metadata or configuration.
+      properties:
+        metadata:
+          type: object
+          description: Updated custom metadata to associate with the card.
+          additionalProperties:
+            type: string
+    CardResponse:
+      type: object
+      description: Payment card resource returned by the Marqeta Core API.
+      properties:
+        token:
+          type: string
+          description: Unique identifier of the card.
+        card_product_token:
+          type: string
+          description: Token of the card product this card is derived from.
+        user_token:
+          type: string
+          description: Token of the user this card belongs to.
+        last_four:
+          type: string
+          description: Last four digits of the card PAN.
+          pattern: '^\d{4}$'
+        pan:
+          type: string
+          description: Full 16-digit PAN (only returned at card creation if show_pan=true).
+        cvv_number:
+          type: string
+          description: Card CVV2 value (only returned at card creation if show_cvv_number=true).
+        expiration:
+          type: string
+          description: Card expiration date in MMYY format.
+          pattern: '^\d{4}$'
+        expiration_time:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp of card expiration.
+        state:
+          type: string
+          description: Current state of the card.
+          enum: [ACTIVE, SUSPENDED, TERMINATED, UNACTIVATED, LIMITED, UNSUPPORTED]
+        state_reason:
+          type: string
+          description: Reason for the current state.
+        fulfillment_status:
+          type: string
+          description: Physical card fulfillment status.
+          enum: [ISSUED, ORDERED, REORDERED, REJECTED, SHIPPED, DELIVERED, DIGITALLY_PRESENTED]
+        created_time:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp when the card was created.
+        last_modified_time:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp when the card was last modified.
+        metadata:
+          type: object
+          description: Custom metadata associated with the card.
+          additionalProperties:
+            type: string
+    CardListResponse:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              description: Array of card records.
+              items:
+                $ref: '#/components/schemas/CardResponse'
+    CardTransitionRequest:
+      type: object
+      description: Request body for transitioning a card to a new state.
+      required:
+        - card_token
+        - state
+        - reason_code
+        - channel
+      properties:
+        token:
+          type: string
+          description: Optional unique identifier for the transition record.
+        card_token:
+          type: string
+          description: Token of the card to transition.
+        state:
+          type: string
+          description: Target state for the card.
+          enum: [ACTIVE, SUSPENDED, TERMINATED, UNSUPPORTED]
+        reason_code:
+          type: string
+          description: Code indicating the reason for the transition.
+        reason:
+          type: string
+          description: Human-readable description of the reason.
+          maxLength: 255
+        channel:
+          type: string
+          description: Channel through which the transition was initiated.
+          enum: [API, IVR, FRAUD, ADMIN, SYSTEM, AUTOMATED, CARDHOLDER]
+    CardTransitionResponse:
+      type: object
+      description: Card transition record returned by the Marqeta Core API.
+      properties:
+        token:
+          type: string
+          description: Unique identifier of the transition record.
+        card_token:
+          type: string
+          description: Token of the card that was transitioned.
+        state:
+          type: string
+          description: New state applied to the card.
+        reason_code:
+          type: string
+          description: Reason code for the transition.
+        reason:
+          type: string
+          description: Human-readable reason for the transition.
+        channel:
+          type: string
+          description: Channel through which the transition occurred.
+        created_time:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp when the transition was created.
+    CardTransitionListResponse:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              description: Array of card transition records.
+              items:
+                $ref: '#/components/schemas/CardTransitionResponse'
+    CardProductRequest:
+      type: object
+      description: Request body for creating or updating a card product.
+      required:
+        - name
+        - start_date
+        - config
+      properties:
+        token:
+          type: string
+          description: Optional unique identifier for the card product.
+          maxLength: 36
+        name:
+          type: string
+          description: Name of the card product.
+          maxLength: 40
+        start_date:
+          type: string
+          format: date
+          description: Date on which the card product becomes active (YYYY-MM-DD).
+        end_date:
+          type: string
+          format: date
+          description: Optional date on which the card product expires (YYYY-MM-DD).
+        config:
+          type: object
+          description: Configuration object defining card behavior and controls.
+          properties:
+            fulfillment:
+              type: object
+              description: Physical card fulfillment settings.
+              properties:
+                payment_instrument:
+                  type: string
+                  description: Card form factor.
+                  enum: [PHYSICAL_MSR, PHYSICAL_ICC, PHYSICAL_CONTACTLESS, PHYSICAL_COMBO, VIRTUAL_PAN]
+            poi:
+              type: object
+              description: Point of interaction settings for online and POS usage.
+            jit_funding:
+              type: object
+              description: Just-in-time funding configuration.
+    CardProductResponse:
+      type: object
+      description: Card product resource returned by the Marqeta Core API.
+      properties:
+        token:
+          type: string
+          description: Unique identifier of the card product.
+        name:
+          type: string
+          description: Name of the card product.
+        active:
+          type: boolean
+          description: Whether the card product is currently active.
+        start_date:
+          type: string
+          format: date
+          description: Date on which the card product became active.
+        end_date:
+          type: string
+          format: date
+          description: Date on which the card product expires, if set.
+        created_time:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp when the card product was created.
+        last_modified_time:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp when the card product was last modified.
+    CardProductListResponse:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              description: Array of card product records.
+              items:
+                $ref: '#/components/schemas/CardProductResponse'
+    TransactionResponse:
+      type: object
+      description: Transaction record returned by the Marqeta Core API.
+      properties:
+        token:
+          type: string
+          description: Unique identifier of the transaction.
+        type:
+          type: string
+          description: >-
+            Transaction type describing the event (e.g., authorization,
+            authorization.clearing, pindebit, refund).
+        state:
+          type: string
+          description: Current state of the transaction.
+          enum: [PENDING, COMPLETION, DECLINED, ERROR, ALL, VOID]
+        user_token:
+          type: string
+          description: Token of the user associated with this transaction.
+        card_token:
+          type: string
+          description: Token of the card used in this transaction.
+        amount:
+          type: number
+          format: double
+          description: Transaction amount in the currency specified.
+        currency_code:
+          type: string
+          description: ISO 4217 three-letter currency code.
+          pattern: '^[A-Z]{3}$'
+        card_acceptor:
+          type: object
+          description: Merchant or card acceptor information.
+          properties:
+            mid:
+              type: string
+              description: Merchant identifier.
+            mcc:
+              type: string
+              description: Merchant category code.
+            name:
+              type: string
+              description: Merchant name.
+            city:
+              type: string
+              description: Merchant city.
+            state:
+              type: string
+              description: Merchant state.
+            country:
+              type: string
+              description: Merchant country code.
+        response:
+          type: object
+          description: Authorization response from Marqeta or the issuer.
+          properties:
+            code:
+              type: string
+              description: Response code (00 = approved).
+            memo:
+              type: string
+              description: Human-readable response message.
+        gpa:
+          type: object
+          description: GPA balance impact of the transaction.
+          properties:
+            ledger_balance:
+              type: number
+              description: Ledger balance after the transaction.
+            available_balance:
+              type: number
+              description: Available balance after the transaction.
+            credit_balance:
+              type: number
+              description: Credit balance after the transaction.
+        created_time:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp when the transaction was created.
+        user_transaction_time:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp of the transaction as reported by the card network.
+    TransactionListResponse:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              description: Array of transaction records.
+              items:
+                $ref: '#/components/schemas/TransactionResponse'
+    BalanceResponse:
+      type: object
+      description: General purpose account (GPA) balance response.
+      properties:
+        gpa:
+          type: object
+          description: GPA balance details for the account holder.
+          properties:
+            currency_code:
+              type: string
+              description: ISO 4217 currency code for this balance.
+            ledger_balance:
+              type: number
+              description: Total ledger balance including pending transactions.
+            available_balance:
+              type: number
+              description: Available balance that can be spent.
+            credit_balance:
+              type: number
+              description: Current credit balance.
+            pending_credits:
+              type: number
+              description: Pending credits that have not yet settled.
+            impacted_amount:
+              type: number
+              description: Amount impacted by transactions currently in flight.
+        links:
+          type: array
+          description: Related resources associated with this balance.
+          items:
+            type: object
+    GpaOrderRequest:
+      type: object
+      description: Request body for creating a GPA funding order.
+      required:
+        - amount
+        - currency_code
+        - funding_source_token
+        - user_token
+      properties:
+        token:
+          type: string
+          description: Optional unique identifier for the GPA order.
+        user_token:
+          type: string
+          description: Token of the user to receive the funds.
+        business_token:
+          type: string
+          description: Token of the business to receive the funds (instead of user_token).
+        amount:
+          type: number
+          format: double
+          description: Amount to load onto the cardholder GPA.
+          minimum: 0.01
+        currency_code:
+          type: string
+          description: ISO 4217 three-letter currency code.
+          pattern: '^[A-Z]{3}$'
+        funding_source_token:
+          type: string
+          description: Token of the funding source to draw from.
+        memo:
+          type: string
+          description: Optional description or memo for this order.
+          maxLength: 99
+        metadata:
+          type: object
+          description: Custom metadata for the GPA order.
+          additionalProperties:
+            type: string
+    GpaOrderResponse:
+      type: object
+      description: GPA order record returned by the Marqeta Core API.
+      properties:
+        token:
+          type: string
+          description: Unique identifier of the GPA order.
+        amount:
+          type: number
+          description: Amount loaded.
+        currency_code:
+          type: string
+          description: Currency code of the loaded amount.
+        state:
+          type: string
+          description: Current state of the GPA order.
+          enum: [PENDING, COMPLETION, DECLINED, ERROR, VOID]
+        user_token:
+          type: string
+          description: Token of the user that received the funds.
+        funding_source_token:
+          type: string
+          description: Token of the funding source used.
+        created_time:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp when the order was created.
+    GpaOrderListResponse:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              description: Array of GPA order records.
+              items:
+                $ref: '#/components/schemas/GpaOrderResponse'
+    AuthControlRequest:
+      type: object
+      description: Request body for creating or updating an authorization control.
+      required:
+        - name
+        - association
+      properties:
+        token:
+          type: string
+          description: Optional unique identifier for the authorization control.
+        name:
+          type: string
+          description: Name of the authorization control.
+          maxLength: 40
+        association:
+          type: object
+          description: Association defining what the control applies to.
+          properties:
+            card_product_token:
+              type: string
+              description: Apply the control to all cards from this card product.
+            user_token:
+              type: string
+              description: Apply the control to a specific user's cards.
+        merchant_scope:
+          type: object
+          description: Merchant scope defining where the control applies.
+          properties:
+            mcc:
+              type: string
+              description: Specific merchant category code to restrict.
+            mcc_group:
+              type: string
+              description: Token of an MCC group to restrict.
+            mid:
+              type: string
+              description: Specific merchant identifier to restrict.
+        active:
+          type: boolean
+          description: Whether the control is active. Defaults to true.
+        start_time:
+          type: string
+          format: date-time
+          description: ISO 8601 date-time when the control becomes active.
+        end_time:
+          type: string
+          format: date-time
+          description: ISO 8601 date-time when the control expires.
+    AuthControlResponse:
+      type: object
+      description: Authorization control resource returned by the Marqeta Core API.
+      properties:
+        token:
+          type: string
+          description: Unique identifier of the authorization control.
+        name:
+          type: string
+          description: Name of the authorization control.
+        active:
+          type: boolean
+          description: Whether the control is currently active.
+        created_time:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp when the control was created.
+        last_modified_time:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp when the control was last modified.
+    AuthControlListResponse:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              description: Array of authorization control records.
+              items:
+                $ref: '#/components/schemas/AuthControlResponse'
+    VelocityControlRequest:
+      type: object
+      description: Request body for creating or updating a velocity control.
+      required:
+        - name
+        - association
+        - velocity_window
+      properties:
+        token:
+          type: string
+          description: Optional unique identifier for the velocity control.
+        name:
+          type: string
+          description: Name of the velocity control.
+          maxLength: 40
+        association:
+          type: object
+          description: Association defining what the control applies to.
+          properties:
+            card_product_token:
+              type: string
+              description: Apply the control to cards from this card product.
+            user_token:
+              type: string
+              description: Apply the control to a specific user's cards.
+        velocity_window:
+          type: string
+          description: Time window over which the velocity limits are measured.
+          enum: [DAY, WEEK, MONTH, LIFETIME, TRANSACTION, HOUR]
+        amount_limit:
+          type: number
+          description: Maximum total spend amount within the velocity window.
+          minimum: 0
+        approvals_only:
+          type: boolean
+          description: >-
+            If true, only approved transactions count toward the velocity
+            limit. Defaults to false.
+        include_purchases:
+          type: boolean
+          description: Include purchase transactions in velocity calculations.
+        include_withdrawals:
+          type: boolean
+          description: Include ATM withdrawal transactions in velocity calculations.
+        include_transfers:
+          type: boolean
+          description: Include transfer transactions in velocity calculations.
+        include_cashback:
+          type: boolean
+          description: Include cashback transactions in velocity calculations.
+        currency_code:
+          type: string
+          description: ISO 4217 currency code for the amount limit.
+        usage_limit:
+          type: integer
+          description: Maximum number of transactions within the velocity window.
+          minimum: 0
+    VelocityControlResponse:
+      type: object
+      description: Velocity control resource returned by the Marqeta Core API.
+      properties:
+        token:
+          type: string
+          description: Unique identifier of the velocity control.
+        name:
+          type: string
+          description: Name of the velocity control.
+        velocity_window:
+          type: string
+          description: Time window for the velocity limits.
+        amount_limit:
+          type: number
+          description: Maximum spend amount within the velocity window.
+        usage_limit:
+          type: integer
+          description: Maximum number of transactions within the velocity window.
+        active:
+          type: boolean
+          description: Whether the control is currently active.
+        created_time:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp when the control was created.
+        last_modified_time:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp when the control was last modified.
+    VelocityControlListResponse:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              description: Array of velocity control records.
+              items:
+                $ref: '#/components/schemas/VelocityControlResponse'
+    WebhookRequest:
+      type: object
+      description: Request body for creating or updating a webhook configuration.
+      required:
+        - name
+        - config
+        - events
+      properties:
+        token:
+          type: string
+          description: Optional unique identifier for the webhook.
+        name:
+          type: string
+          description: Descriptive name for the webhook configuration.
+          maxLength: 40
+        active:
+          type: boolean
+          description: Whether the webhook is active and delivering events.
+          default: true
+        config:
+          type: object
+          description: Endpoint configuration for the webhook.
+          required:
+            - url
+          properties:
+            url:
+              type: string
+              format: uri
+              description: HTTPS URL where webhook events will be delivered via POST.
+            secret:
+              type: string
+              description: Shared secret for HMAC signature validation (if configured).
+            basic_auth_username:
+              type: string
+              description: Username for Basic Auth on the webhook endpoint.
+            basic_auth_password:
+              type: string
+              description: Password for Basic Auth on the webhook endpoint.
+        events:
+          type: array
+          description: >-
+            Array of event type strings to subscribe to. Supports single
+            event types (e.g., transaction.authorization) and wildcard groups
+            (e.g., transaction.* or cardtransition.*).
+          items:
+            type: string
+    WebhookResponse:
+      type: object
+      description: Webhook configuration resource returned by the Marqeta Core API.
+      properties:
+        token:
+          type: string
+          description: Unique identifier of the webhook configuration.
+        name:
+          type: string
+          description: Name of the webhook.
+        active:
+          type: boolean
+          description: Whether the webhook is active.
+        config:
+          type: object
+          description: Endpoint configuration.
+          properties:
+            url:
+              type: string
+              description: Destination URL for webhook events.
+            basic_auth_username:
+              type: string
+              description: Username for Basic Auth on the endpoint.
+        events:
+          type: array
+          description: Event types subscribed to.
+          items:
+            type: string
+        created_time:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp when the webhook was created.
+        last_modified_time:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp when the webhook was last modified.
+    WebhookListResponse:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              description: Array of webhook configuration records.
+              items:
+                $ref: '#/components/schemas/WebhookResponse'
+    KycRequest:
+      type: object
+      description: Request body for submitting a KYC verification.
+      required:
+        - user_token
+      properties:
+        token:
+          type: string
+          description: Optional unique identifier for the KYC record.
+        user_token:
+          type: string
+          description: Token of the user to verify.
+        manual_override:
+          type: boolean
+          description: >-
+            If true, manually override the KYC result to PASSED without
+            running identity checks. Requires elevated permissions.
+    KycResponse:
+      type: object
+      description: KYC verification record returned by the Marqeta Core API.
+      properties:
+        token:
+          type: string
+          description: Unique identifier of the KYC record.
+        user_token:
+          type: string
+          description: Token of the user that was verified.
+        result:
+          type: object
+          description: KYC verification result.
+          properties:
+            status:
+              type: string
+              description: Overall KYC verification status.
+              enum: [PASSED, FAILED, PENDING]
+            codes:
+              type: array
+              description: List of result codes from identity checks.
+              items:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: Result code identifier.
+                  description:
+                    type: string
+                    description: Human-readable description of the result.
+        created_time:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp when the KYC verification was submitted.
+    KycListResponse:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              description: Array of KYC verification records.
+              items:
+                $ref: '#/components/schemas/KycResponse'
+    AchFundingSourceRequest:
+      type: object
+      description: Request body for creating an ACH funding source.
+      required:
+        - account_number
+        - routing_number
+        - account_type
+        - name_on_account
+      properties:
+        token:
+          type: string
+          description: Optional unique identifier for the funding source.
+        account_number:
+          type: string
+          description: Bank account number.
+          pattern: '^\d{4,17}$'
+        routing_number:
+          type: string
+          description: ABA routing number for the bank.
+          pattern: '^\d{9}$'
+        account_type:
+          type: string
+          description: Type of bank account.
+          enum: [checking, savings]
+        name_on_account:
+          type: string
+          description: Name of the account holder as it appears at the bank.
+          maxLength: 40
+        user_token:
+          type: string
+          description: Token of the user to associate this funding source with.
+        business_token:
+          type: string
+          description: Token of the business to associate this funding source with.
+        is_default_account:
+          type: boolean
+          description: Whether this is the default funding source for the account holder.
+    AchFundingSourceResponse:
+      type: object
+      description: ACH funding source resource returned by the Marqeta Core API.
+      properties:
+        token:
+          type: string
+          description: Unique identifier of the funding source.
+        account_suffix:
+          type: string
+          description: Last four digits of the bank account number.
+        routing_number:
+          type: string
+          description: ABA routing number.
+        account_type:
+          type: string
+          description: Type of bank account (checking or savings).
+        name_on_account:
+          type: string
+          description: Name on the bank account.
+        verification_status:
+          type: string
+          description: Verification status of the ACH account.
+          enum: [ACH_PRE_NOTE_INITIATED, ACH_PRE_NOTE_SENT, ACH_PRE_NOTE_VERIFIED, ACH_PRE_NOTE_FAILED, UNVERIFIED, VERIFIED]
+        is_default_account:
+          type: boolean
+          description: Whether this is the default funding source.
+        created_time:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp when the funding source was created.
+        last_modified_time:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp when the funding source was last modified.
+    BusinessRequest:
+      type: object
+      description: Request body for creating or updating a business account holder.
+      properties:
+        token:
+          type: string
+          description: Optional unique identifier for the business.
+        business_name_legal:
+          type: string
+          description: Legal name of the business entity.
+          maxLength: 40
+        business_name_dba:
+          type: string
+          description: Doing-business-as name of the business.
+          maxLength: 40
+        office_location:
+          $ref: '#/components/schemas/Address'
+        business_type:
+          type: string
+          description: Type of business entity.
+          enum: [LLC, CORPORATION, PARTNERSHIP, SOLE_PROPRIETORSHIP, OTHER]
+        tax_id_number:
+          type: string
+          description: Federal Employer Identification Number (EIN) for the business.
+          pattern: '^\d{9}$'
+        phone:
+          type: string
+          description: Business phone number.
+        email:
+          type: string
+          format: email
+          description: Business email address.
+        metadata:
+          type: object
+          description: Custom metadata to associate with the business.
+          additionalProperties:
+            type: string
+    BusinessResponse:
+      type: object
+      description: Business account holder resource returned by the Marqeta Core API.
+      properties:
+        token:
+          type: string
+          description: Unique identifier of the business.
+        business_name_legal:
+          type: string
+          description: Legal name of the business.
+        business_name_dba:
+          type: string
+          description: DBA name of the business.
+        status:
+          type: string
+          description: Current account status of the business.
+          enum: [ACTIVE, SUSPENDED, CLOSED, UNVERIFIED, LIMITED]
+        created_time:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp when the business was created.
+        last_modified_time:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp when the business was last modified.
+        metadata:
+          type: object
+          description: Custom metadata associated with the business.
+          additionalProperties:
+            type: string
+    BusinessListResponse:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              description: Array of business records.
+              items:
+                $ref: '#/components/schemas/BusinessResponse'

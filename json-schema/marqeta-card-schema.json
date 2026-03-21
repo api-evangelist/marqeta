@@ -1,0 +1,254 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://marqeta.com/schemas/card.json",
+  "title": "Marqeta Card",
+  "description": "A Marqeta payment card resource. Cards are derived from card products and represent individual physical or virtual payment instruments issued to a cardholder. Each card belongs to a card product that defines its behavior, network affiliation, spending controls, and fulfillment options. Cards have a lifecycle managed through card transitions (UNACTIVATED -> ACTIVE -> SUSPENDED | TERMINATED).",
+  "type": "object",
+  "required": ["token", "card_product_token", "user_token", "state", "created_time"],
+  "properties": {
+    "token": {
+      "type": "string",
+      "description": "Unique identifier for the card on the Marqeta platform.",
+      "maxLength": 36
+    },
+    "card_product_token": {
+      "type": "string",
+      "description": "Token of the card product this card was derived from. The card product controls the card's behavior and spending controls.",
+      "maxLength": 36
+    },
+    "user_token": {
+      "type": "string",
+      "description": "Token of the cardholder (user) who owns this card.",
+      "maxLength": 36
+    },
+    "business_token": {
+      "type": "string",
+      "description": "Token of the business account holder who owns this card, if applicable.",
+      "maxLength": 36
+    },
+    "last_four": {
+      "type": "string",
+      "description": "Last four digits of the card's primary account number (PAN).",
+      "pattern": "^\\d{4}$"
+    },
+    "pan": {
+      "type": "string",
+      "description": "Full 16-digit primary account number. Only returned at card creation when show_pan=true is specified.",
+      "pattern": "^\\d{16}$"
+    },
+    "cvv_number": {
+      "type": "string",
+      "description": "Card verification value (CVV2). Only returned at card creation when show_cvv_number=true is specified.",
+      "pattern": "^\\d{3}$"
+    },
+    "expiration": {
+      "type": "string",
+      "description": "Card expiration date in MMYY format.",
+      "pattern": "^\\d{4}$"
+    },
+    "expiration_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp representing the exact card expiration date and time."
+    },
+    "state": {
+      "type": "string",
+      "description": "Current state in the card lifecycle.",
+      "enum": ["ACTIVE", "SUSPENDED", "TERMINATED", "UNACTIVATED", "LIMITED", "UNSUPPORTED"]
+    },
+    "state_reason": {
+      "type": "string",
+      "description": "Human-readable reason for the current card state.",
+      "maxLength": 255
+    },
+    "fulfillment_status": {
+      "type": "string",
+      "description": "Current fulfillment status for physical cards tracking production and delivery progress.",
+      "enum": ["ISSUED", "ORDERED", "REORDERED", "REJECTED", "SHIPPED", "DELIVERED", "DIGITALLY_PRESENTED"]
+    },
+    "fulfillment": {
+      "$ref": "#/$defs/CardFulfillment"
+    },
+    "pin_is_set": {
+      "type": "boolean",
+      "description": "Whether a PIN has been set for this card."
+    },
+    "translate_pin_from_control_token": {
+      "type": "string",
+      "description": "Control token for PIN translation, if applicable."
+    },
+    "instrument_type": {
+      "type": "string",
+      "description": "Physical form factor of the card.",
+      "enum": ["PHYSICAL_MSR", "PHYSICAL_ICC", "PHYSICAL_CONTACTLESS", "PHYSICAL_COMBO", "VIRTUAL_PAN"]
+    },
+    "expedite": {
+      "type": "boolean",
+      "description": "Whether expedited fulfillment was requested for this physical card."
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Key-value pairs of custom metadata associated with this card. Maximum 20 pairs.",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "maxProperties": 20
+    },
+    "created_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when the card was created."
+    },
+    "last_modified_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when the card record was last modified."
+    }
+  },
+  "$defs": {
+    "CardFulfillment": {
+      "type": "object",
+      "description": "Fulfillment configuration and shipping details for a physical card.",
+      "properties": {
+        "shipping": {
+          "$ref": "#/$defs/CardShipping"
+        },
+        "card_personalization": {
+          "$ref": "#/$defs/CardPersonalization"
+        }
+      }
+    },
+    "CardShipping": {
+      "type": "object",
+      "description": "Shipping method and address for physical card delivery.",
+      "properties": {
+        "method": {
+          "type": "string",
+          "description": "Shipping service level for card delivery.",
+          "enum": ["LOCAL_MAIL", "GROUND", "TWO_DAY", "OVERNIGHT", "INTERNATIONAL"]
+        },
+        "return_address": {
+          "$ref": "#/$defs/ShippingAddress"
+        },
+        "recipient_address": {
+          "$ref": "#/$defs/ShippingAddress"
+        },
+        "care_of_line": {
+          "type": "string",
+          "description": "Care-of line printed on the card envelope.",
+          "maxLength": 40
+        }
+      }
+    },
+    "ShippingAddress": {
+      "type": "object",
+      "description": "Physical mailing address for card shipping.",
+      "required": ["first_name", "last_name", "address1", "city", "state", "zip", "country"],
+      "properties": {
+        "first_name": {
+          "type": "string",
+          "description": "First name of the recipient.",
+          "maxLength": 40
+        },
+        "middle_name": {
+          "type": "string",
+          "description": "Middle name of the recipient.",
+          "maxLength": 40
+        },
+        "last_name": {
+          "type": "string",
+          "description": "Last name of the recipient.",
+          "maxLength": 40
+        },
+        "address1": {
+          "type": "string",
+          "description": "Primary street address.",
+          "maxLength": 255
+        },
+        "address2": {
+          "type": "string",
+          "description": "Secondary address line.",
+          "maxLength": 255
+        },
+        "city": {
+          "type": "string",
+          "description": "City.",
+          "maxLength": 40
+        },
+        "state": {
+          "type": "string",
+          "description": "State or province (two-letter abbreviation for US).",
+          "maxLength": 32
+        },
+        "zip": {
+          "type": "string",
+          "description": "ZIP or postal code.",
+          "maxLength": 10
+        },
+        "country": {
+          "type": "string",
+          "description": "Two-letter ISO 3166-1 alpha-2 country code.",
+          "pattern": "^[A-Z]{2}$"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Recipient's phone number."
+        }
+      }
+    },
+    "CardPersonalization": {
+      "type": "object",
+      "description": "Custom personalization details printed on the physical card.",
+      "properties": {
+        "text": {
+          "type": "object",
+          "description": "Text printed on the card face.",
+          "properties": {
+            "name_line_1": {
+              "type": "object",
+              "description": "First name line on the card.",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "description": "Text to print on name line 1.",
+                  "maxLength": 26
+                }
+              }
+            },
+            "name_line_2": {
+              "type": "object",
+              "description": "Second name line on the card.",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "description": "Text to print on name line 2.",
+                  "maxLength": 26
+                }
+              }
+            }
+          }
+        },
+        "images": {
+          "type": "object",
+          "description": "Custom images to print on the card.",
+          "properties": {
+            "card": {
+              "type": "object",
+              "description": "Custom card image configuration.",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Name of the card image design."
+                },
+                "thermal_color": {
+                  "type": "string",
+                  "description": "Color scheme for thermal printing."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

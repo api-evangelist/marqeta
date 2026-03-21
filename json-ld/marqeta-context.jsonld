@@ -1,0 +1,322 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "marqeta": "https://marqeta.com/vocab/",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "fibo-fnd-acc-cur": "https://spec.edmcouncil.org/fibo/ontology/FND/Accounting/CurrencyAmount/",
+
+    "CardProgram": {
+      "@id": "marqeta:CardProgram",
+      "@context": {
+        "token": "marqeta:token",
+        "name": "schema:name",
+        "description": "dcterms:description",
+        "baseURL": {
+          "@id": "marqeta:baseURL",
+          "@type": "@id"
+        },
+        "humanURL": {
+          "@id": "schema:url",
+          "@type": "@id"
+        }
+      }
+    },
+
+    "Cardholder": {
+      "@id": "marqeta:Cardholder",
+      "@context": {
+        "token": "marqeta:token",
+        "first_name": "schema:givenName",
+        "last_name": "schema:familyName",
+        "middle_name": "schema:additionalName",
+        "email": "schema:email",
+        "phone": "schema:telephone",
+        "birth_date": {
+          "@id": "schema:birthDate",
+          "@type": "xsd:date"
+        },
+        "status": "marqeta:accountStatus",
+        "kyc_required": "marqeta:kycRequired",
+        "address1": "schema:streetAddress",
+        "city": "schema:addressLocality",
+        "state": "schema:addressRegion",
+        "zip": "schema:postalCode",
+        "country": "schema:addressCountry",
+        "corporate_card_holder": "marqeta:corporateCardHolder",
+        "account_holder_group_token": "marqeta:accountHolderGroup",
+        "metadata": "marqeta:metadata",
+        "created_time": {
+          "@id": "dcterms:created",
+          "@type": "xsd:dateTime"
+        },
+        "last_modified_time": {
+          "@id": "dcterms:modified",
+          "@type": "xsd:dateTime"
+        }
+      }
+    },
+
+    "PaymentCard": {
+      "@id": "marqeta:PaymentCard",
+      "@context": {
+        "token": "marqeta:token",
+        "card_product_token": "marqeta:cardProduct",
+        "user_token": "marqeta:cardholder",
+        "business_token": "marqeta:businessHolder",
+        "last_four": "marqeta:lastFour",
+        "expiration": "marqeta:expiration",
+        "expiration_time": {
+          "@id": "marqeta:expirationTime",
+          "@type": "xsd:dateTime"
+        },
+        "state": "marqeta:cardState",
+        "state_reason": "marqeta:stateReason",
+        "fulfillment_status": "marqeta:fulfillmentStatus",
+        "instrument_type": "marqeta:instrumentType",
+        "pin_is_set": "marqeta:pinIsSet",
+        "metadata": "marqeta:metadata",
+        "created_time": {
+          "@id": "dcterms:created",
+          "@type": "xsd:dateTime"
+        },
+        "last_modified_time": {
+          "@id": "dcterms:modified",
+          "@type": "xsd:dateTime"
+        }
+      }
+    },
+
+    "CardProduct": {
+      "@id": "marqeta:CardProduct",
+      "@context": {
+        "token": "marqeta:token",
+        "name": "schema:name",
+        "active": "marqeta:active",
+        "start_date": {
+          "@id": "schema:startDate",
+          "@type": "xsd:date"
+        },
+        "end_date": {
+          "@id": "schema:endDate",
+          "@type": "xsd:date"
+        },
+        "created_time": {
+          "@id": "dcterms:created",
+          "@type": "xsd:dateTime"
+        },
+        "last_modified_time": {
+          "@id": "dcterms:modified",
+          "@type": "xsd:dateTime"
+        }
+      }
+    },
+
+    "Transaction": {
+      "@id": "marqeta:Transaction",
+      "@context": {
+        "token": "marqeta:token",
+        "type": "marqeta:transactionType",
+        "state": "marqeta:transactionState",
+        "user_token": "marqeta:cardholder",
+        "card_token": "marqeta:paymentCard",
+        "business_token": "marqeta:businessHolder",
+        "amount": {
+          "@id": "schema:price",
+          "@type": "xsd:decimal"
+        },
+        "currency_code": {
+          "@id": "schema:priceCurrency",
+          "@type": "xsd:string"
+        },
+        "network": "marqeta:cardNetwork",
+        "settlement_date": {
+          "@id": "marqeta:settlementDate",
+          "@type": "xsd:date"
+        },
+        "created_time": {
+          "@id": "dcterms:created",
+          "@type": "xsd:dateTime"
+        },
+        "user_transaction_time": {
+          "@id": "marqeta:userTransactionTime",
+          "@type": "xsd:dateTime"
+        }
+      }
+    },
+
+    "CardAcceptor": {
+      "@id": "marqeta:CardAcceptor",
+      "@context": {
+        "mid": "marqeta:merchantId",
+        "mcc": "marqeta:merchantCategoryCode",
+        "name": "schema:name",
+        "address": "schema:streetAddress",
+        "city": "schema:addressLocality",
+        "state": "schema:addressRegion",
+        "zip": "schema:postalCode",
+        "country": "schema:addressCountry"
+      }
+    },
+
+    "GpaOrder": {
+      "@id": "marqeta:GpaOrder",
+      "@context": {
+        "token": "marqeta:token",
+        "user_token": "marqeta:cardholder",
+        "business_token": "marqeta:businessHolder",
+        "amount": {
+          "@id": "schema:price",
+          "@type": "xsd:decimal"
+        },
+        "currency_code": {
+          "@id": "schema:priceCurrency",
+          "@type": "xsd:string"
+        },
+        "state": "marqeta:orderState",
+        "funding_source_token": "marqeta:fundingSource",
+        "memo": "dcterms:description",
+        "created_time": {
+          "@id": "dcterms:created",
+          "@type": "xsd:dateTime"
+        }
+      }
+    },
+
+    "FundingSource": {
+      "@id": "marqeta:FundingSource",
+      "@context": {
+        "token": "marqeta:token",
+        "account_type": "marqeta:accountType",
+        "account_suffix": "marqeta:accountSuffix",
+        "routing_number": "marqeta:routingNumber",
+        "name_on_account": "marqeta:nameOnAccount",
+        "verification_status": "marqeta:verificationStatus",
+        "is_default_account": "marqeta:isDefaultAccount",
+        "created_time": {
+          "@id": "dcterms:created",
+          "@type": "xsd:dateTime"
+        },
+        "last_modified_time": {
+          "@id": "dcterms:modified",
+          "@type": "xsd:dateTime"
+        }
+      }
+    },
+
+    "GpaBalance": {
+      "@id": "marqeta:GpaBalance",
+      "@context": {
+        "currency_code": {
+          "@id": "schema:priceCurrency",
+          "@type": "xsd:string"
+        },
+        "ledger_balance": {
+          "@id": "marqeta:ledgerBalance",
+          "@type": "xsd:decimal"
+        },
+        "available_balance": {
+          "@id": "marqeta:availableBalance",
+          "@type": "xsd:decimal"
+        },
+        "credit_balance": {
+          "@id": "marqeta:creditBalance",
+          "@type": "xsd:decimal"
+        },
+        "pending_credits": {
+          "@id": "marqeta:pendingCredits",
+          "@type": "xsd:decimal"
+        }
+      }
+    },
+
+    "VelocityControl": {
+      "@id": "marqeta:VelocityControl",
+      "@context": {
+        "token": "marqeta:token",
+        "name": "schema:name",
+        "velocity_window": "marqeta:velocityWindow",
+        "amount_limit": {
+          "@id": "marqeta:amountLimit",
+          "@type": "xsd:decimal"
+        },
+        "usage_limit": {
+          "@id": "marqeta:usageLimit",
+          "@type": "xsd:integer"
+        },
+        "currency_code": "schema:priceCurrency",
+        "active": "marqeta:active",
+        "created_time": {
+          "@id": "dcterms:created",
+          "@type": "xsd:dateTime"
+        }
+      }
+    },
+
+    "AuthorizationControl": {
+      "@id": "marqeta:AuthorizationControl",
+      "@context": {
+        "token": "marqeta:token",
+        "name": "schema:name",
+        "active": "marqeta:active",
+        "start_time": {
+          "@id": "schema:startDate",
+          "@type": "xsd:dateTime"
+        },
+        "end_time": {
+          "@id": "schema:endDate",
+          "@type": "xsd:dateTime"
+        },
+        "created_time": {
+          "@id": "dcterms:created",
+          "@type": "xsd:dateTime"
+        }
+      }
+    },
+
+    "WebhookConfig": {
+      "@id": "marqeta:WebhookConfig",
+      "@context": {
+        "token": "marqeta:token",
+        "name": "schema:name",
+        "active": "marqeta:active",
+        "events": {
+          "@id": "marqeta:events",
+          "@container": "@set"
+        },
+        "created_time": {
+          "@id": "dcterms:created",
+          "@type": "xsd:dateTime"
+        },
+        "last_modified_time": {
+          "@id": "dcterms:modified",
+          "@type": "xsd:dateTime"
+        }
+      }
+    },
+
+    "Business": {
+      "@id": "marqeta:Business",
+      "@context": {
+        "token": "marqeta:token",
+        "business_name_legal": "schema:legalName",
+        "business_name_dba": "schema:name",
+        "business_type": "marqeta:businessType",
+        "tax_id_number": "marqeta:taxIdNumber",
+        "phone": "schema:telephone",
+        "email": "schema:email",
+        "status": "marqeta:accountStatus",
+        "metadata": "marqeta:metadata",
+        "created_time": {
+          "@id": "dcterms:created",
+          "@type": "xsd:dateTime"
+        },
+        "last_modified_time": {
+          "@id": "dcterms:modified",
+          "@type": "xsd:dateTime"
+        }
+      }
+    }
+  }
+}

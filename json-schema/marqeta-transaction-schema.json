@@ -1,0 +1,351 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://marqeta.com/schemas/transaction.json",
+  "title": "Marqeta Transaction",
+  "description": "A Marqeta transaction record representing a card payment event such as an authorization, clearing, decline, GPA debit, GPA credit, or refund. Transactions are created by the Marqeta platform in response to card network messages and are associated with a specific card, cardholder, and card acceptor.",
+  "type": "object",
+  "required": ["token", "type", "state", "created_time"],
+  "properties": {
+    "token": {
+      "type": "string",
+      "description": "Unique identifier for the transaction on the Marqeta platform.",
+      "maxLength": 36
+    },
+    "type": {
+      "type": "string",
+      "description": "Transaction type describing the nature of the event. Common values include authorization, authorization.clearing, authorization.advice, pindebit, refund, gpa.credit, gpa.debit, and transfer.",
+      "examples": [
+        "authorization",
+        "authorization.clearing",
+        "authorization.advice",
+        "pindebit",
+        "refund",
+        "gpa.credit",
+        "gpa.debit",
+        "transfer"
+      ]
+    },
+    "state": {
+      "type": "string",
+      "description": "Current lifecycle state of the transaction.",
+      "enum": ["PENDING", "COMPLETION", "DECLINED", "ERROR", "ALL", "VOID"]
+    },
+    "identifier": {
+      "type": "string",
+      "description": "Unique identifier assigned by the card network for the transaction.",
+      "maxLength": 255
+    },
+    "user_token": {
+      "type": "string",
+      "description": "Token of the cardholder (user) associated with this transaction.",
+      "maxLength": 36
+    },
+    "business_token": {
+      "type": "string",
+      "description": "Token of the business account holder associated with this transaction, if applicable.",
+      "maxLength": 36
+    },
+    "card_token": {
+      "type": "string",
+      "description": "Token of the payment card used in this transaction.",
+      "maxLength": 36
+    },
+    "card_product_token": {
+      "type": "string",
+      "description": "Token of the card product associated with the card used.",
+      "maxLength": 36
+    },
+    "amount": {
+      "type": "number",
+      "description": "Transaction amount in the cardholder billing currency.",
+      "minimum": 0
+    },
+    "currency_code": {
+      "type": "string",
+      "description": "ISO 4217 three-letter currency code for the transaction amount.",
+      "pattern": "^[A-Z]{3}$"
+    },
+    "orig_amount": {
+      "type": "number",
+      "description": "Original transaction amount in the merchant transaction currency, before any currency conversion.",
+      "minimum": 0
+    },
+    "orig_currency_code": {
+      "type": "string",
+      "description": "ISO 4217 currency code for the original transaction currency at the merchant.",
+      "pattern": "^[A-Z]{3}$"
+    },
+    "card_acceptor": {
+      "$ref": "#/$defs/CardAcceptor"
+    },
+    "response": {
+      "$ref": "#/$defs/TransactionResponse"
+    },
+    "gpa": {
+      "$ref": "#/$defs/GpaBalance"
+    },
+    "gpa_order": {
+      "type": "object",
+      "description": "GPA order details if this transaction is associated with a fund load.",
+      "properties": {
+        "token": {
+          "type": "string",
+          "description": "Token of the GPA order."
+        },
+        "funding_source_token": {
+          "type": "string",
+          "description": "Token of the funding source used for the GPA order."
+        }
+      }
+    },
+    "fees": {
+      "type": "array",
+      "description": "List of fees applied to this transaction.",
+      "items": {
+        "$ref": "#/$defs/FeeDetail"
+      }
+    },
+    "pos": {
+      "$ref": "#/$defs/PosData"
+    },
+    "network": {
+      "type": "string",
+      "description": "Card network that processed the transaction.",
+      "enum": ["VISA", "MASTERCARD", "PULSE", "STAR", "ACCEL", "NY_SWITCH", "CU24"]
+    },
+    "acquirer_fee_amount": {
+      "type": "number",
+      "description": "Fee amount charged by the acquirer for this transaction."
+    },
+    "acquirer": {
+      "type": "object",
+      "description": "Acquirer information for the transaction.",
+      "properties": {
+        "institution_country": {
+          "type": "string",
+          "description": "Country of the acquiring institution."
+        },
+        "institution_id_code": {
+          "type": "string",
+          "description": "Acquiring institution identifier code."
+        },
+        "retrieval_reference_number": {
+          "type": "string",
+          "description": "Retrieval reference number assigned by the acquirer."
+        }
+      }
+    },
+    "related_transactions": {
+      "type": "array",
+      "description": "Tokens of related transactions, such as the original authorization for a clearing event.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "related_transaction_token": {
+            "type": "string",
+            "description": "Token of the related transaction."
+          },
+          "type": {
+            "type": "string",
+            "description": "Relationship type (e.g., ORIGINAL_AUTHORIZATION)."
+          }
+        }
+      }
+    },
+    "created_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when the transaction was created on the Marqeta platform."
+    },
+    "user_transaction_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of the transaction as reported by the card network."
+    },
+    "settlement_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date on which the transaction settled with the card network."
+    }
+  },
+  "$defs": {
+    "CardAcceptor": {
+      "type": "object",
+      "description": "Merchant or card acceptor information for the transaction.",
+      "properties": {
+        "mid": {
+          "type": "string",
+          "description": "Merchant identifier assigned by the card network.",
+          "maxLength": 15
+        },
+        "mcc": {
+          "type": "string",
+          "description": "Merchant category code identifying the type of business.",
+          "pattern": "^\\d{4}$"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the merchant or card acceptor.",
+          "maxLength": 25
+        },
+        "address": {
+          "type": "string",
+          "description": "Street address of the merchant location.",
+          "maxLength": 25
+        },
+        "city": {
+          "type": "string",
+          "description": "City of the merchant location.",
+          "maxLength": 13
+        },
+        "state": {
+          "type": "string",
+          "description": "State or province of the merchant location.",
+          "maxLength": 3
+        },
+        "zip": {
+          "type": "string",
+          "description": "ZIP or postal code of the merchant location.",
+          "maxLength": 10
+        },
+        "country": {
+          "type": "string",
+          "description": "ISO 3166-1 alpha-3 country code of the merchant.",
+          "pattern": "^[A-Z]{3}$"
+        },
+        "poi": {
+          "$ref": "#/$defs/PointOfInteraction"
+        }
+      }
+    },
+    "PointOfInteraction": {
+      "type": "object",
+      "description": "Point of interaction data describing how the card was presented.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Terminal type at the point of interaction.",
+          "enum": ["ATM", "AUTOFUEL_DISPENSERS", "CASH_REGISTER", "ECOMMERCE", "MOTO", "POS", "RECURRING_PAYMENTS", "UNATTENDED_PAYMENT_TERMINAL"]
+        },
+        "partial_approval_capable": {
+          "type": "boolean",
+          "description": "Whether the terminal supports partial approvals."
+        },
+        "installment_type": {
+          "type": "string",
+          "description": "Type of installment payment if applicable."
+        }
+      }
+    },
+    "TransactionResponse": {
+      "type": "object",
+      "description": "Authorization response from the Marqeta platform or card network.",
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "Response code. 00 indicates approval. Other values indicate decline reasons.",
+          "pattern": "^\\d{2,4}$"
+        },
+        "memo": {
+          "type": "string",
+          "description": "Human-readable response message describing the authorization result.",
+          "maxLength": 255
+        }
+      }
+    },
+    "GpaBalance": {
+      "type": "object",
+      "description": "General purpose account (GPA) balance state after a transaction.",
+      "properties": {
+        "currency_code": {
+          "type": "string",
+          "description": "ISO 4217 currency code for the GPA balance.",
+          "pattern": "^[A-Z]{3}$"
+        },
+        "ledger_balance": {
+          "type": "number",
+          "description": "Total ledger balance including all pending transactions."
+        },
+        "available_balance": {
+          "type": "number",
+          "description": "Available balance that can be spent immediately."
+        },
+        "credit_balance": {
+          "type": "number",
+          "description": "Credit balance applied to the account."
+        },
+        "pending_credits": {
+          "type": "number",
+          "description": "Pending credits not yet settled into the available balance."
+        },
+        "impacted_amount": {
+          "type": "number",
+          "description": "Balance amount affected by the current transaction."
+        }
+      }
+    },
+    "FeeDetail": {
+      "type": "object",
+      "description": "Detail of a fee applied to a transaction.",
+      "properties": {
+        "token": {
+          "type": "string",
+          "description": "Unique identifier of the fee record."
+        },
+        "fee_token": {
+          "type": "string",
+          "description": "Token of the fee configuration that was applied."
+        },
+        "amount": {
+          "type": "number",
+          "description": "Fee amount charged.",
+          "minimum": 0
+        },
+        "memo": {
+          "type": "string",
+          "description": "Description of the fee."
+        },
+        "type": {
+          "type": "string",
+          "description": "Fee type identifier."
+        }
+      }
+    },
+    "PosData": {
+      "type": "object",
+      "description": "Point-of-sale terminal data from the card network message.",
+      "properties": {
+        "terminal_attendance": {
+          "type": "string",
+          "description": "Whether terminal is attended by a merchant employee.",
+          "enum": ["ATTENDED", "UNATTENDED", "NONE"]
+        },
+        "terminal_location": {
+          "type": "string",
+          "description": "Physical location type of the terminal.",
+          "enum": ["ON_PREMISE", "OFF_PREMISE", "NONE"]
+        },
+        "cardholder_presence": {
+          "type": "string",
+          "description": "Whether the cardholder was present at the terminal.",
+          "enum": ["PRESENT", "NOT_PRESENT", "MAIL_ORDER", "PHONE_ORDER", "STANDING_ORDER", "ELECTRONIC_ORDER", "NOT_PRESENT_RECURRING"]
+        },
+        "card_presence": {
+          "type": "string",
+          "description": "Whether the physical card was present.",
+          "enum": ["PRESENT", "NOT_PRESENT"]
+        },
+        "card_data_input_capability": {
+          "type": "string",
+          "description": "Method by which card data was read.",
+          "enum": ["UNKNOWN", "NO_TERMINAL", "MAGNETIC_STRIPE", "BARCODE", "OCR", "CHIP_AND_PIN", "CONTACTLESS", "CONTACTLESS_AND_MAGNETIC_STRIPE", "CREDENTIAL_ON_FILE", "MANUAL", "MANUAL_AND_CHIP"]
+        },
+        "pin_entry_mode": {
+          "type": "string",
+          "description": "Whether PIN entry was required and performed.",
+          "enum": ["TRUE", "FALSE", "CREDENTIAL_ON_FILE"]
+        }
+      }
+    }
+  }
+}

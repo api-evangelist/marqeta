@@ -1,0 +1,537 @@
+asyncapi: 2.6.0
+info:
+  title: Marqeta Webhooks
+  description: >-
+    Marqeta delivers real-time event notifications to a developer-configured
+    HTTPS endpoint when specific events occur within a card program. Each
+    program supports up to five active webhook configurations. Events cover
+    card transactions, authorizations, declines, card state transitions, user
+    state transitions, and other platform activity. Webhook payloads are
+    delivered as HTTP POST requests in JSON format to the receiving endpoint.
+    The Marqeta platform includes Basic Auth credentials in the notification
+    request using the username and password configured in the webhook setup.
+    Event types can be subscribed to individually (e.g., transaction.authorization)
+    or as a group using a wildcard (e.g., transaction.* or cardtransition.*).
+    Applications should respond to webhook deliveries with an HTTP 200 status
+    within 10 seconds; failures trigger automatic retries.
+  version: '3.0.38'
+  contact:
+    name: Marqeta Support
+    url: https://www.marqeta.com/company/contact
+    email: support@marqeta.com
+externalDocs:
+  description: Marqeta Webhooks Overview
+  url: https://www.marqeta.com/docs/developer-guides/webhooks-overview
+servers:
+  yourWebhookEndpoint:
+    url: 'https://your-server.example.com/webhooks'
+    protocol: https
+    description: >-
+      Your HTTPS webhook endpoint. Marqeta requires HTTPS for all webhook
+      delivery URLs. Configure this URL in the Marqeta Core API by creating
+      a webhook resource at POST /webhooks with the config.url field set to
+      your endpoint. Set basic_auth_username and basic_auth_password in the
+      config to require Basic Auth on your endpoint.
+    security:
+      - basicAuth: []
+channels:
+  /webhook:
+    description: >-
+      Marqeta sends all webhook events as HTTP POST requests to your registered
+      endpoint URL. Each request contains a JSON payload with the event type
+      and the full Marqeta object associated with the triggering event. Events
+      are grouped into categories: transaction events, card transition events,
+      user transition events, business transition events, GPA order events,
+      and charge-back events. Your endpoint must respond with HTTP 200 to
+      acknowledge receipt.
+    publish:
+      operationId: receiveMarqetaWebhookEvent
+      summary: Receive a Marqeta webhook event
+      description: >-
+        Handle incoming webhook event notifications from the Marqeta platform.
+        Validate the Basic Auth header using the credentials configured in
+        your webhook setup before processing the payload. The payload always
+        contains one or more event objects grouped under their event type key.
+        For example, transaction events appear under a transactions array, and
+        card transition events appear under a cards array.
+      message:
+        oneOf:
+          - $ref: '#/components/messages/TransactionAuthorization'
+          - $ref: '#/components/messages/TransactionClearing'
+          - $ref: '#/components/messages/TransactionGpaDebit'
+          - $ref: '#/components/messages/TransactionGpaCredit'
+          - $ref: '#/components/messages/TransactionRefund'
+          - $ref: '#/components/messages/TransactionDeclined'
+          - $ref: '#/components/messages/CardTransitionActivation'
+          - $ref: '#/components/messages/CardTransitionSuspension'
+          - $ref: '#/components/messages/CardTransitionTermination'
+          - $ref: '#/components/messages/CardTransitionFulfillmentIssued'
+          - $ref: '#/components/messages/CardTransitionFulfillmentShipped'
+          - $ref: '#/components/messages/CardTransitionFulfillmentDelivered'
+          - $ref: '#/components/messages/UserTransition'
+          - $ref: '#/components/messages/BusinessTransition'
+          - $ref: '#/components/messages/GpaOrderCompletion'
+          - $ref: '#/components/messages/ChargebackTransition'
+components:
+  securitySchemes:
+    basicAuth:
+      type: httpApiKey
+      name: Authorization
+      in: header
+      description: >-
+        HTTP Basic Authentication. Marqeta includes an Authorization header
+        with every webhook delivery using the basic_auth_username and
+        basic_auth_password values configured in the webhook resource.
+        Validate this header in your endpoint before processing the payload
+        to ensure the request originates from Marqeta.
+  messages:
+    TransactionAuthorization:
+      name: transaction.authorization
+      title: Transaction Authorization
+      summary: A card authorization request was received by the Marqeta platform.
+      description: >-
+        Fired when a card authorization request is received from the card
+        network. This event fires for both approved and declined authorization
+        attempts. The transaction object includes the full merchant details,
+        amount, response code, and real-time GPA balance impact. Use this
+        event to monitor card spend activity in real time.
+      payload:
+        $ref: '#/components/schemas/TransactionEventPayload'
+    TransactionClearing:
+      name: transaction.authorization.clearing
+      title: Transaction Clearing
+      summary: A previously authorized transaction was cleared (settled).
+      description: >-
+        Fired when a card transaction clears through the card network after
+        an authorization. The clearing amount may differ from the original
+        authorization amount. This is the final settlement event for a
+        purchase transaction. Use this event to trigger balance reconciliation
+        and financial reporting workflows.
+      payload:
+        $ref: '#/components/schemas/TransactionEventPayload'
+    TransactionGpaDebit:
+      name: transaction.gpa.debit
+      title: GPA Debit
+      summary: Funds were debited from a cardholder general purpose account.
+      description: >-
+        Fired when the Marqeta platform debits a cardholder's general purpose
+        account (GPA) as part of a transaction or fee. The payload includes
+        the transaction details, amount debited, and the resulting GPA balance.
+      payload:
+        $ref: '#/components/schemas/TransactionEventPayload'
+    TransactionGpaCredit:
+      name: transaction.gpa.credit
+      title: GPA Credit
+      summary: Funds were credited to a cardholder general purpose account.
+      description: >-
+        Fired when funds are credited to a cardholder's GPA, such as a
+        refund, reward, or GPA order load. The payload includes the
+        transaction details, amount credited, and resulting GPA balance.
+      payload:
+        $ref: '#/components/schemas/TransactionEventPayload'
+    TransactionRefund:
+      name: transaction.refund
+      title: Transaction Refund
+      summary: A refund was applied to a card transaction.
+      description: >-
+        Fired when a merchant initiates a refund for a previously cleared
+        transaction. The refund amount is credited back to the cardholder's
+        GPA. The payload includes the original transaction token and the
+        refund amount.
+      payload:
+        $ref: '#/components/schemas/TransactionEventPayload'
+    TransactionDeclined:
+      name: transaction.authorization.advice
+      title: Transaction Declined
+      summary: A card authorization was declined.
+      description: >-
+        Fired when a card authorization request is declined either by the
+        Marqeta platform (due to spending controls or insufficient funds)
+        or by the downstream card network. The response object in the
+        payload contains the decline reason code and message. Use this
+        event to alert cardholders or trigger customer service workflows.
+      payload:
+        $ref: '#/components/schemas/TransactionEventPayload'
+    CardTransitionActivation:
+      name: cardtransition.state.active
+      title: Card Activated
+      summary: A card was activated and is ready for use.
+      description: >-
+        Fired when a card transitions to ACTIVE state, either via an API
+        call or through the Marqeta platform. This is the event to listen
+        for to confirm that a newly issued card has been successfully
+        activated and is ready for transactions.
+      payload:
+        $ref: '#/components/schemas/CardTransitionEventPayload'
+    CardTransitionSuspension:
+      name: cardtransition.state.suspended
+      title: Card Suspended
+      summary: A card was suspended and temporarily unable to process transactions.
+      description: >-
+        Fired when a card transitions to SUSPENDED state. A suspended card
+        cannot process new transactions but can be reactivated. This event
+        fires whether the suspension was initiated by the program, the
+        cardholder, or the Marqeta fraud system.
+      payload:
+        $ref: '#/components/schemas/CardTransitionEventPayload'
+    CardTransitionTermination:
+      name: cardtransition.state.terminated
+      title: Card Terminated
+      summary: A card was permanently terminated.
+      description: >-
+        Fired when a card transitions to TERMINATED state. A terminated card
+        cannot process transactions and cannot be reactivated. This event
+        fires for lost, stolen, expired, and program-closed card terminations.
+      payload:
+        $ref: '#/components/schemas/CardTransitionEventPayload'
+    CardTransitionFulfillmentIssued:
+      name: cardtransition.fulfillment.issued
+      title: Card Fulfillment Issued
+      summary: A physical card was issued and queued for fulfillment.
+      description: >-
+        Fired when a physical card is queued for production. This is the
+        first fulfillment status event in the card production lifecycle.
+        The card has been ordered and is awaiting printing and embossing.
+      payload:
+        $ref: '#/components/schemas/CardTransitionEventPayload'
+    CardTransitionFulfillmentShipped:
+      name: cardtransition.fulfillment.shipped
+      title: Card Fulfillment Shipped
+      summary: A physical card has been shipped to the cardholder.
+      description: >-
+        Fired when a physical card has been shipped from the fulfillment
+        facility. The payload may include shipment tracking information.
+        Use this event to notify cardholders that their card is on the way.
+      payload:
+        $ref: '#/components/schemas/CardTransitionEventPayload'
+    CardTransitionFulfillmentDelivered:
+      name: cardtransition.fulfillment.delivered
+      title: Card Fulfillment Delivered
+      summary: A physical card was confirmed as delivered.
+      description: >-
+        Fired when a physical card delivery is confirmed. Use this event
+        to prompt the cardholder to activate their card and update delivery
+        status in your application.
+      payload:
+        $ref: '#/components/schemas/CardTransitionEventPayload'
+    UserTransition:
+      name: usertransition
+      title: User Transition
+      summary: A cardholder user account transitioned to a new state.
+      description: >-
+        Fired when a user account transitions state (e.g., ACTIVE, SUSPENDED,
+        CLOSED). This event is useful for understanding when a cardholder
+        passes KYC verification, is suspended for fraud, or closes their
+        account. The payload includes the new state, reason code, and
+        the channel through which the transition was initiated.
+      payload:
+        $ref: '#/components/schemas/UserTransitionEventPayload'
+    BusinessTransition:
+      name: businesstransition
+      title: Business Transition
+      summary: A business account holder transitioned to a new state.
+      description: >-
+        Fired when a business account holder transitions state (e.g., ACTIVE,
+        SUSPENDED, CLOSED). Use this event to track business onboarding
+        progress, KYB completion, and account lifecycle changes.
+      payload:
+        $ref: '#/components/schemas/BusinessTransitionEventPayload'
+    GpaOrderCompletion:
+      name: gpaorder.completion
+      title: GPA Order Completion
+      summary: A GPA funding order completed successfully.
+      description: >-
+        Fired when a GPA order (fund load) completes and the funds are
+        available in the cardholder's GPA. The payload includes the amount
+        loaded, the funding source used, and the resulting GPA balance.
+        Use this event to confirm fund availability and trigger downstream
+        notifications to cardholders.
+      payload:
+        $ref: '#/components/schemas/GpaOrderEventPayload'
+    ChargebackTransition:
+      name: chargebacktransition
+      title: Chargeback Transition
+      summary: A chargeback transitioned to a new state in the dispute lifecycle.
+      description: >-
+        Fired when a chargeback transitions through the arbitration process.
+        States include INITIATED, REPRESENTMENT, ARBITRATION, CLOSED, and
+        REVERSAL. Use this event to track disputes, trigger evidence
+        collection workflows, and update financial accounting for disputed
+        transactions.
+      payload:
+        $ref: '#/components/schemas/ChargebackTransitionEventPayload'
+  schemas:
+    WebhookEventBase:
+      type: object
+      description: >-
+        Base structure for Marqeta webhook event payloads. Each event includes
+        a type identifier and the full Marqeta object associated with the event.
+      properties:
+        type:
+          type: string
+          description: >-
+            Event type string that categorizes the event
+            (e.g., authorization, authorization.clearing, pindebit).
+        token:
+          type: string
+          description: Unique token of the resource that triggered this event.
+        created_time:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp when the event was generated.
+        user_token:
+          type: string
+          description: Token of the user associated with the event, if applicable.
+        business_token:
+          type: string
+          description: Token of the business associated with the event, if applicable.
+    TransactionEventPayload:
+      type: object
+      description: >-
+        Payload for transaction-related webhook events. The Marqeta platform
+        delivers transaction events in a top-level transactions array within
+        the POST body.
+      properties:
+        transactions:
+          type: array
+          description: Array of transaction event objects included in this delivery.
+          items:
+            allOf:
+              - $ref: '#/components/schemas/WebhookEventBase'
+              - type: object
+                properties:
+                  state:
+                    type: string
+                    description: Current state of the transaction.
+                    enum: [PENDING, COMPLETION, DECLINED, ERROR, ALL, VOID]
+                  amount:
+                    type: number
+                    format: double
+                    description: Transaction amount in the specified currency.
+                  currency_code:
+                    type: string
+                    description: ISO 4217 three-letter currency code.
+                    pattern: '^[A-Z]{3}$'
+                  card_token:
+                    type: string
+                    description: Token of the card used in the transaction.
+                  card_acceptor:
+                    type: object
+                    description: Merchant or card acceptor details.
+                    properties:
+                      mid:
+                        type: string
+                        description: Merchant identifier.
+                      mcc:
+                        type: string
+                        description: Merchant category code.
+                      name:
+                        type: string
+                        description: Merchant name.
+                      city:
+                        type: string
+                        description: Merchant city.
+                      state:
+                        type: string
+                        description: Merchant state or region.
+                      country:
+                        type: string
+                        description: Merchant country code.
+                  response:
+                    type: object
+                    description: Authorization response details.
+                    properties:
+                      code:
+                        type: string
+                        description: >-
+                          Response code (00 indicates approval; other codes
+                          indicate decline reason).
+                      memo:
+                        type: string
+                        description: Human-readable response message.
+                  gpa:
+                    type: object
+                    description: GPA balance state after the transaction.
+                    properties:
+                      ledger_balance:
+                        type: number
+                        description: Ledger balance after the transaction.
+                      available_balance:
+                        type: number
+                        description: Available balance after the transaction.
+                      currency_code:
+                        type: string
+                        description: Currency of the GPA balance.
+                  user_transaction_time:
+                    type: string
+                    format: date-time
+                    description: Timestamp of the transaction as reported by the card network.
+    CardTransitionEventPayload:
+      type: object
+      description: >-
+        Payload for card transition webhook events. Card transition events
+        are delivered in a top-level cards array within the POST body. For
+        credit card transitions, the array is named creditcardtransitions.
+      properties:
+        cards:
+          type: array
+          description: Array of card transition event objects.
+          items:
+            allOf:
+              - $ref: '#/components/schemas/WebhookEventBase'
+              - type: object
+                properties:
+                  card_token:
+                    type: string
+                    description: Token of the card that transitioned.
+                  state:
+                    type: string
+                    description: New state of the card after the transition.
+                    enum: [ACTIVE, SUSPENDED, TERMINATED, UNACTIVATED, LIMITED]
+                  reason_code:
+                    type: string
+                    description: Code indicating the reason for the state transition.
+                  reason:
+                    type: string
+                    description: Human-readable reason for the transition.
+                  channel:
+                    type: string
+                    description: Channel through which the transition was initiated.
+                    enum: [API, IVR, FRAUD, ADMIN, SYSTEM, AUTOMATED, CARDHOLDER]
+                  fulfillment_status:
+                    type: string
+                    description: Fulfillment status for physical cards.
+                    enum: [ISSUED, ORDERED, REORDERED, REJECTED, SHIPPED, DELIVERED, DIGITALLY_PRESENTED]
+                  card_product_token:
+                    type: string
+                    description: Token of the card product associated with this card.
+    UserTransitionEventPayload:
+      type: object
+      description: >-
+        Payload for user transition webhook events. User transitions are
+        delivered in a top-level usertransitions array in the POST body.
+      properties:
+        usertransitions:
+          type: array
+          description: Array of user transition event objects.
+          items:
+            allOf:
+              - $ref: '#/components/schemas/WebhookEventBase'
+              - type: object
+                properties:
+                  status:
+                    type: string
+                    description: New status applied to the user account.
+                    enum: [ACTIVE, SUSPENDED, CLOSED, UNVERIFIED, LIMITED]
+                  reason_code:
+                    type: string
+                    description: Code indicating the reason for the transition.
+                  reason:
+                    type: string
+                    description: Human-readable reason for the transition.
+                  channel:
+                    type: string
+                    description: Channel through which the transition was initiated.
+                    enum: [API, IVR, FRAUD, ADMIN, SYSTEM]
+    BusinessTransitionEventPayload:
+      type: object
+      description: >-
+        Payload for business account holder transition webhook events.
+        Business transitions are delivered in a top-level
+        businesstransitions array in the POST body.
+      properties:
+        businesstransitions:
+          type: array
+          description: Array of business transition event objects.
+          items:
+            allOf:
+              - $ref: '#/components/schemas/WebhookEventBase'
+              - type: object
+                properties:
+                  status:
+                    type: string
+                    description: New status applied to the business account.
+                    enum: [ACTIVE, SUSPENDED, CLOSED, UNVERIFIED, LIMITED]
+                  reason_code:
+                    type: string
+                    description: Code indicating the reason for the transition.
+                  reason:
+                    type: string
+                    description: Human-readable reason for the transition.
+                  channel:
+                    type: string
+                    description: Channel through which the transition was initiated.
+                    enum: [API, IVR, FRAUD, ADMIN, SYSTEM]
+    GpaOrderEventPayload:
+      type: object
+      description: >-
+        Payload for GPA order completion webhook events. GPA order events
+        are delivered in a top-level gpaorders array in the POST body.
+      properties:
+        gpaorders:
+          type: array
+          description: Array of GPA order event objects.
+          items:
+            allOf:
+              - $ref: '#/components/schemas/WebhookEventBase'
+              - type: object
+                properties:
+                  state:
+                    type: string
+                    description: Current state of the GPA order.
+                    enum: [PENDING, COMPLETION, DECLINED, ERROR, VOID]
+                  amount:
+                    type: number
+                    description: Amount loaded onto the cardholder GPA.
+                  currency_code:
+                    type: string
+                    description: ISO 4217 currency code.
+                  funding_source_token:
+                    type: string
+                    description: Token of the funding source used for this order.
+                  gpa:
+                    type: object
+                    description: Resulting GPA balance after the order.
+                    properties:
+                      ledger_balance:
+                        type: number
+                        description: Ledger balance after the load.
+                      available_balance:
+                        type: number
+                        description: Available balance after the load.
+    ChargebackTransitionEventPayload:
+      type: object
+      description: >-
+        Payload for chargeback transition webhook events. Chargeback events
+        are delivered in a top-level chargebacks array in the POST body.
+      properties:
+        chargebacks:
+          type: array
+          description: Array of chargeback transition event objects.
+          items:
+            allOf:
+              - $ref: '#/components/schemas/WebhookEventBase'
+              - type: object
+                properties:
+                  state:
+                    type: string
+                    description: Current state of the chargeback in the dispute lifecycle.
+                    enum: [INITIATED, REPRESENTMENT, ARBITRATION, CLOSED, REVERSAL, CASE_WON, CASE_LOST]
+                  amount:
+                    type: number
+                    description: Disputed transaction amount.
+                  currency_code:
+                    type: string
+                    description: ISO 4217 currency code.
+                  transaction_token:
+                    type: string
+                    description: Token of the original transaction being disputed.
+                  reason_code:
+                    type: string
+                    description: Card network reason code for the chargeback.
+                  reason:
+                    type: string
+                    description: Human-readable chargeback reason.
+                  channel:
+                    type: string
+                    description: Channel through which the chargeback was initiated.
