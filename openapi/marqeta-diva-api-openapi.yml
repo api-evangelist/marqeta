@@ -26,12 +26,18 @@ servers:
   - url: https://diva-api.marqeta.com/data/v2
     description: Production Server
 tags:
-  - name: Views
+  - name: Cards
     description: >-
-      View endpoints provide programmatic access to aggregated platform data
-      derived from card program activity. Each view represents a specific
-      dataset such as transactions, balances, or card states, aggregated at
-      a configurable time level.
+      Retrieve card inventory and state data aggregated at card level or
+      by time period for reporting on card issuance and usage.
+  - name: Chargebacks
+    description: >-
+      Access chargeback data aggregated by transaction for dispute tracking
+      and financial reconciliation.
+  - name: Loads
+    description: >-
+      Retrieve funding load transaction data at a specified aggregation level.
+      Covers all load types including ACH, push-to-card, and program transfers.
   - name: Program Balances
     description: >-
       Retrieve program funding balance data for financial reconciliation.
@@ -42,22 +48,16 @@ tags:
       Access transaction data including authorizations, settlements, and
       declines aggregated at day, week, month, or detail level for analysis
       and reconciliation.
-  - name: Cards
-    description: >-
-      Retrieve card inventory and state data aggregated at card level or
-      by time period for reporting on card issuance and usage.
   - name: Users
     description: >-
       Access cardholder (user) data and activity aggregated for program
       reporting and analysis.
-  - name: Loads
+  - name: Views
     description: >-
-      Retrieve funding load transaction data at a specified aggregation level.
-      Covers all load types including ACH, push-to-card, and program transfers.
-  - name: Chargebacks
-    description: >-
-      Access chargeback data aggregated by transaction for dispute tracking
-      and financial reconciliation.
+      View endpoints provide programmatic access to aggregated platform data
+      derived from card program activity. Each view represents a specific
+      dataset such as transactions, balances, or card states, aggregated at
+      a configurable time level.
 security:
   - basicAuth: []
 paths:

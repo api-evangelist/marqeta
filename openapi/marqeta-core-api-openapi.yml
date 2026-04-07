@@ -27,23 +27,22 @@ servers:
   - url: https://api.marqeta.com/v3
     description: Production Server
 tags:
-  - name: Users
+  - name: Account Holder Funding Sources
     description: >-
-      Create and manage cardholders (users) on the Marqeta platform. Users
-      represent the individuals who will be issued payment cards and hold
-      funding balances.
-  - name: User Transitions
+      Manage ACH bank account funding sources attached to individual cardholders
+      and businesses for loading funds.
+  - name: Authorization Controls
     description: >-
-      Manage state transitions for user accounts, including activation,
-      suspension, and closure of cardholder accounts.
+      Create and manage authorization controls that restrict where and how
+      cards can be used, including merchant category and geographic limits.
+  - name: Balances
+    description: >-
+      Retrieve general purpose account (GPA) balance information for users,
+      businesses, and cards.
   - name: Businesses
     description: >-
       Create and manage business account holders on the Marqeta platform.
       Businesses can hold cards and funding balances just like individual users.
-  - name: Cards
-    description: >-
-      Issue and manage physical and virtual payment cards. Cards are derived
-      from card products and inherit their spending controls and configurations.
   - name: Card Products
     description: >-
       Define card product templates that control card behavior, spending
@@ -52,34 +51,18 @@ tags:
     description: >-
       Manage state transitions for payment cards, including activation,
       suspension, termination, and lost or stolen status.
-  - name: Transactions
+  - name: Cards
     description: >-
-      Retrieve and search transaction records for card activity including
-      authorizations, clearing, declines, and GPA orders.
-  - name: Account Holder Groups
-    description: >-
-      Define groups that organize users and businesses for applying shared
-      spending controls and configurations.
-  - name: Authorization Controls
-    description: >-
-      Create and manage authorization controls that restrict where and how
-      cards can be used, including merchant category and geographic limits.
-  - name: Velocity Controls
-    description: >-
-      Define velocity controls that limit spending amounts and transaction
-      counts over configurable time windows.
-  - name: Balances
-    description: >-
-      Retrieve general purpose account (GPA) balance information for users,
-      businesses, and cards.
+      Issue and manage physical and virtual payment cards. Cards are derived
+      from card products and inherit their spending controls and configurations.
   - name: GPA Orders
     description: >-
       Create and retrieve general purpose account (GPA) funding orders to
       load money onto cardholder accounts.
-  - name: Account Holder Funding Sources
+  - name: KYC Verification
     description: >-
-      Manage ACH bank account funding sources attached to individual cardholders
-      and businesses for loading funds.
+      Submit and retrieve Know Your Customer (KYC) verification results for
+      users and businesses on the platform.
   - name: Program Funding Sources
     description: >-
       Manage program-level funding sources used to load funds into the program
@@ -88,73 +71,27 @@ tags:
     description: >-
       Retrieve and manage the program reserve account balance and transactions
       used for funding cardholder GPAs.
-  - name: Funding via ACH
+  - name: Transactions
     description: >-
-      Initiate and manage ACH bank transfer funding operations for cardholder
-      and program accounts.
-  - name: KYC Verification
+      Retrieve and search transaction records for card activity including
+      authorizations, clearing, declines, and GPA orders.
+  - name: User Transitions
     description: >-
-      Submit and retrieve Know Your Customer (KYC) verification results for
-      users and businesses on the platform.
+      Manage state transitions for user accounts, including activation,
+      suspension, and closure of cardholder accounts.
+  - name: Users
+    description: >-
+      Create and manage cardholders (users) on the Marqeta platform. Users
+      represent the individuals who will be issued payment cards and hold
+      funding balances.
+  - name: Velocity Controls
+    description: >-
+      Define velocity controls that limit spending amounts and transaction
+      counts over configurable time windows.
   - name: Webhooks
     description: >-
       Create, retrieve, update, and delete webhook configurations that deliver
       real-time event notifications to your endpoint.
-  - name: Bulk Card Orders
-    description: >-
-      Submit and manage bulk physical card orders for large-volume card
-      issuance programs.
-  - name: Digital Wallets Management
-    description: >-
-      Manage digital wallet tokens and provisioning for Apple Pay, Google Pay,
-      and Samsung Pay support on issued cards.
-  - name: MCC Groups
-    description: >-
-      Create and manage merchant category code (MCC) groups used in
-      authorization controls to allow or block merchant categories.
-  - name: Merchant Groups
-    description: >-
-      Create and manage named lists of specific merchants for use in
-      authorization controls.
-  - name: Accepted Countries
-    description: >-
-      Create and manage accepted country lists that restrict card usage to
-      specific geographic regions.
-  - name: PINs
-    description: >-
-      Create and reveal card PINs for physical card activation and ATM usage.
-  - name: Fees
-    description: >-
-      Define fee configurations that can be applied to cardholder accounts
-      for service charges, monthly fees, or transaction fees.
-  - name: Real-Time Fee Groups
-    description: >-
-      Create and manage groups of fees that are applied in real time during
-      transaction authorization.
-  - name: Program Transfers
-    description: >-
-      Create and retrieve program transfer records for moving funds between
-      cardholder GPAs and the program reserve.
-  - name: Auto Reload
-    description: >-
-      Configure automatic reload rules that replenish cardholder GPA balances
-      when they fall below a defined threshold.
-  - name: Credit Accounts
-    description: >-
-      Manage credit accounts for cardholders, including account lifecycle,
-      credit limits, billing cycles, and statements.
-  - name: Payments
-    description: >-
-      Submit and manage credit account payments, including scheduled payments
-      and payment source management.
-  - name: Credit Products
-    description: >-
-      Define credit product configurations including APR, credit limits, fees,
-      and billing cycle parameters.
-  - name: Policies
-    description: >-
-      Manage policy configurations for document delivery, APR, fees, and
-      rewards associated with credit products.
 security:
   - basicAuth: []
 paths:
