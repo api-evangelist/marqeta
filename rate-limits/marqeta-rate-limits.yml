@@ -1,92 +1,63 @@
 specification: API Commons Rate Limits
 specificationVersion: '0.1'
 schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
-provider: marqeta
+provider: Marqeta
 providerId: marqeta
 created: '2026-05-04'
-modified: '2026-05-04'
+modified: '2026-05-05'
+reconciled: false
 tags:
+  - Card Issuing
+  - Fintech
+  - Payments
   - Rate Limiting
-  - Quotas
-  - Throttling
-description: Machine-readable rate limit definitions for the marqeta API surface. Captures per-tier quotas,
-  burst behavior, response signaling, and recovery semantics. Defaults are scaffold values to be replaced
-  with published provider limits.
-headers:
-  limit: X-RateLimit-Limit
-  remaining: X-RateLimit-Remaining
-  reset: X-RateLimit-Reset
-  retryAfter: Retry-After
-  policy: RateLimit-Policy
+description: Marqeta's developer documentation describes a 429 Too Many Requests response when limits
+  are exceeded but does not publish numeric per-second or per-minute ceilings on the public docs site.
+  Limits are program-specific and tuned by the implementation team based on expected authorization volume.
+  Sandbox and production environments are subject to independent throttles, and webhook decisioning runs
+  under a strict authorization-deadline rather than a documented RPS.
+notes: |
+  No public RPS / RPM numbers documented. The /docs/rate-limits and /docs/api-rate-limits paths
+  return 404 / redirect to www.marqeta.com/api. Set reconciled=true once per-program limits are confirmed
+  in writing.
+sources:
+  - https://www.marqeta.com/api
+  - https://www.marqeta.com/developer
 responseCodes:
   throttled: 429
-  quotaExceeded: 429
   serviceUnavailable: 503
 limits:
-  - tier: free
-    name: Free Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 10
-    burst: 20
-    timeFrame: minute
+  - name: Core API request limit (production)
+    scope: program
+    metric: varies
+    limit: 'program-specific; not publicly documented'
     applies:
       - Marqeta Core API
       - Marqeta DiVA API
       - Marqeta Webhooks
-  - tier: free
-    name: Free Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 1000
-    timeFrame: month
+    notes: Limits are configured per program and visible to the implementation team; consumers should
+      request the agreed ceiling from their account contact.
+  - name: Sandbox environment limit
+    scope: program/sandbox
+    metric: varies
+    limit: 'program-specific; not publicly documented'
     applies:
       - Marqeta Core API
       - Marqeta DiVA API
-      - Marqeta Webhooks
-  - tier: professional
-    name: Professional Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 100
-    burst: 200
-    timeFrame: minute
-    applies:
-      - Marqeta Core API
-      - Marqeta DiVA API
-      - Marqeta Webhooks
-  - tier: professional
-    name: Professional Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 100000
-    timeFrame: month
-    applies:
-      - Marqeta Core API
-      - Marqeta DiVA API
-      - Marqeta Webhooks
-  - tier: enterprise
-    name: Enterprise Negotiated Limit
-    scope: contract
-    metric: requests_per_minute
-    limit: 1000
-    burst: 5000
-    timeFrame: minute
-    applies:
-      - Marqeta Core API
-      - Marqeta DiVA API
-      - Marqeta Webhooks
+    notes: Sandbox throttles are typically tighter than production and intended for functional testing
+      only.
 policies:
   - name: Backoff Strategy
-    description: Clients should implement exponential backoff with jitter, honoring the Retry-After header
-      when present.
-  - name: Burst Handling
-    description: Short bursts above the steady-state limit are tolerated up to the documented burst ceiling
-      before throttling engages.
-  - name: Quota Reset
-    description: Monthly quotas reset at the start of each calendar month in UTC. Per-minute and per-second
-      windows reset on a sliding-window basis.
-  - name: Fair Use
-    description: Even on uncapped enterprise tiers, sustained usage that materially impacts shared infrastructure
-      may be subject to fair-use throttling.
-maintainers: []
+    description: Clients receiving 429 should back off exponentially with jitter; Marqeta authorizations
+      are time-sensitive so retries should be bounded by the network's authorization deadline (typically
+      a few seconds).
+  - name: Idempotency
+    description: Use idempotency keys for state-changing requests (card issuance, JIT funding) to safely
+      retry across timeouts.
+  - name: Webhook Backpressure
+    description: Real-time webhook decisioning operates under a strict deadline; if your endpoint cannot
+      respond in time the network falls back to your default decisioning rules. Plan capacity for peak
+      authorization rates rather than average.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com
