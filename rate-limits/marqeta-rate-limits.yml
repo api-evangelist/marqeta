@@ -3,61 +3,33 @@ specificationVersion: '0.1'
 schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
 provider: Marqeta
 providerId: marqeta
-created: '2026-05-04'
-modified: '2026-05-05'
+created: '2026-05-08'
+modified: '2026-05-08'
 reconciled: false
 tags:
-  - Card Issuing
-  - Fintech
-  - Payments
-  - Rate Limiting
-description: Marqeta's developer documentation describes a 429 Too Many Requests response when limits
-  are exceeded but does not publish numeric per-second or per-minute ceilings on the public docs site.
-  Limits are program-specific and tuned by the implementation team based on expected authorization volume.
-  Sandbox and production environments are subject to independent throttles, and webhook decisioning runs
-  under a strict authorization-deadline rather than a documented RPS.
-notes: |
-  No public RPS / RPM numbers documented. The /docs/rate-limits and /docs/api-rate-limits paths
-  return 404 / redirect to www.marqeta.com/api. Set reconciled=true once per-program limits are confirmed
-  in writing.
+- Fintech
+- Card Issuing
+- Payments
+- BaaS
+- Embedded Finance
+- Rate Limiting
+- Quotas
+- Throttling
+description: Placeholder rate-limit artifact for Marqeta. Replace with real limits once researched.
+notes: Initial scaffold — limits have not yet been reconciled.
 sources:
-  - https://www.marqeta.com/api
-  - https://www.marqeta.com/developer
+- https://www.marqeta.com/
 responseCodes:
   throttled: 429
-  serviceUnavailable: 503
 limits:
-  - name: Core API request limit (production)
-    scope: program
-    metric: varies
-    limit: 'program-specific; not publicly documented'
-    applies:
-      - Marqeta Core API
-      - Marqeta DiVA API
-      - Marqeta Webhooks
-    notes: Limits are configured per program and visible to the implementation team; consumers should
-      request the agreed ceiling from their account contact.
-  - name: Sandbox environment limit
-    scope: program/sandbox
-    metric: varies
-    limit: 'program-specific; not publicly documented'
-    applies:
-      - Marqeta Core API
-      - Marqeta DiVA API
-    notes: Sandbox throttles are typically tighter than production and intended for functional testing
-      only.
+- name: Default
+  scope: account
+  metric: varies
+  limit: see provider documentation
+  notes: Pending reconciliation.
 policies:
-  - name: Backoff Strategy
-    description: Clients receiving 429 should back off exponentially with jitter; Marqeta authorizations
-      are time-sensitive so retries should be bounded by the network's authorization deadline (typically
-      a few seconds).
-  - name: Idempotency
-    description: Use idempotency keys for state-changing requests (card issuance, JIT funding) to safely
-      retry across timeouts.
-  - name: Webhook Backpressure
-    description: Real-time webhook decisioning operates under a strict deadline; if your endpoint cannot
-      respond in time the network falls back to your default decisioning rules. Plan capacity for peak
-      authorization rates rather than average.
+- name: Backoff Strategy
+  description: Clients should implement exponential backoff with jitter and honor any Retry-After header.
 maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+- FN: Kin Lane
+  email: kin@apievangelist.com
