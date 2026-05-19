@@ -1,0 +1,81 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Core API — Rewards
+  description: 'Core API — Rewards. 1 operations. Lead operation: Retrieve account signup bonus progress.. Self-contained
+    Naftiko capability covering one Marqeta business surface.'
+  tags:
+  - Marqeta
+  - Rewards
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: core-rewards
+    baseUri: ''
+    description: Core API — Rewards business capability. Self-contained, no shared references.
+    resources:
+    - name: accounts-account_token-signupbonusprogress
+      path: /accounts/{account_token}/signupbonusprogress
+      operations:
+      - name: retrievesignupbonusprogress
+        method: GET
+        description: Retrieve account signup bonus progress.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account for which you want to retrieve the sign up bonus for.
+          required: true
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: core-rewards-rest
+    port: 8080
+    description: REST adapter for Core API — Rewards. One Spectral-compliant resource per consumed operation, prefixed with
+      /v1.
+    resources:
+    - path: /v1/accounts/{account-token}/signupbonusprogress
+      name: accounts-account-token-signupbonusprogress
+      description: REST surface for accounts-account_token-signupbonusprogress.
+      operations:
+      - method: GET
+        name: retrievesignupbonusprogress
+        description: Retrieve account signup bonus progress.
+        call: core-rewards.retrievesignupbonusprogress
+        with:
+          account_token: rest.account_token
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: core-rewards-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Core API — Rewards. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: retrieve-account-signup-bonus-progress
+      description: Retrieve account signup bonus progress.
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-rewards.retrievesignupbonusprogress
+      with:
+        account_token: tools.account_token
+      outputParameters:
+      - type: object
+        mapping: $.

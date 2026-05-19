@@ -1,0 +1,423 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Core API
+  description: 'Core API. 9 operations. Lead operation: List transitions associated with a refund. Self-contained Naftiko
+    capability covering one Marqeta business surface.'
+  tags:
+  - Marqeta
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: core-general
+    baseUri: ''
+    description: Core API business capability. Self-contained, no shared references.
+    resources:
+    - name: accounts-account_token-refunds-refund_token-transitions
+      path: /accounts/{account_token}/refunds/{refund_token}/transitions
+      operations:
+      - name: retrieverefundtransitions
+        method: GET
+        description: List transitions associated with a refund
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account
+          required: true
+        - name: refund_token
+          in: path
+          type: string
+          description: Unique identifier of the refund
+          required: true
+        - name: count
+          in: query
+          type: integer
+          description: The number of resources to retrieve.
+        - name: start_index
+          in: query
+          type: integer
+          description: The sort order index of the first resource in the returned array.
+        - name: sort_by
+          in: query
+          type: string
+          description: Field on which to sort.
+    - name: depositaccounts-user-token-direct
+      path: /depositaccounts/user/{token}/direct
+      operations:
+      - name: getdepositaccountusertoken
+        method: GET
+        description: Get deposit account user token.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Token
+          required: true
+    - name: feedback-fraud
+      path: /feedback/fraud
+      operations:
+      - name: post
+        method: POST
+        description: Creates a fraud feedback
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: spaces
+      path: /spaces
+      operations:
+      - name: getspaces
+        method: GET
+        description: Get spaces.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: createspace
+        method: POST
+        description: Create space.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: spaces-redis-queue-queueName
+      path: /spaces/redis-queue/{queueName}
+      operations:
+      - name: deletequeue
+        method: DELETE
+        description: ''
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: queueName
+          in: path
+          type: string
+          required: true
+    - name: spaces-space-key
+      path: /spaces/{space}/{key}
+      operations:
+      - name: deletespace
+        method: DELETE
+        description: Delete space.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: space
+          in: path
+          type: string
+          required: true
+        - name: key
+          in: path
+          type: string
+          required: true
+      - name: getspace
+        method: GET
+        description: Get space.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: space
+          in: path
+          type: string
+          required: true
+        - name: key
+          in: path
+          type: string
+          required: true
+        - name: timeout
+          in: query
+          type: integer
+      - name: createspaceforkey
+        method: POST
+        description: Create space for key.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: space
+          in: path
+          type: string
+          required: true
+        - name: key
+          in: path
+          type: string
+          required: true
+        - name: timeout
+          in: query
+          type: integer
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: core-general-rest
+    port: 8080
+    description: REST adapter for Core API. One Spectral-compliant resource per consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/accounts/{account-token}/refunds/{refund-token}/transitions
+      name: accounts-account-token-refunds-refund-token-transitions
+      description: REST surface for accounts-account_token-refunds-refund_token-transitions.
+      operations:
+      - method: GET
+        name: retrieverefundtransitions
+        description: List transitions associated with a refund
+        call: core-general.retrieverefundtransitions
+        with:
+          account_token: rest.account_token
+          refund_token: rest.refund_token
+          count: rest.count
+          start_index: rest.start_index
+          sort_by: rest.sort_by
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/depositaccounts/user/{token}/direct
+      name: depositaccounts-user-token-direct
+      description: REST surface for depositaccounts-user-token-direct.
+      operations:
+      - method: GET
+        name: getdepositaccountusertoken
+        description: Get deposit account user token.
+        call: core-general.getdepositaccountusertoken
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/feedback/fraud
+      name: feedback-fraud
+      description: REST surface for feedback-fraud.
+      operations:
+      - method: POST
+        name: post
+        description: Creates a fraud feedback
+        call: core-general.post
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/spaces
+      name: spaces
+      description: REST surface for spaces.
+      operations:
+      - method: GET
+        name: getspaces
+        description: Get spaces.
+        call: core-general.getspaces
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createspace
+        description: Create space.
+        call: core-general.createspace
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/spaces/redis-queue/{queuename}
+      name: spaces-redis-queue-queuename
+      description: REST surface for spaces-redis-queue-queueName.
+      operations:
+      - method: DELETE
+        name: deletequeue
+        description: deletequeue
+        call: core-general.deletequeue
+        with:
+          queueName: rest.queueName
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/spaces/{space}/{key}
+      name: spaces-space-key
+      description: REST surface for spaces-space-key.
+      operations:
+      - method: DELETE
+        name: deletespace
+        description: Delete space.
+        call: core-general.deletespace
+        with:
+          space: rest.space
+          key: rest.key
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: getspace
+        description: Get space.
+        call: core-general.getspace
+        with:
+          space: rest.space
+          key: rest.key
+          timeout: rest.timeout
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createspaceforkey
+        description: Create space for key.
+        call: core-general.createspaceforkey
+        with:
+          space: rest.space
+          key: rest.key
+          timeout: rest.timeout
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: core-general-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Core API. One tool per consumed operation, routed inline through this capability's consumes
+      block.
+    tools:
+    - name: list-transitions-associated-refund
+      description: List transitions associated with a refund
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-general.retrieverefundtransitions
+      with:
+        account_token: tools.account_token
+        refund_token: tools.refund_token
+        count: tools.count
+        start_index: tools.start_index
+        sort_by: tools.sort_by
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-deposit-account-user-token
+      description: Get deposit account user token.
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-general.getdepositaccountusertoken
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: creates-fraud-feedback
+      description: Creates a fraud feedback
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-general.post
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-spaces
+      description: Get spaces.
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-general.getspaces
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-space
+      description: Create space.
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-general.createspace
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: deletequeue
+      description: deletequeue
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: core-general.deletequeue
+      with:
+        queueName: tools.queueName
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-space
+      description: Delete space.
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: core-general.deletespace
+      with:
+        space: tools.space
+        key: tools.key
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-space
+      description: Get space.
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-general.getspace
+      with:
+        space: tools.space
+        key: tools.key
+        timeout: tools.timeout
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-space-key
+      description: Create space for key.
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-general.createspaceforkey
+      with:
+        space: tools.space
+        key: tools.key
+        timeout: tools.timeout
+      outputParameters:
+      - type: object
+        mapping: $.

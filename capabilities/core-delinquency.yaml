@@ -1,0 +1,239 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Core API — Delinquency
+  description: 'Core API — Delinquency. 4 operations. Lead operation: Retrieve delinquency state. Self-contained Naftiko capability
+    covering one Marqeta business surface.'
+  tags:
+  - Marqeta
+  - Delinquency
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: core-delinquency
+    baseUri: ''
+    description: Core API — Delinquency business capability. Self-contained, no shared references.
+    resources:
+    - name: accounts-account_token-delinquencystate
+      path: /accounts/{account_token}/delinquencystate
+      operations:
+      - name: retrievedelinquencystate
+        method: GET
+        description: Retrieve delinquency state
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account for which you want to retrieve delinquency state details.
+          required: true
+    - name: accounts-account_token-delinquencystate-transitions
+      path: /accounts/{account_token}/delinquencystate/transitions
+      operations:
+      - name: retrievedelinquencytransitions
+        method: GET
+        description: List delinquency state transitions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account whose delinquency state transitions you want to retrieve.
+          required: true
+        - name: count
+          in: query
+          type: integer
+          description: Number of resources to retrieve.
+        - name: start_index
+          in: query
+          type: integer
+          description: Sort order index of the first resource in the returned array.
+        - name: sort_by
+          in: query
+          type: string
+          description: Field on which to sort.
+    - name: accounts-account_token-delinquencystate-transitions-delinquency_transition_token
+      path: /accounts/{account_token}/delinquencystate/transitions/{delinquency_transition_token}
+      operations:
+      - name: retrievedelinquencytransition
+        method: GET
+        description: Retrieve delinquency state transition
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account whose delinquency state transition you want to retrieve.
+          required: true
+        - name: delinquency_transition_token
+          in: path
+          type: string
+          description: Unique identifier of the delinquency state transition.
+          required: true
+    - name: webhooks-event_type-resource_token
+      path: /webhooks/{event_type}/{resource_token}
+      operations:
+      - name: resendwebhookevent
+        method: POST
+        description: Resend credit event notification
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: event_type
+          in: path
+          type: string
+          description: Specifies the type of event you want to resend.
+          required: true
+        - name: resource_token
+          in: path
+          type: string
+          description: Unique identifier of the resource for which you want to resend a notification.
+          required: true
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: core-delinquency-rest
+    port: 8080
+    description: REST adapter for Core API — Delinquency. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/accounts/{account-token}/delinquencystate
+      name: accounts-account-token-delinquencystate
+      description: REST surface for accounts-account_token-delinquencystate.
+      operations:
+      - method: GET
+        name: retrievedelinquencystate
+        description: Retrieve delinquency state
+        call: core-delinquency.retrievedelinquencystate
+        with:
+          account_token: rest.account_token
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/accounts/{account-token}/delinquencystate/transitions
+      name: accounts-account-token-delinquencystate-transitions
+      description: REST surface for accounts-account_token-delinquencystate-transitions.
+      operations:
+      - method: GET
+        name: retrievedelinquencytransitions
+        description: List delinquency state transitions
+        call: core-delinquency.retrievedelinquencytransitions
+        with:
+          account_token: rest.account_token
+          count: rest.count
+          start_index: rest.start_index
+          sort_by: rest.sort_by
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/accounts/{account-token}/delinquencystate/transitions/{delinquency-transition-token}
+      name: accounts-account-token-delinquencystate-transitions-delinquency-transition-token
+      description: REST surface for accounts-account_token-delinquencystate-transitions-delinquency_transition_token.
+      operations:
+      - method: GET
+        name: retrievedelinquencytransition
+        description: Retrieve delinquency state transition
+        call: core-delinquency.retrievedelinquencytransition
+        with:
+          account_token: rest.account_token
+          delinquency_transition_token: rest.delinquency_transition_token
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/webhooks/{event-type}/{resource-token}
+      name: webhooks-event-type-resource-token
+      description: REST surface for webhooks-event_type-resource_token.
+      operations:
+      - method: POST
+        name: resendwebhookevent
+        description: Resend credit event notification
+        call: core-delinquency.resendwebhookevent
+        with:
+          event_type: rest.event_type
+          resource_token: rest.resource_token
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: core-delinquency-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Core API — Delinquency. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: retrieve-delinquency-state
+      description: Retrieve delinquency state
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-delinquency.retrievedelinquencystate
+      with:
+        account_token: tools.account_token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-delinquency-state-transitions
+      description: List delinquency state transitions
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-delinquency.retrievedelinquencytransitions
+      with:
+        account_token: tools.account_token
+        count: tools.count
+        start_index: tools.start_index
+        sort_by: tools.sort_by
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-delinquency-state-transition
+      description: Retrieve delinquency state transition
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-delinquency.retrievedelinquencytransition
+      with:
+        account_token: tools.account_token
+        delinquency_transition_token: tools.delinquency_transition_token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: resend-credit-event-notification
+      description: Resend credit event notification
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-delinquency.resendwebhookevent
+      with:
+        event_type: tools.event_type
+        resource_token: tools.resource_token
+      outputParameters:
+      - type: object
+        mapping: $.

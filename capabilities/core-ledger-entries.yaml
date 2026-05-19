@@ -1,0 +1,245 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Core API — Ledger Entries
+  description: 'Core API — Ledger Entries. 3 operations. Lead operation: List account ledger entries. Self-contained Naftiko
+    capability covering one Marqeta business surface.'
+  tags:
+  - Marqeta
+  - Ledger Entries
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: core-ledger-entries
+    baseUri: ''
+    description: Core API — Ledger Entries business capability. Self-contained, no shared references.
+    resources:
+    - name: accounts-account_token-ledgerentries
+      path: /accounts/{account_token}/ledgerentries
+      operations:
+      - name: listaccountledgerentries
+        method: GET
+        description: List account ledger entries
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account for which you want to retrieve ledger entries.
+          required: true
+        - name: count
+          in: query
+          type: integer
+          description: Number of ledger entry resources to retrieve.
+        - name: start_index
+          in: query
+          type: integer
+          description: Sort order index of the first resource in the returned array.
+        - name: start_date
+          in: query
+          type: string
+          description: Starting date of the date range from which to return ledger entries.
+        - name: end_date
+          in: query
+          type: string
+          description: Ending date of the date range from which to return ledger entries.
+        - name: statuses
+          in: query
+          type: array
+          description: Array of statuses by which to filter ledger entries.
+        - name: description
+          in: query
+          type: string
+          description: Description of the ledger entries to return.
+        - name: detail_token
+          in: query
+          type: string
+          description: Detail token of the ledger entries to return.
+        - name: groups
+          in: query
+          type: array
+          description: Array of groups by which to filter ledger entries.
+        - name: amount
+          in: query
+          type: number
+          description: Number of ledger entries to return.
+        - name: expand
+          in: query
+          type: array
+          description: Embeds the specified object into the response.
+        - name: sort_by
+          in: query
+          type: string
+          description: Field on which to sort.
+    - name: accounts-account_token-ledgerentries-ledger_entry_token
+      path: /accounts/{account_token}/ledgerentries/{ledger_entry_token}
+      operations:
+      - name: getaccountledgerentry
+        method: GET
+        description: Retrieve account ledger entry
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account for which you want to retrieve ledger entries.
+          required: true
+        - name: ledger_entry_token
+          in: path
+          type: string
+          description: Unique identifier of the ledger entry you want to retrieve.
+          required: true
+    - name: webhooks-event_type-resource_token
+      path: /webhooks/{event_type}/{resource_token}
+      operations:
+      - name: resendwebhookevent
+        method: POST
+        description: Resend credit event notification
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: event_type
+          in: path
+          type: string
+          description: Specifies the type of event you want to resend.
+          required: true
+        - name: resource_token
+          in: path
+          type: string
+          description: Unique identifier of the resource for which you want to resend a notification.
+          required: true
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: core-ledger-entries-rest
+    port: 8080
+    description: REST adapter for Core API — Ledger Entries. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/accounts/{account-token}/ledgerentries
+      name: accounts-account-token-ledgerentries
+      description: REST surface for accounts-account_token-ledgerentries.
+      operations:
+      - method: GET
+        name: listaccountledgerentries
+        description: List account ledger entries
+        call: core-ledger-entries.listaccountledgerentries
+        with:
+          account_token: rest.account_token
+          count: rest.count
+          start_index: rest.start_index
+          start_date: rest.start_date
+          end_date: rest.end_date
+          statuses: rest.statuses
+          description: rest.description
+          detail_token: rest.detail_token
+          groups: rest.groups
+          amount: rest.amount
+          expand: rest.expand
+          sort_by: rest.sort_by
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/accounts/{account-token}/ledgerentries/{ledger-entry-token}
+      name: accounts-account-token-ledgerentries-ledger-entry-token
+      description: REST surface for accounts-account_token-ledgerentries-ledger_entry_token.
+      operations:
+      - method: GET
+        name: getaccountledgerentry
+        description: Retrieve account ledger entry
+        call: core-ledger-entries.getaccountledgerentry
+        with:
+          account_token: rest.account_token
+          ledger_entry_token: rest.ledger_entry_token
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/webhooks/{event-type}/{resource-token}
+      name: webhooks-event-type-resource-token
+      description: REST surface for webhooks-event_type-resource_token.
+      operations:
+      - method: POST
+        name: resendwebhookevent
+        description: Resend credit event notification
+        call: core-ledger-entries.resendwebhookevent
+        with:
+          event_type: rest.event_type
+          resource_token: rest.resource_token
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: core-ledger-entries-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Core API — Ledger Entries. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: list-account-ledger-entries
+      description: List account ledger entries
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-ledger-entries.listaccountledgerentries
+      with:
+        account_token: tools.account_token
+        count: tools.count
+        start_index: tools.start_index
+        start_date: tools.start_date
+        end_date: tools.end_date
+        statuses: tools.statuses
+        description: tools.description
+        detail_token: tools.detail_token
+        groups: tools.groups
+        amount: tools.amount
+        expand: tools.expand
+        sort_by: tools.sort_by
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-account-ledger-entry
+      description: Retrieve account ledger entry
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-ledger-entries.getaccountledgerentry
+      with:
+        account_token: tools.account_token
+        ledger_entry_token: tools.ledger_entry_token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: resend-credit-event-notification
+      description: Resend credit event notification
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-ledger-entries.resendwebhookevent
+      with:
+        event_type: tools.event_type
+        resource_token: tools.resource_token
+      outputParameters:
+      - type: object
+        mapping: $.

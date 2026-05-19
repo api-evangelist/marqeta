@@ -1,0 +1,123 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Core API — velocity controls
+  description: 'Core API — velocity controls. 2 operations. Lead operation: Retrieve velocity control available balances for
+    an account token. Self-contained Naftiko capability covering one Marqeta business surface.'
+  tags:
+  - Marqeta
+  - velocity controls
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: core-velocity-controls-2
+    baseUri: ''
+    description: Core API — velocity controls business capability. Self-contained, no shared references.
+    resources:
+    - name: velocitycontrols-account-account_token-available
+      path: /velocitycontrols/account/{account_token}/available
+      operations:
+      - name: getvelocitycontrolsaccountaccounttokenavailable
+        method: GET
+        description: Retrieve velocity control available balances for an account token
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Account token
+          required: true
+    - name: velocitycontrols-token
+      path: /velocitycontrols/{token}
+      operations:
+      - name: deletevelocitycontrolstoken
+        method: DELETE
+        description: Sets a specific velocity control to inactive to soft delete it
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Velocity control token
+          required: true
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: core-velocity-controls-2-rest
+    port: 8080
+    description: REST adapter for Core API — velocity controls. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/velocitycontrols/account/{account-token}/available
+      name: velocitycontrols-account-account-token-available
+      description: REST surface for velocitycontrols-account-account_token-available.
+      operations:
+      - method: GET
+        name: getvelocitycontrolsaccountaccounttokenavailable
+        description: Retrieve velocity control available balances for an account token
+        call: core-velocity-controls-2.getvelocitycontrolsaccountaccounttokenavailable
+        with:
+          account_token: rest.account_token
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/velocitycontrols/{token}
+      name: velocitycontrols-token
+      description: REST surface for velocitycontrols-token.
+      operations:
+      - method: DELETE
+        name: deletevelocitycontrolstoken
+        description: Sets a specific velocity control to inactive to soft delete it
+        call: core-velocity-controls-2.deletevelocitycontrolstoken
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: core-velocity-controls-2-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Core API — velocity controls. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: retrieve-velocity-control-available-balances
+      description: Retrieve velocity control available balances for an account token
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-velocity-controls-2.getvelocitycontrolsaccountaccounttokenavailable
+      with:
+        account_token: tools.account_token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: sets-specific-velocity-control-inactive
+      description: Sets a specific velocity control to inactive to soft delete it
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: core-velocity-controls-2.deletevelocitycontrolstoken
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.

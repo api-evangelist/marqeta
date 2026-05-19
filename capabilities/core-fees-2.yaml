@@ -1,0 +1,265 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Core API — fees
+  description: 'Core API — fees. 5 operations. Lead operation: Retrieve account fee. Self-contained Naftiko capability covering
+    one Marqeta business surface.'
+  tags:
+  - Marqeta
+  - fees
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: core-fees-2
+    baseUri: ''
+    description: Core API — fees business capability. Self-contained, no shared references.
+    resources:
+    - name: accounts-account_token-fees-fee_token
+      path: /accounts/{account_token}/fees/{fee_token}
+      operations:
+      - name: retrievefee
+        method: GET
+        description: Retrieve account fee
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account for which you want to retrieve the fee.
+          required: true
+        - name: fee_token
+          in: path
+          type: string
+          description: Unique identifier of the fee to retrieve.
+          required: true
+    - name: fees
+      path: /fees
+      operations:
+      - name: getfees
+        method: GET
+        description: Lists all fees
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: count
+          in: query
+          type: integer
+          description: Number of fees to retrieve
+        - name: start_index
+          in: query
+          type: integer
+          description: Start index
+        - name: fields
+          in: query
+          type: string
+          description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+        - name: sort_by
+          in: query
+          type: string
+          description: Sort order
+      - name: postfees
+        method: POST
+        description: Creates a fee
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: fees-token
+      path: /fees/{token}
+      operations:
+      - name: getfeestoken
+        method: GET
+        description: Returns a specific fee
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Fee token
+          required: true
+      - name: putfeestoken
+        method: PUT
+        description: Updates a specific fee
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Fee token
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: core-fees-2-rest
+    port: 8080
+    description: REST adapter for Core API — fees. One Spectral-compliant resource per consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/accounts/{account-token}/fees/{fee-token}
+      name: accounts-account-token-fees-fee-token
+      description: REST surface for accounts-account_token-fees-fee_token.
+      operations:
+      - method: GET
+        name: retrievefee
+        description: Retrieve account fee
+        call: core-fees-2.retrievefee
+        with:
+          account_token: rest.account_token
+          fee_token: rest.fee_token
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/fees
+      name: fees
+      description: REST surface for fees.
+      operations:
+      - method: GET
+        name: getfees
+        description: Lists all fees
+        call: core-fees-2.getfees
+        with:
+          count: rest.count
+          start_index: rest.start_index
+          fields: rest.fields
+          sort_by: rest.sort_by
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postfees
+        description: Creates a fee
+        call: core-fees-2.postfees
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/fees/{token}
+      name: fees-token
+      description: REST surface for fees-token.
+      operations:
+      - method: GET
+        name: getfeestoken
+        description: Returns a specific fee
+        call: core-fees-2.getfeestoken
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: putfeestoken
+        description: Updates a specific fee
+        call: core-fees-2.putfeestoken
+        with:
+          token: rest.token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: core-fees-2-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Core API — fees. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: retrieve-account-fee
+      description: Retrieve account fee
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-fees-2.retrievefee
+      with:
+        account_token: tools.account_token
+        fee_token: tools.fee_token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: lists-all-fees
+      description: Lists all fees
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-fees-2.getfees
+      with:
+        count: tools.count
+        start_index: tools.start_index
+        fields: tools.fields
+        sort_by: tools.sort_by
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: creates-fee
+      description: Creates a fee
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-fees-2.postfees
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: returns-specific-fee
+      description: Returns a specific fee
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-fees-2.getfeestoken
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: updates-specific-fee
+      description: Updates a specific fee
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: core-fees-2.putfeestoken
+      with:
+        token: tools.token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

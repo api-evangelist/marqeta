@@ -1,0 +1,254 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Core API — kyc
+  description: 'Core API — kyc. 4 operations. Lead operation: Performs a KYC. Self-contained Naftiko capability covering one
+    Marqeta business surface.'
+  tags:
+  - Marqeta
+  - kyc
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: core-kyc
+    baseUri: ''
+    description: Core API — kyc business capability. Self-contained, no shared references.
+    resources:
+    - name: kyc
+      path: /kyc
+      operations:
+      - name: postkyc
+        method: POST
+        description: Performs a KYC
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: kyc-business-business_token
+      path: /kyc/business/{business_token}
+      operations:
+      - name: getkycbusinessbusinesstoken
+        method: GET
+        description: Lists all KYC results for a business
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: business_token
+          in: path
+          type: string
+          description: Business token
+          required: true
+        - name: count
+          in: query
+          type: integer
+          description: Number of items to retrieve
+        - name: start_index
+          in: query
+          type: integer
+          description: Start index
+        - name: fields
+          in: query
+          type: string
+          description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+        - name: sort_by
+          in: query
+          type: string
+          description: Sort order
+    - name: kyc-user-user_token
+      path: /kyc/user/{user_token}
+      operations:
+      - name: getkycuserusertoken
+        method: GET
+        description: Lists all KYC results for a user
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: user_token
+          in: path
+          type: string
+          description: User token
+          required: true
+        - name: count
+          in: query
+          type: integer
+          description: Number of items to retrieve
+        - name: start_index
+          in: query
+          type: integer
+          description: Start index
+        - name: fields
+          in: query
+          type: string
+          description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+        - name: sort_by
+          in: query
+          type: string
+          description: Sort order
+    - name: kyc-token
+      path: /kyc/{token}
+      operations:
+      - name: getkyctoken
+        method: GET
+        description: Returns a specific KYC result
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: KYC token
+          required: true
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: core-kyc-rest
+    port: 8080
+    description: REST adapter for Core API — kyc. One Spectral-compliant resource per consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/kyc
+      name: kyc
+      description: REST surface for kyc.
+      operations:
+      - method: POST
+        name: postkyc
+        description: Performs a KYC
+        call: core-kyc.postkyc
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/kyc/business/{business-token}
+      name: kyc-business-business-token
+      description: REST surface for kyc-business-business_token.
+      operations:
+      - method: GET
+        name: getkycbusinessbusinesstoken
+        description: Lists all KYC results for a business
+        call: core-kyc.getkycbusinessbusinesstoken
+        with:
+          business_token: rest.business_token
+          count: rest.count
+          start_index: rest.start_index
+          fields: rest.fields
+          sort_by: rest.sort_by
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/kyc/user/{user-token}
+      name: kyc-user-user-token
+      description: REST surface for kyc-user-user_token.
+      operations:
+      - method: GET
+        name: getkycuserusertoken
+        description: Lists all KYC results for a user
+        call: core-kyc.getkycuserusertoken
+        with:
+          user_token: rest.user_token
+          count: rest.count
+          start_index: rest.start_index
+          fields: rest.fields
+          sort_by: rest.sort_by
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/kyc/{token}
+      name: kyc-token
+      description: REST surface for kyc-token.
+      operations:
+      - method: GET
+        name: getkyctoken
+        description: Returns a specific KYC result
+        call: core-kyc.getkyctoken
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: core-kyc-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Core API — kyc. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: performs-kyc
+      description: Performs a KYC
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-kyc.postkyc
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: lists-all-kyc-results-business
+      description: Lists all KYC results for a business
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-kyc.getkycbusinessbusinesstoken
+      with:
+        business_token: tools.business_token
+        count: tools.count
+        start_index: tools.start_index
+        fields: tools.fields
+        sort_by: tools.sort_by
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: lists-all-kyc-results-user
+      description: Lists all KYC results for a user
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-kyc.getkycuserusertoken
+      with:
+        user_token: tools.user_token
+        count: tools.count
+        start_index: tools.start_index
+        fields: tools.fields
+        sort_by: tools.sort_by
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: returns-specific-kyc-result
+      description: Returns a specific KYC result
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-kyc.getkyctoken
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.

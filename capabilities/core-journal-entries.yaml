@@ -1,0 +1,276 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Core API — Journal Entries
+  description: 'Core API — Journal Entries. 3 operations. Lead operation: List account journal entries. Self-contained Naftiko
+    capability covering one Marqeta business surface.'
+  tags:
+  - Marqeta
+  - Journal Entries
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: core-journal-entries
+    baseUri: ''
+    description: Core API — Journal Entries business capability. Self-contained, no shared references.
+    resources:
+    - name: accounts-account_token-journalentries
+      path: /accounts/{account_token}/journalentries
+      operations:
+      - name: listaccountjournalentries
+        method: GET
+        description: List account journal entries
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account for which you want to retrieve journal entries.
+          required: true
+        - name: count
+          in: query
+          type: integer
+          description: Number of journal entry resources to retrieve.
+        - name: start_index
+          in: query
+          type: integer
+          description: Sort order index of the first resource in the returned array.
+        - name: start_date
+          in: query
+          type: string
+          description: Starting date of the date range from which to return journal entries.
+        - name: end_date
+          in: query
+          type: string
+          description: Ending date of the date range from which to return journal entries.
+        - name: start_impact_time
+          in: query
+          type: string
+          description: Starting `impact_time` of the date range from which to return journal entries.
+        - name: end_impact_time
+          in: query
+          type: string
+          description: Ending `impact_time` of the date range from which to return journal entries.
+        - name: start_created_time
+          in: query
+          type: string
+          description: Starting `created_date` of the date range from which to return journal entries.
+        - name: end_created_time
+          in: query
+          type: string
+          description: Ending `created_date` of the date range from which to return journal entries.
+        - name: statuses
+          in: query
+          type: array
+          description: Array of statuses by which to filter journal entries.
+        - name: detail_token
+          in: query
+          type: string
+          description: Detail token of the journal entries to return.
+        - name: groups
+          in: query
+          type: array
+          description: Array of groups by which to filter journal entries.
+        - name: expand
+          in: query
+          type: array
+          description: Embeds the specified object into the response.
+        - name: sort_by
+          in: query
+          type: string
+          description: Field on which to sort.
+        - name: card_tokens
+          in: query
+          type: array
+          description: Array of card tokens by which to filter journal entries.
+        - name: user_tokens
+          in: query
+          type: array
+          description: Array of user tokens by which to filter journal entries.
+        - name: types
+          in: query
+          type: array
+          description: Array of <</core-api/event-types#_credit_journal_entry_events, event types>> by which to filter journal
+            entries.
+    - name: accounts-account_token-journalentries-journal_entry_token
+      path: /accounts/{account_token}/journalentries/{journal_entry_token}
+      operations:
+      - name: getaccountjournalentry
+        method: GET
+        description: Retrieve account journal entry
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account for which you want to retrieve journal entries.
+          required: true
+        - name: journal_entry_token
+          in: path
+          type: string
+          description: Unique identifier of the journal entry you want to retrieve.
+          required: true
+    - name: webhooks-event_type-resource_token
+      path: /webhooks/{event_type}/{resource_token}
+      operations:
+      - name: resendwebhookevent
+        method: POST
+        description: Resend credit event notification
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: event_type
+          in: path
+          type: string
+          description: Specifies the type of event you want to resend.
+          required: true
+        - name: resource_token
+          in: path
+          type: string
+          description: Unique identifier of the resource for which you want to resend a notification.
+          required: true
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: core-journal-entries-rest
+    port: 8080
+    description: REST adapter for Core API — Journal Entries. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/accounts/{account-token}/journalentries
+      name: accounts-account-token-journalentries
+      description: REST surface for accounts-account_token-journalentries.
+      operations:
+      - method: GET
+        name: listaccountjournalentries
+        description: List account journal entries
+        call: core-journal-entries.listaccountjournalentries
+        with:
+          account_token: rest.account_token
+          count: rest.count
+          start_index: rest.start_index
+          start_date: rest.start_date
+          end_date: rest.end_date
+          start_impact_time: rest.start_impact_time
+          end_impact_time: rest.end_impact_time
+          start_created_time: rest.start_created_time
+          end_created_time: rest.end_created_time
+          statuses: rest.statuses
+          detail_token: rest.detail_token
+          groups: rest.groups
+          expand: rest.expand
+          sort_by: rest.sort_by
+          card_tokens: rest.card_tokens
+          user_tokens: rest.user_tokens
+          types: rest.types
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/accounts/{account-token}/journalentries/{journal-entry-token}
+      name: accounts-account-token-journalentries-journal-entry-token
+      description: REST surface for accounts-account_token-journalentries-journal_entry_token.
+      operations:
+      - method: GET
+        name: getaccountjournalentry
+        description: Retrieve account journal entry
+        call: core-journal-entries.getaccountjournalentry
+        with:
+          account_token: rest.account_token
+          journal_entry_token: rest.journal_entry_token
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/webhooks/{event-type}/{resource-token}
+      name: webhooks-event-type-resource-token
+      description: REST surface for webhooks-event_type-resource_token.
+      operations:
+      - method: POST
+        name: resendwebhookevent
+        description: Resend credit event notification
+        call: core-journal-entries.resendwebhookevent
+        with:
+          event_type: rest.event_type
+          resource_token: rest.resource_token
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: core-journal-entries-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Core API — Journal Entries. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: list-account-journal-entries
+      description: List account journal entries
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-journal-entries.listaccountjournalentries
+      with:
+        account_token: tools.account_token
+        count: tools.count
+        start_index: tools.start_index
+        start_date: tools.start_date
+        end_date: tools.end_date
+        start_impact_time: tools.start_impact_time
+        end_impact_time: tools.end_impact_time
+        start_created_time: tools.start_created_time
+        end_created_time: tools.end_created_time
+        statuses: tools.statuses
+        detail_token: tools.detail_token
+        groups: tools.groups
+        expand: tools.expand
+        sort_by: tools.sort_by
+        card_tokens: tools.card_tokens
+        user_tokens: tools.user_tokens
+        types: tools.types
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-account-journal-entry
+      description: Retrieve account journal entry
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-journal-entries.getaccountjournalentry
+      with:
+        account_token: tools.account_token
+        journal_entry_token: tools.journal_entry_token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: resend-credit-event-notification
+      description: Resend credit event notification
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-journal-entries.resendwebhookevent
+      with:
+        event_type: tools.event_type
+        resource_token: tools.resource_token
+      outputParameters:
+      - type: object
+        mapping: $.

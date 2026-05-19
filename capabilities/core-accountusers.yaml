@@ -1,0 +1,81 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Core API — AccountUsers
+  description: 'Core API — AccountUsers. 1 operations. Lead operation: Retrieve user. Self-contained Naftiko capability covering
+    one Marqeta business surface.'
+  tags:
+  - Marqeta
+  - AccountUsers
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: core-accountusers
+    baseUri: ''
+    description: Core API — AccountUsers business capability. Self-contained, no shared references.
+    resources:
+    - name: accountusers-user_token
+      path: /accountusers/{user_token}
+      operations:
+      - name: retrieveaccountuser
+        method: GET
+        description: Retrieve user
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: user_token
+          in: path
+          type: string
+          description: Unique identifier of the user to retrieve.
+          required: true
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: core-accountusers-rest
+    port: 8080
+    description: REST adapter for Core API — AccountUsers. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/accountusers/{user-token}
+      name: accountusers-user-token
+      description: REST surface for accountusers-user_token.
+      operations:
+      - method: GET
+        name: retrieveaccountuser
+        description: Retrieve user
+        call: core-accountusers.retrieveaccountuser
+        with:
+          user_token: rest.user_token
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: core-accountusers-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Core API — AccountUsers. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: retrieve-user
+      description: Retrieve user
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-accountusers.retrieveaccountuser
+      with:
+        user_token: tools.user_token
+      outputParameters:
+      - type: object
+        mapping: $.

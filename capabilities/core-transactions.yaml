@@ -1,0 +1,495 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Core API — Transactions
+  description: 'Core API — Transactions. 5 operations. Lead operation: List account transactions. Self-contained Naftiko capability
+    covering one Marqeta business surface.'
+  tags:
+  - Marqeta
+  - Transactions
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: core-transactions
+    baseUri: ''
+    description: Core API — Transactions business capability. Self-contained, no shared references.
+    resources:
+    - name: accounts-account_token-transactions
+      path: /accounts/{account_token}/transactions
+      operations:
+      - name: listaccounttransactions
+        method: GET
+        description: List account transactions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account for which you want to retrieve transactions.
+          required: true
+        - name: count
+          in: query
+          type: integer
+          description: Number of transaction resources to retrieve.
+        - name: start_index
+          in: query
+          type: integer
+          description: Starting index for pagination.
+        - name: start_date
+          in: query
+          type: string
+          description: Start date for transaction filter. Defaults to 30 days ago if not provided.
+        - name: end_date
+          in: query
+          type: string
+          description: End date for transaction filter. Defaults to current date if not provided.
+        - name: status
+          in: query
+          type: string
+          description: Filter by transaction status. Allowed values are PENDING, POSTED, DECLINED, and ERROR. When no status
+            is provided, PENDING, POSTED, DECLINED, and ERROR transact
+        - name: card_token
+          in: query
+          type: string
+          description: Filter transactions by card token.
+        - name: user_token
+          in: query
+          type: string
+          description: Filter transactions by user token.
+    - name: transactions
+      path: /transactions
+      operations:
+      - name: gettransactions
+        method: GET
+        description: List transactions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: count
+          in: query
+          type: integer
+          description: The number of transactions to retrieve.
+        - name: start_index
+          in: query
+          type: integer
+          description: The sort order index of the first resource in the returned array.
+        - name: fields
+          in: query
+          type: string
+          description: Comma-delimited list of fields to return (`field_1,field_2`, and so on).
+        - name: sort_by
+          in: query
+          type: string
+          description: Field on which to sort.
+        - name: start_date
+          in: query
+          type: string
+          description: The starting date (or date-time) of a date range from which to return transactions.
+        - name: end_date
+          in: query
+          type: string
+          description: The ending date (or date-time) of a date range from which to return transactions.
+        - name: type
+          in: query
+          type: string
+          description: Comma-delimited list of transaction types to include.
+        - name: user_token
+          in: query
+          type: string
+          description: The unique identifier of the user account holder.
+        - name: business_token
+          in: query
+          type: string
+          description: The unique identifier of the business account holder.
+        - name: acting_user_token
+          in: query
+          type: string
+          description: The unique identifier of the acting user.
+        - name: card_token
+          in: query
+          type: string
+          description: The unique identifier of the card.
+        - name: account_token
+          in: query
+          type: string
+          description: Account token
+        - name: state
+          in: query
+          type: string
+          description: Comma-delimited list of transaction states to display.
+        - name: version
+          in: query
+          type: string
+          description: Specifies the API version for the request.
+        - name: start_identifier
+          in: query
+          type: integer
+          description: Start identifier
+    - name: transactions-fundingsource-funding_source_token
+      path: /transactions/fundingsource/{funding_source_token}
+      operations:
+      - name: gettransactionsfundingsourcefundingsourcetoken
+        method: GET
+        description: List transactions for a funding account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: funding_source_token
+          in: path
+          type: string
+          description: The unique identifier of the funding account.
+          required: true
+        - name: count
+          in: query
+          type: integer
+          description: The number of transactions to retrieve.
+        - name: start_index
+          in: query
+          type: integer
+          description: The sort order index of the first resource in the returned array.
+        - name: fields
+          in: query
+          type: string
+          description: Comma-delimited list of fields to return (`field_1,field_2`, and so on).
+        - name: sort_by
+          in: query
+          type: string
+          description: Field on which to sort.
+        - name: start_date
+          in: query
+          type: string
+          description: The starting date (or date-time) of a date range from which to return transactions.
+        - name: end_date
+          in: query
+          type: string
+          description: The ending date (or date-time) of a date range from which to return transactions.
+        - name: type
+          in: query
+          type: string
+          description: Comma-delimited list of transaction types to include.
+        - name: polarity
+          in: query
+          type: string
+          description: Specifies whether to return credit or debit transactions.
+        - name: version
+          in: query
+          type: string
+          description: Specifies the API version for the request.
+    - name: transactions-token
+      path: /transactions/{token}
+      operations:
+      - name: gettransactionstoken
+        method: GET
+        description: Retrieve transaction
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: The unique identifier of the transaction.
+          required: true
+        - name: fields
+          in: query
+          type: string
+          description: Comma-delimited list of fields to return (`field_1,field_2`, and so on).
+        - name: version
+          in: query
+          type: string
+          description: Specifies the API version for the request.
+    - name: transactions-token-related
+      path: /transactions/{token}/related
+      operations:
+      - name: gettransactionstokenrelated
+        method: GET
+        description: List related transactions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: The unique identifier of the transaction.
+          required: true
+        - name: count
+          in: query
+          type: integer
+          description: The number of transactions to retrieve.
+        - name: start_index
+          in: query
+          type: integer
+          description: The sort order index of the first resource in the returned array.
+        - name: fields
+          in: query
+          type: string
+          description: Comma-delimited list of fields to return (`field_1,field_2`, and so on).
+        - name: sort_by
+          in: query
+          type: string
+          description: Field on which to sort.
+        - name: start_date
+          in: query
+          type: string
+          description: The starting date (or date-time) of a date range from which to return transactions.
+        - name: end_date
+          in: query
+          type: string
+          description: The ending date (or date-time) of a date range from which to return transactions.
+        - name: type
+          in: query
+          type: string
+          description: Comma-delimited list of transaction types to include.
+        - name: state
+          in: query
+          type: string
+          description: Comma-delimited list of transaction states to display.
+        - name: version
+          in: query
+          type: string
+          description: Specifies the API version for the request.
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: core-transactions-rest
+    port: 8080
+    description: REST adapter for Core API — Transactions. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/accounts/{account-token}/transactions
+      name: accounts-account-token-transactions
+      description: REST surface for accounts-account_token-transactions.
+      operations:
+      - method: GET
+        name: listaccounttransactions
+        description: List account transactions
+        call: core-transactions.listaccounttransactions
+        with:
+          account_token: rest.account_token
+          count: rest.count
+          start_index: rest.start_index
+          start_date: rest.start_date
+          end_date: rest.end_date
+          status: rest.status
+          card_token: rest.card_token
+          user_token: rest.user_token
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/transactions
+      name: transactions
+      description: REST surface for transactions.
+      operations:
+      - method: GET
+        name: gettransactions
+        description: List transactions
+        call: core-transactions.gettransactions
+        with:
+          count: rest.count
+          start_index: rest.start_index
+          fields: rest.fields
+          sort_by: rest.sort_by
+          start_date: rest.start_date
+          end_date: rest.end_date
+          type: rest.type
+          user_token: rest.user_token
+          business_token: rest.business_token
+          acting_user_token: rest.acting_user_token
+          card_token: rest.card_token
+          account_token: rest.account_token
+          state: rest.state
+          version: rest.version
+          start_identifier: rest.start_identifier
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/transactions/fundingsource/{funding-source-token}
+      name: transactions-fundingsource-funding-source-token
+      description: REST surface for transactions-fundingsource-funding_source_token.
+      operations:
+      - method: GET
+        name: gettransactionsfundingsourcefundingsourcetoken
+        description: List transactions for a funding account
+        call: core-transactions.gettransactionsfundingsourcefundingsourcetoken
+        with:
+          funding_source_token: rest.funding_source_token
+          count: rest.count
+          start_index: rest.start_index
+          fields: rest.fields
+          sort_by: rest.sort_by
+          start_date: rest.start_date
+          end_date: rest.end_date
+          type: rest.type
+          polarity: rest.polarity
+          version: rest.version
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/transactions/{token}
+      name: transactions-token
+      description: REST surface for transactions-token.
+      operations:
+      - method: GET
+        name: gettransactionstoken
+        description: Retrieve transaction
+        call: core-transactions.gettransactionstoken
+        with:
+          token: rest.token
+          fields: rest.fields
+          version: rest.version
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/transactions/{token}/related
+      name: transactions-token-related
+      description: REST surface for transactions-token-related.
+      operations:
+      - method: GET
+        name: gettransactionstokenrelated
+        description: List related transactions
+        call: core-transactions.gettransactionstokenrelated
+        with:
+          token: rest.token
+          count: rest.count
+          start_index: rest.start_index
+          fields: rest.fields
+          sort_by: rest.sort_by
+          start_date: rest.start_date
+          end_date: rest.end_date
+          type: rest.type
+          state: rest.state
+          version: rest.version
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: core-transactions-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Core API — Transactions. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: list-account-transactions
+      description: List account transactions
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-transactions.listaccounttransactions
+      with:
+        account_token: tools.account_token
+        count: tools.count
+        start_index: tools.start_index
+        start_date: tools.start_date
+        end_date: tools.end_date
+        status: tools.status
+        card_token: tools.card_token
+        user_token: tools.user_token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-transactions
+      description: List transactions
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-transactions.gettransactions
+      with:
+        count: tools.count
+        start_index: tools.start_index
+        fields: tools.fields
+        sort_by: tools.sort_by
+        start_date: tools.start_date
+        end_date: tools.end_date
+        type: tools.type
+        user_token: tools.user_token
+        business_token: tools.business_token
+        acting_user_token: tools.acting_user_token
+        card_token: tools.card_token
+        account_token: tools.account_token
+        state: tools.state
+        version: tools.version
+        start_identifier: tools.start_identifier
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-transactions-funding-account
+      description: List transactions for a funding account
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-transactions.gettransactionsfundingsourcefundingsourcetoken
+      with:
+        funding_source_token: tools.funding_source_token
+        count: tools.count
+        start_index: tools.start_index
+        fields: tools.fields
+        sort_by: tools.sort_by
+        start_date: tools.start_date
+        end_date: tools.end_date
+        type: tools.type
+        polarity: tools.polarity
+        version: tools.version
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-transaction
+      description: Retrieve transaction
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-transactions.gettransactionstoken
+      with:
+        token: tools.token
+        fields: tools.fields
+        version: tools.version
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-related-transactions
+      description: List related transactions
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-transactions.gettransactionstokenrelated
+      with:
+        token: tools.token
+        count: tools.count
+        start_index: tools.start_index
+        fields: tools.fields
+        sort_by: tools.sort_by
+        start_date: tools.start_date
+        end_date: tools.end_date
+        type: tools.type
+        state: tools.state
+        version: tools.version
+      outputParameters:
+      - type: object
+        mapping: $.

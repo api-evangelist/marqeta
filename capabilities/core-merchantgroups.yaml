@@ -1,0 +1,217 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Core API — merchantgroups
+  description: 'Core API — merchantgroups. 4 operations. Lead operation: Lists all Merchant Groups. Self-contained Naftiko
+    capability covering one Marqeta business surface.'
+  tags:
+  - Marqeta
+  - merchantgroups
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: core-merchantgroups
+    baseUri: ''
+    description: Core API — merchantgroups business capability. Self-contained, no shared references.
+    resources:
+    - name: merchantgroups
+      path: /merchantgroups
+      operations:
+      - name: getmerchantgroups
+        method: GET
+        description: Lists all Merchant Groups
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: mid
+          in: query
+          type: string
+          description: mid
+        - name: count
+          in: query
+          type: integer
+          description: Number of items to retrieve. Count can be between 1 - 10 items.
+        - name: start_index
+          in: query
+          type: integer
+          description: Indicates from what row to start returning data.
+        - name: sort_by
+          in: query
+          type: string
+          description: Field by which to sort the returned items. Use any field in the model, or system fields lastModifiedTime
+            or createdTime.
+      - name: postmerchantgroup
+        method: POST
+        description: Creates a merchant group
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: merchantgroups-token
+      path: /merchantgroups/{token}
+      operations:
+      - name: getmerchantgroup
+        method: GET
+        description: Returns a Merchant Group
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Merchant Group token
+          required: true
+      - name: putmerchantgroupstoken
+        method: PUT
+        description: Updates an Merchant Group
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: core-merchantgroups-rest
+    port: 8080
+    description: REST adapter for Core API — merchantgroups. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/merchantgroups
+      name: merchantgroups
+      description: REST surface for merchantgroups.
+      operations:
+      - method: GET
+        name: getmerchantgroups
+        description: Lists all Merchant Groups
+        call: core-merchantgroups.getmerchantgroups
+        with:
+          mid: rest.mid
+          count: rest.count
+          start_index: rest.start_index
+          sort_by: rest.sort_by
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postmerchantgroup
+        description: Creates a merchant group
+        call: core-merchantgroups.postmerchantgroup
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/merchantgroups/{token}
+      name: merchantgroups-token
+      description: REST surface for merchantgroups-token.
+      operations:
+      - method: GET
+        name: getmerchantgroup
+        description: Returns a Merchant Group
+        call: core-merchantgroups.getmerchantgroup
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: putmerchantgroupstoken
+        description: Updates an Merchant Group
+        call: core-merchantgroups.putmerchantgroupstoken
+        with:
+          token: rest.token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: core-merchantgroups-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Core API — merchantgroups. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: lists-all-merchant-groups
+      description: Lists all Merchant Groups
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-merchantgroups.getmerchantgroups
+      with:
+        mid: tools.mid
+        count: tools.count
+        start_index: tools.start_index
+        sort_by: tools.sort_by
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: creates-merchant-group
+      description: Creates a merchant group
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-merchantgroups.postmerchantgroup
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: returns-merchant-group
+      description: Returns a Merchant Group
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-merchantgroups.getmerchantgroup
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: updates-merchant-group
+      description: Updates an Merchant Group
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: core-merchantgroups.putmerchantgroupstoken
+      with:
+        token: tools.token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

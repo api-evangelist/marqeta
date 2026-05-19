@@ -1,0 +1,71 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Marqeta DiVA API — Views
+  description: 'Marqeta DiVA API — Views. 1 operations. Lead operation: List available views. Self-contained Naftiko capability
+    covering one Marqeta business surface.'
+  tags:
+  - Marqeta
+  - Views
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: diva-views
+    baseUri: https://diva-api.marqeta.com/data/v2
+    description: Marqeta DiVA API — Views business capability. Self-contained, no shared references.
+    resources:
+    - name: views
+      path: /views
+      operations:
+      - name: listviews
+        method: GET
+        description: List available views
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: diva-views-rest
+    port: 8080
+    description: REST adapter for Marqeta DiVA API — Views. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/views
+      name: views
+      description: REST surface for views.
+      operations:
+      - method: GET
+        name: listviews
+        description: List available views
+        call: diva-views.listviews
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: diva-views-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Marqeta DiVA API — Views. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: list-available-views
+      description: List available views
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: diva-views.listviews
+      outputParameters:
+      - type: object
+        mapping: $.

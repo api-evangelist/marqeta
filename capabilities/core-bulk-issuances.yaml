@@ -1,0 +1,169 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Core API — bulk issuances
+  description: 'Core API — bulk issuances. 3 operations. Lead operation: Lists all bulk issuance requests. Self-contained
+    Naftiko capability covering one Marqeta business surface.'
+  tags:
+  - Marqeta
+  - bulk issuances
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: core-bulk-issuances
+    baseUri: ''
+    description: Core API — bulk issuances business capability. Self-contained, no shared references.
+    resources:
+    - name: bulkissuances
+      path: /bulkissuances
+      operations:
+      - name: getbulkissuances
+        method: GET
+        description: Lists all bulk issuance requests
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: count
+          in: query
+          type: integer
+          description: Number of requests to retrieve
+        - name: start_index
+          in: query
+          type: integer
+          description: Start index
+        - name: sort_by
+          in: query
+          type: string
+          description: Sort order
+      - name: postbulkissuances
+        method: POST
+        description: Creates a bulk issuance request for cards
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: bulkissuances-token
+      path: /bulkissuances/{token}
+      operations:
+      - name: getbulkissuancestoken
+        method: GET
+        description: Returns a bulk issuance request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Bulk issuance token
+          required: true
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: core-bulk-issuances-rest
+    port: 8080
+    description: REST adapter for Core API — bulk issuances. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/bulkissuances
+      name: bulkissuances
+      description: REST surface for bulkissuances.
+      operations:
+      - method: GET
+        name: getbulkissuances
+        description: Lists all bulk issuance requests
+        call: core-bulk-issuances.getbulkissuances
+        with:
+          count: rest.count
+          start_index: rest.start_index
+          sort_by: rest.sort_by
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postbulkissuances
+        description: Creates a bulk issuance request for cards
+        call: core-bulk-issuances.postbulkissuances
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/bulkissuances/{token}
+      name: bulkissuances-token
+      description: REST surface for bulkissuances-token.
+      operations:
+      - method: GET
+        name: getbulkissuancestoken
+        description: Returns a bulk issuance request
+        call: core-bulk-issuances.getbulkissuancestoken
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: core-bulk-issuances-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Core API — bulk issuances. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: lists-all-bulk-issuance-requests
+      description: Lists all bulk issuance requests
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-bulk-issuances.getbulkissuances
+      with:
+        count: tools.count
+        start_index: tools.start_index
+        sort_by: tools.sort_by
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: creates-bulk-issuance-request-cards
+      description: Creates a bulk issuance request for cards
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-bulk-issuances.postbulkissuances
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: returns-bulk-issuance-request
+      description: Returns a bulk issuance request
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-bulk-issuances.getbulkissuancestoken
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.

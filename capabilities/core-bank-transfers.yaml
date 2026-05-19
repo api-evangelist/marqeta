@@ -1,0 +1,354 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Core API — bank transfers
+  description: 'Core API — bank transfers. 6 operations. Lead operation: Lists all bank transfers. Self-contained Naftiko
+    capability covering one Marqeta business surface.'
+  tags:
+  - Marqeta
+  - bank transfers
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: core-bank-transfers
+    baseUri: ''
+    description: Core API — bank transfers business capability. Self-contained, no shared references.
+    resources:
+    - name: banktransfers-ach
+      path: /banktransfers/ach
+      operations:
+      - name: getbanktransfersach
+        method: GET
+        description: Lists all bank transfers
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: count
+          in: query
+          type: integer
+          description: Number of users to retrieve
+        - name: start_index
+          in: query
+          type: integer
+          description: Start index
+        - name: user_token
+          in: query
+          type: string
+          description: User token
+        - name: business_token
+          in: query
+          type: string
+          description: Business token
+        - name: funding_source_token
+          in: query
+          type: string
+          description: Funding source token
+        - name: statuses
+          in: query
+          type: string
+          description: A comma-delimited list of bank transfer status(s)
+        - name: sort_by
+          in: query
+          type: string
+          description: Sort order
+        - name: expand
+          in: query
+          type: string
+          description: Object to expand
+        - name: funding_source_type
+          in: query
+          type: string
+          description: Funding source type
+      - name: postbanktransfersach
+        method: POST
+        description: Creates an ACH bank transfer
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: banktransfers-ach-earlyfunds
+      path: /banktransfers/ach/earlyfunds
+      operations:
+      - name: postapplyprovisionalcredittobanktransfer
+        method: POST
+        description: Applies a provisional credit to a bank transfer
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: banktransfers-ach-transitions
+      path: /banktransfers/ach/transitions
+      operations:
+      - name: getbanktransfersachtransitions
+        method: GET
+        description: Lists all bank transfer transitions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: count
+          in: query
+          type: integer
+          description: Number of bank transfer transitions to retrieve
+        - name: token
+          in: query
+          type: string
+          description: Bank transfer transition token
+        - name: bank_transfer_token
+          in: query
+          type: string
+          description: Bank transfer token
+        - name: start_index
+          in: query
+          type: integer
+          description: Start index
+        - name: sort_by
+          in: query
+          type: string
+          description: Sort order
+        - name: statuses
+          in: query
+          type: string
+          description: Comma-delimited list of bank transfer states to display e.g. PENDING | PROCESSING | SUBMITTED | RETURNED
+            |  COMPLETED | CANCELLED
+      - name: postbanktransfersachtransitions
+        method: POST
+        description: Creates an ACH bank transfer transition
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: banktransfers-ach-token
+      path: /banktransfers/ach/{token}
+      operations:
+      - name: getbanktransfersachtoken
+        method: GET
+        description: Returns a bank transfer entry
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Bank transfer token
+          required: true
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: core-bank-transfers-rest
+    port: 8080
+    description: REST adapter for Core API — bank transfers. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/banktransfers/ach
+      name: banktransfers-ach
+      description: REST surface for banktransfers-ach.
+      operations:
+      - method: GET
+        name: getbanktransfersach
+        description: Lists all bank transfers
+        call: core-bank-transfers.getbanktransfersach
+        with:
+          count: rest.count
+          start_index: rest.start_index
+          user_token: rest.user_token
+          business_token: rest.business_token
+          funding_source_token: rest.funding_source_token
+          statuses: rest.statuses
+          sort_by: rest.sort_by
+          expand: rest.expand
+          funding_source_type: rest.funding_source_type
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postbanktransfersach
+        description: Creates an ACH bank transfer
+        call: core-bank-transfers.postbanktransfersach
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/banktransfers/ach/earlyfunds
+      name: banktransfers-ach-earlyfunds
+      description: REST surface for banktransfers-ach-earlyfunds.
+      operations:
+      - method: POST
+        name: postapplyprovisionalcredittobanktransfer
+        description: Applies a provisional credit to a bank transfer
+        call: core-bank-transfers.postapplyprovisionalcredittobanktransfer
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/banktransfers/ach/transitions
+      name: banktransfers-ach-transitions
+      description: REST surface for banktransfers-ach-transitions.
+      operations:
+      - method: GET
+        name: getbanktransfersachtransitions
+        description: Lists all bank transfer transitions
+        call: core-bank-transfers.getbanktransfersachtransitions
+        with:
+          count: rest.count
+          token: rest.token
+          bank_transfer_token: rest.bank_transfer_token
+          start_index: rest.start_index
+          sort_by: rest.sort_by
+          statuses: rest.statuses
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postbanktransfersachtransitions
+        description: Creates an ACH bank transfer transition
+        call: core-bank-transfers.postbanktransfersachtransitions
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/banktransfers/ach/{token}
+      name: banktransfers-ach-token
+      description: REST surface for banktransfers-ach-token.
+      operations:
+      - method: GET
+        name: getbanktransfersachtoken
+        description: Returns a bank transfer entry
+        call: core-bank-transfers.getbanktransfersachtoken
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: core-bank-transfers-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Core API — bank transfers. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: lists-all-bank-transfers
+      description: Lists all bank transfers
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-bank-transfers.getbanktransfersach
+      with:
+        count: tools.count
+        start_index: tools.start_index
+        user_token: tools.user_token
+        business_token: tools.business_token
+        funding_source_token: tools.funding_source_token
+        statuses: tools.statuses
+        sort_by: tools.sort_by
+        expand: tools.expand
+        funding_source_type: tools.funding_source_type
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: creates-ach-bank-transfer
+      description: Creates an ACH bank transfer
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-bank-transfers.postbanktransfersach
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: applies-provisional-credit-bank-transfer
+      description: Applies a provisional credit to a bank transfer
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-bank-transfers.postapplyprovisionalcredittobanktransfer
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: lists-all-bank-transfer-transitions
+      description: Lists all bank transfer transitions
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-bank-transfers.getbanktransfersachtransitions
+      with:
+        count: tools.count
+        token: tools.token
+        bank_transfer_token: tools.bank_transfer_token
+        start_index: tools.start_index
+        sort_by: tools.sort_by
+        statuses: tools.statuses
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: creates-ach-bank-transfer-transition
+      description: Creates an ACH bank transfer transition
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-bank-transfers.postbanktransfersachtransitions
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: returns-bank-transfer-entry
+      description: Returns a bank transfer entry
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-bank-transfers.getbanktransfersachtoken
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.

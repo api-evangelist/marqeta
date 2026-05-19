@@ -1,0 +1,235 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Core API — Payment Sources
+  description: 'Core API — Payment Sources. 4 operations. Lead operation: List payment sources. Self-contained Naftiko capability
+    covering one Marqeta business surface.'
+  tags:
+  - Marqeta
+  - Payment Sources
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: core-payment-sources
+    baseUri: ''
+    description: Core API — Payment Sources business capability. Self-contained, no shared references.
+    resources:
+    - name: paymentsources
+      path: /paymentsources
+      operations:
+      - name: listpaymentsources
+        method: GET
+        description: List payment sources
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: query
+          type: string
+          description: Unique identifier of the credit account associated with the payment source.
+        - name: user_token
+          in: query
+          type: string
+          description: Unique identifier of the user associated with the payment source.
+        - name: business_token
+          in: query
+          type: string
+          description: Unique identifier of the business associated with the payment source.
+        - name: count
+          in: query
+          type: integer
+          description: Number of payment source resources to retrieve.
+        - name: start_index
+          in: query
+          type: integer
+          description: Sort order index of the first resource in the returned array.
+        - name: sort_by
+          in: query
+          type: string
+          description: Field on which to sort.
+        - name: statuses
+          in: query
+          type: array
+          description: Array of statuses to use for filtering payment sources.
+      - name: createpaymentsource
+        method: POST
+        description: Create payment source
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: paymentsources-token
+      path: /paymentsources/{token}
+      operations:
+      - name: retrievepaymentsource
+        method: GET
+        description: Retrieve payment source
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Unique identifier of the payment source to retrieve.
+          required: true
+      - name: updatepaymentsource
+        method: PUT
+        description: Update payment source
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Unique identifier of the payment source to retrieve.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: core-payment-sources-rest
+    port: 8080
+    description: REST adapter for Core API — Payment Sources. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/paymentsources
+      name: paymentsources
+      description: REST surface for paymentsources.
+      operations:
+      - method: GET
+        name: listpaymentsources
+        description: List payment sources
+        call: core-payment-sources.listpaymentsources
+        with:
+          account_token: rest.account_token
+          user_token: rest.user_token
+          business_token: rest.business_token
+          count: rest.count
+          start_index: rest.start_index
+          sort_by: rest.sort_by
+          statuses: rest.statuses
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createpaymentsource
+        description: Create payment source
+        call: core-payment-sources.createpaymentsource
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/paymentsources/{token}
+      name: paymentsources-token
+      description: REST surface for paymentsources-token.
+      operations:
+      - method: GET
+        name: retrievepaymentsource
+        description: Retrieve payment source
+        call: core-payment-sources.retrievepaymentsource
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: updatepaymentsource
+        description: Update payment source
+        call: core-payment-sources.updatepaymentsource
+        with:
+          token: rest.token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: core-payment-sources-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Core API — Payment Sources. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: list-payment-sources
+      description: List payment sources
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-payment-sources.listpaymentsources
+      with:
+        account_token: tools.account_token
+        user_token: tools.user_token
+        business_token: tools.business_token
+        count: tools.count
+        start_index: tools.start_index
+        sort_by: tools.sort_by
+        statuses: tools.statuses
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-payment-source
+      description: Create payment source
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-payment-sources.createpaymentsource
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-payment-source
+      description: Retrieve payment source
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-payment-sources.retrievepaymentsource
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-payment-source
+      description: Update payment source
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: core-payment-sources.updatepaymentsource
+      with:
+        token: tools.token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

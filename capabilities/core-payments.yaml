@@ -1,0 +1,362 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Core API — Payments
+  description: 'Core API — Payments. 6 operations. Lead operation: List account payments. Self-contained Naftiko capability
+    covering one Marqeta business surface.'
+  tags:
+  - Marqeta
+  - Payments
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: core-payments
+    baseUri: ''
+    description: Core API — Payments business capability. Self-contained, no shared references.
+    resources:
+    - name: accounts-account_token-payments
+      path: /accounts/{account_token}/payments
+      operations:
+      - name: listpayments
+        method: GET
+        description: List account payments
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account for which to retrieve payments.
+          required: true
+        - name: start_date
+          in: query
+          type: string
+          description: Beginning of the date range of the payments to return.
+        - name: end_date
+          in: query
+          type: string
+          description: End of the date range of the payments to return.
+        - name: count
+          in: query
+          type: integer
+          description: Number of account payments resources to retrieve.
+        - name: start_index
+          in: query
+          type: integer
+          description: Sort order index of the first resource in the returned array.
+        - name: sort_by
+          in: query
+          type: string
+          description: Field on which to sort.
+        - name: statuses
+          in: query
+          type: array
+          description: Array of statuses by which to filter payments.
+      - name: createpayment
+        method: POST
+        description: Create account payment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account for which to create a payment.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: accounts-account_token-payments-payment_token
+      path: /accounts/{account_token}/payments/{payment_token}
+      operations:
+      - name: retrievepayment
+        method: GET
+        description: Retrieve account payment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account for which to retrieve a payment.
+          required: true
+        - name: payment_token
+          in: path
+          type: string
+          description: Unique identifier of the payment to retrieve.
+          required: true
+    - name: accounts-account_token-payments-payment_token-releasehold
+      path: /accounts/{account_token}/payments/{payment_token}/releasehold
+      operations:
+      - name: releasepaymenthold
+        method: POST
+        description: Release payment hold
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account on which a payment hold is being released.
+          required: true
+        - name: payment_token
+          in: path
+          type: string
+          description: Unique identifier of the payment currently on hold.
+          required: true
+    - name: accounts-account_token-payments-payment_token-transitions
+      path: /accounts/{account_token}/payments/{payment_token}/transitions
+      operations:
+      - name: transitionpayment
+        method: POST
+        description: Transition account payment status
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account for which you want to transition a payment status.
+          required: true
+        - name: payment_token
+          in: path
+          type: string
+          description: Unique identifier of the payment whose status you want to transition.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: webhooks-event_type-resource_token
+      path: /webhooks/{event_type}/{resource_token}
+      operations:
+      - name: resendwebhookevent
+        method: POST
+        description: Resend credit event notification
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: event_type
+          in: path
+          type: string
+          description: Specifies the type of event you want to resend.
+          required: true
+        - name: resource_token
+          in: path
+          type: string
+          description: Unique identifier of the resource for which you want to resend a notification.
+          required: true
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: core-payments-rest
+    port: 8080
+    description: REST adapter for Core API — Payments. One Spectral-compliant resource per consumed operation, prefixed with
+      /v1.
+    resources:
+    - path: /v1/accounts/{account-token}/payments
+      name: accounts-account-token-payments
+      description: REST surface for accounts-account_token-payments.
+      operations:
+      - method: GET
+        name: listpayments
+        description: List account payments
+        call: core-payments.listpayments
+        with:
+          account_token: rest.account_token
+          start_date: rest.start_date
+          end_date: rest.end_date
+          count: rest.count
+          start_index: rest.start_index
+          sort_by: rest.sort_by
+          statuses: rest.statuses
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createpayment
+        description: Create account payment
+        call: core-payments.createpayment
+        with:
+          account_token: rest.account_token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/accounts/{account-token}/payments/{payment-token}
+      name: accounts-account-token-payments-payment-token
+      description: REST surface for accounts-account_token-payments-payment_token.
+      operations:
+      - method: GET
+        name: retrievepayment
+        description: Retrieve account payment
+        call: core-payments.retrievepayment
+        with:
+          account_token: rest.account_token
+          payment_token: rest.payment_token
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/accounts/{account-token}/payments/{payment-token}/releasehold
+      name: accounts-account-token-payments-payment-token-releasehold
+      description: REST surface for accounts-account_token-payments-payment_token-releasehold.
+      operations:
+      - method: POST
+        name: releasepaymenthold
+        description: Release payment hold
+        call: core-payments.releasepaymenthold
+        with:
+          account_token: rest.account_token
+          payment_token: rest.payment_token
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/accounts/{account-token}/payments/{payment-token}/transitions
+      name: accounts-account-token-payments-payment-token-transitions
+      description: REST surface for accounts-account_token-payments-payment_token-transitions.
+      operations:
+      - method: POST
+        name: transitionpayment
+        description: Transition account payment status
+        call: core-payments.transitionpayment
+        with:
+          account_token: rest.account_token
+          payment_token: rest.payment_token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/webhooks/{event-type}/{resource-token}
+      name: webhooks-event-type-resource-token
+      description: REST surface for webhooks-event_type-resource_token.
+      operations:
+      - method: POST
+        name: resendwebhookevent
+        description: Resend credit event notification
+        call: core-payments.resendwebhookevent
+        with:
+          event_type: rest.event_type
+          resource_token: rest.resource_token
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: core-payments-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Core API — Payments. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: list-account-payments
+      description: List account payments
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-payments.listpayments
+      with:
+        account_token: tools.account_token
+        start_date: tools.start_date
+        end_date: tools.end_date
+        count: tools.count
+        start_index: tools.start_index
+        sort_by: tools.sort_by
+        statuses: tools.statuses
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-account-payment
+      description: Create account payment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-payments.createpayment
+      with:
+        account_token: tools.account_token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-account-payment
+      description: Retrieve account payment
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-payments.retrievepayment
+      with:
+        account_token: tools.account_token
+        payment_token: tools.payment_token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: release-payment-hold
+      description: Release payment hold
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-payments.releasepaymenthold
+      with:
+        account_token: tools.account_token
+        payment_token: tools.payment_token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: transition-account-payment-status
+      description: Transition account payment status
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-payments.transitionpayment
+      with:
+        account_token: tools.account_token
+        payment_token: tools.payment_token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: resend-credit-event-notification
+      description: Resend credit event notification
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-payments.resendwebhookevent
+      with:
+        event_type: tools.event_type
+        resource_token: tools.resource_token
+      outputParameters:
+      - type: object
+        mapping: $.

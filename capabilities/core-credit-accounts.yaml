@@ -1,0 +1,212 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Core API — Credit Accounts
+  description: 'Core API — Credit Accounts. 3 operations. Lead operation: List accounts. Self-contained Naftiko capability
+    covering one Marqeta business surface.'
+  tags:
+  - Marqeta
+  - Credit Accounts
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: core-credit-accounts
+    baseUri: ''
+    description: Core API — Credit Accounts business capability. Self-contained, no shared references.
+    resources:
+    - name: accounts
+      path: /accounts
+      operations:
+      - name: listaccounts
+        method: GET
+        description: List accounts
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: card_token
+          in: query
+          type: string
+          description: Unique identifier of the credit card associated with the account.
+        - name: count
+          in: query
+          type: integer
+          description: Number of credit account resources to retrieve.
+        - name: start_index
+          in: query
+          type: integer
+          description: Sort order index of the first resource in the returned array.
+        - name: sort_by
+          in: query
+          type: string
+          description: Field on which to sort.
+        - name: light_response
+          in: query
+          type: boolean
+          description: If `true`, returns a lightweight response without any balances and usages.
+        - name: secured_account_token
+          in: query
+          type: string
+          description: Unique identifier of an existing secured account.
+        - name: user_token
+          in: query
+          type: string
+          description: Unique identifier of the user by which to filter accounts.
+    - name: accounts-account_token
+      path: /accounts/{account_token}
+      operations:
+      - name: retrieveaccount
+        method: GET
+        description: Retrieve account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: effective_fee_schedule_only
+          in: query
+          type: boolean
+          description: Display the effective fee schedule only.
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account to retrieve.
+          required: true
+        - name: light_response
+          in: query
+          type: boolean
+          description: If true, returns a lightweight response without any balances and usages.
+      - name: updateaccount
+        method: PUT
+        description: Update account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account to update.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: core-credit-accounts-rest
+    port: 8080
+    description: REST adapter for Core API — Credit Accounts. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/accounts
+      name: accounts
+      description: REST surface for accounts.
+      operations:
+      - method: GET
+        name: listaccounts
+        description: List accounts
+        call: core-credit-accounts.listaccounts
+        with:
+          card_token: rest.card_token
+          count: rest.count
+          start_index: rest.start_index
+          sort_by: rest.sort_by
+          light_response: rest.light_response
+          secured_account_token: rest.secured_account_token
+          user_token: rest.user_token
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/accounts/{account-token}
+      name: accounts-account-token
+      description: REST surface for accounts-account_token.
+      operations:
+      - method: GET
+        name: retrieveaccount
+        description: Retrieve account
+        call: core-credit-accounts.retrieveaccount
+        with:
+          effective_fee_schedule_only: rest.effective_fee_schedule_only
+          account_token: rest.account_token
+          light_response: rest.light_response
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: updateaccount
+        description: Update account
+        call: core-credit-accounts.updateaccount
+        with:
+          account_token: rest.account_token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: core-credit-accounts-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Core API — Credit Accounts. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: list-accounts
+      description: List accounts
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-credit-accounts.listaccounts
+      with:
+        card_token: tools.card_token
+        count: tools.count
+        start_index: tools.start_index
+        sort_by: tools.sort_by
+        light_response: tools.light_response
+        secured_account_token: tools.secured_account_token
+        user_token: tools.user_token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-account
+      description: Retrieve account
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-credit-accounts.retrieveaccount
+      with:
+        effective_fee_schedule_only: tools.effective_fee_schedule_only
+        account_token: tools.account_token
+        light_response: tools.light_response
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-account
+      description: Update account
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: core-credit-accounts.updateaccount
+      with:
+        account_token: tools.account_token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

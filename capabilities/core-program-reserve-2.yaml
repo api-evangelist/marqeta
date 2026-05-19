@@ -1,0 +1,127 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Core API — program reserve
+  description: 'Core API — program reserve. 2 operations. Lead operation: program reserve. Self-contained Naftiko capability
+    covering one Marqeta business surface.'
+  tags:
+  - Marqeta
+  - program reserve
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: core-program-reserve-2
+    baseUri: ''
+    description: Core API — program reserve business capability. Self-contained, no shared references.
+    resources:
+    - name: programreserve-deposits
+      path: /programreserve/deposits
+      operations:
+      - name: getprogramreservedeposits
+        method: GET
+        description: ''
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: count
+          in: query
+          type: integer
+          description: Number of items to retrieve
+        - name: start_index
+          in: query
+          type: integer
+          description: Start index
+        - name: sort_by
+          in: query
+          type: string
+          description: Sort order
+      - name: deposit
+        method: POST
+        description: ''
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: core-program-reserve-2-rest
+    port: 8080
+    description: REST adapter for Core API — program reserve. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/programreserve/deposits
+      name: programreserve-deposits
+      description: REST surface for programreserve-deposits.
+      operations:
+      - method: GET
+        name: getprogramreservedeposits
+        description: getprogramreservedeposits
+        call: core-program-reserve-2.getprogramreservedeposits
+        with:
+          count: rest.count
+          start_index: rest.start_index
+          sort_by: rest.sort_by
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: deposit
+        description: deposit
+        call: core-program-reserve-2.deposit
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: core-program-reserve-2-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Core API — program reserve. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: getprogramreservedeposits
+      description: getprogramreservedeposits
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-program-reserve-2.getprogramreservedeposits
+      with:
+        count: tools.count
+        start_index: tools.start_index
+        sort_by: tools.sort_by
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: deposit
+      description: deposit
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-program-reserve-2.deposit
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

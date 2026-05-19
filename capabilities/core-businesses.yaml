@@ -1,0 +1,791 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Core API — businesses
+  description: 'Core API — businesses. 14 operations. Lead operation: Lists all businesses. Self-contained Naftiko capability
+    covering one Marqeta business surface.'
+  tags:
+  - Marqeta
+  - businesses
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: core-businesses
+    baseUri: ''
+    description: Core API — businesses business capability. Self-contained, no shared references.
+    resources:
+    - name: businesses
+      path: /businesses
+      operations:
+      - name: getbusinesses
+        method: GET
+        description: Lists all businesses
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: count
+          in: query
+          type: integer
+          description: Number of users to retrieve
+        - name: start_index
+          in: query
+          type: integer
+          description: Start index
+        - name: business_name_dba
+          in: query
+          type: string
+          description: Business name DBA
+        - name: business_name_legal
+          in: query
+          type: string
+          description: Business name legal
+        - name: search_type
+          in: query
+          type: string
+          description: Search type
+        - name: fields
+          in: query
+          type: string
+          description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+        - name: sort_by
+          in: query
+          type: string
+          description: Sort order
+      - name: postbusinesses
+        method: POST
+        description: Creates a business
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: businesses-lookup
+      path: /businesses/lookup
+      operations:
+      - name: postbusinesseslookup
+        method: POST
+        description: Returns a specific business
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: businesses-business_token-directors
+      path: /businesses/{business_token}/directors
+      operations:
+      - name: postbusinessestokendirectors
+        method: POST
+        description: Creates a BusinessDirector for a business
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: business_token
+          in: path
+          type: string
+          description: Business token
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: businesses-business_token-directors-token
+      path: /businesses/{business_token}/directors/{token}
+      operations:
+      - name: getbusinessdirectortoken
+        method: GET
+        description: Returns a specific business director
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: business_token
+          in: path
+          type: string
+          description: Business token
+          required: true
+        - name: token
+          in: path
+          type: string
+          description: Business Director token
+          required: true
+        - name: fields
+          in: query
+          type: string
+          description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+      - name: putbusinessestokenbusinessdirectortoken
+        method: PUT
+        description: Updates a specific business director for a business
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: business_token
+          in: path
+          type: string
+          description: Business token
+          required: true
+        - name: token
+          in: path
+          type: string
+          description: Business Director token
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: businesses-business_token-directors-token-identifications
+      path: /businesses/{business_token}/directors/{token}/identifications
+      operations:
+      - name: getbusinessdirectortokenssn
+        method: GET
+        description: Returns a specific business director's SSN
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: business_token
+          in: path
+          type: string
+          description: Business token
+          required: true
+        - name: token
+          in: path
+          type: string
+          description: Business Director token
+          required: true
+        - name: full_ssn
+          in: query
+          type: boolean
+    - name: businesses-parent_token-children
+      path: /businesses/{parent_token}/children
+      operations:
+      - name: getbusinessesparenttokenchildren
+        method: GET
+        description: Lists all children of a parent business
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: count
+          in: query
+          type: integer
+          description: Number of users to retrieve
+        - name: start_index
+          in: query
+          type: integer
+          description: Start index
+        - name: parent_token
+          in: path
+          type: string
+          description: Token of parent business
+          required: true
+        - name: fields
+          in: query
+          type: string
+          description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+        - name: sort_by
+          in: query
+          type: string
+          description: Sort order
+    - name: businesses-token
+      path: /businesses/{token}
+      operations:
+      - name: getbusinessestoken
+        method: GET
+        description: Returns a specific business
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Business token
+          required: true
+        - name: fields
+          in: query
+          type: string
+          description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+      - name: putbusinessestoken
+        method: PUT
+        description: Updates a specific business
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Business token
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: businesses-token-notes
+      path: /businesses/{token}/notes
+      operations:
+      - name: getbusinessestokennotes
+        method: GET
+        description: Lists business notes
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Business token
+          required: true
+        - name: start_index
+          in: query
+          type: integer
+          description: Start index
+        - name: count
+          in: query
+          type: integer
+          description: Number of notes to retrieve
+        - name: created_by
+          in: query
+          type: string
+          description: Created by
+        - name: created_by_user_role
+          in: query
+          type: string
+          description: Comma-delimited list of created by user roles
+        - name: include_private
+          in: query
+          type: boolean
+          description: Include private notes and private fields in note response
+        - name: search_type
+          in: query
+          type: string
+          description: Search type
+        - name: fields
+          in: query
+          type: string
+          description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+        - name: sort_by
+          in: query
+          type: string
+          description: Sort order
+      - name: postbusinessestokennotes
+        method: POST
+        description: Creates a note for a business
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Business token
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: businesses-token-notes-notes_token
+      path: /businesses/{token}/notes/{notes_token}
+      operations:
+      - name: putbusinessestokennotesnotestoken
+        method: PUT
+        description: Updates a specific note for a business
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Business token
+          required: true
+        - name: notes_token
+          in: path
+          type: string
+          description: Notes token
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: businesses-token-ssn
+      path: /businesses/{token}/ssn
+      operations:
+      - name: getbusinessestokenssn
+        method: GET
+        description: Returns a specific business proprietor's SSN
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Business token
+          required: true
+        - name: full_ssn
+          in: query
+          type: boolean
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: core-businesses-rest
+    port: 8080
+    description: REST adapter for Core API — businesses. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/businesses
+      name: businesses
+      description: REST surface for businesses.
+      operations:
+      - method: GET
+        name: getbusinesses
+        description: Lists all businesses
+        call: core-businesses.getbusinesses
+        with:
+          count: rest.count
+          start_index: rest.start_index
+          business_name_dba: rest.business_name_dba
+          business_name_legal: rest.business_name_legal
+          search_type: rest.search_type
+          fields: rest.fields
+          sort_by: rest.sort_by
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postbusinesses
+        description: Creates a business
+        call: core-businesses.postbusinesses
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/businesses/lookup
+      name: businesses-lookup
+      description: REST surface for businesses-lookup.
+      operations:
+      - method: POST
+        name: postbusinesseslookup
+        description: Returns a specific business
+        call: core-businesses.postbusinesseslookup
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/businesses/{business-token}/directors
+      name: businesses-business-token-directors
+      description: REST surface for businesses-business_token-directors.
+      operations:
+      - method: POST
+        name: postbusinessestokendirectors
+        description: Creates a BusinessDirector for a business
+        call: core-businesses.postbusinessestokendirectors
+        with:
+          business_token: rest.business_token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/businesses/{business-token}/directors/{token}
+      name: businesses-business-token-directors-token
+      description: REST surface for businesses-business_token-directors-token.
+      operations:
+      - method: GET
+        name: getbusinessdirectortoken
+        description: Returns a specific business director
+        call: core-businesses.getbusinessdirectortoken
+        with:
+          business_token: rest.business_token
+          token: rest.token
+          fields: rest.fields
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: putbusinessestokenbusinessdirectortoken
+        description: Updates a specific business director for a business
+        call: core-businesses.putbusinessestokenbusinessdirectortoken
+        with:
+          business_token: rest.business_token
+          token: rest.token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/businesses/{business-token}/directors/{token}/identifications
+      name: businesses-business-token-directors-token-identifications
+      description: REST surface for businesses-business_token-directors-token-identifications.
+      operations:
+      - method: GET
+        name: getbusinessdirectortokenssn
+        description: Returns a specific business director's SSN
+        call: core-businesses.getbusinessdirectortokenssn
+        with:
+          business_token: rest.business_token
+          token: rest.token
+          full_ssn: rest.full_ssn
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/businesses/{parent-token}/children
+      name: businesses-parent-token-children
+      description: REST surface for businesses-parent_token-children.
+      operations:
+      - method: GET
+        name: getbusinessesparenttokenchildren
+        description: Lists all children of a parent business
+        call: core-businesses.getbusinessesparenttokenchildren
+        with:
+          count: rest.count
+          start_index: rest.start_index
+          parent_token: rest.parent_token
+          fields: rest.fields
+          sort_by: rest.sort_by
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/businesses/{token}
+      name: businesses-token
+      description: REST surface for businesses-token.
+      operations:
+      - method: GET
+        name: getbusinessestoken
+        description: Returns a specific business
+        call: core-businesses.getbusinessestoken
+        with:
+          token: rest.token
+          fields: rest.fields
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: putbusinessestoken
+        description: Updates a specific business
+        call: core-businesses.putbusinessestoken
+        with:
+          token: rest.token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/businesses/{token}/notes
+      name: businesses-token-notes
+      description: REST surface for businesses-token-notes.
+      operations:
+      - method: GET
+        name: getbusinessestokennotes
+        description: Lists business notes
+        call: core-businesses.getbusinessestokennotes
+        with:
+          token: rest.token
+          start_index: rest.start_index
+          count: rest.count
+          created_by: rest.created_by
+          created_by_user_role: rest.created_by_user_role
+          include_private: rest.include_private
+          search_type: rest.search_type
+          fields: rest.fields
+          sort_by: rest.sort_by
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postbusinessestokennotes
+        description: Creates a note for a business
+        call: core-businesses.postbusinessestokennotes
+        with:
+          token: rest.token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/businesses/{token}/notes/{notes-token}
+      name: businesses-token-notes-notes-token
+      description: REST surface for businesses-token-notes-notes_token.
+      operations:
+      - method: PUT
+        name: putbusinessestokennotesnotestoken
+        description: Updates a specific note for a business
+        call: core-businesses.putbusinessestokennotesnotestoken
+        with:
+          token: rest.token
+          notes_token: rest.notes_token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/businesses/{token}/ssn
+      name: businesses-token-ssn
+      description: REST surface for businesses-token-ssn.
+      operations:
+      - method: GET
+        name: getbusinessestokenssn
+        description: Returns a specific business proprietor's SSN
+        call: core-businesses.getbusinessestokenssn
+        with:
+          token: rest.token
+          full_ssn: rest.full_ssn
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: core-businesses-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Core API — businesses. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: lists-all-businesses
+      description: Lists all businesses
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-businesses.getbusinesses
+      with:
+        count: tools.count
+        start_index: tools.start_index
+        business_name_dba: tools.business_name_dba
+        business_name_legal: tools.business_name_legal
+        search_type: tools.search_type
+        fields: tools.fields
+        sort_by: tools.sort_by
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: creates-business
+      description: Creates a business
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-businesses.postbusinesses
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: returns-specific-business
+      description: Returns a specific business
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-businesses.postbusinesseslookup
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: creates-businessdirector-business
+      description: Creates a BusinessDirector for a business
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-businesses.postbusinessestokendirectors
+      with:
+        business_token: tools.business_token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: returns-specific-business-director
+      description: Returns a specific business director
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-businesses.getbusinessdirectortoken
+      with:
+        business_token: tools.business_token
+        token: tools.token
+        fields: tools.fields
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: updates-specific-business-director-business
+      description: Updates a specific business director for a business
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: core-businesses.putbusinessestokenbusinessdirectortoken
+      with:
+        business_token: tools.business_token
+        token: tools.token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: returns-specific-business-director-s-ssn
+      description: Returns a specific business director's SSN
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-businesses.getbusinessdirectortokenssn
+      with:
+        business_token: tools.business_token
+        token: tools.token
+        full_ssn: tools.full_ssn
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: lists-all-children-parent-business
+      description: Lists all children of a parent business
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-businesses.getbusinessesparenttokenchildren
+      with:
+        count: tools.count
+        start_index: tools.start_index
+        parent_token: tools.parent_token
+        fields: tools.fields
+        sort_by: tools.sort_by
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: returns-specific-business-2
+      description: Returns a specific business
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-businesses.getbusinessestoken
+      with:
+        token: tools.token
+        fields: tools.fields
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: updates-specific-business
+      description: Updates a specific business
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: core-businesses.putbusinessestoken
+      with:
+        token: tools.token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: lists-business-notes
+      description: Lists business notes
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-businesses.getbusinessestokennotes
+      with:
+        token: tools.token
+        start_index: tools.start_index
+        count: tools.count
+        created_by: tools.created_by
+        created_by_user_role: tools.created_by_user_role
+        include_private: tools.include_private
+        search_type: tools.search_type
+        fields: tools.fields
+        sort_by: tools.sort_by
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: creates-note-business
+      description: Creates a note for a business
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-businesses.postbusinessestokennotes
+      with:
+        token: tools.token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: updates-specific-note-business
+      description: Updates a specific note for a business
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: core-businesses.putbusinessestokennotesnotestoken
+      with:
+        token: tools.token
+        notes_token: tools.notes_token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: returns-specific-business-proprietor-s-ssn
+      description: Returns a specific business proprietor's SSN
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-businesses.getbusinessestokenssn
+      with:
+        token: tools.token
+        full_ssn: tools.full_ssn
+      outputParameters:
+      - type: object
+        mapping: $.

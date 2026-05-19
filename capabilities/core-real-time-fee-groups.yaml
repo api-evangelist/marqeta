@@ -1,0 +1,217 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Core API — Real-Time Fee Groups
+  description: 'Core API — Real-Time Fee Groups. 4 operations. Lead operation: List real-time fee groups. Self-contained Naftiko
+    capability covering one Marqeta business surface.'
+  tags:
+  - Marqeta
+  - Real-Time Fee Groups
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: core-real-time-fee-groups
+    baseUri: ''
+    description: Core API — Real-Time Fee Groups business capability. Self-contained, no shared references.
+    resources:
+    - name: realtimefeegroups
+      path: /realtimefeegroups
+      operations:
+      - name: getrealtimefeegroups
+        method: GET
+        description: List real-time fee groups
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: count
+          in: query
+          type: integer
+          description: Number of real-time fee groups to retrieve.
+        - name: start_index
+          in: query
+          type: integer
+          description: The sort order index of the first resource in the returned array.
+        - name: fields
+          in: query
+          type: string
+          description: Comma-delimited list of fields to return (`field_1,field_2`, and so on).
+        - name: sort_by
+          in: query
+          type: string
+          description: Field on which to sort.
+      - name: postrealtimefeegroups
+        method: POST
+        description: Create real-time fee group
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: realtimefeegroups-token
+      path: /realtimefeegroups/{token}
+      operations:
+      - name: getrealtimefeegroupstoken
+        method: GET
+        description: Retrieve real-time fee group
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Unique identifier of the real-time fee group.
+          required: true
+      - name: putrealtimefeegroupstoken
+        method: PUT
+        description: Update real-time fee group
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Unique identifier of the real-time fee group.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: core-real-time-fee-groups-rest
+    port: 8080
+    description: REST adapter for Core API — Real-Time Fee Groups. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/realtimefeegroups
+      name: realtimefeegroups
+      description: REST surface for realtimefeegroups.
+      operations:
+      - method: GET
+        name: getrealtimefeegroups
+        description: List real-time fee groups
+        call: core-real-time-fee-groups.getrealtimefeegroups
+        with:
+          count: rest.count
+          start_index: rest.start_index
+          fields: rest.fields
+          sort_by: rest.sort_by
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postrealtimefeegroups
+        description: Create real-time fee group
+        call: core-real-time-fee-groups.postrealtimefeegroups
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/realtimefeegroups/{token}
+      name: realtimefeegroups-token
+      description: REST surface for realtimefeegroups-token.
+      operations:
+      - method: GET
+        name: getrealtimefeegroupstoken
+        description: Retrieve real-time fee group
+        call: core-real-time-fee-groups.getrealtimefeegroupstoken
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: putrealtimefeegroupstoken
+        description: Update real-time fee group
+        call: core-real-time-fee-groups.putrealtimefeegroupstoken
+        with:
+          token: rest.token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: core-real-time-fee-groups-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Core API — Real-Time Fee Groups. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: list-real-time-fee-groups
+      description: List real-time fee groups
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-real-time-fee-groups.getrealtimefeegroups
+      with:
+        count: tools.count
+        start_index: tools.start_index
+        fields: tools.fields
+        sort_by: tools.sort_by
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-real-time-fee-group
+      description: Create real-time fee group
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-real-time-fee-groups.postrealtimefeegroups
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-real-time-fee-group
+      description: Retrieve real-time fee group
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-real-time-fee-groups.getrealtimefeegroupstoken
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-real-time-fee-group
+      description: Update real-time fee group
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: core-real-time-fee-groups.putrealtimefeegroupstoken
+      with:
+        token: tools.token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

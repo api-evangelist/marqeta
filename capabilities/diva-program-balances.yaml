@@ -1,0 +1,135 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Marqeta DiVA API — Program Balances
+  description: 'Marqeta DiVA API — Program Balances. 3 operations. Lead operation: Retrieve activity balance data. Self-contained
+    Naftiko capability covering one Marqeta business surface.'
+  tags:
+  - Marqeta
+  - Program Balances
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: diva-program-balances
+    baseUri: https://diva-api.marqeta.com/data/v2
+    description: Marqeta DiVA API — Program Balances business capability. Self-contained, no shared references.
+    resources:
+    - name: views-activitybalances-time_agg
+      path: /views/activitybalances/{time_agg}
+      operations:
+      - name: getactivitybalances
+        method: GET
+        description: Retrieve activity balance data
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: views-programbalances-time_agg
+      path: /views/programbalances/{time_agg}
+      operations:
+      - name: getprogrambalances
+        method: GET
+        description: Retrieve program funding balances
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: views-programbalancessettlement-time_agg
+      path: /views/programbalancessettlement/{time_agg}
+      operations:
+      - name: getprogrambalancessettlement
+        method: GET
+        description: Retrieve program settlement balances
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: diva-program-balances-rest
+    port: 8080
+    description: REST adapter for Marqeta DiVA API — Program Balances. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/views/activitybalances/{time-agg}
+      name: views-activitybalances-time-agg
+      description: REST surface for views-activitybalances-time_agg.
+      operations:
+      - method: GET
+        name: getactivitybalances
+        description: Retrieve activity balance data
+        call: diva-program-balances.getactivitybalances
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/views/programbalances/{time-agg}
+      name: views-programbalances-time-agg
+      description: REST surface for views-programbalances-time_agg.
+      operations:
+      - method: GET
+        name: getprogrambalances
+        description: Retrieve program funding balances
+        call: diva-program-balances.getprogrambalances
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/views/programbalancessettlement/{time-agg}
+      name: views-programbalancessettlement-time-agg
+      description: REST surface for views-programbalancessettlement-time_agg.
+      operations:
+      - method: GET
+        name: getprogrambalancessettlement
+        description: Retrieve program settlement balances
+        call: diva-program-balances.getprogrambalancessettlement
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: diva-program-balances-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Marqeta DiVA API — Program Balances. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: retrieve-activity-balance-data
+      description: Retrieve activity balance data
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: diva-program-balances.getactivitybalances
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-program-funding-balances
+      description: Retrieve program funding balances
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: diva-program-balances.getprogrambalances
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-program-settlement-balances
+      description: Retrieve program settlement balances
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: diva-program-balances.getprogrambalancessettlement
+      outputParameters:
+      - type: object
+        mapping: $.

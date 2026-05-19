@@ -1,0 +1,92 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Core API — web push provisioning
+  description: 'Core API — web push provisioning. 1 operations. Lead operation: API to query for the web push provisioning
+    related parameters, such as: google piaid/integrator_id, apple partnerId, apple Card Template Identifier. Self-contained
+    Naftiko capability covering one Marqeta business surface.'
+  tags:
+  - Marqeta
+  - web push provisioning
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: core-web-push-provisioning
+    baseUri: ''
+    description: Core API — web push provisioning business capability. Self-contained, no shared references.
+    resources:
+    - name: digitalwallets-wpp-parameters
+      path: /digitalwallets/wpp/parameters
+      operations:
+      - name: getwppparameters
+        method: POST
+        description: 'API to query for the web push provisioning related parameters, such as: google piaid/integrator_id,
+          apple partnerId, apple Card Template Identifier'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: req-sys-id
+          in: header
+          type: string
+          description: Random pseudo unique value used for troubleshooting between multiple parties. 36 char max
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: core-web-push-provisioning-rest
+    port: 8080
+    description: REST adapter for Core API — web push provisioning. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/digitalwallets/wpp/parameters
+      name: digitalwallets-wpp-parameters
+      description: REST surface for digitalwallets-wpp-parameters.
+      operations:
+      - method: POST
+        name: getwppparameters
+        description: 'API to query for the web push provisioning related parameters, such as: google piaid/integrator_id,
+          apple partnerId, apple Card Template Identifier'
+        call: core-web-push-provisioning.getwppparameters
+        with:
+          req-sys-id: rest.req-sys-id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: core-web-push-provisioning-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Core API — web push provisioning. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: api-query-web-push-provisioning
+      description: 'API to query for the web push provisioning related parameters, such as: google piaid/integrator_id, apple
+        partnerId, apple Card Template Identifier'
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: core-web-push-provisioning.getwppparameters
+      with:
+        req-sys-id: tools.req-sys-id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

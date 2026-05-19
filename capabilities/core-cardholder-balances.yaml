@@ -1,0 +1,167 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Core API — cardholder balances
+  description: 'Core API — cardholder balances. 3 operations. Lead operation: Returns account balance for an account. Self-contained
+    Naftiko capability covering one Marqeta business surface.'
+  tags:
+  - Marqeta
+  - cardholder balances
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: core-cardholder-balances
+    baseUri: ''
+    description: Core API — cardholder balances business capability. Self-contained, no shared references.
+    resources:
+    - name: balances-account-token
+      path: /balances/account/{token}
+      operations:
+      - name: getaccountbalancestoken
+        method: GET
+        description: Returns account balance for an account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: The unique token associated with the user or business account. This token is required to fetch the
+            corresponding account balance.
+          required: true
+    - name: balances-user-token
+      path: /balances/user/{token}
+      operations:
+      - name: getuseraccountbalances
+        method: GET
+        description: Returns account balances for a cardholder
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: The unique token identifying the user or business. This token is required to retrieve the associated
+            account balances.
+          required: true
+    - name: balances-token
+      path: /balances/{token}
+      operations:
+      - name: getbalancestoken
+        method: GET
+        description: Returns account balances for a cardholder
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: User or Business token
+          required: true
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: core-cardholder-balances-rest
+    port: 8080
+    description: REST adapter for Core API — cardholder balances. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/balances/account/{token}
+      name: balances-account-token
+      description: REST surface for balances-account-token.
+      operations:
+      - method: GET
+        name: getaccountbalancestoken
+        description: Returns account balance for an account
+        call: core-cardholder-balances.getaccountbalancestoken
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/balances/user/{token}
+      name: balances-user-token
+      description: REST surface for balances-user-token.
+      operations:
+      - method: GET
+        name: getuseraccountbalances
+        description: Returns account balances for a cardholder
+        call: core-cardholder-balances.getuseraccountbalances
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/balances/{token}
+      name: balances-token
+      description: REST surface for balances-token.
+      operations:
+      - method: GET
+        name: getbalancestoken
+        description: Returns account balances for a cardholder
+        call: core-cardholder-balances.getbalancestoken
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: core-cardholder-balances-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Core API — cardholder balances. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: returns-account-balance-account
+      description: Returns account balance for an account
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-cardholder-balances.getaccountbalancestoken
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: returns-account-balances-cardholder
+      description: Returns account balances for a cardholder
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-cardholder-balances.getuseraccountbalances
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: returns-account-balances-cardholder-2
+      description: Returns account balances for a cardholder
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-cardholder-balances.getbalancestoken
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.

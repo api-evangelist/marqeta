@@ -1,0 +1,235 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Core API — commando modes
+  description: 'Core API — commando modes. 4 operations. Lead operation: Lists all commando mode control sets. Self-contained
+    Naftiko capability covering one Marqeta business surface.'
+  tags:
+  - Marqeta
+  - commando modes
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: core-commando-modes
+    baseUri: ''
+    description: Core API — commando modes business capability. Self-contained, no shared references.
+    resources:
+    - name: commandomodes
+      path: /commandomodes
+      operations:
+      - name: getcommandomodes
+        method: GET
+        description: Lists all commando mode control sets
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: count
+          in: query
+          type: integer
+          description: Number of commando modes to retrieve
+        - name: start_index
+          in: query
+          type: integer
+          description: Start index
+        - name: sort_by
+          in: query
+          type: string
+          description: Sort order
+    - name: commandomodes-transitions-token
+      path: /commandomodes/transitions/{token}
+      operations:
+      - name: getcommandomodestransitionstoken
+        method: GET
+        description: Returns a specific commando mode transition
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Commando mode transition token
+          required: true
+    - name: commandomodes-commandomode_token-transitions
+      path: /commandomodes/{commandomode_token}/transitions
+      operations:
+      - name: getcommandomodescommandomodetokentransitions
+        method: GET
+        description: Lists all commando mode transitions related to a commando mode control set
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: count
+          in: query
+          type: integer
+          description: Number of transitions to retrieve
+        - name: start_index
+          in: query
+          type: integer
+          description: Start index
+        - name: sort_by
+          in: query
+          type: string
+          description: Sort order
+        - name: commandomode_token
+          in: path
+          type: string
+          description: Commando mode token
+          required: true
+    - name: commandomodes-token
+      path: /commandomodes/{token}
+      operations:
+      - name: getcommandomodestoken
+        method: GET
+        description: Returns a specific commando mode control set
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          required: true
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: core-commando-modes-rest
+    port: 8080
+    description: REST adapter for Core API — commando modes. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/commandomodes
+      name: commandomodes
+      description: REST surface for commandomodes.
+      operations:
+      - method: GET
+        name: getcommandomodes
+        description: Lists all commando mode control sets
+        call: core-commando-modes.getcommandomodes
+        with:
+          count: rest.count
+          start_index: rest.start_index
+          sort_by: rest.sort_by
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/commandomodes/transitions/{token}
+      name: commandomodes-transitions-token
+      description: REST surface for commandomodes-transitions-token.
+      operations:
+      - method: GET
+        name: getcommandomodestransitionstoken
+        description: Returns a specific commando mode transition
+        call: core-commando-modes.getcommandomodestransitionstoken
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/commandomodes/{commandomode-token}/transitions
+      name: commandomodes-commandomode-token-transitions
+      description: REST surface for commandomodes-commandomode_token-transitions.
+      operations:
+      - method: GET
+        name: getcommandomodescommandomodetokentransitions
+        description: Lists all commando mode transitions related to a commando mode control set
+        call: core-commando-modes.getcommandomodescommandomodetokentransitions
+        with:
+          count: rest.count
+          start_index: rest.start_index
+          sort_by: rest.sort_by
+          commandomode_token: rest.commandomode_token
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/commandomodes/{token}
+      name: commandomodes-token
+      description: REST surface for commandomodes-token.
+      operations:
+      - method: GET
+        name: getcommandomodestoken
+        description: Returns a specific commando mode control set
+        call: core-commando-modes.getcommandomodestoken
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: core-commando-modes-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Core API — commando modes. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: lists-all-commando-mode-control
+      description: Lists all commando mode control sets
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-commando-modes.getcommandomodes
+      with:
+        count: tools.count
+        start_index: tools.start_index
+        sort_by: tools.sort_by
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: returns-specific-commando-mode-transition
+      description: Returns a specific commando mode transition
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-commando-modes.getcommandomodestransitionstoken
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: lists-all-commando-mode-transitions
+      description: Lists all commando mode transitions related to a commando mode control set
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-commando-modes.getcommandomodescommandomodetokentransitions
+      with:
+        count: tools.count
+        start_index: tools.start_index
+        sort_by: tools.sort_by
+        commandomode_token: tools.commandomode_token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: returns-specific-commando-mode-control
+      description: Returns a specific commando mode control set
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-commando-modes.getcommandomodestoken
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.

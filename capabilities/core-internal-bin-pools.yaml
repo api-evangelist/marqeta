@@ -1,0 +1,225 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Core API — Internal - BIN Pools
+  description: 'Core API — Internal - BIN Pools. 5 operations. Lead operation: Get all BIN pools. Self-contained Naftiko capability
+    covering one Marqeta business surface.'
+  tags:
+  - Marqeta
+  - Internal - BIN Pools
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: core-internal-bin-pools
+    baseUri: ''
+    description: Core API — Internal - BIN Pools business capability. Self-contained, no shared references.
+    resources:
+    - name: internal-binpools
+      path: /internal/binpools
+      operations:
+      - name: getallpools
+        method: GET
+        description: Get all BIN pools
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: createpool
+        method: POST
+        description: Create BIN pool
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: internal-binpools-token
+      path: /internal/binpools/{token}
+      operations:
+      - name: deletepool
+        method: DELETE
+        description: Delete BIN pool
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Pool token
+          required: true
+      - name: getpool
+        method: GET
+        description: Get BIN pool by token
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Pool token
+          required: true
+      - name: updatepool
+        method: PUT
+        description: Update BIN pool
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Pool token
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: core-internal-bin-pools-rest
+    port: 8080
+    description: REST adapter for Core API — Internal - BIN Pools. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/internal/binpools
+      name: internal-binpools
+      description: REST surface for internal-binpools.
+      operations:
+      - method: GET
+        name: getallpools
+        description: Get all BIN pools
+        call: core-internal-bin-pools.getallpools
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createpool
+        description: Create BIN pool
+        call: core-internal-bin-pools.createpool
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/internal/binpools/{token}
+      name: internal-binpools-token
+      description: REST surface for internal-binpools-token.
+      operations:
+      - method: DELETE
+        name: deletepool
+        description: Delete BIN pool
+        call: core-internal-bin-pools.deletepool
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: getpool
+        description: Get BIN pool by token
+        call: core-internal-bin-pools.getpool
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: updatepool
+        description: Update BIN pool
+        call: core-internal-bin-pools.updatepool
+        with:
+          token: rest.token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: core-internal-bin-pools-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Core API — Internal - BIN Pools. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: get-all-bin-pools
+      description: Get all BIN pools
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-internal-bin-pools.getallpools
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-bin-pool
+      description: Create BIN pool
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-internal-bin-pools.createpool
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-bin-pool
+      description: Delete BIN pool
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: core-internal-bin-pools.deletepool
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-bin-pool-token
+      description: Get BIN pool by token
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-internal-bin-pools.getpool
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-bin-pool
+      description: Update BIN pool
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: core-internal-bin-pools.updatepool
+      with:
+        token: tools.token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

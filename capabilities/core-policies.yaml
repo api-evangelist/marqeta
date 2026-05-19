@@ -1,0 +1,1218 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Core API — Policies
+  description: 'Core API — Policies. 27 operations. Lead operation: List APR policies. Self-contained Naftiko capability covering
+    one Marqeta business surface.'
+  tags:
+  - Marqeta
+  - Policies
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: core-policies
+    baseUri: ''
+    description: Core API — Policies business capability. Self-contained, no shared references.
+    resources:
+    - name: policies-aprs
+      path: /policies/aprs
+      operations:
+      - name: getaprpolicies
+        method: GET
+        description: List APR policies
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: count
+          in: query
+          type: integer
+          description: Number of APR policy resources to retrieve.
+        - name: start_index
+          in: query
+          type: integer
+          description: Sort order index of the first resource in the returned array.
+        - name: sort_by
+          in: query
+          type: string
+          description: Field on which to sort.
+      - name: createaprpolicy
+        method: POST
+        description: Create APR policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: policies-aprs-token
+      path: /policies/aprs/{token}
+      operations:
+      - name: getaprpolicybytoken
+        method: GET
+        description: Retrieve APR policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Unique identifier of the APR policy to retrieve.
+          required: true
+      - name: updateaprpolicywithtoken
+        method: PUT
+        description: Update APR policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Unique identifier of the APR policy to update.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: policies-aprs-token-clone
+      path: /policies/aprs/{token}/clone
+      operations:
+      - name: cloneaprpolicy
+        method: POST
+        description: Clone APR policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Unique identifier of the APR policy to clone.
+          required: true
+    - name: policies-aprs-token-schedule
+      path: /policies/aprs/{token}/schedule
+      operations:
+      - name: getaprpolicyscheduleswithtoken
+        method: GET
+        description: List APR schedules
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Unique identifier of the APR policy on which to retrieve APR schedules.
+          required: true
+        - name: count
+          in: query
+          type: integer
+          description: Number of APR schedule resources to retrieve.
+        - name: start_index
+          in: query
+          type: integer
+          description: Sort order index of the first resource in the returned array.
+        - name: sort_by
+          in: query
+          type: string
+          description: Field on which to sort.
+    - name: policies-documents
+      path: /policies/documents
+      operations:
+      - name: listdocumentpolicies
+        method: GET
+        description: List document policies
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: count
+          in: query
+          type: integer
+          description: Number of document policy resources to retrieve.
+        - name: start_index
+          in: query
+          type: integer
+          description: Sort order index of the first resource in the returned array.
+        - name: sort_by
+          in: query
+          type: string
+          description: Field on which to sort.
+      - name: createdocumentpolicy
+        method: POST
+        description: Create document policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: policies-documents-token
+      path: /policies/documents/{token}
+      operations:
+      - name: retrievedocumentpolicy
+        method: GET
+        description: Retrieve document policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Unique identifier of the document policy to retrieve.
+          required: true
+      - name: updatedocumentpolicy
+        method: PUT
+        description: Update document policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Unique identifier of the document policy to update.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: policies-documents-token-clone
+      path: /policies/documents/{token}/clone
+      operations:
+      - name: clonedocumentpolicy
+        method: POST
+        description: Clone document policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Unique identifier of the document policy to clone.
+          required: true
+    - name: policies-fees
+      path: /policies/fees
+      operations:
+      - name: getfeepolicies
+        method: GET
+        description: List fee policies
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: count
+          in: query
+          type: integer
+          description: Number of fee policy resources to retrieve.
+        - name: start_index
+          in: query
+          type: integer
+          description: Sort order index of the first resource in the returned array.
+        - name: sort_by
+          in: query
+          type: string
+          description: Field on which to sort.
+      - name: createfeepolicy
+        method: POST
+        description: Create fee policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: policies-fees-token
+      path: /policies/fees/{token}
+      operations:
+      - name: getfeepolicybytoken
+        method: GET
+        description: Retrieve fee policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Unique identifier of the fee policy to retrieve.
+          required: true
+      - name: updatefeepolicywithtoken
+        method: PUT
+        description: Update fee policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Unique identifier of the fee policy to retrieve.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: policies-fees-token-clone
+      path: /policies/fees/{token}/clone
+      operations:
+      - name: clonefeepolicy
+        method: POST
+        description: Clone fee policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Unique identifier of the fee policy to clone.
+          required: true
+    - name: policies-products
+      path: /policies/products
+      operations:
+      - name: listproductpolicies
+        method: GET
+        description: List credit product policies
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: count
+          in: query
+          type: integer
+          description: Number of product policy resources to retrieve.
+        - name: start_index
+          in: query
+          type: integer
+          description: Sort order index of the first resource in the returned array.
+        - name: sort_by
+          in: query
+          type: string
+          description: Field on which to sort.
+      - name: createproductpolicy
+        method: POST
+        description: Create credit product policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: policies-products-token
+      path: /policies/products/{token}
+      operations:
+      - name: retrieveproductpolicy
+        method: GET
+        description: Retrieve credit product policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Unique identifier of the credit product policy to retrieve.
+          required: true
+      - name: updateproductpolicy
+        method: PUT
+        description: Update credit product policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Unique identifier of the credit product policy to retrieve.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: policies-products-token-cardproducts
+      path: /policies/products/{token}/cardproducts
+      operations:
+      - name: addcardproducttoproductpolicy
+        method: POST
+        description: Add card product to credit product policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Unique identifier of the credit product policy.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: policies-products-token-clone
+      path: /policies/products/{token}/clone
+      operations:
+      - name: cloneproductpolicy
+        method: POST
+        description: Clone credit product policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Unique identifier of the credit product policy to clone.
+          required: true
+    - name: policies-rewards
+      path: /policies/rewards
+      operations:
+      - name: listrewardpolicies
+        method: GET
+        description: List reward policies
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: count
+          in: query
+          type: integer
+          description: Number of reward policy resources to retrieve.
+        - name: start_index
+          in: query
+          type: integer
+          description: Sort order index of the first resource in the returned array.
+        - name: sort_by
+          in: query
+          type: string
+          description: Field on which to sort.
+      - name: createrewardpolicy
+        method: POST
+        description: Create reward policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: policies-rewards-token
+      path: /policies/rewards/{token}
+      operations:
+      - name: retrieverewardpolicy
+        method: GET
+        description: Retrieve reward policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Unique identifier of the reward policy to retrieve.
+          required: true
+      - name: updaterewardpolicy
+        method: PUT
+        description: Update reward policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Unique identifier of the reward policy to update.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: policies-rewards-token-clone
+      path: /policies/rewards/{token}/clone
+      operations:
+      - name: clonerewardpolicy
+        method: POST
+        description: Clone reward policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Unique identifier of the reward policy to clone.
+          required: true
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: core-policies-rest
+    port: 8080
+    description: REST adapter for Core API — Policies. One Spectral-compliant resource per consumed operation, prefixed with
+      /v1.
+    resources:
+    - path: /v1/policies/aprs
+      name: policies-aprs
+      description: REST surface for policies-aprs.
+      operations:
+      - method: GET
+        name: getaprpolicies
+        description: List APR policies
+        call: core-policies.getaprpolicies
+        with:
+          count: rest.count
+          start_index: rest.start_index
+          sort_by: rest.sort_by
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createaprpolicy
+        description: Create APR policy
+        call: core-policies.createaprpolicy
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/policies/aprs/{token}
+      name: policies-aprs-token
+      description: REST surface for policies-aprs-token.
+      operations:
+      - method: GET
+        name: getaprpolicybytoken
+        description: Retrieve APR policy
+        call: core-policies.getaprpolicybytoken
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: updateaprpolicywithtoken
+        description: Update APR policy
+        call: core-policies.updateaprpolicywithtoken
+        with:
+          token: rest.token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/policies/aprs/{token}/clone
+      name: policies-aprs-token-clone
+      description: REST surface for policies-aprs-token-clone.
+      operations:
+      - method: POST
+        name: cloneaprpolicy
+        description: Clone APR policy
+        call: core-policies.cloneaprpolicy
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/policies/aprs/{token}/schedule
+      name: policies-aprs-token-schedule
+      description: REST surface for policies-aprs-token-schedule.
+      operations:
+      - method: GET
+        name: getaprpolicyscheduleswithtoken
+        description: List APR schedules
+        call: core-policies.getaprpolicyscheduleswithtoken
+        with:
+          token: rest.token
+          count: rest.count
+          start_index: rest.start_index
+          sort_by: rest.sort_by
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/policies/documents
+      name: policies-documents
+      description: REST surface for policies-documents.
+      operations:
+      - method: GET
+        name: listdocumentpolicies
+        description: List document policies
+        call: core-policies.listdocumentpolicies
+        with:
+          count: rest.count
+          start_index: rest.start_index
+          sort_by: rest.sort_by
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createdocumentpolicy
+        description: Create document policy
+        call: core-policies.createdocumentpolicy
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/policies/documents/{token}
+      name: policies-documents-token
+      description: REST surface for policies-documents-token.
+      operations:
+      - method: GET
+        name: retrievedocumentpolicy
+        description: Retrieve document policy
+        call: core-policies.retrievedocumentpolicy
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: updatedocumentpolicy
+        description: Update document policy
+        call: core-policies.updatedocumentpolicy
+        with:
+          token: rest.token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/policies/documents/{token}/clone
+      name: policies-documents-token-clone
+      description: REST surface for policies-documents-token-clone.
+      operations:
+      - method: POST
+        name: clonedocumentpolicy
+        description: Clone document policy
+        call: core-policies.clonedocumentpolicy
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/policies/fees
+      name: policies-fees
+      description: REST surface for policies-fees.
+      operations:
+      - method: GET
+        name: getfeepolicies
+        description: List fee policies
+        call: core-policies.getfeepolicies
+        with:
+          count: rest.count
+          start_index: rest.start_index
+          sort_by: rest.sort_by
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createfeepolicy
+        description: Create fee policy
+        call: core-policies.createfeepolicy
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/policies/fees/{token}
+      name: policies-fees-token
+      description: REST surface for policies-fees-token.
+      operations:
+      - method: GET
+        name: getfeepolicybytoken
+        description: Retrieve fee policy
+        call: core-policies.getfeepolicybytoken
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: updatefeepolicywithtoken
+        description: Update fee policy
+        call: core-policies.updatefeepolicywithtoken
+        with:
+          token: rest.token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/policies/fees/{token}/clone
+      name: policies-fees-token-clone
+      description: REST surface for policies-fees-token-clone.
+      operations:
+      - method: POST
+        name: clonefeepolicy
+        description: Clone fee policy
+        call: core-policies.clonefeepolicy
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/policies/products
+      name: policies-products
+      description: REST surface for policies-products.
+      operations:
+      - method: GET
+        name: listproductpolicies
+        description: List credit product policies
+        call: core-policies.listproductpolicies
+        with:
+          count: rest.count
+          start_index: rest.start_index
+          sort_by: rest.sort_by
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createproductpolicy
+        description: Create credit product policy
+        call: core-policies.createproductpolicy
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/policies/products/{token}
+      name: policies-products-token
+      description: REST surface for policies-products-token.
+      operations:
+      - method: GET
+        name: retrieveproductpolicy
+        description: Retrieve credit product policy
+        call: core-policies.retrieveproductpolicy
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: updateproductpolicy
+        description: Update credit product policy
+        call: core-policies.updateproductpolicy
+        with:
+          token: rest.token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/policies/products/{token}/cardproducts
+      name: policies-products-token-cardproducts
+      description: REST surface for policies-products-token-cardproducts.
+      operations:
+      - method: POST
+        name: addcardproducttoproductpolicy
+        description: Add card product to credit product policy
+        call: core-policies.addcardproducttoproductpolicy
+        with:
+          token: rest.token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/policies/products/{token}/clone
+      name: policies-products-token-clone
+      description: REST surface for policies-products-token-clone.
+      operations:
+      - method: POST
+        name: cloneproductpolicy
+        description: Clone credit product policy
+        call: core-policies.cloneproductpolicy
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/policies/rewards
+      name: policies-rewards
+      description: REST surface for policies-rewards.
+      operations:
+      - method: GET
+        name: listrewardpolicies
+        description: List reward policies
+        call: core-policies.listrewardpolicies
+        with:
+          count: rest.count
+          start_index: rest.start_index
+          sort_by: rest.sort_by
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createrewardpolicy
+        description: Create reward policy
+        call: core-policies.createrewardpolicy
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/policies/rewards/{token}
+      name: policies-rewards-token
+      description: REST surface for policies-rewards-token.
+      operations:
+      - method: GET
+        name: retrieverewardpolicy
+        description: Retrieve reward policy
+        call: core-policies.retrieverewardpolicy
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: updaterewardpolicy
+        description: Update reward policy
+        call: core-policies.updaterewardpolicy
+        with:
+          token: rest.token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/policies/rewards/{token}/clone
+      name: policies-rewards-token-clone
+      description: REST surface for policies-rewards-token-clone.
+      operations:
+      - method: POST
+        name: clonerewardpolicy
+        description: Clone reward policy
+        call: core-policies.clonerewardpolicy
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: core-policies-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Core API — Policies. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: list-apr-policies
+      description: List APR policies
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-policies.getaprpolicies
+      with:
+        count: tools.count
+        start_index: tools.start_index
+        sort_by: tools.sort_by
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-apr-policy
+      description: Create APR policy
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-policies.createaprpolicy
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-apr-policy
+      description: Retrieve APR policy
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-policies.getaprpolicybytoken
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-apr-policy
+      description: Update APR policy
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: core-policies.updateaprpolicywithtoken
+      with:
+        token: tools.token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: clone-apr-policy
+      description: Clone APR policy
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-policies.cloneaprpolicy
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-apr-schedules
+      description: List APR schedules
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-policies.getaprpolicyscheduleswithtoken
+      with:
+        token: tools.token
+        count: tools.count
+        start_index: tools.start_index
+        sort_by: tools.sort_by
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-document-policies
+      description: List document policies
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-policies.listdocumentpolicies
+      with:
+        count: tools.count
+        start_index: tools.start_index
+        sort_by: tools.sort_by
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-document-policy
+      description: Create document policy
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-policies.createdocumentpolicy
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-document-policy
+      description: Retrieve document policy
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-policies.retrievedocumentpolicy
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-document-policy
+      description: Update document policy
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: core-policies.updatedocumentpolicy
+      with:
+        token: tools.token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: clone-document-policy
+      description: Clone document policy
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-policies.clonedocumentpolicy
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-fee-policies
+      description: List fee policies
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-policies.getfeepolicies
+      with:
+        count: tools.count
+        start_index: tools.start_index
+        sort_by: tools.sort_by
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-fee-policy
+      description: Create fee policy
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-policies.createfeepolicy
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-fee-policy
+      description: Retrieve fee policy
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-policies.getfeepolicybytoken
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-fee-policy
+      description: Update fee policy
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: core-policies.updatefeepolicywithtoken
+      with:
+        token: tools.token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: clone-fee-policy
+      description: Clone fee policy
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-policies.clonefeepolicy
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-credit-product-policies
+      description: List credit product policies
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-policies.listproductpolicies
+      with:
+        count: tools.count
+        start_index: tools.start_index
+        sort_by: tools.sort_by
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-credit-product-policy
+      description: Create credit product policy
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-policies.createproductpolicy
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-credit-product-policy
+      description: Retrieve credit product policy
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-policies.retrieveproductpolicy
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-credit-product-policy
+      description: Update credit product policy
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: core-policies.updateproductpolicy
+      with:
+        token: tools.token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: add-card-product-credit-product
+      description: Add card product to credit product policy
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-policies.addcardproducttoproductpolicy
+      with:
+        token: tools.token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: clone-credit-product-policy
+      description: Clone credit product policy
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-policies.cloneproductpolicy
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-reward-policies
+      description: List reward policies
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-policies.listrewardpolicies
+      with:
+        count: tools.count
+        start_index: tools.start_index
+        sort_by: tools.sort_by
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-reward-policy
+      description: Create reward policy
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-policies.createrewardpolicy
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-reward-policy
+      description: Retrieve reward policy
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-policies.retrieverewardpolicy
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-reward-policy
+      description: Update reward policy
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: core-policies.updaterewardpolicy
+      with:
+        token: tools.token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: clone-reward-policy
+      description: Clone reward policy
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-policies.clonerewardpolicy
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.

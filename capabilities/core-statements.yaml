@@ -1,0 +1,795 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Core API — Statements
+  description: 'Core API — Statements. 13 operations. Lead operation: List account statement summaries. Self-contained Naftiko
+    capability covering one Marqeta business surface.'
+  tags:
+  - Marqeta
+  - Statements
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: core-statements
+    baseUri: ''
+    description: Core API — Statements business capability. Self-contained, no shared references.
+    resources:
+    - name: accounts-account_token-statements
+      path: /accounts/{account_token}/statements
+      operations:
+      - name: getstatementsummariesbyaccount
+        method: GET
+        description: List account statement summaries
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account for which you want to retrieve statement summaries.
+          required: true
+        - name: start_date
+          in: query
+          type: string
+          description: Returns statements with a matching opening date.
+        - name: end_date
+          in: query
+          type: string
+          description: Returns statements with a matching closing date.
+        - name: count
+          in: query
+          type: integer
+          description: Number of account statement resources to retrieve.
+        - name: start_index
+          in: query
+          type: integer
+          description: Sort order index of the first resource in the returned array.
+        - name: sort_by
+          in: query
+          type: string
+          description: Field on which to sort.
+    - name: accounts-account_token-statements-files
+      path: /accounts/{account_token}/statements/files
+      operations:
+      - name: getstatementfilesbyaccount
+        method: GET
+        description: List files for an account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account for which to retrieve statement files.
+          required: true
+        - name: start_date
+          in: query
+          type: string
+          description: Start date of the date range for which to return statement files.
+        - name: end_date
+          in: query
+          type: string
+          description: End date of the date range for which to return statement files.
+        - name: count
+          in: query
+          type: integer
+          description: Number of statement file resources to retrieve.
+        - name: start_index
+          in: query
+          type: integer
+          description: Sort order index of the first resource in the returned array.
+        - name: sort_by
+          in: query
+          type: string
+          description: Field on which to sort.
+    - name: accounts-account_token-statements-statement_summary_token
+      path: /accounts/{account_token}/statements/{statement_summary_token}
+      operations:
+      - name: retrievestatementsummary
+        method: GET
+        description: Retrieve account statement summary
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account for which you want to retrieve a statement summary.
+          required: true
+        - name: statement_summary_token
+          in: path
+          type: string
+          description: Unique identifier of the statement summary to retrieve.
+          required: true
+    - name: accounts-account_token-statements-statement_summary_token-files
+      path: /accounts/{account_token}/statements/{statement_summary_token}/files
+      operations:
+      - name: retrievestatementfiles
+        method: GET
+        description: List files for a statement summary
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account for which to retrieve statement files for a statement summary.
+          required: true
+        - name: statement_summary_token
+          in: path
+          type: string
+          description: Unique identifier of the statement summary whose statement files you want to retrieve.
+          required: true
+        - name: count
+          in: query
+          type: integer
+          description: Number of statement files to return.
+        - name: start_index
+          in: query
+          type: integer
+          description: Sort order index from which to begin returning files.
+    - name: accounts-account_token-statements-statement_summary_token-interestcharges
+      path: /accounts/{account_token}/statements/{statement_summary_token}/interestcharges
+      operations:
+      - name: retrievestatementinterestcharges
+        method: GET
+        description: Retrieve account statement interest charges
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account for which you want to retrieve the statement interest charges.
+          required: true
+        - name: statement_summary_token
+          in: path
+          type: string
+          description: Unique identifier of the statement summary from which to retrieve the interest charges.
+          required: true
+    - name: accounts-account_token-statements-statement_summary_token-journalentries
+      path: /accounts/{account_token}/statements/{statement_summary_token}/journalentries
+      operations:
+      - name: liststatementjournalentries
+        method: GET
+        description: List account statement journal entries
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account for which to retrieve the statement journal entries.
+          required: true
+        - name: statement_summary_token
+          in: path
+          type: string
+          description: Unique identifier of the statement summary from which to retrieve journal entries.
+          required: true
+        - name: count
+          in: query
+          type: integer
+          description: Number of journal entry resources to return.
+        - name: start_index
+          in: query
+          type: integer
+          description: Sort order index of the first resource in the returned array.
+        - name: expand
+          in: query
+          type: array
+          description: Embeds the specified object into the response.
+        - name: sort_by
+          in: query
+          type: string
+          description: Field on which to sort.
+    - name: accounts-account_token-statements-statement_summary_token-ledgerentries
+      path: /accounts/{account_token}/statements/{statement_summary_token}/ledgerentries
+      operations:
+      - name: liststatementledgerentries
+        method: GET
+        description: List account statement ledger entries
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account for which to retrieve the statement ledger entries.
+          required: true
+        - name: statement_summary_token
+          in: path
+          type: string
+          description: Unique identifier of the statement summary from which to retrieve ledger entries.
+          required: true
+        - name: expand
+          in: query
+          type: array
+          description: Embeds the specified object into the response.
+        - name: sort_by
+          in: query
+          type: string
+          description: Field on which to sort.
+    - name: accounts-account_token-statements-statement_summary_token-paymentinfo
+      path: /accounts/{account_token}/statements/{statement_summary_token}/paymentinfo
+      operations:
+      - name: retrievestatementpaymentinfo
+        method: GET
+        description: Retrieve account statement payment information
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account for which you want to retrieve the statement payment information.
+          required: true
+        - name: statement_summary_token
+          in: path
+          type: string
+          description: Unique identifier of the statement summary from which to retrieve the payment information.
+          required: true
+    - name: accounts-account_token-statements-statement_summary_token-paymentreminders
+      path: /accounts/{account_token}/statements/{statement_summary_token}/paymentreminders/
+      operations:
+      - name: getpaymentremindersbystatementsummary
+        method: GET
+        description: List payment reminders by statement summary
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account for which you want to retrieve the statement payment information.
+          required: true
+        - name: statement_summary_token
+          in: path
+          type: string
+          description: Unique identifier of the statement summary from which to retrieve the payment information.
+          required: true
+        - name: count
+          in: query
+          type: integer
+          description: Number of payment reminder resources to retrieve.
+        - name: start_index
+          in: query
+          type: integer
+          description: Sort order index of the first resource in the returned array.
+        - name: sort_by
+          in: query
+          type: string
+          description: Field on which to sort.
+    - name: accounts-account_token-statements-statement_summary_token-paymentreminders-token
+      path: /accounts/{account_token}/statements/{statement_summary_token}/paymentreminders/{token}
+      operations:
+      - name: getpaymentreminder
+        method: GET
+        description: Get payment reminder
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account for which you want to retrieve the statement payment reminder.
+          required: true
+        - name: statement_summary_token
+          in: path
+          type: string
+          description: Unique identifier of the statement summary for which you want to retrieve the statement payment reminder.
+          required: true
+        - name: token
+          in: path
+          type: string
+          description: Unique identifier of the payment reminder you want to retrieve.
+          required: true
+    - name: accounts-account_token-statements-statement_summary_token-rewards
+      path: /accounts/{account_token}/statements/{statement_summary_token}/rewards
+      operations:
+      - name: retrievestatementreward
+        method: GET
+        description: Retrieve account statement rewards
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account from which to retrieve statement rewards.
+          required: true
+        - name: statement_summary_token
+          in: path
+          type: string
+          description: Unique identifier of the statement summary from which to retrieve rewards.
+          required: true
+    - name: accounts-account_token-statements-statement_summary_token-yeartodate
+      path: /accounts/{account_token}/statements/{statement_summary_token}/yeartodate
+      operations:
+      - name: retrieveyeartodateforstatementsummary
+        method: GET
+        description: Retrieve account statement year-to-date totals
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account from which to retrieve statement year-to-date totals.
+          required: true
+        - name: statement_summary_token
+          in: path
+          type: string
+          description: Unique identifier of the statement summary from which to retrieve year-to-date totals.
+          required: true
+    - name: webhooks-event_type-resource_token
+      path: /webhooks/{event_type}/{resource_token}
+      operations:
+      - name: resendwebhookevent
+        method: POST
+        description: Resend credit event notification
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: event_type
+          in: path
+          type: string
+          description: Specifies the type of event you want to resend.
+          required: true
+        - name: resource_token
+          in: path
+          type: string
+          description: Unique identifier of the resource for which you want to resend a notification.
+          required: true
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: core-statements-rest
+    port: 8080
+    description: REST adapter for Core API — Statements. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/accounts/{account-token}/statements
+      name: accounts-account-token-statements
+      description: REST surface for accounts-account_token-statements.
+      operations:
+      - method: GET
+        name: getstatementsummariesbyaccount
+        description: List account statement summaries
+        call: core-statements.getstatementsummariesbyaccount
+        with:
+          account_token: rest.account_token
+          start_date: rest.start_date
+          end_date: rest.end_date
+          count: rest.count
+          start_index: rest.start_index
+          sort_by: rest.sort_by
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/accounts/{account-token}/statements/files
+      name: accounts-account-token-statements-files
+      description: REST surface for accounts-account_token-statements-files.
+      operations:
+      - method: GET
+        name: getstatementfilesbyaccount
+        description: List files for an account
+        call: core-statements.getstatementfilesbyaccount
+        with:
+          account_token: rest.account_token
+          start_date: rest.start_date
+          end_date: rest.end_date
+          count: rest.count
+          start_index: rest.start_index
+          sort_by: rest.sort_by
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/accounts/{account-token}/statements/{statement-summary-token}
+      name: accounts-account-token-statements-statement-summary-token
+      description: REST surface for accounts-account_token-statements-statement_summary_token.
+      operations:
+      - method: GET
+        name: retrievestatementsummary
+        description: Retrieve account statement summary
+        call: core-statements.retrievestatementsummary
+        with:
+          account_token: rest.account_token
+          statement_summary_token: rest.statement_summary_token
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/accounts/{account-token}/statements/{statement-summary-token}/files
+      name: accounts-account-token-statements-statement-summary-token-files
+      description: REST surface for accounts-account_token-statements-statement_summary_token-files.
+      operations:
+      - method: GET
+        name: retrievestatementfiles
+        description: List files for a statement summary
+        call: core-statements.retrievestatementfiles
+        with:
+          account_token: rest.account_token
+          statement_summary_token: rest.statement_summary_token
+          count: rest.count
+          start_index: rest.start_index
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/accounts/{account-token}/statements/{statement-summary-token}/interestcharges
+      name: accounts-account-token-statements-statement-summary-token-interestcharges
+      description: REST surface for accounts-account_token-statements-statement_summary_token-interestcharges.
+      operations:
+      - method: GET
+        name: retrievestatementinterestcharges
+        description: Retrieve account statement interest charges
+        call: core-statements.retrievestatementinterestcharges
+        with:
+          account_token: rest.account_token
+          statement_summary_token: rest.statement_summary_token
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/accounts/{account-token}/statements/{statement-summary-token}/journalentries
+      name: accounts-account-token-statements-statement-summary-token-journalentries
+      description: REST surface for accounts-account_token-statements-statement_summary_token-journalentries.
+      operations:
+      - method: GET
+        name: liststatementjournalentries
+        description: List account statement journal entries
+        call: core-statements.liststatementjournalentries
+        with:
+          account_token: rest.account_token
+          statement_summary_token: rest.statement_summary_token
+          count: rest.count
+          start_index: rest.start_index
+          expand: rest.expand
+          sort_by: rest.sort_by
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/accounts/{account-token}/statements/{statement-summary-token}/ledgerentries
+      name: accounts-account-token-statements-statement-summary-token-ledgerentries
+      description: REST surface for accounts-account_token-statements-statement_summary_token-ledgerentries.
+      operations:
+      - method: GET
+        name: liststatementledgerentries
+        description: List account statement ledger entries
+        call: core-statements.liststatementledgerentries
+        with:
+          account_token: rest.account_token
+          statement_summary_token: rest.statement_summary_token
+          expand: rest.expand
+          sort_by: rest.sort_by
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/accounts/{account-token}/statements/{statement-summary-token}/paymentinfo
+      name: accounts-account-token-statements-statement-summary-token-paymentinfo
+      description: REST surface for accounts-account_token-statements-statement_summary_token-paymentinfo.
+      operations:
+      - method: GET
+        name: retrievestatementpaymentinfo
+        description: Retrieve account statement payment information
+        call: core-statements.retrievestatementpaymentinfo
+        with:
+          account_token: rest.account_token
+          statement_summary_token: rest.statement_summary_token
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/accounts/{account-token}/statements/{statement-summary-token}/paymentreminders
+      name: accounts-account-token-statements-statement-summary-token-paymentreminders
+      description: REST surface for accounts-account_token-statements-statement_summary_token-paymentreminders.
+      operations:
+      - method: GET
+        name: getpaymentremindersbystatementsummary
+        description: List payment reminders by statement summary
+        call: core-statements.getpaymentremindersbystatementsummary
+        with:
+          account_token: rest.account_token
+          statement_summary_token: rest.statement_summary_token
+          count: rest.count
+          start_index: rest.start_index
+          sort_by: rest.sort_by
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/accounts/{account-token}/statements/{statement-summary-token}/paymentreminders/{token}
+      name: accounts-account-token-statements-statement-summary-token-paymentreminders-token
+      description: REST surface for accounts-account_token-statements-statement_summary_token-paymentreminders-token.
+      operations:
+      - method: GET
+        name: getpaymentreminder
+        description: Get payment reminder
+        call: core-statements.getpaymentreminder
+        with:
+          account_token: rest.account_token
+          statement_summary_token: rest.statement_summary_token
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/accounts/{account-token}/statements/{statement-summary-token}/rewards
+      name: accounts-account-token-statements-statement-summary-token-rewards
+      description: REST surface for accounts-account_token-statements-statement_summary_token-rewards.
+      operations:
+      - method: GET
+        name: retrievestatementreward
+        description: Retrieve account statement rewards
+        call: core-statements.retrievestatementreward
+        with:
+          account_token: rest.account_token
+          statement_summary_token: rest.statement_summary_token
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/accounts/{account-token}/statements/{statement-summary-token}/yeartodate
+      name: accounts-account-token-statements-statement-summary-token-yeartodate
+      description: REST surface for accounts-account_token-statements-statement_summary_token-yeartodate.
+      operations:
+      - method: GET
+        name: retrieveyeartodateforstatementsummary
+        description: Retrieve account statement year-to-date totals
+        call: core-statements.retrieveyeartodateforstatementsummary
+        with:
+          account_token: rest.account_token
+          statement_summary_token: rest.statement_summary_token
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/webhooks/{event-type}/{resource-token}
+      name: webhooks-event-type-resource-token
+      description: REST surface for webhooks-event_type-resource_token.
+      operations:
+      - method: POST
+        name: resendwebhookevent
+        description: Resend credit event notification
+        call: core-statements.resendwebhookevent
+        with:
+          event_type: rest.event_type
+          resource_token: rest.resource_token
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: core-statements-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Core API — Statements. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: list-account-statement-summaries
+      description: List account statement summaries
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-statements.getstatementsummariesbyaccount
+      with:
+        account_token: tools.account_token
+        start_date: tools.start_date
+        end_date: tools.end_date
+        count: tools.count
+        start_index: tools.start_index
+        sort_by: tools.sort_by
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-files-account
+      description: List files for an account
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-statements.getstatementfilesbyaccount
+      with:
+        account_token: tools.account_token
+        start_date: tools.start_date
+        end_date: tools.end_date
+        count: tools.count
+        start_index: tools.start_index
+        sort_by: tools.sort_by
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-account-statement-summary
+      description: Retrieve account statement summary
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-statements.retrievestatementsummary
+      with:
+        account_token: tools.account_token
+        statement_summary_token: tools.statement_summary_token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-files-statement-summary
+      description: List files for a statement summary
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-statements.retrievestatementfiles
+      with:
+        account_token: tools.account_token
+        statement_summary_token: tools.statement_summary_token
+        count: tools.count
+        start_index: tools.start_index
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-account-statement-interest-charges
+      description: Retrieve account statement interest charges
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-statements.retrievestatementinterestcharges
+      with:
+        account_token: tools.account_token
+        statement_summary_token: tools.statement_summary_token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-account-statement-journal-entries
+      description: List account statement journal entries
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-statements.liststatementjournalentries
+      with:
+        account_token: tools.account_token
+        statement_summary_token: tools.statement_summary_token
+        count: tools.count
+        start_index: tools.start_index
+        expand: tools.expand
+        sort_by: tools.sort_by
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-account-statement-ledger-entries
+      description: List account statement ledger entries
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-statements.liststatementledgerentries
+      with:
+        account_token: tools.account_token
+        statement_summary_token: tools.statement_summary_token
+        expand: tools.expand
+        sort_by: tools.sort_by
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-account-statement-payment-information
+      description: Retrieve account statement payment information
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-statements.retrievestatementpaymentinfo
+      with:
+        account_token: tools.account_token
+        statement_summary_token: tools.statement_summary_token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-payment-reminders-statement-summary
+      description: List payment reminders by statement summary
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-statements.getpaymentremindersbystatementsummary
+      with:
+        account_token: tools.account_token
+        statement_summary_token: tools.statement_summary_token
+        count: tools.count
+        start_index: tools.start_index
+        sort_by: tools.sort_by
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-payment-reminder
+      description: Get payment reminder
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-statements.getpaymentreminder
+      with:
+        account_token: tools.account_token
+        statement_summary_token: tools.statement_summary_token
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-account-statement-rewards
+      description: Retrieve account statement rewards
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-statements.retrievestatementreward
+      with:
+        account_token: tools.account_token
+        statement_summary_token: tools.statement_summary_token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-account-statement-year-date
+      description: Retrieve account statement year-to-date totals
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-statements.retrieveyeartodateforstatementsummary
+      with:
+        account_token: tools.account_token
+        statement_summary_token: tools.statement_summary_token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: resend-credit-event-notification
+      description: Resend credit event notification
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-statements.resendwebhookevent
+      with:
+        event_type: tools.event_type
+        resource_token: tools.resource_token
+      outputParameters:
+      - type: object
+        mapping: $.

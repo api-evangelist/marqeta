@@ -1,0 +1,371 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Core API — Webhooks
+  description: 'Core API — Webhooks. 7 operations. Lead operation: List webhooks. Self-contained Naftiko capability covering
+    one Marqeta business surface.'
+  tags:
+  - Marqeta
+  - Webhooks
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: core-webhooks
+    baseUri: ''
+    description: Core API — Webhooks business capability. Self-contained, no shared references.
+    resources:
+    - name: webhooks
+      path: /webhooks
+      operations:
+      - name: getwebhooks
+        method: GET
+        description: List webhooks
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: active
+          in: query
+          type: boolean
+          description: Set to `true` to return only active webhook configurations, otherwise all webhook configurations will
+            be returned.
+        - name: count
+          in: query
+          type: integer
+          description: Number of resources to retrieve.
+        - name: start_index
+          in: query
+          type: integer
+          description: Sort order index of the first resource in the returned array.
+        - name: fields
+          in: query
+          type: string
+          description: Comma-delimited list of fields to return (`field_1,field_2`, and so on).
+        - name: sort_by
+          in: query
+          type: string
+          description: Field on which to sort.
+      - name: postwebhooks
+        method: POST
+        description: Create webhook
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: webhooks-customheaders-token
+      path: /webhooks/customheaders/{token}
+      operations:
+      - name: putwebhookscustomheaderstoken
+        method: PUT
+        description: Update webhook custom headers
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Unique identifier of the webhook.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: webhooks-token
+      path: /webhooks/{token}
+      operations:
+      - name: getwebhookstoken
+        method: GET
+        description: Retrieve webhook
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Unique identifier of the webhook.
+          required: true
+      - name: putwebhookstoken
+        method: PUT
+        description: Update webhook
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Unique identifier of the webhook.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: webhooks-token-ping
+      path: /webhooks/{token}/ping
+      operations:
+      - name: postwebhookstokenping
+        method: POST
+        description: Ping webhook
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Unique identifier of the webhook.
+          required: true
+    - name: webhooks-token-event_type-event_token
+      path: /webhooks/{token}/{event_type}/{event_token}
+      operations:
+      - name: postwebhookstokeneventtypeeventtoken
+        method: POST
+        description: Resend event notification
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Unique identifier of the webhook.
+          required: true
+        - name: event_type
+          in: path
+          type: string
+          description: Specifies the type of event you want to resend.
+          required: true
+        - name: event_token
+          in: path
+          type: string
+          description: Unique identifier of the event for which you want to resend a notification.
+          required: true
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: core-webhooks-rest
+    port: 8080
+    description: REST adapter for Core API — Webhooks. One Spectral-compliant resource per consumed operation, prefixed with
+      /v1.
+    resources:
+    - path: /v1/webhooks
+      name: webhooks
+      description: REST surface for webhooks.
+      operations:
+      - method: GET
+        name: getwebhooks
+        description: List webhooks
+        call: core-webhooks.getwebhooks
+        with:
+          active: rest.active
+          count: rest.count
+          start_index: rest.start_index
+          fields: rest.fields
+          sort_by: rest.sort_by
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postwebhooks
+        description: Create webhook
+        call: core-webhooks.postwebhooks
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/webhooks/customheaders/{token}
+      name: webhooks-customheaders-token
+      description: REST surface for webhooks-customheaders-token.
+      operations:
+      - method: PUT
+        name: putwebhookscustomheaderstoken
+        description: Update webhook custom headers
+        call: core-webhooks.putwebhookscustomheaderstoken
+        with:
+          token: rest.token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/webhooks/{token}
+      name: webhooks-token
+      description: REST surface for webhooks-token.
+      operations:
+      - method: GET
+        name: getwebhookstoken
+        description: Retrieve webhook
+        call: core-webhooks.getwebhookstoken
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: putwebhookstoken
+        description: Update webhook
+        call: core-webhooks.putwebhookstoken
+        with:
+          token: rest.token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/webhooks/{token}/ping
+      name: webhooks-token-ping
+      description: REST surface for webhooks-token-ping.
+      operations:
+      - method: POST
+        name: postwebhookstokenping
+        description: Ping webhook
+        call: core-webhooks.postwebhookstokenping
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/webhooks/{token}/{event-type}/{event-token}
+      name: webhooks-token-event-type-event-token
+      description: REST surface for webhooks-token-event_type-event_token.
+      operations:
+      - method: POST
+        name: postwebhookstokeneventtypeeventtoken
+        description: Resend event notification
+        call: core-webhooks.postwebhookstokeneventtypeeventtoken
+        with:
+          token: rest.token
+          event_type: rest.event_type
+          event_token: rest.event_token
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: core-webhooks-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Core API — Webhooks. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: list-webhooks
+      description: List webhooks
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-webhooks.getwebhooks
+      with:
+        active: tools.active
+        count: tools.count
+        start_index: tools.start_index
+        fields: tools.fields
+        sort_by: tools.sort_by
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-webhook
+      description: Create webhook
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-webhooks.postwebhooks
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-webhook-custom-headers
+      description: Update webhook custom headers
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: core-webhooks.putwebhookscustomheaderstoken
+      with:
+        token: tools.token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-webhook
+      description: Retrieve webhook
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-webhooks.getwebhookstoken
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-webhook
+      description: Update webhook
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: core-webhooks.putwebhookstoken
+      with:
+        token: tools.token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: ping-webhook
+      description: Ping webhook
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-webhooks.postwebhookstokenping
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: resend-event-notification
+      description: Resend event notification
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-webhooks.postwebhookstokeneventtypeeventtoken
+      with:
+        token: tools.token
+        event_type: tools.event_type
+        event_token: tools.event_token
+      outputParameters:
+      - type: object
+        mapping: $.

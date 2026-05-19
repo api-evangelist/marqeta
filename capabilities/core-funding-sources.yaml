@@ -1,0 +1,1189 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Core API — funding sources
+  description: 'Core API — funding sources. 26 operations. Lead operation: Registers an ACH funding source. Self-contained
+    Naftiko capability covering one Marqeta business surface.'
+  tags:
+  - Marqeta
+  - funding sources
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: core-funding-sources
+    baseUri: ''
+    description: Core API — funding sources business capability. Self-contained, no shared references.
+    resources:
+    - name: fundingsources-ach
+      path: /fundingsources/ach
+      operations:
+      - name: postfundingsourcesach
+        method: POST
+        description: Registers an ACH funding source
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: fundingsources-ach-partner
+      path: /fundingsources/ach/partner
+      operations:
+      - name: postfundingsourcesachpartner
+        method: POST
+        description: Registers an ACH funding source through a partner
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: fundingsources-ach-partner-funding_source_token-balance
+      path: /fundingsources/ach/partner/{funding_source_token}/balance
+      operations:
+      - name: getachpartnerlinkedfundingsourcebalance
+        method: GET
+        description: Retrieves a linked funding source balance from a partner
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: funding_source_token
+          in: path
+          type: string
+          description: Funding source token
+          required: true
+    - name: fundingsources-ach-funding_source_token
+      path: /fundingsources/ach/{funding_source_token}
+      operations:
+      - name: getfundingsourcesachfundingsourcetoken
+        method: GET
+        description: Returns a user ACH account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: funding_source_token
+          in: path
+          type: string
+          description: Funding account token
+          required: true
+      - name: putfundingsourcesachfundingsourcetoken
+        method: PUT
+        description: Verifies a bank account as a funding source
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: funding_source_token
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: fundingsources-ach-funding_source_token-verificationamounts
+      path: /fundingsources/ach/{funding_source_token}/verificationamounts
+      operations:
+      - name: getfundingsourcesachfundingsourcetokenverificationamounts
+        method: GET
+        description: Returns the dollar amounts used to verify the ACH account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: funding_source_token
+          in: path
+          type: string
+          description: Funding account token
+          required: true
+    - name: fundingsources-addresses
+      path: /fundingsources/addresses
+      operations:
+      - name: postfundingsourcesaddresses
+        method: POST
+        description: Creates an account holder address for a funding source
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: fundingsources-addresses-business-business_token
+      path: /fundingsources/addresses/business/{business_token}
+      operations:
+      - name: getfundingsourcesaddressesbusinessbusinesstoken
+        method: GET
+        description: Lists all addresses for a business
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: business_token
+          in: path
+          type: string
+          description: Business token
+          required: true
+        - name: fields
+          in: query
+          type: string
+          description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+    - name: fundingsources-addresses-user-user_token
+      path: /fundingsources/addresses/user/{user_token}
+      operations:
+      - name: getfundingsourcesaddressesuserusertoken
+        method: GET
+        description: Lists all addresses for a user
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: user_token
+          in: path
+          type: string
+          description: User token
+          required: true
+        - name: fields
+          in: query
+          type: string
+          description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+    - name: fundingsources-addresses-funding_source_address_token
+      path: /fundingsources/addresses/{funding_source_address_token}
+      operations:
+      - name: getfundingsourcesaddressesfundingsourceaddresstoken
+        method: GET
+        description: Returns a user address for a funding source
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: funding_source_address_token
+          in: path
+          type: string
+          description: Funding source address token
+          required: true
+      - name: putfundingsourcesaddressesfundingsourceaddresstoken
+        method: PUT
+        description: Updates the account holder address for a funding source
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: funding_source_address_token
+          in: path
+          type: string
+          description: Funding source address token
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: fundingsources-business-business_token
+      path: /fundingsources/business/{business_token}
+      operations:
+      - name: getfundingsourcesbusinessbusinesstoken
+        method: GET
+        description: Lists all funding sources for a business
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: business_token
+          in: path
+          type: string
+          description: Business token
+          required: true
+        - name: type
+          in: query
+          type: string
+          description: Type, such as a payment card or ACH
+        - name: fields
+          in: query
+          type: string
+          description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+    - name: fundingsources-paymentcard
+      path: /fundingsources/paymentcard
+      operations:
+      - name: postfundingsourcespaymentcard
+        method: POST
+        description: Registers a payment card funding source
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: fundingsources-paymentcard-funding_source_token
+      path: /fundingsources/paymentcard/{funding_source_token}
+      operations:
+      - name: getfundingsourcespaymentcardfundingsourcetoken
+        method: GET
+        description: Returns a specific payment card
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: funding_source_token
+          in: path
+          type: string
+          description: Funding token
+          required: true
+      - name: putfundingsourcesfundingsourcetoken
+        method: PUT
+        description: Updates a specific payment card
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: funding_source_token
+          in: path
+          type: string
+          description: Funding account token
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: fundingsources-program
+      path: /fundingsources/program
+      operations:
+      - name: postfundingsourcesprogram
+        method: POST
+        description: Creates a program funding source
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: fundingsources-program-ach
+      path: /fundingsources/program/ach
+      operations:
+      - name: getallachfundingsources
+        method: GET
+        description: Returns a list of Program ACH funding sources
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: count
+          in: query
+          type: integer
+          description: Number of items to retrieve. Count can be between 1 - 10 items.
+        - name: start_index
+          in: query
+          type: integer
+          description: Indicates from what row to start returning data.
+        - name: fields
+          in: query
+          type: string
+          description: Comma delimited list of fields to return (e.g. field_1,field_2,..)
+        - name: sort_by
+          in: query
+          type: string
+          description: Sort order
+        - name: active
+          in: query
+          type: boolean
+          description: Returns programs with this active state
+      - name: postfundingsourcesprogramach
+        method: POST
+        description: Registers an ACH funding source for a program
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: fundingsources-program-token
+      path: /fundingsources/program/{token}
+      operations:
+      - name: getfundingsourcesprogramtoken
+        method: GET
+        description: Returns a specific program funding source
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Program funding source token
+          required: true
+      - name: putfundingsourcesprogramtoken
+        method: PUT
+        description: Updates a specific program funding source
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Program funding source token
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: fundingsources-programgateway
+      path: /fundingsources/programgateway
+      operations:
+      - name: postfundingsourcesprogramgateway
+        method: POST
+        description: Creates a gateway program funding source
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: fundingsources-programgateway-customheaders-token
+      path: /fundingsources/programgateway/customheaders/{token}
+      operations:
+      - name: putfundingsourcesprogramgatewaycustomheadertoken
+        method: PUT
+        description: Updates a specific gateway program funding source Custom headers
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Gateway program funding source token
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: fundingsources-programgateway-token
+      path: /fundingsources/programgateway/{token}
+      operations:
+      - name: getfundingsourcesprogramgatewaytoken
+        method: GET
+        description: Returns a gateway program funding source
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Gateway program funding source token
+          required: true
+      - name: putfundingsourcesprogramgatewaytoken
+        method: PUT
+        description: Updates a specific gateway program funding source
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Gateway program funding source token
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: fundingsources-user-user_token
+      path: /fundingsources/user/{user_token}
+      operations:
+      - name: getfundingsourcesuserusertoken
+        method: GET
+        description: Lists all funding sources for a user
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: user_token
+          in: path
+          type: string
+          description: User token
+          required: true
+        - name: type
+          in: query
+          type: string
+          description: Type, such as a payment card or ACH
+        - name: fields
+          in: query
+          type: string
+          description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+    - name: fundingsources-funding_source_token-default
+      path: /fundingsources/{funding_source_token}/default
+      operations:
+      - name: putfundingsourcesfundingsourcetokendefault
+        method: PUT
+        description: Configures a default funding source
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: funding_source_token
+          in: path
+          type: string
+          description: Funding account
+          required: true
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: core-funding-sources-rest
+    port: 8080
+    description: REST adapter for Core API — funding sources. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/fundingsources/ach
+      name: fundingsources-ach
+      description: REST surface for fundingsources-ach.
+      operations:
+      - method: POST
+        name: postfundingsourcesach
+        description: Registers an ACH funding source
+        call: core-funding-sources.postfundingsourcesach
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/fundingsources/ach/partner
+      name: fundingsources-ach-partner
+      description: REST surface for fundingsources-ach-partner.
+      operations:
+      - method: POST
+        name: postfundingsourcesachpartner
+        description: Registers an ACH funding source through a partner
+        call: core-funding-sources.postfundingsourcesachpartner
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/fundingsources/ach/partner/{funding-source-token}/balance
+      name: fundingsources-ach-partner-funding-source-token-balance
+      description: REST surface for fundingsources-ach-partner-funding_source_token-balance.
+      operations:
+      - method: GET
+        name: getachpartnerlinkedfundingsourcebalance
+        description: Retrieves a linked funding source balance from a partner
+        call: core-funding-sources.getachpartnerlinkedfundingsourcebalance
+        with:
+          funding_source_token: rest.funding_source_token
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/fundingsources/ach/{funding-source-token}
+      name: fundingsources-ach-funding-source-token
+      description: REST surface for fundingsources-ach-funding_source_token.
+      operations:
+      - method: GET
+        name: getfundingsourcesachfundingsourcetoken
+        description: Returns a user ACH account
+        call: core-funding-sources.getfundingsourcesachfundingsourcetoken
+        with:
+          funding_source_token: rest.funding_source_token
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: putfundingsourcesachfundingsourcetoken
+        description: Verifies a bank account as a funding source
+        call: core-funding-sources.putfundingsourcesachfundingsourcetoken
+        with:
+          funding_source_token: rest.funding_source_token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/fundingsources/ach/{funding-source-token}/verificationamounts
+      name: fundingsources-ach-funding-source-token-verificationamounts
+      description: REST surface for fundingsources-ach-funding_source_token-verificationamounts.
+      operations:
+      - method: GET
+        name: getfundingsourcesachfundingsourcetokenverificationamounts
+        description: Returns the dollar amounts used to verify the ACH account
+        call: core-funding-sources.getfundingsourcesachfundingsourcetokenverificationamounts
+        with:
+          funding_source_token: rest.funding_source_token
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/fundingsources/addresses
+      name: fundingsources-addresses
+      description: REST surface for fundingsources-addresses.
+      operations:
+      - method: POST
+        name: postfundingsourcesaddresses
+        description: Creates an account holder address for a funding source
+        call: core-funding-sources.postfundingsourcesaddresses
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/fundingsources/addresses/business/{business-token}
+      name: fundingsources-addresses-business-business-token
+      description: REST surface for fundingsources-addresses-business-business_token.
+      operations:
+      - method: GET
+        name: getfundingsourcesaddressesbusinessbusinesstoken
+        description: Lists all addresses for a business
+        call: core-funding-sources.getfundingsourcesaddressesbusinessbusinesstoken
+        with:
+          business_token: rest.business_token
+          fields: rest.fields
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/fundingsources/addresses/user/{user-token}
+      name: fundingsources-addresses-user-user-token
+      description: REST surface for fundingsources-addresses-user-user_token.
+      operations:
+      - method: GET
+        name: getfundingsourcesaddressesuserusertoken
+        description: Lists all addresses for a user
+        call: core-funding-sources.getfundingsourcesaddressesuserusertoken
+        with:
+          user_token: rest.user_token
+          fields: rest.fields
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/fundingsources/addresses/{funding-source-address-token}
+      name: fundingsources-addresses-funding-source-address-token
+      description: REST surface for fundingsources-addresses-funding_source_address_token.
+      operations:
+      - method: GET
+        name: getfundingsourcesaddressesfundingsourceaddresstoken
+        description: Returns a user address for a funding source
+        call: core-funding-sources.getfundingsourcesaddressesfundingsourceaddresstoken
+        with:
+          funding_source_address_token: rest.funding_source_address_token
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: putfundingsourcesaddressesfundingsourceaddresstoken
+        description: Updates the account holder address for a funding source
+        call: core-funding-sources.putfundingsourcesaddressesfundingsourceaddresstoken
+        with:
+          funding_source_address_token: rest.funding_source_address_token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/fundingsources/business/{business-token}
+      name: fundingsources-business-business-token
+      description: REST surface for fundingsources-business-business_token.
+      operations:
+      - method: GET
+        name: getfundingsourcesbusinessbusinesstoken
+        description: Lists all funding sources for a business
+        call: core-funding-sources.getfundingsourcesbusinessbusinesstoken
+        with:
+          business_token: rest.business_token
+          type: rest.type
+          fields: rest.fields
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/fundingsources/paymentcard
+      name: fundingsources-paymentcard
+      description: REST surface for fundingsources-paymentcard.
+      operations:
+      - method: POST
+        name: postfundingsourcespaymentcard
+        description: Registers a payment card funding source
+        call: core-funding-sources.postfundingsourcespaymentcard
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/fundingsources/paymentcard/{funding-source-token}
+      name: fundingsources-paymentcard-funding-source-token
+      description: REST surface for fundingsources-paymentcard-funding_source_token.
+      operations:
+      - method: GET
+        name: getfundingsourcespaymentcardfundingsourcetoken
+        description: Returns a specific payment card
+        call: core-funding-sources.getfundingsourcespaymentcardfundingsourcetoken
+        with:
+          funding_source_token: rest.funding_source_token
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: putfundingsourcesfundingsourcetoken
+        description: Updates a specific payment card
+        call: core-funding-sources.putfundingsourcesfundingsourcetoken
+        with:
+          funding_source_token: rest.funding_source_token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/fundingsources/program
+      name: fundingsources-program
+      description: REST surface for fundingsources-program.
+      operations:
+      - method: POST
+        name: postfundingsourcesprogram
+        description: Creates a program funding source
+        call: core-funding-sources.postfundingsourcesprogram
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/fundingsources/program/ach
+      name: fundingsources-program-ach
+      description: REST surface for fundingsources-program-ach.
+      operations:
+      - method: GET
+        name: getallachfundingsources
+        description: Returns a list of Program ACH funding sources
+        call: core-funding-sources.getallachfundingsources
+        with:
+          count: rest.count
+          start_index: rest.start_index
+          fields: rest.fields
+          sort_by: rest.sort_by
+          active: rest.active
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postfundingsourcesprogramach
+        description: Registers an ACH funding source for a program
+        call: core-funding-sources.postfundingsourcesprogramach
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/fundingsources/program/{token}
+      name: fundingsources-program-token
+      description: REST surface for fundingsources-program-token.
+      operations:
+      - method: GET
+        name: getfundingsourcesprogramtoken
+        description: Returns a specific program funding source
+        call: core-funding-sources.getfundingsourcesprogramtoken
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: putfundingsourcesprogramtoken
+        description: Updates a specific program funding source
+        call: core-funding-sources.putfundingsourcesprogramtoken
+        with:
+          token: rest.token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/fundingsources/programgateway
+      name: fundingsources-programgateway
+      description: REST surface for fundingsources-programgateway.
+      operations:
+      - method: POST
+        name: postfundingsourcesprogramgateway
+        description: Creates a gateway program funding source
+        call: core-funding-sources.postfundingsourcesprogramgateway
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/fundingsources/programgateway/customheaders/{token}
+      name: fundingsources-programgateway-customheaders-token
+      description: REST surface for fundingsources-programgateway-customheaders-token.
+      operations:
+      - method: PUT
+        name: putfundingsourcesprogramgatewaycustomheadertoken
+        description: Updates a specific gateway program funding source Custom headers
+        call: core-funding-sources.putfundingsourcesprogramgatewaycustomheadertoken
+        with:
+          token: rest.token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/fundingsources/programgateway/{token}
+      name: fundingsources-programgateway-token
+      description: REST surface for fundingsources-programgateway-token.
+      operations:
+      - method: GET
+        name: getfundingsourcesprogramgatewaytoken
+        description: Returns a gateway program funding source
+        call: core-funding-sources.getfundingsourcesprogramgatewaytoken
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: putfundingsourcesprogramgatewaytoken
+        description: Updates a specific gateway program funding source
+        call: core-funding-sources.putfundingsourcesprogramgatewaytoken
+        with:
+          token: rest.token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/fundingsources/user/{user-token}
+      name: fundingsources-user-user-token
+      description: REST surface for fundingsources-user-user_token.
+      operations:
+      - method: GET
+        name: getfundingsourcesuserusertoken
+        description: Lists all funding sources for a user
+        call: core-funding-sources.getfundingsourcesuserusertoken
+        with:
+          user_token: rest.user_token
+          type: rest.type
+          fields: rest.fields
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/fundingsources/{funding-source-token}/default
+      name: fundingsources-funding-source-token-default
+      description: REST surface for fundingsources-funding_source_token-default.
+      operations:
+      - method: PUT
+        name: putfundingsourcesfundingsourcetokendefault
+        description: Configures a default funding source
+        call: core-funding-sources.putfundingsourcesfundingsourcetokendefault
+        with:
+          funding_source_token: rest.funding_source_token
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: core-funding-sources-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Core API — funding sources. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: registers-ach-funding-source
+      description: Registers an ACH funding source
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-funding-sources.postfundingsourcesach
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: registers-ach-funding-source-through
+      description: Registers an ACH funding source through a partner
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-funding-sources.postfundingsourcesachpartner
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieves-linked-funding-source-balance
+      description: Retrieves a linked funding source balance from a partner
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-funding-sources.getachpartnerlinkedfundingsourcebalance
+      with:
+        funding_source_token: tools.funding_source_token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: returns-user-ach-account
+      description: Returns a user ACH account
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-funding-sources.getfundingsourcesachfundingsourcetoken
+      with:
+        funding_source_token: tools.funding_source_token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: verifies-bank-account-funding-source
+      description: Verifies a bank account as a funding source
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: core-funding-sources.putfundingsourcesachfundingsourcetoken
+      with:
+        funding_source_token: tools.funding_source_token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: returns-dollar-amounts-used-verify
+      description: Returns the dollar amounts used to verify the ACH account
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-funding-sources.getfundingsourcesachfundingsourcetokenverificationamounts
+      with:
+        funding_source_token: tools.funding_source_token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: creates-account-holder-address-funding
+      description: Creates an account holder address for a funding source
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-funding-sources.postfundingsourcesaddresses
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: lists-all-addresses-business
+      description: Lists all addresses for a business
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-funding-sources.getfundingsourcesaddressesbusinessbusinesstoken
+      with:
+        business_token: tools.business_token
+        fields: tools.fields
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: lists-all-addresses-user
+      description: Lists all addresses for a user
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-funding-sources.getfundingsourcesaddressesuserusertoken
+      with:
+        user_token: tools.user_token
+        fields: tools.fields
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: returns-user-address-funding-source
+      description: Returns a user address for a funding source
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-funding-sources.getfundingsourcesaddressesfundingsourceaddresstoken
+      with:
+        funding_source_address_token: tools.funding_source_address_token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: updates-account-holder-address-funding
+      description: Updates the account holder address for a funding source
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: core-funding-sources.putfundingsourcesaddressesfundingsourceaddresstoken
+      with:
+        funding_source_address_token: tools.funding_source_address_token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: lists-all-funding-sources-business
+      description: Lists all funding sources for a business
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-funding-sources.getfundingsourcesbusinessbusinesstoken
+      with:
+        business_token: tools.business_token
+        type: tools.type
+        fields: tools.fields
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: registers-payment-card-funding-source
+      description: Registers a payment card funding source
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-funding-sources.postfundingsourcespaymentcard
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: returns-specific-payment-card
+      description: Returns a specific payment card
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-funding-sources.getfundingsourcespaymentcardfundingsourcetoken
+      with:
+        funding_source_token: tools.funding_source_token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: updates-specific-payment-card
+      description: Updates a specific payment card
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: core-funding-sources.putfundingsourcesfundingsourcetoken
+      with:
+        funding_source_token: tools.funding_source_token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: creates-program-funding-source
+      description: Creates a program funding source
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-funding-sources.postfundingsourcesprogram
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: returns-list-program-ach-funding
+      description: Returns a list of Program ACH funding sources
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-funding-sources.getallachfundingsources
+      with:
+        count: tools.count
+        start_index: tools.start_index
+        fields: tools.fields
+        sort_by: tools.sort_by
+        active: tools.active
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: registers-ach-funding-source-program
+      description: Registers an ACH funding source for a program
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-funding-sources.postfundingsourcesprogramach
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: returns-specific-program-funding-source
+      description: Returns a specific program funding source
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-funding-sources.getfundingsourcesprogramtoken
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: updates-specific-program-funding-source
+      description: Updates a specific program funding source
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: core-funding-sources.putfundingsourcesprogramtoken
+      with:
+        token: tools.token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: creates-gateway-program-funding-source
+      description: Creates a gateway program funding source
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-funding-sources.postfundingsourcesprogramgateway
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: updates-specific-gateway-program-funding
+      description: Updates a specific gateway program funding source Custom headers
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: core-funding-sources.putfundingsourcesprogramgatewaycustomheadertoken
+      with:
+        token: tools.token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: returns-gateway-program-funding-source
+      description: Returns a gateway program funding source
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-funding-sources.getfundingsourcesprogramgatewaytoken
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: updates-specific-gateway-program-funding-2
+      description: Updates a specific gateway program funding source
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: core-funding-sources.putfundingsourcesprogramgatewaytoken
+      with:
+        token: tools.token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: lists-all-funding-sources-user
+      description: Lists all funding sources for a user
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-funding-sources.getfundingsourcesuserusertoken
+      with:
+        user_token: tools.user_token
+        type: tools.type
+        fields: tools.fields
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: configures-default-funding-source
+      description: Configures a default funding source
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: core-funding-sources.putfundingsourcesfundingsourcetokendefault
+      with:
+        funding_source_token: tools.funding_source_token
+      outputParameters:
+      - type: object
+        mapping: $.

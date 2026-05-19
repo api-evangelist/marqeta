@@ -1,0 +1,422 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Core API — Bundles
+  description: 'Core API — Bundles. 8 operations. Lead operation: List bundles. Self-contained Naftiko capability covering
+    one Marqeta business surface.'
+  tags:
+  - Marqeta
+  - Bundles
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: core-bundles
+    baseUri: ''
+    description: Core API — Bundles business capability. Self-contained, no shared references.
+    resources:
+    - name: bundles
+      path: /bundles
+      operations:
+      - name: listbundles
+        method: GET
+        description: List bundles
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: count
+          in: query
+          type: integer
+          description: Number of bundles resources to retrieve.
+        - name: start_index
+          in: query
+          type: integer
+          description: Sort order index of the first resource in the returned array.
+        - name: sort_by
+          in: query
+          type: string
+          description: Field on which to sort.
+        - name: status
+          in: query
+          type: array
+          description: An array of statuses by which to filter bundles.
+      - name: createbundle
+        method: POST
+        description: Create bundle
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: bundles-token
+      path: /bundles/{token}
+      operations:
+      - name: retrievebundle
+        method: GET
+        description: Retrieve bundle
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Unique identifier of the bundle to retrieve.
+          required: true
+        - name: expand_objects
+          in: query
+          type: array
+          description: Embeds the associated object of the specified type into the response.
+      - name: updatebundle
+        method: PUT
+        description: Update bundle
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Token of the bundle to update.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: bundles-token-clone
+      path: /bundles/{token}/clone
+      operations:
+      - name: clonebundle
+        method: POST
+        description: Clone bundle
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Unique identifier of the bundle to clone.
+          required: true
+    - name: bundles-token-lineage
+      path: /bundles/{token}/lineage
+      operations:
+      - name: listrelatedbundles
+        method: GET
+        description: List related bundles
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Unique identifier of the parent product bundle.
+          required: true
+        - name: count
+          in: query
+          type: integer
+          description: Number of related bundle product resources to retrieve.
+        - name: start_index
+          in: query
+          type: integer
+          description: Sort order index of the first resource in the returned array.
+        - name: sort_by
+          in: query
+          type: string
+          description: Field on which to sort.
+        - name: status
+          in: query
+          type: array
+          description: Array of statuses by which to filter bundles.
+    - name: bundles-token-promote
+      path: /bundles/{token}/promote
+      operations:
+      - name: promotebundle
+        method: PUT
+        description: Promote bundle
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Unique identifier of the bundle to promote.
+          required: true
+    - name: bundles-token-transitions
+      path: /bundles/{token}/transitions
+      operations:
+      - name: transitionbundle
+        method: POST
+        description: Transition a bundle
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Token of the bundle whose status you want to transition.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: core-bundles-rest
+    port: 8080
+    description: REST adapter for Core API — Bundles. One Spectral-compliant resource per consumed operation, prefixed with
+      /v1.
+    resources:
+    - path: /v1/bundles
+      name: bundles
+      description: REST surface for bundles.
+      operations:
+      - method: GET
+        name: listbundles
+        description: List bundles
+        call: core-bundles.listbundles
+        with:
+          count: rest.count
+          start_index: rest.start_index
+          sort_by: rest.sort_by
+          status: rest.status
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createbundle
+        description: Create bundle
+        call: core-bundles.createbundle
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/bundles/{token}
+      name: bundles-token
+      description: REST surface for bundles-token.
+      operations:
+      - method: GET
+        name: retrievebundle
+        description: Retrieve bundle
+        call: core-bundles.retrievebundle
+        with:
+          token: rest.token
+          expand_objects: rest.expand_objects
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: updatebundle
+        description: Update bundle
+        call: core-bundles.updatebundle
+        with:
+          token: rest.token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/bundles/{token}/clone
+      name: bundles-token-clone
+      description: REST surface for bundles-token-clone.
+      operations:
+      - method: POST
+        name: clonebundle
+        description: Clone bundle
+        call: core-bundles.clonebundle
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/bundles/{token}/lineage
+      name: bundles-token-lineage
+      description: REST surface for bundles-token-lineage.
+      operations:
+      - method: GET
+        name: listrelatedbundles
+        description: List related bundles
+        call: core-bundles.listrelatedbundles
+        with:
+          token: rest.token
+          count: rest.count
+          start_index: rest.start_index
+          sort_by: rest.sort_by
+          status: rest.status
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/bundles/{token}/promote
+      name: bundles-token-promote
+      description: REST surface for bundles-token-promote.
+      operations:
+      - method: PUT
+        name: promotebundle
+        description: Promote bundle
+        call: core-bundles.promotebundle
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/bundles/{token}/transitions
+      name: bundles-token-transitions
+      description: REST surface for bundles-token-transitions.
+      operations:
+      - method: POST
+        name: transitionbundle
+        description: Transition a bundle
+        call: core-bundles.transitionbundle
+        with:
+          token: rest.token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: core-bundles-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Core API — Bundles. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: list-bundles
+      description: List bundles
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-bundles.listbundles
+      with:
+        count: tools.count
+        start_index: tools.start_index
+        sort_by: tools.sort_by
+        status: tools.status
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-bundle
+      description: Create bundle
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-bundles.createbundle
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-bundle
+      description: Retrieve bundle
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-bundles.retrievebundle
+      with:
+        token: tools.token
+        expand_objects: tools.expand_objects
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-bundle
+      description: Update bundle
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: core-bundles.updatebundle
+      with:
+        token: tools.token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: clone-bundle
+      description: Clone bundle
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-bundles.clonebundle
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-related-bundles
+      description: List related bundles
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-bundles.listrelatedbundles
+      with:
+        token: tools.token
+        count: tools.count
+        start_index: tools.start_index
+        sort_by: tools.sort_by
+        status: tools.status
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: promote-bundle
+      description: Promote bundle
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: core-bundles.promotebundle
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: transition-bundle
+      description: Transition a bundle
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-bundles.transitionbundle
+      with:
+        token: tools.token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

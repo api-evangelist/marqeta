@@ -1,0 +1,164 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Core API — PINs
+  description: 'Core API — PINs. 3 operations. Lead operation: Create or update PIN. Self-contained Naftiko capability covering
+    one Marqeta business surface.'
+  tags:
+  - Marqeta
+  - PINs
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: core-pins
+    baseUri: ''
+    description: Core API — PINs business capability. Self-contained, no shared references.
+    resources:
+    - name: pins
+      path: /pins
+      operations:
+      - name: putpins
+        method: PUT
+        description: Create or update PIN
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: pins-controltoken
+      path: /pins/controltoken
+      operations:
+      - name: postpinscontroltoken
+        method: POST
+        description: Create PIN control token
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: pins-reveal
+      path: /pins/reveal
+      operations:
+      - name: revealpins
+        method: POST
+        description: Reveal PIN
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: core-pins-rest
+    port: 8080
+    description: REST adapter for Core API — PINs. One Spectral-compliant resource per consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/pins
+      name: pins
+      description: REST surface for pins.
+      operations:
+      - method: PUT
+        name: putpins
+        description: Create or update PIN
+        call: core-pins.putpins
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/pins/controltoken
+      name: pins-controltoken
+      description: REST surface for pins-controltoken.
+      operations:
+      - method: POST
+        name: postpinscontroltoken
+        description: Create PIN control token
+        call: core-pins.postpinscontroltoken
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/pins/reveal
+      name: pins-reveal
+      description: REST surface for pins-reveal.
+      operations:
+      - method: POST
+        name: revealpins
+        description: Reveal PIN
+        call: core-pins.revealpins
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: core-pins-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Core API — PINs. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: create-update-pin
+      description: Create or update PIN
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: core-pins.putpins
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-pin-control-token
+      description: Create PIN control token
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-pins.postpinscontroltoken
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: reveal-pin
+      description: Reveal PIN
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-pins.revealpins
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

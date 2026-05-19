@@ -1,0 +1,169 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Core API — Card Group
+  description: 'Core API — Card Group. 3 operations. Lead operation: List Card Groups. Self-contained Naftiko capability covering
+    one Marqeta business surface.'
+  tags:
+  - Marqeta
+  - Card Group
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: core-card-group
+    baseUri: ''
+    description: Core API — Card Group business capability. Self-contained, no shared references.
+    resources:
+    - name: cardgroups
+      path: /cardgroups
+      operations:
+      - name: listcardgroups
+        method: GET
+        description: List Card Groups
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: card_tokens
+          in: query
+          type: array
+          description: list of unique card identifiers to retrieve.
+        - name: count
+          in: query
+          type: integer
+          description: Number of card group resources to retrieve.
+        - name: start_index
+          in: query
+          type: integer
+          description: Sort order index of the first resource in the returned array.
+      - name: createcardgroup
+        method: POST
+        description: Create Card Group
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: cardgroups-token
+      path: /cardgroups/{token}
+      operations:
+      - name: retrievecardgroup
+        method: GET
+        description: Retrieve Card Group
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Unique identifier of the card group to retrieve
+          required: true
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: core-card-group-rest
+    port: 8080
+    description: REST adapter for Core API — Card Group. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/cardgroups
+      name: cardgroups
+      description: REST surface for cardgroups.
+      operations:
+      - method: GET
+        name: listcardgroups
+        description: List Card Groups
+        call: core-card-group.listcardgroups
+        with:
+          card_tokens: rest.card_tokens
+          count: rest.count
+          start_index: rest.start_index
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createcardgroup
+        description: Create Card Group
+        call: core-card-group.createcardgroup
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/cardgroups/{token}
+      name: cardgroups-token
+      description: REST surface for cardgroups-token.
+      operations:
+      - method: GET
+        name: retrievecardgroup
+        description: Retrieve Card Group
+        call: core-card-group.retrievecardgroup
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: core-card-group-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Core API — Card Group. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: list-card-groups
+      description: List Card Groups
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-card-group.listcardgroups
+      with:
+        card_tokens: tools.card_tokens
+        count: tools.count
+        start_index: tools.start_index
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-card-group
+      description: Create Card Group
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-card-group.createcardgroup
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-card-group
+      description: Retrieve Card Group
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-card-group.retrievecardgroup
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.

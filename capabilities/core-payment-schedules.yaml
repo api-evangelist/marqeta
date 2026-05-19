@@ -1,0 +1,374 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Core API — Payment Schedules
+  description: 'Core API — Payment Schedules. 6 operations. Lead operation: List payment schedules. Self-contained Naftiko
+    capability covering one Marqeta business surface.'
+  tags:
+  - Marqeta
+  - Payment Schedules
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: core-payment-schedules
+    baseUri: ''
+    description: Core API — Payment Schedules business capability. Self-contained, no shared references.
+    resources:
+    - name: accounts-account_token-paymentschedules
+      path: /accounts/{account_token}/paymentschedules
+      operations:
+      - name: retrievepaymentschedules
+        method: GET
+        description: List payment schedules
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account for which you want to retrieve payment schedules.
+          required: true
+        - name: statuses
+          in: query
+          type: array
+          description: Status of the payment schedules to retrieve.
+        - name: frequency
+          in: query
+          type: array
+          description: Frequency of the payment schedules to retrieve.
+        - name: count
+          in: query
+          type: integer
+          description: Number of payment schedule resources to retrieve.
+        - name: start_index
+          in: query
+          type: integer
+          description: Sort order index of the first resource in the returned array.
+        - name: sort_by
+          in: query
+          type: string
+          description: Field on which to sort.
+      - name: createpaymentschedule
+        method: POST
+        description: Create payment schedule
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account for which you want to create a payment schedule.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: accounts-account_token-paymentschedules-payment_schedule_token
+      path: /accounts/{account_token}/paymentschedules/{payment_schedule_token}
+      operations:
+      - name: retrievepaymentschedule
+        method: GET
+        description: Retrieve payment schedule
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account for which you want to retrieve a payment schedule.
+          required: true
+        - name: payment_schedule_token
+          in: path
+          type: string
+          description: Unique identifier of the payment schedule that you want to retrieve.
+          required: true
+    - name: accounts-account_token-paymentschedules-payment_schedule_token-transitions
+      path: /accounts/{account_token}/paymentschedules/{payment_schedule_token}/transitions
+      operations:
+      - name: retrievepaymentscheduletransitions
+        method: GET
+        description: Retrieve payment schedule transitions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account for which you want to retrieve payment schedule transitions.
+          required: true
+        - name: payment_schedule_token
+          in: path
+          type: string
+          description: Unique identifier of the payment schedule for which you want to retrieve transitions.
+          required: true
+        - name: count
+          in: query
+          type: integer
+          description: Number of payment schedule resources to retrieve.
+        - name: start_index
+          in: query
+          type: integer
+          description: Sort order index of the first resource in the returned array.
+        - name: sort_by
+          in: query
+          type: string
+          description: Field on which to sort.
+      - name: createpaymentscheduletransition
+        method: POST
+        description: Create payment schedule transition
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account on which to transition a payment schedule.
+          required: true
+        - name: payment_schedule_token
+          in: path
+          type: string
+          description: Unique identifier of the payment schedule whose status is to transition.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: accounts-account_token-paymentschedules-payment_schedule_token-transitions-token
+      path: /accounts/{account_token}/paymentschedules/{payment_schedule_token}/transitions/{token}
+      operations:
+      - name: retrievepaymentscheduletransition
+        method: GET
+        description: Retrieve payment schedule transition
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account for which you want to retrieve a payment schedule transition.
+          required: true
+        - name: payment_schedule_token
+          in: path
+          type: string
+          description: Unique identifier of the payment schedule you want to retrieve.
+          required: true
+        - name: token
+          in: path
+          type: string
+          description: Unique identifier of the payment schedule transition you want to retrieve.
+          required: true
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: core-payment-schedules-rest
+    port: 8080
+    description: REST adapter for Core API — Payment Schedules. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/accounts/{account-token}/paymentschedules
+      name: accounts-account-token-paymentschedules
+      description: REST surface for accounts-account_token-paymentschedules.
+      operations:
+      - method: GET
+        name: retrievepaymentschedules
+        description: List payment schedules
+        call: core-payment-schedules.retrievepaymentschedules
+        with:
+          account_token: rest.account_token
+          statuses: rest.statuses
+          frequency: rest.frequency
+          count: rest.count
+          start_index: rest.start_index
+          sort_by: rest.sort_by
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createpaymentschedule
+        description: Create payment schedule
+        call: core-payment-schedules.createpaymentschedule
+        with:
+          account_token: rest.account_token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/accounts/{account-token}/paymentschedules/{payment-schedule-token}
+      name: accounts-account-token-paymentschedules-payment-schedule-token
+      description: REST surface for accounts-account_token-paymentschedules-payment_schedule_token.
+      operations:
+      - method: GET
+        name: retrievepaymentschedule
+        description: Retrieve payment schedule
+        call: core-payment-schedules.retrievepaymentschedule
+        with:
+          account_token: rest.account_token
+          payment_schedule_token: rest.payment_schedule_token
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/accounts/{account-token}/paymentschedules/{payment-schedule-token}/transitions
+      name: accounts-account-token-paymentschedules-payment-schedule-token-transitions
+      description: REST surface for accounts-account_token-paymentschedules-payment_schedule_token-transitions.
+      operations:
+      - method: GET
+        name: retrievepaymentscheduletransitions
+        description: Retrieve payment schedule transitions
+        call: core-payment-schedules.retrievepaymentscheduletransitions
+        with:
+          account_token: rest.account_token
+          payment_schedule_token: rest.payment_schedule_token
+          count: rest.count
+          start_index: rest.start_index
+          sort_by: rest.sort_by
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createpaymentscheduletransition
+        description: Create payment schedule transition
+        call: core-payment-schedules.createpaymentscheduletransition
+        with:
+          account_token: rest.account_token
+          payment_schedule_token: rest.payment_schedule_token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/accounts/{account-token}/paymentschedules/{payment-schedule-token}/transitions/{token}
+      name: accounts-account-token-paymentschedules-payment-schedule-token-transitions-token
+      description: REST surface for accounts-account_token-paymentschedules-payment_schedule_token-transitions-token.
+      operations:
+      - method: GET
+        name: retrievepaymentscheduletransition
+        description: Retrieve payment schedule transition
+        call: core-payment-schedules.retrievepaymentscheduletransition
+        with:
+          account_token: rest.account_token
+          payment_schedule_token: rest.payment_schedule_token
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: core-payment-schedules-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Core API — Payment Schedules. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: list-payment-schedules
+      description: List payment schedules
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-payment-schedules.retrievepaymentschedules
+      with:
+        account_token: tools.account_token
+        statuses: tools.statuses
+        frequency: tools.frequency
+        count: tools.count
+        start_index: tools.start_index
+        sort_by: tools.sort_by
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-payment-schedule
+      description: Create payment schedule
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-payment-schedules.createpaymentschedule
+      with:
+        account_token: tools.account_token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-payment-schedule
+      description: Retrieve payment schedule
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-payment-schedules.retrievepaymentschedule
+      with:
+        account_token: tools.account_token
+        payment_schedule_token: tools.payment_schedule_token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-payment-schedule-transitions
+      description: Retrieve payment schedule transitions
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-payment-schedules.retrievepaymentscheduletransitions
+      with:
+        account_token: tools.account_token
+        payment_schedule_token: tools.payment_schedule_token
+        count: tools.count
+        start_index: tools.start_index
+        sort_by: tools.sort_by
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-payment-schedule-transition
+      description: Create payment schedule transition
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-payment-schedules.createpaymentscheduletransition
+      with:
+        account_token: tools.account_token
+        payment_schedule_token: tools.payment_schedule_token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-payment-schedule-transition
+      description: Retrieve payment schedule transition
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-payment-schedules.retrievepaymentscheduletransition
+      with:
+        account_token: tools.account_token
+        payment_schedule_token: tools.payment_schedule_token
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.

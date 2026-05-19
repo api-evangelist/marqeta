@@ -1,0 +1,211 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Core API — card products
+  description: 'Core API — card products. 4 operations. Lead operation: Lists all card products. Self-contained Naftiko capability
+    covering one Marqeta business surface.'
+  tags:
+  - Marqeta
+  - card products
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: core-card-products
+    baseUri: ''
+    description: Core API — card products business capability. Self-contained, no shared references.
+    resources:
+    - name: cardproducts
+      path: /cardproducts
+      operations:
+      - name: getcardproducts
+        method: GET
+        description: Lists all card products
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: count
+          in: query
+          type: integer
+          description: Number of items to retrieve. Count can be between 1 - 10 items.
+        - name: start_index
+          in: query
+          type: integer
+          description: Indicates from what row to start returning data.
+        - name: sort_by
+          in: query
+          type: string
+          description: Sort order
+      - name: postcardproducts
+        method: POST
+        description: Creates a card product
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: cardproducts-token
+      path: /cardproducts/{token}
+      operations:
+      - name: getcardproductstoken
+        method: GET
+        description: Returns a specific card product
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Card product token
+          required: true
+      - name: putcardproductstoken
+        method: PUT
+        description: Updates a specific card product
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          description: Card product token
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: core-card-products-rest
+    port: 8080
+    description: REST adapter for Core API — card products. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/cardproducts
+      name: cardproducts
+      description: REST surface for cardproducts.
+      operations:
+      - method: GET
+        name: getcardproducts
+        description: Lists all card products
+        call: core-card-products.getcardproducts
+        with:
+          count: rest.count
+          start_index: rest.start_index
+          sort_by: rest.sort_by
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postcardproducts
+        description: Creates a card product
+        call: core-card-products.postcardproducts
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/cardproducts/{token}
+      name: cardproducts-token
+      description: REST surface for cardproducts-token.
+      operations:
+      - method: GET
+        name: getcardproductstoken
+        description: Returns a specific card product
+        call: core-card-products.getcardproductstoken
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: putcardproductstoken
+        description: Updates a specific card product
+        call: core-card-products.putcardproductstoken
+        with:
+          token: rest.token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: core-card-products-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Core API — card products. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: lists-all-card-products
+      description: Lists all card products
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-card-products.getcardproducts
+      with:
+        count: tools.count
+        start_index: tools.start_index
+        sort_by: tools.sort_by
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: creates-card-product
+      description: Creates a card product
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-card-products.postcardproducts
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: returns-specific-card-product
+      description: Returns a specific card product
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-card-products.getcardproductstoken
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: updates-specific-card-product
+      description: Updates a specific card product
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: core-card-products.putcardproductstoken
+      with:
+        token: tools.token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

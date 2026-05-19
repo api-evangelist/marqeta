@@ -1,0 +1,95 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Core API — Refunds
+  description: 'Core API — Refunds. 1 operations. Lead operation: Simulate Refund Transition. Self-contained Naftiko capability
+    covering one Marqeta business surface.'
+  tags:
+  - Marqeta
+  - Refunds
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MARQETA_API_KEY: MARQETA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: core-refunds
+    baseUri: ''
+    description: Core API — Refunds business capability. Self-contained, no shared references.
+    resources:
+    - name: simulation-accounts-account_token-refunds-refund_token-transitions
+      path: /simulation/accounts/{account_token}/refunds/{refund_token}/transitions
+      operations:
+      - name: simulatetransitionrefund
+        method: POST
+        description: Simulate Refund Transition
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_token
+          in: path
+          type: string
+          description: Unique identifier of the credit account for which you want to create a balance refund.
+          required: true
+        - name: refund_token
+          in: path
+          type: string
+          description: Unique identifier of the refund to retrieve.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: basic
+      username: '{{env.MARQETA_USER}}'
+      password: '{{env.MARQETA_PASS}}'
+  exposes:
+  - type: rest
+    namespace: core-refunds-rest
+    port: 8080
+    description: REST adapter for Core API — Refunds. One Spectral-compliant resource per consumed operation, prefixed with
+      /v1.
+    resources:
+    - path: /v1/simulation/accounts/{account-token}/refunds/{refund-token}/transitions
+      name: simulation-accounts-account-token-refunds-refund-token-transitions
+      description: REST surface for simulation-accounts-account_token-refunds-refund_token-transitions.
+      operations:
+      - method: POST
+        name: simulatetransitionrefund
+        description: Simulate Refund Transition
+        call: core-refunds.simulatetransitionrefund
+        with:
+          account_token: rest.account_token
+          refund_token: rest.refund_token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: core-refunds-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Core API — Refunds. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: simulate-refund-transition
+      description: Simulate Refund Transition
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: core-refunds.simulatetransitionrefund
+      with:
+        account_token: tools.account_token
+        refund_token: tools.refund_token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
