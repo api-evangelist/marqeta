@@ -1,0 +1,953 @@
+"""
+Marqeta GraphQL Schema
+Conceptual schema derived from the Marqeta Core API v3 REST surface.
+Source: https://www.marqeta.com/docs/core-api
+"""
+
+# ─────────────────────────────────────────────
+# Scalars
+# ─────────────────────────────────────────────
+
+scalar DateTime
+scalar Decimal
+scalar JSON
+
+# ─────────────────────────────────────────────
+# Enums
+# ─────────────────────────────────────────────
+
+enum CardState {
+  UNACTIVATED
+  ACTIVE
+  SUSPENDED
+  TERMINATED
+  UNSUPPORTED
+  UNKNOWN
+}
+
+enum UserStatus {
+  ACTIVE
+  CLOSED
+  LIMITED
+}
+
+enum TransactionType {
+  AUTHORIZATION
+  AUTHORIZATION_CLEARING
+  AUTHORIZATION_REVERSAL
+  CLEARING
+  REFUND
+  REFUND_REVERSAL
+  PINCHANGE_COMPLETE
+  ACCOUNT_CREDIT
+  ACCOUNT_DEBIT
+  ADJUSTMENT_CREDIT
+  ADJUSTMENT_DEBIT
+  TRANSFER
+  FEE_TRANSFER
+}
+
+enum FundingSourceType {
+  ACH
+  PROGRAM_GATEWAY
+  PROGRAM
+  CARD_ACCEPTOR
+}
+
+enum KycResult {
+  SUCCESS
+  FAILURE
+  PENDING
+}
+
+enum WebhookStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum CardFormFactor {
+  VIRTUAL
+  PHYSICAL
+}
+
+# ─────────────────────────────────────────────
+# Card Domain
+# ─────────────────────────────────────────────
+
+"""Full card record with state and associations."""
+type Card {
+  token: String!
+  state: CardState!
+  stateReason: String
+  cardProductToken: String!
+  lastFour: String
+  pan: CardPan
+  expiration: CardExpiry
+  cvv: CardCVV
+  bin: CardBIN
+  userToken: String
+  fulfillmentStatus: String
+  formFactor: CardFormFactor
+  isActivated: Boolean
+  pinIsSet: Boolean
+  details: CardDetails
+  personalization: CardPersonalization
+  controls: CardControls
+  createdTime: DateTime
+  lastModifiedTime: DateTime
+}
+
+"""Extended metadata for a card."""
+type CardDetails {
+  token: String!
+  chipEnabled: Boolean
+  contactlessEnabled: Boolean
+  ecommerceEnabled: Boolean
+  cashEnabled: Boolean
+  allowedCountries: [String]
+  internationalEnabled: Boolean
+}
+
+"""Tokenized card reference used in API requests."""
+type CardToken {
+  token: String!
+  cardToken: String!
+  createdTime: DateTime
+  expirationTime: DateTime
+}
+
+"""Primary Account Number (PAN) reveal details."""
+type CardPan {
+  pan: String!
+  createdTime: DateTime
+  expirationTime: DateTime
+}
+
+"""Card expiration date."""
+type CardExpiry {
+  expirationMonth: String!
+  expirationYear: String!
+}
+
+"""Card Verification Value (CVV2)."""
+type CardCVV {
+  cvv: String!
+  createdTime: DateTime
+  expirationTime: DateTime
+}
+
+"""Bank Identification Number details for a card."""
+type CardBIN {
+  bin: String!
+  network: String
+  cardBrand: String
+  country: String
+  fundingType: String
+  prepaid: Boolean
+}
+
+"""A virtual (non-physical) card."""
+type VirtualCard {
+  token: String!
+  state: CardState!
+  pan: CardPan
+  expiration: CardExpiry
+  cvv: CardCVV
+  cardProductToken: String!
+  userToken: String
+  createdTime: DateTime
+}
+
+"""A physical (embossed/shipped) card."""
+type PhysicalCard {
+  token: String!
+  state: CardState!
+  lastFour: String
+  cardProductToken: String!
+  userToken: String
+  fulfillmentStatus: String
+  shipDate: DateTime
+  personalizations: CardPersonalization
+  createdTime: DateTime
+}
+
+"""Cardholder authentication settings."""
+type CardholderAuth {
+  threeDSecureEnabled: Boolean
+  dynamicCvvEnabled: Boolean
+  pinRequired: Boolean
+}
+
+"""Cardholder contact and identity information."""
+type CardholderDetails {
+  token: String!
+  firstName: String
+  lastName: String
+  email: String
+  phone: String
+  address1: String
+  address2: String
+  city: String
+  state: String
+  zip: String
+  country: String
+}
+
+"""Card PIN management object."""
+type CardPIN {
+  token: String!
+  cardToken: String!
+  isSet: Boolean
+  lastChangedTime: DateTime
+}
+
+"""Card-level controls for transaction authorization."""
+type CardControls {
+  token: String!
+  cardToken: String!
+  velocityControls: [VelocityControl]
+  spendControls: [SpendControl]
+}
+
+# ─────────────────────────────────────────────
+# Card Product Domain
+# ─────────────────────────────────────────────
+
+"""Card product definition — the ruleset for a card program."""
+type CardProduct {
+  token: String!
+  name: String!
+  active: Boolean
+  startDate: DateTime
+  endDate: DateTime
+  config: CardConfig
+  details: CardProductDetails
+  createdTime: DateTime
+  lastModifiedTime: DateTime
+}
+
+"""Descriptive metadata for a card product."""
+type CardProductDetails {
+  token: String!
+  name: String!
+  description: String
+  packageId: String
+  carrierReturnWindowDays: Int
+  allZeroAvailableBalance: Boolean
+}
+
+"""Configuration block for a card product."""
+type CardConfig {
+  token: String!
+  poi: JSON
+  transactionControls: JSON
+  selectiveAuth: JSON
+  special: JSON
+  cardLifeCycle: JSON
+  clearingAndSettlement: JSON
+  jitFunding: JSON
+  digitalWalletTokenization: JSON
+  threedSecure: JSON
+}
+
+"""Offset definition for card expiration relative to activation."""
+type ExpirationOffset {
+  unit: String!
+  value: Int!
+  minOffset: Int
+}
+
+"""Velocity control limiting spend within a time window."""
+type VelocityControl {
+  token: String!
+  name: String
+  association: JSON
+  usageLimit: Int
+  approvalsOnly: Boolean
+  includePurchases: Boolean
+  includeWithdrawals: Boolean
+  includeTransfers: Boolean
+  includeJitFunding: Boolean
+  includeCashback: Boolean
+  currencyCode: String
+  amountLimit: Decimal
+  velocityWindow: String
+  active: Boolean
+}
+
+"""Spend control restricting card usage by merchant category or amount."""
+type SpendControl {
+  token: String!
+  name: String
+  association: JSON
+  merchantScope: JSON
+  usageLimit: Int
+  amountLimit: Decimal
+  active: Boolean
+}
+
+"""A business-issued card associated with a Business entity."""
+type BusinessCard {
+  token: String!
+  state: CardState!
+  businessToken: String!
+  cardProductToken: String!
+  lastFour: String
+  createdTime: DateTime
+}
+
+"""Card personalization including emboss art and text lines."""
+type CardPersonalization {
+  token: String!
+  text: TextLine
+  images: EmbossImage
+  carrier: JSON
+  persoType: String
+}
+
+"""Emboss image art for card personalization."""
+type EmbossImage {
+  card: JSON
+  carrier: JSON
+}
+
+"""Text line printed on a personalized card."""
+type TextLine {
+  nameLine1: String
+  nameLine2: String
+}
+
+# ─────────────────────────────────────────────
+# Program Domain
+# ─────────────────────────────────────────────
+
+"""Top-level program encapsulating a card-issuing tenant."""
+type Program {
+  token: String!
+  name: String!
+  shortCode: String
+  active: Boolean
+  fundingSourceToken: String
+  gatewayExceptionUrl: String
+  gatewayTimeoutMs: Int
+  createdTime: DateTime
+  lastModifiedTime: DateTime
+}
+
+"""API key for authenticating to the Marqeta API."""
+type APIKey {
+  token: String!
+  accessToken: String!
+  active: Boolean
+  createdTime: DateTime
+}
+
+"""Generic token object used for API-level references."""
+type Token {
+  token: String!
+  type: String
+  state: String
+  createdTime: DateTime
+  expirationTime: DateTime
+}
+
+# ─────────────────────────────────────────────
+# Funding Domain
+# ─────────────────────────────────────────────
+
+"""Funding configuration for a card or program."""
+type Funding {
+  amount: Decimal!
+  source: FundingSource
+  gatewayLog: JSON
+  paymentSchedule: JSON
+}
+
+"""A funding source (ACH account, program gateway, etc.)."""
+type FundingSource {
+  token: String!
+  type: FundingSourceType!
+  name: String
+  active: Boolean
+  validationStatus: String
+  verificationStatus: String
+  accountSuffix: String
+  accountType: String
+  routingNumber: String
+  createdTime: DateTime
+  lastModifiedTime: DateTime
+}
+
+"""General Purpose Account for a cardholder."""
+type GPA {
+  token: String!
+  userToken: String
+  businessToken: String
+  balance: GPABalance
+  currencyCode: String
+  createdTime: DateTime
+  lastModifiedTime: DateTime
+}
+
+"""Balance snapshot of a General Purpose Account."""
+type GPABalance {
+  currency: String!
+  ledgerBalance: Decimal!
+  availableBalance: Decimal!
+  creditBalance: Decimal!
+  pendingCredits: Decimal!
+  impactedAmount: Decimal
+  lastUpdatedTime: DateTime
+}
+
+"""Program-level funding account."""
+type ProgramFunding {
+  token: String!
+  name: String!
+  active: Boolean
+  currencyCode: String
+  balance: Decimal
+  createdTime: DateTime
+}
+
+"""Member Service Provider configuration."""
+type MSP {
+  token: String!
+  name: String!
+  active: Boolean
+  telephoneNumber: String
+  url: String
+  address: JSON
+}
+
+"""Generic account associated with a user or business."""
+type Account {
+  token: String!
+  userToken: String
+  businessToken: String
+  type: String
+  balance: AccountBalance
+  createdTime: DateTime
+  lastModifiedTime: DateTime
+}
+
+"""Balance snapshot of an account."""
+type AccountBalance {
+  currency: String!
+  ledgerBalance: Decimal!
+  availableBalance: Decimal!
+  lastUpdatedTime: DateTime
+}
+
+# ─────────────────────────────────────────────
+# Transaction Domain
+# ─────────────────────────────────────────────
+
+"""A transaction record in the Marqeta ledger."""
+type Transaction {
+  token: String!
+  type: TransactionType!
+  state: String
+  identifier: String
+  userToken: String
+  cardToken: String
+  cardProductToken: String
+  amount: Decimal!
+  currencyCode: String
+  issuerExchangeRate: Decimal
+  issuerReceivedTime: DateTime
+  issuerPaymentNode: String
+  networkType: String
+  approval: Authorization
+  details: TransactionDetails
+  merchant: MerchantDetails
+  terminal: Terminal
+  fee: TransactionFee
+  createdTime: DateTime
+}
+
+"""Extended metadata and raw fields for a transaction."""
+type TransactionDetails {
+  token: String!
+  standin: Boolean
+  forceDebit: Boolean
+  cardAcceptor: JSON
+  pos: JSON
+  networkMetadata: JSON
+  digitalWalletToken: JSON
+}
+
+"""Authorization decision for a transaction."""
+type Authorization {
+  token: String!
+  transactionToken: String!
+  state: String
+  amount: Decimal
+  approvalCode: String
+  network: String
+  acquirerFeeAmount: Decimal
+  createdTime: DateTime
+  expirationTime: DateTime
+}
+
+"""Clearing event linking an authorization to settlement."""
+type Clearing {
+  token: String!
+  transactionToken: String!
+  amount: Decimal
+  settledAt: DateTime
+  createdTime: DateTime
+}
+
+"""Refund credited back to a cardholder."""
+type Refund {
+  token: String!
+  transactionToken: String!
+  amount: Decimal
+  currencyCode: String
+  state: String
+  createdTime: DateTime
+}
+
+"""Reversal of a prior transaction."""
+type Reversal {
+  token: String!
+  originalTransactionToken: String!
+  amount: Decimal
+  reason: String
+  createdTime: DateTime
+}
+
+"""Record of a card PIN change event."""
+type PinChange {
+  token: String!
+  cardToken: String!
+  changedTime: DateTime
+}
+
+"""Credit adjustment applied to an account."""
+type AdjustmentCredit {
+  token: String!
+  userToken: String
+  businessToken: String
+  amount: Decimal
+  currencyCode: String
+  memo: String
+  createdTime: DateTime
+}
+
+"""Fee charged in the context of a transaction."""
+type TransactionFee {
+  token: String!
+  type: String
+  amount: Decimal
+  currencyCode: String
+  memo: String
+  createdTime: DateTime
+}
+
+"""Merchant Category Code definition."""
+type MCC {
+  mcc: String!
+  description: String
+  groupName: String
+}
+
+"""Merchant entity at the network level."""
+type Merchant {
+  token: String!
+  name: String
+  mcc: String
+  city: String
+  state: String
+  zip: String
+  country: String
+  mid: String
+  network: String
+}
+
+"""Merchant details embedded in a transaction."""
+type MerchantDetails {
+  name: String
+  mcc: String
+  city: String
+  state: String
+  zip: String
+  country: String
+  mid: String
+  networkMid: String
+  terminalId: String
+}
+
+"""Point-of-sale terminal details."""
+type Terminal {
+  token: String!
+  id: String
+  city: String
+  state: String
+  country: String
+  zip: String
+  posConditionCode: String
+  terminalType: String
+  attended: Boolean
+  cardholderPresent: Boolean
+  cardPresent: Boolean
+}
+
+# ─────────────────────────────────────────────
+# User and Business Domain
+# ─────────────────────────────────────────────
+
+"""Cardholder (individual) user account."""
+type User {
+  token: String!
+  status: UserStatus!
+  email: String
+  phone: String
+  address1: String
+  address2: String
+  city: String
+  state: String
+  zip: String
+  country: String
+  firstName: String
+  lastName: String
+  birthDate: String
+  ssn: String
+  details: UserDetails
+  identifications: [JSON]
+  metadata: JSON
+  honorific: String
+  parentToken: String
+  usesParentAccount: Boolean
+  corporateCardHolder: Boolean
+  createdTime: DateTime
+  lastModifiedTime: DateTime
+}
+
+"""Extended profile fields for a user."""
+type UserDetails {
+  token: String!
+  ipAddress: String
+  passportNumber: String
+  passportExpirationDate: String
+  nationality: String
+  company: String
+}
+
+"""Business (corporate) entity account."""
+type Business {
+  token: String!
+  businessNameDba: String
+  businessNameLegal: String
+  status: String
+  inCorporation: Boolean
+  incorporationType: String
+  incorporationState: String
+  dateEstablished: String
+  website: String
+  phone: String
+  taxIdNumber: String
+  details: BusinessDetails
+  identifications: [JSON]
+  metadata: JSON
+  createdTime: DateTime
+  lastModifiedTime: DateTime
+}
+
+"""Extended profile fields for a business."""
+type BusinessDetails {
+  token: String!
+  mainAddress: JSON
+  primaryContact: JSON
+  proprietorOrOfficer: JSON
+  beneficialOwner1: JSON
+  beneficialOwner2: JSON
+  beneficialOwner3: JSON
+  beneficialOwner4: JSON
+  attestationConsent: Boolean
+  attestationDate: String
+  attesterName: String
+  attesterTitle: String
+}
+
+# ─────────────────────────────────────────────
+# KYC Domain
+# ─────────────────────────────────────────────
+
+"""KYC/KYB identity verification request."""
+type Kyc {
+  token: String!
+  userToken: String
+  businessToken: String
+  result: KycResult!
+  notes: String
+  referenceId: String
+  createdTime: DateTime
+  lastModifiedTime: DateTime
+}
+
+# ─────────────────────────────────────────────
+# Webhook Domain
+# ─────────────────────────────────────────────
+
+"""Webhook subscription configuration."""
+type Webhook {
+  token: String!
+  name: String!
+  status: WebhookStatus!
+  config: JSON
+  events: [String]
+  active: Boolean
+  createdTime: DateTime
+  lastModifiedTime: DateTime
+}
+
+"""An individual webhook event payload delivery record."""
+type WebhookEvent {
+  token: String!
+  webhookToken: String!
+  eventType: String
+  state: String
+  payload: JSON
+  responseCode: Int
+  responseBody: String
+  attempts: Int
+  createdTime: DateTime
+  lastAttemptTime: DateTime
+}
+
+# ─────────────────────────────────────────────
+# Sandbox / Simulation Domain
+# ─────────────────────────────────────────────
+
+"""Sandbox environment metadata."""
+type Sandbox {
+  baseUrl: String!
+  active: Boolean
+  programToken: String
+}
+
+"""A sandbox simulation request (test transaction trigger)."""
+type SimulationRequest {
+  token: String!
+  cardToken: String
+  amount: Decimal!
+  currencyCode: String
+  mid: String
+  mcc: String
+  network: String
+  ecommerceEnabled: Boolean
+  state: String
+  createdTime: DateTime
+}
+
+# ─────────────────────────────────────────────
+# Query Root
+# ─────────────────────────────────────────────
+
+type Query {
+  """Retrieve a single card by token."""
+  card(token: String!): Card
+
+  """List cards, optionally filtered by user or card product."""
+  cards(userToken: String, cardProductToken: String, count: Int, startIndex: Int): [Card]
+
+  """Retrieve a virtual card by token."""
+  virtualCard(token: String!): VirtualCard
+
+  """Retrieve a physical card by token."""
+  physicalCard(token: String!): PhysicalCard
+
+  """Reveal the PAN for a card token."""
+  cardPan(token: String!): CardPan
+
+  """Reveal the CVV2 for a card token."""
+  cardCvv(token: String!): CardCVV
+
+  """Get card product by token."""
+  cardProduct(token: String!): CardProduct
+
+  """List all card products."""
+  cardProducts(count: Int, startIndex: Int): [CardProduct]
+
+  """Get a user by token."""
+  user(token: String!): User
+
+  """List users."""
+  users(count: Int, startIndex: Int): [User]
+
+  """Get a business by token."""
+  business(token: String!): Business
+
+  """List businesses."""
+  businesses(count: Int, startIndex: Int): [Business]
+
+  """Get a GPA for a user."""
+  gpa(userToken: String!): GPA
+
+  """Get GPA balance."""
+  gpaBalance(userToken: String!): GPABalance
+
+  """Get funding source by token."""
+  fundingSource(token: String!): FundingSource
+
+  """List funding sources."""
+  fundingSources(userToken: String, businessToken: String): [FundingSource]
+
+  """Get a transaction by token."""
+  transaction(token: String!): Transaction
+
+  """List transactions with optional filters."""
+  transactions(userToken: String, cardToken: String, count: Int, startIndex: Int, startDate: DateTime, endDate: DateTime): [Transaction]
+
+  """Get an authorization by token."""
+  authorization(token: String!): Authorization
+
+  """Get a clearing by token."""
+  clearing(token: String!): Clearing
+
+  """Get a refund by token."""
+  refund(token: String!): Refund
+
+  """Get velocity controls."""
+  velocityControls(userToken: String, cardToken: String): [VelocityControl]
+
+  """Get spend controls."""
+  spendControls(cardProductToken: String): [SpendControl]
+
+  """Get merchant by token."""
+  merchant(token: String!): Merchant
+
+  """List merchants."""
+  merchants(count: Int, startIndex: Int): [Merchant]
+
+  """Get MCC details."""
+  mcc(code: String!): MCC
+
+  """List MCCs."""
+  mccs: [MCC]
+
+  """Get a program."""
+  program(token: String!): Program
+
+  """List programs."""
+  programs: [Program]
+
+  """Get program funding account."""
+  programFunding(token: String!): ProgramFunding
+
+  """Get MSP by token."""
+  msp(token: String!): MSP
+
+  """Get KYC result by token."""
+  kyc(token: String!): Kyc
+
+  """List KYC results for a user."""
+  kycForUser(userToken: String!): [Kyc]
+
+  """Get webhook by token."""
+  webhook(token: String!): Webhook
+
+  """List webhooks."""
+  webhooks: [Webhook]
+
+  """Get webhook event by token."""
+  webhookEvent(token: String!): WebhookEvent
+
+  """List events for a webhook."""
+  webhookEvents(webhookToken: String!): [WebhookEvent]
+
+  """Get an account by token."""
+  account(token: String!): Account
+
+  """Get account balance."""
+  accountBalance(token: String!): AccountBalance
+
+  """Get an API key."""
+  apiKey(token: String!): APIKey
+}
+
+# ─────────────────────────────────────────────
+# Mutation Root
+# ─────────────────────────────────────────────
+
+type Mutation {
+  """Create a virtual card."""
+  createVirtualCard(cardProductToken: String!, userToken: String!): Card
+
+  """Activate a card."""
+  activateCard(token: String!): Card
+
+  """Suspend a card."""
+  suspendCard(token: String!): Card
+
+  """Terminate a card."""
+  terminateCard(token: String!): Card
+
+  """Set or change card PIN."""
+  setCardPin(token: String!, pin: String!): CardPIN
+
+  """Create a user."""
+  createUser(input: JSON!): User
+
+  """Update a user."""
+  updateUser(token: String!, input: JSON!): User
+
+  """Create a business."""
+  createBusiness(input: JSON!): Business
+
+  """Update a business."""
+  updateBusiness(token: String!, input: JSON!): Business
+
+  """Fund a GPA (issue a GPA order)."""
+  fundGpa(userToken: String!, amount: Decimal!, fundingSourceToken: String!, currencyCode: String!): GPA
+
+  """Create a funding source."""
+  createFundingSource(input: JSON!): FundingSource
+
+  """Trigger a sandbox authorization simulation."""
+  simulateAuthorization(cardToken: String!, amount: Decimal!, mid: String): SimulationRequest
+
+  """Trigger a sandbox clearing simulation."""
+  simulateClearing(transactionToken: String!, amount: Decimal): SimulationRequest
+
+  """Trigger a sandbox refund simulation."""
+  simulateRefund(cardToken: String!, amount: Decimal!): SimulationRequest
+
+  """Create a velocity control."""
+  createVelocityControl(input: JSON!): VelocityControl
+
+  """Update a velocity control."""
+  updateVelocityControl(token: String!, input: JSON!): VelocityControl
+
+  """Create a spend control."""
+  createSpendControl(input: JSON!): SpendControl
+
+  """Create a card product."""
+  createCardProduct(input: JSON!): CardProduct
+
+  """Update a card product."""
+  updateCardProduct(token: String!, input: JSON!): CardProduct
+
+  """Create a webhook subscription."""
+  createWebhook(input: JSON!): Webhook
+
+  """Update a webhook subscription."""
+  updateWebhook(token: String!, input: JSON!): Webhook
+
+  """Replay a webhook event."""
+  replayWebhookEvent(webhookToken: String!, eventToken: String!): WebhookEvent
+
+  """Submit a KYC verification request."""
+  submitKyc(userToken: String): Kyc
+
+  """Submit a KYB verification request for a business."""
+  submitKyb(businessToken: String!): Kyc
+
+  """Issue an adjustment credit."""
+  issueAdjustmentCredit(userToken: String!, amount: Decimal!, currencyCode: String!, memo: String): AdjustmentCredit
+
+  """Apply a reversal to a transaction."""
+  reverseTransaction(transactionToken: String!, amount: Decimal): Reversal
+}
