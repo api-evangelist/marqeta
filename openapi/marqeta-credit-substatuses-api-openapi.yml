@@ -1,0 +1,1330 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries Credit Substatuses API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- description: '// Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    Credit substatuses can be applied to credit accounts or credit account holders.
+
+    Substatuses should be applied only after verification with Customer Support and after the cardholder request for the substatus designation has been accepted.
+
+    Substatuses define specific circumstances, such as bankruptcy, hardship or fraud.
+
+    They also affect account behavior or activity, including interest accrual, authorization requests, and account termination.
+
+    Substatus downstream account actions are not always reversible for the cardholder, which means that substatuses should be applied with caution.
+
+
+    Use the substatus endpoints to apply or remove a substatus for a credit account or user.
+
+    Applying a substatus causes immediate downstream changes to the account.
+
+    For additional information about substatuses, see <</developer-guides/about-credit-accounts#_account-substatuses,Account substatuses>> or <</developer-guides/about-credit-accounts#_account-holder-substatuses,Account holder substatuses>> in the <</developer-guides/about-credit-accounts,About Credit Accounts>> guide.
+
+
+    [NOTE]
+
+    ====
+
+    The substatus `SCRA` stands for "Servicemembers Civilian Relief Act."
+
+    The substatus `MLA` stands for "Military Lending Act."
+
+    ====
+
+
+    For more information about receiving webhook notifications when account transition events occur, see <</core-api/event-types#_credit-substatus-events,Credit substatus events>> on the <</core-api/event-types,Event Types>> page.
+
+
+    [IMPORTANT]
+
+    ====
+
+    If you are a Managed by Marqeta customer, a Marqeta customer service representative will apply the appropriate substatuses.
+
+    ===='
+  name: Credit Substatuses
+paths:
+  /substatuses:
+    get:
+      description: 'Retrieve an array of substatuses.
+
+        This endpoint supports <</core-api/sorting-and-pagination,sorting and pagination>>.'
+      operationId: listSubStatuses
+      parameters:
+      - description: 'Unique identifier of the account for which to retrieve substatuses.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing account tokens.'
+        explode: true
+        in: query
+        name: account_token
+        required: false
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: form
+      - description: 'Unique identifier of the user for which to retrieve substatuses.
+
+
+          Send a `GET` request to `/users` to retrieve existing user tokens.'
+        explode: true
+        in: query
+        name: user_token
+        required: false
+        schema:
+          type: string
+          x-allowableValues: Existing user token
+        style: form
+      - description: Denotes whether a substatus is active.
+        explode: true
+        in: query
+        name: is_active
+        required: false
+        schema:
+          type: boolean
+          x-allowableValues: '`true`, `false`'
+        style: form
+      - description: 'Comma-delimited list of substatus types to include.
+
+          Allowable values:
+
+          `HARDSHIP`, `FRAUD`, `MLA`, `SCRA`, `DECEASED`, `BANKRUPTCY`, `POWER_OF_ATTORNEY`, `BLOCKED`, `CEASE_AND_DESIST`, `OPT_OUT`'
+        explode: true
+        in: query
+        name: substatuses
+        required: false
+        schema:
+          items:
+            enum:
+            - HARDSHIP
+            - FRAUD
+            - MLA
+            - SCRA
+            - DECEASED
+            - BANKRUPTCY
+            - POWER_OF_ATTORNEY
+            - BLOCKED
+            - CEASE_AND_DESIST
+            - OPT_OUT
+            type: string
+          type: array
+        style: form
+      - description: The number of resources to retrieve.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - description: Sort order index of the first resource in the returned array.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: 'Field on which to sort.
+
+          Prefix the field name with a hyphen (`-`) to sort in descending order.
+
+          Omit the hyphen to sort in ascending order.'
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -createdTime
+          enum:
+          - createdTime
+          - -createdTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubstatusPage'
+          description: Expected response to a valid request.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: List substatuses
+      tags:
+      - Credit Substatuses
+    post:
+      description: Create a new substatus for a credit account, user, or business.
+      operationId: createSubStatus
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              attributes:
+              - key: military_start_date
+                value: 2024-04-02 11:23:23+00:00
+              events:
+              - channel: ADMIN
+                reason: Documents submitted and verified
+                state: ACTIVE
+              resource_token: my_user_token
+              resource_type: USER
+              substatus: SCRA
+            schema:
+              $ref: '#/components/schemas/SubstatusCreateReq'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              example:
+                attributes:
+                - key: military_start_date
+                  value: 2024-04-02 11:23:23+00:00
+                created_time: 2024-05-17 21:50:13.729000+00:00
+                events:
+                - channel: ADMIN
+                  created_time: 2024-05-17 21:50:13.740000+00:00
+                  effective_date: 2024-05-17 21:50:13.738000+00:00
+                  reason: Documents submitted and verified
+                  state: ACTIVE
+                is_active: true
+                resource_token: my_user_token
+                resource_type: USER
+                state: ACTIVE
+                substatus: SCRA
+                token: substatus_token
+                updated_time: 2024-05-17 21:51:39.774000+00:00
+              schema:
+                $ref: '#/components/schemas/SubstatusResponse'
+          description: Expected response to a valid request.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Create substatus
+      tags:
+      - Credit Substatuses
+  /substatuses/{substatus_token}:
+    get:
+      description: Retrieve a user or account substatus.
+      operationId: retrieveSubStatus
+      parameters:
+      - description: 'Unique identifier of the substatus to retrieve.
+
+
+          Send a `GET` request to `/credit/substatuses` to retrieve existing substatus tokens.'
+        explode: false
+        in: path
+        name: substatus_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing substatus token
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                attributes:
+                - key: military_start_date
+                  value: 2024-04-02 11:23:23+00:00
+                created_time: 2024-04-02 11:23:23+00:00
+                events:
+                - channel: ADMIN
+                  created_time: 2024-04-02 11:23:23+00:00
+                  effective_date: 2024-04-02 11:23:23+00:00
+                  reason: Documents submitted and verified
+                  state: ACTIVE
+                is_active: true
+                resource_token: my_user_token
+                resource_type: USER
+                state: ACTIVE
+                substatus: SCRA
+                token: substatus_token
+                updated_time: 2024-04-02 11:23:23+00:00
+              schema:
+                $ref: '#/components/schemas/SubstatusResponse'
+          description: A JSON object containing substatus information
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Retrieve substatus
+      tags:
+      - Credit Substatuses
+    put:
+      description: Updating a substatus registers a new event that changes the substatus' state.
+      operationId: updateSubStatus
+      parameters:
+      - description: 'Unique identifier of the account substatus resource to retrieve.
+
+
+          Send a `GET` request to `/credit/substatuses` to retrieve existing substatus tokens.'
+        explode: false
+        in: path
+        name: substatus_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing substatus token
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            example:
+              channel: ADMIN
+              effective_date: 2024-04-09 11:23:23+00:00
+              reason: Remove substatus from account
+              state: INACTIVE
+            schema:
+              $ref: '#/components/schemas/SubstatusUpdateReq'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                attributes: []
+                created_time: 2024-04-02 11:23:23+00:00
+                events:
+                - channel: SYSTEM
+                  created_time: 2024-04-02 11:23:23+00:00
+                  effective_date: 2024-04-02 11:23:23+00:00
+                  reason: Fraud system detected suspicious activity
+                  state: ACTIVE
+                - channel: ADMIN
+                  created_time: 2024-04-02 11:23:23+00:00
+                  effective_date: 2024-04-02 11:23:23+00:00
+                  reason: Verified non-fraud with cardholder
+                  state: INACTIVE
+                is_active: false
+                resource_token: my_account_token
+                resource_type: ACCOUNT
+                state: INACTIVE
+                substatus: FRAUD
+                token: substatus_token
+                updated_time: 2024-04-02 11:23:23+00:00
+              schema:
+                $ref: '#/components/schemas/SubstatusResponse'
+          description: Updated substatus response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Update substatus
+      tags:
+      - Credit Substatuses
+  /webhooks/{event_type}/{resource_token}:
+    post:
+      description: 'Resends a credit event notification to your webhook endpoint.
+
+
+        Although you send this request as a `POST`, all parameters are passed in the URL and the body is empty.
+
+        The event notification is resent to your webhook endpoint and also returned in the response to this request.
+
+
+        For details on how to configure your webhook endpoint, see the About Webhooks <</developer-guides/about-webhooks#_tutorial, tutorial>>.
+
+        For the complete `/webhooks` endpoint reference, see <</core-api/webhooks, Webhooks>>.'
+      operationId: resendWebhookEvent
+      parameters:
+      - description: Specifies the type of event you want to resend.
+        explode: false
+        in: path
+        name: event_type
+        required: true
+        schema:
+          enum:
+          - ledgerentry
+          - journalentry
+          - accounttransition
+          - accountstatement
+          - paymenttransition
+          - delinquencytransition
+          - paymentreminders
+          - substatus
+          - accountsignupbonus
+          type: string
+        style: simple
+      - description: 'Unique identifier of the resource for which you want to resend a notification.
+
+
+          * Send a `GET` request to `/credit/accounts/{account_token}/journalentries` to retrieve existing journal entry tokens.
+
+          * Send a `GET` request to `/credit/accounts/{account_token}/ledgerentries` to retrieve existing ledger entry tokens.
+
+          * Send a `GET` request to `/accounts/{account_token}/accounttransitions` to retrieve existing account transition tokens.
+
+          * Send a `GET` request to `/credit/accounts/{account_token}/payments/{payment_token}` to retrieve existing payment transition tokens.
+
+          * Send a `GET` request to `/accounts/{account_token}/statements` to retrieve existing statement summary tokens.
+
+          * Send a `GET` request to `/accounts/{account_token}/delinquencystate/transitions` to retrieve existing delinquency state transition tokens.
+
+          * Send a `GET` request to `/accounts/{account_token}/statements/{statement_summary_token}/paymentreminders/{token}` to retrieve existing payment reminder tokens.
+
+          * Send a `GET` request to `/credit/substatuses` to retrieve existing substatus tokens.
+
+          * Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens and identify the specific account for the resend event.'
+        explode: false
+        in: path
+        name: resource_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing journal entry token, ledger entry token, account transition token, payment transition token, statement summary token, delinquency transition token, or substatus token
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                account_statement_sample:
+                  summary: The following code block shows a sample of a resent `creditaccountstatements` event.
+                  value:
+                    account_token: my_credit_account_token
+                    available_credit: 0
+                    closing_balance: 506.41
+                    closing_date: 2025-04-01 03:59:59.999000+00:00
+                    created_time: 2023-08-18 22:04:31.261000+00:00
+                    credit_limit: 500
+                    credits: 0
+                    cycle_type: REVOLVING
+                    days_in_billing_cycle: 31
+                    fees: 15
+                    interest: 4.96
+                    opening_balance: 496.45
+                    opening_date: 2025-03-01 05:00:00+00:00
+                    past_due_amount: 10
+                    payments: 10
+                    purchases: 0
+                    token: my_credit_account_statement_token
+                account_transition_sample:
+                  summary: The following code block shows a sample of a resent `creditaccounttransitions` event.
+                  value:
+                    account_token: my_credit_account_token1234
+                    created_time: 2024-08-18 20:25:10.408000+00:00
+                    original_status: UNACTIVATED
+                    status: ACTIVE
+                    token: my_credit_account_transition_token1234
+                accountsignupbonus_example:
+                  summary: The following code block shows a sample of a resent `accountsignupbonus` event.
+                  value:
+                    account_token: my_account_token
+                    accrual_start_time: 2024-04-02 11:23:23+00:00
+                    journal_entry_token: my_journal_entry_token
+                    maturity_time: 2024-04-02 11:23:23+00:00
+                    reward_token: my_reward_token
+                    spend_total: 10
+                    status: ISSUED
+                    token: my_accountsignupbonus_token
+                    type: STATEMENT_CREDIT
+                delinquency_transition_example:
+                  summary: The following code block shows a sample of a resent `creditdelinquencytransitions` event.
+                  value:
+                    account_token: my_credit_account_token1234
+                    bucket_count: 2
+                    created_time: 2024-03-01 04:59:59.999000
+                    current_due: 40
+                    impact_time: 2024-03-01 04:59:59.999000
+                    is_rolled_back: false
+                    oldest_payment_due_date: 2023-02-01 04:59:59.999000
+                    original_status: CURRENT
+                    status: DELINQUENT
+                    token: my_delinquency_transition_token1234
+                    total_due: 140
+                    total_past_due: 100
+                    transition_trigger_reason: STATEMENT_GENERATION
+                    transition_trigger_time: 2024-03-01 04:59:59.999000
+                    updated_time: 2024-03-01 04:59:59.999000
+                journal_entry_example:
+                  summary: The following code block shows a sample of a resent `creditjournalentries` event.
+                  value:
+                    account_token: my_credit_account_token1234
+                    amount: 10
+                    card_token: my_credit_card_token1234
+                    created_time: 2024-08-18 22:07:21.422000+00:00
+                    currency_code: USD
+                    detail_object:
+                      acquirer:
+                        system_trace_audit_number: '376582'
+                      acquirer_fee_amount: 0
+                      acting_user_token: my_user_token
+                      amount: 10
+                      approval_code: '974406'
+                      card:
+                        last_four: '9949'
+                        metadata: {}
+                      card_acceptor:
+                        city: San Francisco
+                        country_code: USA
+                        mcc: '6411'
+                        mid: '1234'
+                        name: Jane's Bakery
+                        postal_code: '94115'
+                        state: CA
+                        street_address: 1989 Fillmore St
+                      card_token: my_credit_card_token1234
+                      created_time: 2024-08-18 22:06:52+00:00
+                      currency_code: USD
+                      duration: 837
+                      gpa:
+                        available_balance: 0
+                        balances:
+                          USD:
+                            available_balance: 0
+                            credit_balance: 0
+                            currency_code: USD
+                            impacted_amount: -10
+                            ledger_balance: 510.87
+                            pending_credits: 0
+                        credit_balance: 0
+                        currency_code: USD
+                        impacted_amount: -10
+                        ledger_balance: 510.87
+                        pending_credits: 0
+                      gpa_order:
+                        amount: 10
+                        created_time: 2024-08-18 22:06:53+00:00
+                        currency_code: USD
+                        funding:
+                          amount: 10
+                          gateway_log:
+                            duration: 485
+                            message: Approved or completed successfully
+                            order_number: my_gateway_token12345
+                            response:
+                              code: '200'
+                              data:
+                                jit_funding:
+                                  acting_user_token: my_user_token
+                                  amount: 10
+                                  method: pgfs.authorization
+                                  token: my_jit_funding_token1234
+                                  user_token: my_user_token
+                            timed_out: false
+                            transaction_id: my_transaction_id1234
+                          source:
+                            active: true
+                            created_time: 2024-10-14 17:26:35+00:00
+                            is_default_account: false
+                            last_modified_time: 2024-10-14 17:26:35+00:00
+                            name: credit_backed_funding_source
+                            token: '**********1ab2'
+                            type: programgateway
+                        funding_source_token: '**********1ab2'
+                        jit_funding:
+                          acting_user_token: my_user_token
+                          amount: 10
+                          method: pgfs.authorization
+                          token: my_transaction_id1234
+                          user_token: my_user_token
+                        last_modified_time: 2024-08-18 22:06:53+00:00
+                        response:
+                          code: '0000'
+                          memo: Approved or completed successfully
+                        state: PENDING
+                        token: my_gpa_order_token1234
+                        transaction_token: my_transaction_token1234
+                        user_token: my_user_token
+                      identifier: '234'
+                      issuer_payment_node: f8205a67b12b90d695b15704a64c074b
+                      issuer_received_time: 2024-08-18 22:06:52.771000+00:00
+                      network: DISCOVER
+                      network_reference_id: '484311571095'
+                      pos:
+                        is_installment: false
+                        is_recurring: false
+                        partial_approval_capable: true
+                        pin_present: false
+                        purchase_amount_only: false
+                      request_amount: 10
+                      response:
+                        code: '0000'
+                        memo: Approved or completed successfully
+                      settlement_date: 2024-08-18 00:00:00+00:00
+                      state: PENDING
+                      token: my_detail_token1234
+                      type: authorization
+                      user:
+                        metadata:
+                          key1: value1
+                          key2: value2
+                          notification_email: user@domain.com
+                          notification_language: spa
+                      user_token: my_user_token
+                      user_transaction_time: 2024-08-18 22:06:52+00:00
+                    detail_token: my_detail_token1234
+                    dispute_token: null
+                    group: PURCHASE
+                    id: '12345678'
+                    impact_time: 2024-08-18 22:07:21.422000+00:00
+                    memo: Jane's Bakery
+                    related_token: null
+                    request_time: 2024-08-18 22:06:52+00:00
+                    root_token: null
+                    status: PENDING
+                    token: my_journal_entry_token1234
+                    type: authorization
+                ledger_entry_sample:
+                  summary: The following code block shows a sample of a resent `creditledgerentries` event.
+                  value:
+                    account_token: my_credit_account_token1234
+                    amount: 10
+                    card_token: my_credit_card_token1234
+                    created_time: 2024-08-18 22:07:21.422000+00:00
+                    currency_code: USD
+                    detail_object:
+                      acquirer:
+                        system_trace_audit_number: '376582'
+                      acquirer_fee_amount: 0
+                      acting_user_token: my_user_token
+                      amount: 10
+                      approval_code: '974406'
+                      card:
+                        last_four: '9949'
+                        metadata: {}
+                      card_acceptor:
+                        city: San Francisco
+                        country_code: USA
+                        mcc: '6411'
+                        mid: '1234'
+                        name: Jane's Bakery
+                        postal_code: '94115'
+                        state: CA
+                        street_address: 1989 Fillmore St
+                      card_token: my_credit_card_token1234
+                      created_time: 2024-08-18 22:06:52+00:00
+                      currency_code: USD
+                      duration: 837
+                      gpa:
+                        available_balance: 0
+                        balances:
+                          USD:
+                            available_balance: 0
+                            credit_balance: 0
+                            currency_code: USD
+                            impacted_amount: -10
+                            ledger_balance: 510.87
+                            pending_credits: 0
+                        credit_balance: 0
+                        currency_code: USD
+                        impacted_amount: -10
+                        ledger_balance: 510.87
+                        pending_credits: 0
+                      gpa_order:
+                        amount: 10
+                        created_time: 2024-08-18 22:06:53+00:00
+                        currency_code: USD
+                        funding:
+                          amount: 10
+                          gateway_log:
+                            duration: 485
+                            message: Approved or completed successfully
+                            order_number: my_gateway_token12345
+                            response:
+                              code: '200'
+                              data:
+                                jit_funding:
+                                  acting_user_token: my_user_token
+                                  amount: 10
+                                  method: pgfs.authorization
+                                  token: my_jit_funding_token1234
+                                  user_token: my_user_token
+                            timed_out: false
+                            transaction_id: my_transaction_id1234
+                          source:
+                            active: true
+                            created_time: 2024-10-14 17:26:35+00:00
+                            is_default_account: false
+                            last_modified_time: 2024-10-14 17:26:35+00:00
+                            name: credit_backed_funding_source
+                            token: '**********1ab2'
+                            type: programgateway
+                        funding_source_token: '**********1ab2'
+                        jit_funding:
+                          acting_user_token: my_user_token
+                          amount: 10
+                          method: pgfs.authorization
+                          token: my_transaction_id1234
+                          user_token: my_user_token
+                        last_modified_time: 2024-08-18 22:06:53+00:00
+                        response:
+                          code: '0000'
+                          memo: Approved or completed successfully
+                        state: PENDING
+                        token: my_gpa_order_token1234
+                        transaction_token: my_transaction_token1234
+                        user_token: my_user_token
+                      identifier: '234'
+                      issuer_payment_node: f8205a67b12b90d695b15704a64c074b
+                      issuer_received_time: 2024-08-18 22:06:52.771000+00:00
+                      network: DISCOVER
+                      network_reference_id: '484311571095'
+                      pos:
+                        is_installment: false
+                        is_recurring: false
+                        partial_approval_capable: true
+                        pin_present: false
+                        purchase_amount_only: false
+                      request_amount: 10
+                      response:
+                        code: '0000'
+                        memo: Approved or completed successfully
+                      settlement_date: 2024-08-18 00:00:00+00:00
+                      state: PENDING
+                      token: my_detail_token1234
+                      type: authorization
+                      user:
+                        metadata:
+                          key1: value1
+                          key2: value2
+                          notification_email: user@domain.com
+                          notification_language: spa
+                      user_token: my_user_token
+                      user_transaction_time: 2024-08-18 22:06:52+00:00
+                    detail_token: my_detail_token1234
+                    dispute_token: null
+                    group: PURCHASE
+                    id: '12345678'
+                    impact_time: 2024-08-18 22:07:21.422000+00:00
+                    memo: Jane's Bakery
+                    related_token: null
+                    request_time: 2024-08-18 22:06:52+00:00
+                    root_token: null
+                    status: PENDING
+                    token: my_ledger_entry_token1234
+                    type: authorization
+                payment_transition_example:
+                  summary: The following code block shows a sample of a resent `creditpaymenttransitions` event.
+                  value:
+                    account_token: my_credit_account_token1234
+                    created_time: 2024-08-17 18:26:47.591000+00:00
+                    payment_token: my_credit_account_payment_token1234
+                    refund_details: null
+                    status: COMPLETED
+                    token: my_payment_transition_token1234
+                substatus_example:
+                  summary: The following code block shows a sample of a resent `substatus` event.
+                  value:
+                    attributes: []
+                    created_time: 2024-04-02 11:23:23+00:00
+                    events:
+                    - channel: SYSTEM
+                      created_time: 2024-04-02 11:23:23+00:00
+                      effective_date: 2024-04-02 11:23:23+00:00
+                      reason: Fraud system detected suspicious activity
+                      state: ACTIVE
+                    - channel: ADMIN
+                      created_time: 2024-04-02 11:23:23+00:00
+                      effective_date: 2024-04-02 11:23:23+00:00
+                      reason: Verified non-fraud with cardholder
+                      state: INACTIVE
+                    is_active: false
+                    resource_token: my_account_token
+                    resource_type: ACCOUNT
+                    state: INACTIVE
+                    substatus: FRAUD
+                    token: substatus_token
+                    updated_time: 2024-04-02 11:23:23+00:00
+              schema:
+                $ref: '#/components/schemas/WebhookEventResendContainerResponse'
+          description: Event response for which the webhook event was resent
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Resend credit event notification
+      tags:
+      - Credit Substatuses
+components:
+  schemas:
+    SubstatusResponse:
+      description: Contains information about the substatus.
+      properties:
+        attributes:
+          description: 'Additional dynamic attributes related to the substatus.
+
+
+            If the substatus is `BANKRUPTCY`, `SCRA`, or `POWER_OF_ATTORNEY`, then attributes are present.'
+          items:
+            properties:
+              key:
+                description: 'The name of the attribute.
+
+
+                  Marqeta provides several preconfigured attributes, as described in the following list.
+
+
+                  * *chapter:* If the substatus is `BANKRUPTCY`, then this value defines the chapter.
+
+
+                  * *military_start_date:* If the substatus is `SCRA`, then this value defines the military start date.
+
+
+                  * *end_date:* If the substatus is `POWER_OF_ATTORNEY`, then the end date attribute is present.
+
+                  This specifies the date when the power of attorney document is no longer valid.
+
+
+                  * *poa_details:* If the substatus is `POWER_OF_ATTORNEY`, then the Power of Attorney details attribute is applicable.
+
+                  This attribute specifies the range of actions that the agent with Power of Attorney is able to perform on the account.
+
+                  By default the range is `UNRESTRICTED`.
+
+
+                  * *agent_name:* If the substatus is `POWER_OF_ATTORNEY`, then the agent name is present.
+
+                  This attribute specifies the name of the agent with Power of Attorney for the user.
+
+
+                  * *agent_address:* If the substatus is `POWER_OF_ATTORNEY`, then the agent address attribute is present.
+
+                  This attribute specifies the address of the agent with Power of Attorney for the user.
+
+
+                  * *agent_id_type:* If the substatus is `POWER_OF_ATTORNEY`, then the agent identification type attribute is present.
+
+                  This specifies the type of the identification method used to identify the agent with Power of Attorney for the user.
+
+
+                  * *agent_id_value:* If the substatus is `POWER_OF_ATTORNEY`, then the agent identification value attribute is present.
+
+                  This attribute specifies the value of the identification method used to identify the agent with Power of Attorney for the user.
+
+
+                  * *agent_id_expiration_date:* If the substatus is `POWER_OF_ATTORNEY`, then the attribute for the Power of Attorney identification expiration date attribute is present.
+
+                  This attribute specifies the expiration date of the identification method used to identify the agent with Power of Attorney for the user.'
+                type: string
+                x-allowableValues: '* `chapter`
+
+                  * `military_start_date`
+
+                  * `end_date`
+
+                  * `poa_details`
+
+                  * `agent_name`
+
+                  * `agent_address`
+
+                  * `agent_id_type`
+
+                  * `agent_id_value`
+
+                  * `agent_id_expiration_date`'
+              value:
+                description: The value of the attribute.
+                type: string
+                x-allowableValues: '* *chapter:* `CHAPTER_7`, `CHAPTER_11`, `CHAPTER_12`, `CHAPTER_13`
+
+                  * *military_start_date:* yyyy-MM-ddThh:mm:ssZ format
+
+                  * *end_date:* yyyy-MM-ddThh:mm:ssZ format
+
+                  * *poa_details:* string (255 char max)
+
+                  * *agent_name:* string (255 char max)
+
+                  * *agent_address:* string (255 char max)
+
+                  * *agent_id_type:* `SSN`, `TIN`, `SIN`, `NIN`, `PASSPORT_NUMBER`, `DRIVERS_LICENSE`, `BUSINESS_LICENSE`, `BUSINESS_NUMBER`, `BUSINESS_TAX_ID`, `TAXPAYER_REFERENCE`
+
+                  * *agent_id_value:* string (255 char max)
+
+                  * *agent_id_expiration_date:* yyyy-MM-ddThh:mm:ssZ format'
+            title: SubstatusResponseAttributes
+            type: object
+          type: array
+        created_time:
+          description: Date and time when the substatus was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        events:
+          description: List of events related to the substatus.
+          items:
+            $ref: '#/components/schemas/SubstatusEventResponseDetails'
+          type: array
+        is_active:
+          description: Denotes whether a substatus is active.
+          type: boolean
+        resource_token:
+          description: Unique identifier of the resource.
+          maxLength: 36
+          type: string
+        resource_type:
+          description: Type of resource to which the substatus is applied.
+          enum:
+          - ACCOUNT
+          - USER
+          - BUSINESS
+          type: string
+        state:
+          description: Current state of the substatus.
+          enum:
+          - ACTIVE
+          - INACTIVE
+          - DECEASED_REPORTED
+          - DECEASED_CONFIRMED
+          - FRAUD_REPORTED
+          - FRAUD_CONFIRMED
+          - BANKRUPTCY_FILED
+          - BANKRUPTCY_WITHDRAWN
+          - BANKRUPTCY_REAFFIRMED
+          - BANKRUPTCY_REAFFIRM_RESCINDED
+          - BANKRUPTCY_DISCHARGED
+          - BANKRUPTCY_DISMISSED
+          - BANKRUPTCY_FILED_INACTIVE
+          - BANKRUPTCY_WITHDRAWN_INACTIVE
+          - BANKRUPTCY_REAFFIRMED_INACTIVE
+          - BANKRUPTCY_REAFFIRM_RESCINDED_INACTIVE
+          - BANKRUPTCY_DISCHARGED_INACTIVE
+          - BANKRUPTCY_DISMISSED_INACTIVE
+          type: string
+        substatus:
+          description: Type of substatus.
+          maxLength: 36
+          type: string
+        token:
+          description: Unique identifier of the credit substatus.
+          maxLength: 36
+          type: string
+        updated_time:
+          description: Date and time when the substatus was last updated on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+      required:
+      - is_active
+      - resource_token
+      - resource_type
+      - state
+      - substatus
+      - token
+      type: object
+    SubstatusPage:
+      description: Return paginated account and user substatuses.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: Contains one or more substatuses.
+          items:
+            $ref: '#/components/schemas/SubstatusResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    SubstatusCreateReq:
+      description: Contains information relevant to creating a substatus.
+      properties:
+        attributes:
+          description: 'Additional dynamic attributes related to the substatus.
+
+            If the substatus is `BANKRUPTCY`, `SCRA` or `POWER_OF_ATTORNEY`, then attributes are required.'
+          items:
+            properties:
+              key:
+                description: 'The name of the attribute.
+
+
+                  Marqeta provides several preconfigured attributes, as described in the following list.
+
+
+                  * *chapter:* If the substatus is `BANKRUPTCY`, then the chapter attribute is required.
+
+                  `CHAPTER_9` is not applicable to a `USER` resource type.
+
+                  `CHAPTER_13` is not applicable to a `BUSINESS` resource type.
+
+
+                  * *military_start_date:* If the substatus is `SCRA`, then the military start date attribute is required.
+
+                  The 6% APR override will be applied from the time and date of account opening until the last statement period of the military start date.
+
+
+                  * *end_date:* If the substatus is `POWER_OF_ATTORNEY`, then the end date attribute is applicable.
+
+                  This specifies the date when the power of attorney document is no longer valid.
+
+
+                  * *poa_details:* If the substatus is `POWER_OF_ATTORNEY`, then the Power of Attorney details attribute is applicable.
+
+                  This attribute specifies the range of actions that the agent with Power of Attorney is able to perform on the account.
+
+                  By default the range is `UNRESTRICTED`.
+
+
+                  * *agent_name:* If the substatus is `POWER_OF_ATTORNEY`, then the agent name is required.
+
+                  This attribute specifies the name of the agent with Power of Attorney for the user.
+
+
+                  * *agent_address:* If the substatus is `POWER_OF_ATTORNEY`, then the agent address attribute is required.
+
+                  This attribute specifies the address of the agent with Power of Attorney for the user.
+
+
+                  * *agent_id_type:* If the substatus is `POWER_OF_ATTORNEY`, then the agent identification type attribute is required.
+
+                  This specifies the type of the identification method used to identify the agent with Power of Attorney for the user.
+
+
+                  * *agent_id_value:* If the substatus is `POWER_OF_ATTORNEY`, then the agent identification value attribute is required.
+
+                  This attribute specifies the value of the identification method used to identify the agent with Power of Attorney for the user.
+
+
+                  * *agent_id_expiration_date:* If the substatus is `POWER_OF_ATTORNEY`, then the attribute for the Power of Attorney identification expiration date attribute is required.
+
+                  This attribute specifies the expiration date of the identification method used to identify the agent with Power of Attorney for the user.'
+                type: string
+                x-allowableValues: '- `chapter`
+
+                  - `military_start_date`
+
+                  - `end_date`
+
+                  - `poa_details`
+
+                  - `agent_name`
+
+                  - `agent_address`
+
+                  - `agent_id_type`
+
+                  - `agent_id_value`
+
+                  - `agent_id_expiration_date`'
+              value:
+                description: The value of the attribute.
+                type: string
+                x-allowableValues: '* *chapter:* `CHAPTER_7`, `CHAPTER_9`, `CHAPTER_11`, `CHAPTER_12`, `CHAPTER_13`
+
+                  * *military_start_date:* yyyy-MM-ddThh:mm:ssZ format
+
+                  * *end_date:* yyyy-MM-ddThh:mm:ssZ format
+
+                  * *poa_details:* string (255 char max)
+
+                  * *agent_name:* string (255 char max)
+
+                  * *agent_address:* string (255 char max)
+
+                  * *agent_id_type:* `SSN`, `TIN`, `SIN`, `NIN`, `PASSPORT_NUMBER`, `DRIVERS_LICENSE`, `BUSINESS_LICENSE`, `BUSINESS_NUMBER`, `BUSINESS_TAX_ID`, `TAXPAYER_REFERENCE`
+
+                  * *agent_id_value:* string (255 char max)
+
+                  * *agent_id_expiration_date:* yyyy-MM-ddThh:mm:ssZ format'
+            title: SubstatusCreateReqAttributes
+            type: object
+          type: array
+        events:
+          description: List of events related to the substatus.
+          items:
+            $ref: '#/components/schemas/SubstatusEvent'
+          type: array
+        resource_token:
+          description: 'Unique identifier of the user or account or business for which you want to create a substatus.
+
+
+            * Send a `GET` request to `/credit/accounts` to retrieve existing account tokens.
+
+            * Send a `GET` request to `/users` to retrieve existing user tokens.
+
+            * Send a `GET` request to `/business` to retrieve existing business tokens.'
+          maxLength: 36
+          minLength: 1
+          type: string
+        resource_type:
+          description: Type of resource to which the substatus can be applied.
+          enum:
+          - USER
+          - ACCOUNT
+          - BUSINESS
+          type: string
+        substatus:
+          description: 'Type of substatus.
+
+
+            * `HARDSHIP`, `FRAUD`, `CEASE_AND_DESIST`, `BLOCKED`, and `OPT_OUT` can only be applied to the `ACCOUNT` resource type.
+
+            * `MLA`, `SCRA` and `DECEASED` can only be applied to the `USER` resource type.
+
+            * `POWER_OF_ATTORNEY` and `BANKRUPTCY` can be applied to either the `USER` or the `BUSINESS` resource type.'
+          maxLength: 36
+          minLength: 1
+          type: string
+        token:
+          description: Unique identifier of the credit substatus.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+      required:
+      - events
+      - resource_token
+      - resource_type
+      - substatus
+      type: object
+    SubstatusUpdateReq:
+      description: Contains information relevant to deactivating a substatus.
+      properties:
+        channel:
+          description: 'The mechanism by which a state designation was applied to a substatus.
+
+            If no value is set, then it defaults to `API`.
+
+
+            * `ADMIN` - Indicates that the state of the substatus was added through the Marqeta Dashboard.
+
+            * `API` - Indicates that you initiated the update of the substatus through the Core API.
+
+            Use this value when creating a card transition with an API `POST` request.
+
+            * `FRAUD` - Indicates that either Marqeta or the card network has determined that the account is fraudulent.
+
+            * `SYSTEM` - Indicates that the substatus update was initiated by Marqeta.
+
+            For example, Marqeta determined during application decisioning that the applicant is `MLA`.'
+          enum:
+          - ADMIN
+          - API
+          - FRAUD
+          - SYSTEM
+          type: string
+        created_by:
+          description: User who created the substatus event.
+          maxLength: 255
+          type: string
+        effective_date:
+          description: Date and time when the state of the substatus is effective, in UTC.
+          format: date-time
+          type: string
+        reason:
+          description: Reason for applying the state to the substatus.
+          maxLength: 255
+          minLength: 1
+          type: string
+        state:
+          description: 'New state of the substatus.
+
+
+            * `INACTIVE` is a valid state for substatuses `HARDSHIP`, `FRAUD`, `MLA`, `SCRA`, `DECEASED`, `BLOCKED`, `CEASE_AND_DESIST`, `OPT_OUT`, and `POWER_OF_ATTORNEY`.
+
+            * `DECEASED_CONFIRMED` is a valid state for substatus `DECEASED`.
+
+            * `FRAUD_CONFIRMED` is a valid state for substatus `FRAUD`.
+
+            * `BANKRUPTCY_WITHDRAWN`, `BANKRUPTCY_REAFFIRMED`, `BANKRUPTCY_REAFFIRM_RESCINDED`, `BANKRUPTCY_DISCHARGED`, `BANKRUPTCY_DISMISSED`, `BANKRUPTCY_FILED_INACTIVE`, `BANKRUPTCY_WITHDRAWN_INACTIVE`, `BANKRUPTCY_REAFFIRMED_INACTIVE`, `BANKRUPTCY_REAFFIRM_RESCINDED_INACTIVE`, `BANKRUPTCY_DISCHARGED_INACTIVE`, and `BANKRUPTCY_DISMISSED_INACTIVE` states are applicable to `BANKRUPTCY`.'
+          enum:
+          - INACTIVE
+          - BANKRUPTCY_WITHDRAWN
+          - BANKRUPTCY_REAFFIRMED
+          - BANKRUPTCY_REAFFIRM_RESCINDED
+          - BANKRUPTCY_DISCHARGED
+          - BANKRUPTCY_DISMISSED
+          - BANKRUPTCY_FILED_INACTIVE
+          - BANKRUPTCY_WITHDRAWN_INACTIVE
+          - BANKRUPTCY_REAFFIRMED_INACTIVE
+          - BANKRUPTCY_REAFFIRM_RESCINDED_INACTIVE
+          - BANKRUPTCY_DISCHARGED_INACTIVE
+          - BANKRUPTCY_DISMISSED_INACTIVE
+          - DECEASED_CONFIRMED
+          - FRAUD_CONFIRMED
+          type: string
+      required:
+      - state
+      type: object
+    WebhookEventResendContainerResponse:
+      description: Contains information about a webhook event.
+      properties:
+        unused:
+          description: Event notification that was resent to your webhook endpoint.
+          type: string
+      type: object
+    SubstatusEvent:
+      description: Details of an event related to a substatus.
+      properties:
+        channel:
+          description: 'The mechanism by which the state of the substatus was applied.
+
+
+            * `ADMIN` - Indicates that the state of the substatus was added through the Marqeta Dashboard.
+
+            * `API` - Indicates that you initiated an update of the substatus through the Core API.
+
+            Use this value when creating a substatus.
+
+            * `FRAUD` - Indicates that either Marqeta or the card network has determined that the account is fraudulent.
+
+            * `SYSTEM` - Indicates that Marqeta initiated the state of the substatus.
+
+            For example, Marqeta determined during application decisioning that the applicant is `MLA`.'
+          enum:
+          - ADMIN
+          - API
+          - FRAUD
+          - SYSTEM
+          type: string
+        created_by:
+          description: User who created the substatus event.
+          maxLength: 255
+          type: string
+        effective_date:
+          description: 'Date and time when the state of the substatus went into effect, in UTC.
+
+            The effective date must be in the past.
+
+            If no value is set, then the effective date and time will be the current time.'
+          format: date-time
+          type: string
+        reason:
+          description: Reason for applying a state designation to the substatus.
+          maxLength: 255
+          type: string
+        state:
+          description: 'Initial state of the substatus.
+
+
+            * `ACTIVE` - Required if the substatus is `HARDSHIP`, `MLA`, `SCRA`, `DECEASED`, `BLOCKED`, `CEASE_AND_DESIST`, `OPT_OUT`, or `POWER_OF_ATTORNEY`.
+
+            * `BANKRUPTCY_FILED` - Required if the substatus is `BANKRUPTCY`.
+
+            * `DECEASED_REPORTED` - Required if the substatus is `DECEASED`.
+
+            * `FRAUD_REPORTED` - Required if the substatus is `FRAUD`.'
+          enum:
+          - ACTIVE
+          - BANKRUPTCY_FILED
+          - DECEASED_REPORTED
+          - FRAUD_REPORTED
+          type: string
+      required:
+      - state
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    SubstatusEventResponseDetails:
+      description: Details of an event related to a substatus.
+      properties:
+        channel:
+          description: The channel through which the event occurred.
+          enum:
+          - ADMIN
+          - API
+          - FRAUD
+          - SYSTEM
+          type: string
+        created_by:
+          description: User who created the substatus event.
+          maxLength: 255
+          type: string
+        created_time:
+          description: Creation time of the event.
+          format: date-time
+          type: string
+        effective_date:
+          description: Effective date of the event, in UTC.
+          format: date-time
+          type: string
+        reason:
+          description: Reason for the event.
+          maxLength: 255
+          type: string
+        state:
+          description: The state of the event.
+          enum:
+          - ACTIVE
+          - INACTIVE
+          - DECEASED_REPORTED
+          - DECEASED_CONFIRMED
+          - FRAUD_REPORTED
+          - FRAUD_CONFIRMED
+          - BANKRUPTCY_FILED
+          - BANKRUPTCY_WITHDRAWN
+          - BANKRUPTCY_REAFFIRMED
+          - BANKRUPTCY_REAFFIRM_RESCINDED
+          - BANKRUPTCY_DISCHARGED
+          - BANKRUPTCY_DISMISSED
+          - BANKRUPTCY_FILED_INACTIVE
+          - BANKRUPTCY_WITHDRAWN_INACTIVE
+          - BANKRUPTCY_REAFFIRMED_INACTIVE
+          - BANKRUPTCY_REAFFIRM_RESCINDED_INACTIVE
+          - BANKRUPTCY_DISCHARGED_INACTIVE
+          - BANKRUPTCY_DISMISSED_INACTIVE
+          type: string
+      required:
+      - channel
+      - created_time
+      - effective_date
+      - state
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

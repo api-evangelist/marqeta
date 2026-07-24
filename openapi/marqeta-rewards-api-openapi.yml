@@ -1,0 +1,96 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries Rewards API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: Rewards
+paths:
+  /accounts/{account_token}/signupbonusprogress:
+    get:
+      description: Retrieve the signup bonus progress, including the bonus amount and the remaining amount to be earned.
+      operationId: retrieveSignupBonusProgress
+      parameters:
+      - description: 'Unique identifier of the credit account for which you want to retrieve the sign up bonus for.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                accrual_start_time: 2024-07-01 00:27:09+00:00
+                maturity_time: 2024-09-29 00:27:09+00:00
+                retrieval_time: 2021-08-01 00:27:09+00:00
+                target_spend: 7000
+                total_spend: 2000
+              schema:
+                $ref: '#/components/schemas/AccountSignupBonusProgressResponse'
+          description: Expected response to a valid request
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Retrieve account signup bonus progress.
+      tags:
+      - Rewards
+components:
+  schemas:
+    AccountSignupBonusProgressResponse:
+      properties:
+        accrual_start_time:
+          description: Date and time when the account started tracking spend accrued towards the signup bonus on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        maturity_time:
+          description: Date and time when transactions must be posted by to be eligible towards signup bonus on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        retrieval_time:
+          description: Date and time when the account signup bonus progress was retrieved from Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        target_spend:
+          description: Minimum spend required to earn the signup bonus on Marqeta's credit platform within the given timeframe.
+          type: number
+        total_spend:
+          description: Total eligible spend accrued towards the signup bonus on Marqeta's credit platform at the time of retrieval if the signup bonus is still active.
+          type: number
+      required:
+      - accrual_start_time
+      - maturity_time
+      - target_spend
+      - total_spend
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

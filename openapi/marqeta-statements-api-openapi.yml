@@ -1,0 +1,2631 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries Statements API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- description: '// Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    Use the statements endpoints to retrieve statement information or statement files for a <</core-api/credit-accounts, credit account>>.
+
+
+    An account statement contains a summary of account activity that occurred during a billing cycle.
+
+    For more on statements, see <</developer-guides/about-credit-account-statements, About Credit Account Statements>>.
+
+
+    To receive a webhook notification when a statement is created, see <</core-api/event-types#_credit_account_statement_event, Credit account statement event>> in Event Types.'
+  name: Statements
+paths:
+  /accounts/{account_token}/statements:
+    get:
+      description: 'Retrieve an array of statement summaries tied to a cardholder''s account.
+
+
+        The statement summary, which is a summary of account activity on a statement, provides account holders with a synopsis of activity that occurred on the account during a specified billing cycle.
+
+
+        This endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>.
+
+        You can use optional query parameters to return a statement based on its exact opening or closing date, or a statement whose closing date falls within a range of dates.'
+      operationId: getStatementSummariesByAccount
+      parameters:
+      - description: 'Unique identifier of the credit account for which you want to retrieve statement summaries.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: 'Returns statements with a matching opening date.
+
+
+          If both `start_date` and `end_date` are specified, statements whose closing date falls between the start and end dates are returned.'
+        explode: true
+        in: query
+        name: start_date
+        required: false
+        schema:
+          format: date-time
+          type: string
+          x-allowableValues: 'Format: yyyy-MM-ddThh:mm:ssZ'
+        style: form
+      - description: 'Returns statements with a matching closing date.
+
+
+          If both `start_date` and `end_date` are specified, statements whose closing date falls between the start and end dates are returned.'
+        explode: true
+        in: query
+        name: end_date
+        required: false
+        schema:
+          format: date-time
+          type: string
+          x-allowableValues: 'Format: yyyy-MM-ddThh:mm:ssZ'
+        style: form
+      - description: Number of account statement resources to retrieve.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - description: Sort order index of the first resource in the returned array.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: 'Field on which to sort.
+
+          Prefix the field name with a hyphen (`-`) to sort in descending order.
+
+          Omit the hyphen to sort in ascending order.
+
+
+          *NOTE:*
+
+          You must sort using system field names such as `createdTime`, and not by the field names appearing in response bodies such as `created_time`.'
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -createdTime
+          enum:
+          - createdTime
+          - -createdTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                count: 1
+                data:
+                - account_token: my_account_token_12
+                  available_credit: 800
+                  closing_balance: 2000
+                  closing_date: 2023-07-01 00:27:09+00:00
+                  created_time: 2023-07-01 00:27:09+00:00
+                  credit_limit: 10000
+                  credits: 0
+                  cycle_type: BEGINNING_REVOLVING
+                  days_in_billing_cycle: 31
+                  fees: 0
+                  interest: 0
+                  opening_balance: 1000
+                  opening_date: 2023-07-01 00:27:09+00:00
+                  past_due_amount: 0
+                  payments: 0
+                  purchases: 200
+                  token: acc0544e-4075-fe67-93dd-6b5cd443adb1
+                end_index: 0
+                is_more: true
+                start_index: 0
+              schema:
+                $ref: '#/components/schemas/StatementSummaryPage'
+          description: A JSON object containing a list of Statement Summaries
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: List account statement summaries
+      tags:
+      - Statements
+  /accounts/{account_token}/statements/files:
+    get:
+      description: Retrieve an array of statement files for a specific credit account.
+      operationId: getStatementFilesByAccount
+      parameters:
+      - description: 'Unique identifier of the credit account for which to retrieve statement files.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: Start date of the date range for which to return statement files.
+        explode: true
+        in: query
+        name: start_date
+        required: false
+        schema:
+          example: 2024-01-01 00:00:00+00:00
+          format: date-time
+          type: string
+        style: form
+      - description: End date of the date range for which to return statement files.
+        explode: true
+        in: query
+        name: end_date
+        required: false
+        schema:
+          example: 2024-03-01 03:59:59+00:00
+          format: date-time
+          type: string
+        style: form
+      - description: Number of statement file resources to retrieve.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - description: Sort order index of the first resource in the returned array.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: 'Field on which to sort.
+
+          Prefix the field name with a hyphen (`-`) to sort in descending order.
+
+          Omit the hyphen to sort in ascending order.
+
+
+          *NOTE:*
+
+          You must sort using system field names such as `createdTime`, and not by the field names appearing in response bodies such as `created_time`.'
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -createdTime
+          enum:
+          - createdTime
+          - -createdTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                count: 1
+                data:
+                - account_token: credit_account_token1234
+                  closing_date: 2023-07-31 00:27:09
+                  opening_date: 2023-07-01 00:27:09
+                  signed_url: <signed_https_url_pointing_to_a_resource_on_S3>
+                  statement_summary_token: 37f07818-2a2c-4c82-a721-a479936d5b2e
+                  token: file_token
+                  type: STATEMENT_PDF
+                - account_token: credit_account_token4567
+                  closing_date: 2023-06-30 00:27:09
+                  opening_date: 2023-06-01 00:27:09
+                  signed_url: <signed_https_url_pointing_to_a_resource_on_S3>
+                  statement_summary_token: 79938791-5e15-456a-bf13-c39142c9a763
+                  token: file_token
+                  type: STATEMENT_PDF
+                end_index: 0
+                is_more: false
+                start_index: 0
+              schema:
+                $ref: '#/components/schemas/StatementFilePage'
+          description: A JSON object containing a list of statement files.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: List files for an account
+      tags:
+      - Statements
+  /accounts/{account_token}/statements/{statement_summary_token}:
+    get:
+      description: Retrieve a statement summary for a credit account.
+      operationId: retrieveStatementSummary
+      parameters:
+      - description: 'Unique identifier of the credit account for which you want to retrieve a statement summary.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: 'Unique identifier of the statement summary to retrieve.
+
+
+          Send a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens.'
+        explode: false
+        in: path
+        name: statement_summary_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing statement summary token
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                account_token: my_account_token_12
+                available_credit: 800
+                closing_balance: 2000
+                closing_date: 2021-07-01 00:27:09+00:00
+                created_time: 2021-07-01 00:27:09+00:00
+                credit_limit: 10000
+                credits: 0
+                cycle_type: BEGINNING_REVOLVING
+                days_in_billing_cycle: 31
+                fees: 0
+                interest: 0
+                opening_balance: 1000
+                opening_date: 2021-07-01 00:27:09+00:00
+                past_due_amount: 0
+                payments: 0
+                purchases: 200
+                token: acc0544e-4075-fe67-93dd-6b5cd443adb1
+              schema:
+                $ref: '#/components/schemas/StatementSummary'
+          description: A JSON object containing statement_summary information
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Retrieve account statement summary
+      tags:
+      - Statements
+  /accounts/{account_token}/statements/{statement_summary_token}/files:
+    get:
+      description: Retrieve an array of statement files for a specific statement summary.
+      operationId: retrieveStatementFiles
+      parameters:
+      - description: 'Unique identifier of the credit account for which to retrieve statement files for a statement summary.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: 'Unique identifier of the statement summary whose statement files you want to retrieve.
+
+
+          Send a `GET` request to `/credit/accounts/{token}/statements` to retrieve existing statement summary tokens.'
+        explode: false
+        in: path
+        name: statement_summary_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing statement summary token
+        style: simple
+      - description: Number of statement files to return.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - description: Sort order index from which to begin returning files.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                count: 1
+                data:
+                - account_token: credit_account_token1234
+                  closing_date: 2023-07-31 00:27:09
+                  opening_date: 2023-07-01 00:27:09
+                  signed_url: <signed_https_url_pointing_to_a_resource_on_S3>
+                  statement_summary_token: 37f07818-2a2c-4c82-a721-a479936d5b2e
+                  token: file_token
+                  type: STATEMENT_PDF
+                end_index: 0
+                is_more: false
+                start_index: 0
+              schema:
+                $ref: '#/components/schemas/StatementFilePage'
+          description: Expected response to a valid request.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: List files for a statement summary
+      tags:
+      - Statements
+  /accounts/{account_token}/statements/{statement_summary_token}/interestcharges:
+    get:
+      description: Retrieve the interest charges on a credit account's statement summary.
+      operationId: retrieveStatementInterestCharges
+      parameters:
+      - description: 'Unique identifier of the credit account for which you want to retrieve the statement interest charges.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: 'Unique identifier of the statement summary from which to retrieve the interest charges.
+
+
+          Send a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens.'
+        explode: false
+        in: path
+        name: statement_summary_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing statement summary token
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                account_token: credit_account_token1234
+                data:
+                - amount: 2.31
+                  apr_type: GO_TO
+                  apr_value: 14.99
+                  balance_subject_to_interest_rate: 181.67
+                  balance_type: PURCHASE
+                statement_summary_token: statement_summary_token1234
+                user_token: user_token1234
+              schema:
+                $ref: '#/components/schemas/StatementInterestChargesPage'
+          description: Expected response to a valid request.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Retrieve account statement interest charges
+      tags:
+      - Statements
+  /accounts/{account_token}/statements/{statement_summary_token}/journalentries:
+    get:
+      description: 'Retrieve an array of journal entries on a credit account''s statement summary.
+
+
+        This endpoint supports <</core-api/sorting-and-pagination, sorting>>.'
+      operationId: listStatementJournalEntries
+      parameters:
+      - description: 'Unique identifier of the credit account for which to retrieve the statement journal entries.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: 'Unique identifier of the statement summary from which to retrieve journal entries.
+
+
+          Send a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens.'
+        explode: false
+        in: path
+        name: statement_summary_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing statement summary token
+        style: simple
+      - description: Number of journal entry resources to return.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - description: Sort order index of the first resource in the returned array.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: Embeds the specified object into the response.
+        explode: true
+        in: query
+        name: expand
+        required: false
+        schema:
+          items:
+            enum:
+            - detailObject
+            - originalCurrency
+            type: string
+          type: array
+        style: form
+      - description: 'Field on which to sort.
+
+          Prefix the field name with a hyphen (`-`) to sort in descending order.
+
+          Omit the hyphen to sort in ascending order.
+
+
+          *NOTE:*
+
+          You must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`.'
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: lastModifiedTime
+          enum:
+          - lastModifiedTime
+          - -lastModifiedTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                count: 3
+                data:
+                - account_token: my_account_token_12
+                  amount: 2.31
+                  card_token: my_credit_card_token7794
+                  created_time: 2023-08-01 07:00:19.756000+00:00
+                  currency_code: USD
+                  detail_object:
+                    account_token: my_account_token_12
+                    average_daily_balance: 181.67
+                    created_date: 2023-08-01 07:00:19.755000+00:00
+                    currency_code: USD
+                    daily_periodic_rate: 0.00041068
+                    days_in_billing_cycle: 31
+                    goto_apr: 14.99
+                    interest_amount: 2.31
+                    statement_balance: 208.93
+                    statement_closing_date: 2023-08-01 03:59:59.999000+00:00
+                    statement_opening_date: 2023-07-01 04:00:00
+                    statement_token: statement_token_75b
+                    token: detail_token_96749
+                    updated_date: 2023-08-01 07:00:19.755000+00:00
+                  detail_token: detail_token_96749
+                  group: INTEREST
+                  id: '11112222'
+                  impact_time: 2023-08-01 03:59:59.999000+00:00
+                  memo: Interest charge on purchases
+                  request_time: 2023-08-01 03:59:59.999000+00:00
+                  status: POSTED
+                  token: interest_journal_entry_token1111
+                  type: account.interest
+                  user_token: user_token1111
+                - account_token: my_account_token_12
+                  amount: 15
+                  card_token: my_credit_card_token7794
+                  created_time: 2023-07-01 07:00:24.240000+00:00
+                  currency_code: USD
+                  detail_object:
+                    account_token: my_account_token_12
+                    amount: 15
+                    created: 2023-07-01 07:00:24.239000+00:00
+                    currency_code: USD
+                    description: Late Payment Fee
+                    method: FLAT
+                    token: detail_token_11221
+                    type: LATE_PAYMENT_FEE
+                    value: 25
+                  detail_token: detail_token_11221
+                  group: FEE
+                  id: '44445678'
+                  impact_time: 2023-07-01 03:59:59.999000+00:00
+                  memo: Late payment fee
+                  request_time: 2023-07-01 03:59:59.999000+00:00
+                  status: POSTED
+                  token: fee_journal_entry_token2121
+                  type: account.fee.payment.late
+                  user_token: user_token2121
+                - account_token: my_account_token_12
+                  amount: 9.11
+                  card_token: my_credit_card_token7794
+                  created_time: 2023-09-26 11:53:48.228000+00:00
+                  currency_code: USD
+                  detail_object:
+                    acquirer:
+                      system_trace_audit_number: 0
+                    acquirer_fee_amount: 0
+                    acquirer_reference_data: 4.355106395860054E22
+                    acting_user_token: user_token4632
+                    amount: 9.11
+                    approval_code: 946791
+                    batch_number: 2021048291031352
+                    card:
+                      last_four: 4489
+                      metadata: {}
+                    card_acceptor:
+                      city: OAKLAND
+                      country_code: US
+                      mcc: 5814
+                      mid: 555600244811
+                      name: SWEET TREATS 0484
+                      postal_code: 94612
+                      state: CA
+                    card_token: my_credit_card_token7794
+                    clearing_record_sequence_number: 0
+                    created_time: 2023-09-26 11:53:46+00:00
+                    currency_code: USD
+                    currency_conversion:
+                      network:
+                        conversion_rate: 1
+                        original_amount: 9.11
+                        original_currency_code: 840
+                    duration: 378
+                    fees:
+                      amount: 0.19131
+                      credit_debit: C
+                      type: INTERCHANGE_FEE
+                    gpa:
+                      available_balance: 0
+                      balances:
+                        USD:
+                          available_balance: 0
+                          credit_balance: 0
+                          currency_code: USD
+                          impacted_amount: -9.11
+                          ledger_balance: 61.7
+                          pending_credits: 0
+                      credit_balance: 0
+                      currency_code: USD
+                      impacted_amount: -9.11
+                      ledger_balance: 61.7
+                      pending_credits: 0
+                    gpa_order:
+                      amount: 9.11
+                      created_time: 2023-09-25 20:59:43+00:00
+                      currency_code: USD
+                      funding:
+                        amount: 9.11
+                        source:
+                          active: true
+                          created_time: 2023-06-22 18:41:14+00:00
+                          is_default_account: false
+                          last_modified_time: 2023-06-22 18:41:14+00:00
+                          name: My Funding Source
+                          token: funding_source_token6789
+                          type: programgateway
+                      funding_source_token: funding_source_token6789
+                      jit_funding:
+                        acting_user_token: user_token4632
+                        amount: 9.11
+                        method: pgfs.authorization.capture
+                        original_jit_funding_token: jit_funding_token4be7
+                        token: jit_funding_token43a3
+                        user_token: user_token4632
+                      last_modified_time: 2023-09-26 11:53:47+00:00
+                      response:
+                        code: 0
+                        memo: Approved or completed successfully
+                      state: COMPLETION
+                      token: gpa_order_token2c2c5
+                      transaction_token: transaction_token42352a
+                      user_token: user_token4632
+                    identifier: 6457
+                    issuer_interchange_amount: 0.19131
+                    issuer_payment_node: 042f97a3458b59e3cce0269f66e864d8
+                    issuer_received_time: 2023-09-26 11:53:46.886000+00:00
+                    network: VISA
+                    network_metadata:
+                      product_id: VISA_TRADITIONAL
+                      program_id: ''
+                    network_reference_id: 218552461989029
+                    pos:
+                      is_installment: false
+                      is_recurring: false
+                      partial_approval_capable: false
+                      pin_present: false
+                      purchase_amount_only: false
+                      terminal_id: 101
+                    preceding_related_transaction_token: journal_entry_token2460
+                    request_amount: 9.11
+                    response:
+                      code: 0
+                      memo: Approved or completed successfully
+                    settlement_date: 2023-09-26 00:00:00+00:00
+                    state: COMPLETION
+                    subnetwork: VISANET
+                    token: detail_token_645736
+                    transaction_metadata:
+                      payment_channel: OTHER
+                    type: authorization.clearing
+                    user:
+                      metadata:
+                        notification_email: hello@myemail.com
+                    user_token: user_token4632
+                    user_transaction_time: 2023-09-25 20:59:43+00:00
+                  detail_token: detail_token_645736
+                  group: PURCHASE
+                  id: '12345678'
+                  impact_time: 2023-09-26 11:53:48.228000+00:00
+                  memo: SWEET TREATS 0484
+                  related_token: journal_entry_token2460
+                  request_time: 2023-09-25 20:59:43
+                  root_token: journal_entry_token2460
+                  status: POSTED
+                  token: purchase_journal_entry_token6789
+                  type: authorization.clearing
+                  user_token: user_token12
+                end_index: 4
+                is_more: true
+                start_index: 0
+              schema:
+                $ref: '#/components/schemas/JournalEntriesPage'
+          description: Expected response to a valid request.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: List account statement journal entries
+      tags:
+      - Statements
+  /accounts/{account_token}/statements/{statement_summary_token}/ledgerentries:
+    get:
+      description: '[IMPORTANT]
+
+        This feature is being deprecated and replaced by statement journal entries.
+
+        To list statement journal entries, see <</core-api/credit-account-journal-entries#listStatementJournalEntries, List account statement journal entries>>.
+
+
+        Retrieve an array of ledger entries on a credit account''s statement summary.
+
+
+        This endpoint supports <</core-api/sorting-and-pagination, sorting>>.'
+      operationId: listStatementLedgerEntries
+      parameters:
+      - description: 'Unique identifier of the credit account for which to retrieve the statement ledger entries.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: 'Unique identifier of the statement summary from which to retrieve ledger entries.
+
+
+          Send a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens.'
+        explode: false
+        in: path
+        name: statement_summary_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing statement summary token
+        style: simple
+      - description: Embeds the specified object into the response.
+        explode: true
+        in: query
+        name: expand
+        required: false
+        schema:
+          items:
+            enum:
+            - detailObject
+            - originalCurrency
+            type: string
+          type: array
+        style: form
+      - description: 'Field on which to sort.
+
+          Prefix the field name with a hyphen (`-`) to sort in descending order.
+
+          Omit the hyphen to sort in ascending order.
+
+
+          *NOTE:*
+
+          You must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`.'
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: lastModifiedTime
+          enum:
+          - lastModifiedTime
+          - -lastModifiedTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - account_token: my_account_token_12
+                amount: 9.11
+                card_token: my_credit_card_token7794
+                created_time: 2023-09-26 11:53:48.228000+00:00
+                currency_code: USD
+                detail_object:
+                  acquirer:
+                    system_trace_audit_number: 0
+                  acquirer_fee_amount: 0
+                  acquirer_reference_data: 4.355106395860054E22
+                  acting_user_token: user_token4632
+                  amount: 9.11
+                  approval_code: 946791
+                  batch_number: 2021048291031352
+                  card:
+                    last_four: 4489
+                    metadata: {}
+                  card_acceptor:
+                    city: OAKLAND
+                    country_code: US
+                    mcc: 5814
+                    mid: 555600244811
+                    name: SWEET TREATS 0484
+                    postal_code: 94612
+                    state: CA
+                  card_token: my_credit_card_token7794
+                  clearing_record_sequence_number: 0
+                  created_time: 2023-09-26 11:53:46+00:00
+                  currency_code: USD
+                  currency_conversion:
+                    network:
+                      conversion_rate: 1
+                      original_amount: 9.11
+                      original_currency_code: 840
+                  duration: 378
+                  fees:
+                    amount: 0.19131
+                    credit_debit: C
+                    type: INTERCHANGE_FEE
+                  gpa:
+                    available_balance: 0
+                    balances:
+                      USD:
+                        available_balance: 0
+                        credit_balance: 0
+                        currency_code: USD
+                        impacted_amount: -9.11
+                        ledger_balance: 61.7
+                        pending_credits: 0
+                    credit_balance: 0
+                    currency_code: USD
+                    impacted_amount: -9.11
+                    ledger_balance: 61.7
+                    pending_credits: 0
+                  gpa_order:
+                    amount: 9.11
+                    created_time: 2023-09-25 20:59:43+00:00
+                    currency_code: USD
+                    funding:
+                      amount: 9.11
+                      source:
+                        active: true
+                        created_time: 2023-06-22 18:41:14+00:00
+                        is_default_account: false
+                        last_modified_time: 2023-06-22 18:41:14+00:00
+                        name: My Funding Source
+                        token: funding_source_token6789
+                        type: programgateway
+                    funding_source_token: funding_source_token6789
+                    jit_funding:
+                      acting_user_token: user_token4632
+                      amount: 9.11
+                      method: pgfs.authorization.capture
+                      original_jit_funding_token: jit_funding_token4be7
+                      token: jit_funding_token43a3
+                      user_token: user_token4632
+                    last_modified_time: 2023-09-26 11:53:47+00:00
+                    response:
+                      code: 0
+                      memo: Approved or completed successfully
+                    state: COMPLETION
+                    token: gpa_order_token2c2c5
+                    transaction_token: transaction_token42352a
+                    user_token: user_token4632
+                  identifier: 6457
+                  issuer_interchange_amount: 0.19131
+                  issuer_payment_node: 042f97a3458b59e3cce0269f66e864d8
+                  issuer_received_time: 2023-09-26 11:53:46.886000+00:00
+                  network: VISA
+                  network_metadata:
+                    product_id: VISA_TRADITIONAL
+                    program_id: ''
+                  network_reference_id: 218552461989029
+                  pos:
+                    is_installment: false
+                    is_recurring: false
+                    partial_approval_capable: false
+                    pin_present: false
+                    purchase_amount_only: false
+                    terminal_id: 101
+                  preceding_related_transaction_token: ledger_entry_token2460
+                  request_amount: 9.11
+                  response:
+                    code: 0
+                    memo: Approved or completed successfully
+                  settlement_date: 2023-09-26 00:00:00+00:00
+                  state: COMPLETION
+                  subnetwork: VISANET
+                  token: detail_token_645736
+                  transaction_metadata:
+                    payment_channel: OTHER
+                  type: authorization.clearing
+                  user:
+                    metadata:
+                      notification_email: hello@myemail.com
+                  user_token: user_token4632
+                  user_transaction_time: 2023-09-25 20:59:43+00:00
+                detail_token: detail_token_645736
+                group: PURCHASE
+                id: '12345678'
+                impact_time: 2023-09-26 11:53:48.228000+00:00
+                memo: SWEET TREATS 0484
+                metadata:
+                  failure_reason: insufficient balance
+                  failure_time: 2023-08-01 07:00:19.756000+00:00
+                related_token: ledger_entry_token2460
+                request_time: 2023-09-25 20:59:43
+                root_token: ledger_entry_token2460
+                status: POSTED
+                token: ledger_entry_token6789
+                type: authorization.clearing
+              schema:
+                items:
+                  $ref: '#/components/schemas/LedgerEntry'
+                type: array
+          description: Expected response to a valid request
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: List account statement ledger entries
+      tags:
+      - Statements
+  /accounts/{account_token}/statements/{statement_summary_token}/paymentinfo:
+    get:
+      description: Retrieve the payment information on a credit account's statement summary.
+      operationId: retrieveStatementPaymentInfo
+      parameters:
+      - description: 'Unique identifier of the credit account for which you want to retrieve the statement payment information.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: 'Unique identifier of the statement summary from which to retrieve the payment information.
+
+
+          Send a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens.'
+        explode: false
+        in: path
+        name: statement_summary_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing statement summary token
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                created_time: 2021-07-01 00:27:09+00:00
+                minimum_payment_due: 25
+                new_statement_balance: 2000
+                payment_cutoff_date: 2021-07-01 00:27:09+00:00
+                payment_due_date: 2021-07-01 00:27:09+00:00
+                statement_summary_token: acc0544e-4075-fe67-93dd-6b5cd443adb1
+                three_year_savings: 0
+                token: 5e3182dc-fc8f-4a83-8038-8808297ca0ca
+                warnings:
+                - disclosure: NEGATIVE_OR_NO_AMORTIZATION
+                  interest_paid: 0
+                  monthly_payment: 0
+                  pay_off_period: 1
+                  period_type: MONTH
+                  total_paid: 0
+                  type: MIN_PAYMENT
+              schema:
+                $ref: '#/components/schemas/StatementPaymentInfo'
+          description: Expected response to a valid request
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Retrieve account statement payment information
+      tags:
+      - Statements
+  /accounts/{account_token}/statements/{statement_summary_token}/paymentreminders/:
+    get:
+      description: Retrieve an array of payment reminder details for a specific statement summary token.
+      operationId: getPaymentRemindersByStatementSummary
+      parameters:
+      - description: 'Unique identifier of the credit account for which you want to retrieve the statement payment information.
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: 'Unique identifier of the statement summary from which to retrieve the payment information.
+
+          Send a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens.'
+        explode: false
+        in: path
+        name: statement_summary_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing statement summary token
+        style: simple
+      - description: Number of payment reminder resources to retrieve.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 10
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - description: Sort order index of the first resource in the returned array.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: 'Field on which to sort.
+
+          Prefix the field name with a hyphen (`-`) to sort in descending order.
+
+          Omit the hyphen to sort in ascending order.
+
+          *NOTE:*
+
+          You must sort using system field names such as `createdTime`, and not by the field names appearing in response bodies such as `created_time`.'
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -createdTime
+          enum:
+          - createdTime
+          - -createdTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentReminderPage'
+          description: Successful response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: List payment reminders by statement summary
+      tags:
+      - Statements
+  /accounts/{account_token}/statements/{statement_summary_token}/paymentreminders/{token}:
+    get:
+      description: Retrieve a single payment reminder on a specific statement summary
+      operationId: getPaymentReminder
+      parameters:
+      - description: 'Unique identifier of the credit account for which you want to retrieve the statement payment reminder.
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: 'Unique identifier of the statement summary for which you want to retrieve the statement payment reminder.
+
+          Send a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens.'
+        explode: false
+        in: path
+        name: statement_summary_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing statement summary token
+        style: simple
+      - description: 'Unique identifier of the payment reminder you want to retrieve.
+
+          Send a `GET` request to `/credit/accounts/{account_token}/statements/{statement_summary_token}/paymentreminders/{token}` to retrieve existing payment reminder tokens.'
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing payment reminder token
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentReminderResponse'
+          description: Successful response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Get payment reminder
+      tags:
+      - Statements
+  /accounts/{account_token}/statements/{statement_summary_token}/rewards:
+    get:
+      description: Retrieve the rewards on a credit account's statement summary.
+      operationId: retrieveStatementReward
+      parameters:
+      - description: 'Unique identifier of the credit account from which to retrieve statement rewards.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: 'Unique identifier of the statement summary from which to retrieve rewards.
+
+
+          Send a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens.'
+        explode: false
+        in: path
+        name: statement_summary_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing statement summary token
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                created_time: 2022-09-01 00:27:09+00:00
+                current_billing_cycle_reward: 0
+                previous_billing_cycle_reward: 0
+                token: account_statement_reward1234
+              schema:
+                $ref: '#/components/schemas/StatementReward'
+          description: Expected response to a valid request
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Retrieve account statement rewards
+      tags:
+      - Statements
+  /accounts/{account_token}/statements/{statement_summary_token}/yeartodate:
+    get:
+      description: Retrieve the year-to-date fee and interest totals on a credit account's statement summary.
+      operationId: retrieveYearToDateForStatementSummary
+      parameters:
+      - description: 'Unique identifier of the credit account from which to retrieve statement year-to-date totals.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: 'Unique identifier of the statement summary from which to retrieve year-to-date totals.
+
+
+          Send a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens.'
+        explode: false
+        in: path
+        name: statement_summary_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing statement summary token
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                account_token: my_account_token_12
+                created_time: 2021-07-01 00:27:09+00:00
+                statement_token: c07918af-2ffa-4da9-972c-6b3d24b2a772
+                token: c40b683b-ad88-51b6-a1fa-bc9961bc011e
+                total_fees: 0
+                total_interest: 0
+              schema:
+                $ref: '#/components/schemas/YearToDate'
+          description: A JSON object containing year-to-date information
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Retrieve account statement year-to-date totals
+      tags:
+      - Statements
+  /webhooks/{event_type}/{resource_token}:
+    post:
+      description: 'Resends a credit event notification to your webhook endpoint.
+
+
+        Although you send this request as a `POST`, all parameters are passed in the URL and the body is empty.
+
+        The event notification is resent to your webhook endpoint and also returned in the response to this request.
+
+
+        For details on how to configure your webhook endpoint, see the About Webhooks <</developer-guides/about-webhooks#_tutorial, tutorial>>.
+
+        For the complete `/webhooks` endpoint reference, see <</core-api/webhooks, Webhooks>>.'
+      operationId: resendWebhookEvent
+      parameters:
+      - description: Specifies the type of event you want to resend.
+        explode: false
+        in: path
+        name: event_type
+        required: true
+        schema:
+          enum:
+          - ledgerentry
+          - journalentry
+          - accounttransition
+          - accountstatement
+          - paymenttransition
+          - delinquencytransition
+          - paymentreminders
+          - substatus
+          - accountsignupbonus
+          type: string
+        style: simple
+      - description: 'Unique identifier of the resource for which you want to resend a notification.
+
+
+          * Send a `GET` request to `/credit/accounts/{account_token}/journalentries` to retrieve existing journal entry tokens.
+
+          * Send a `GET` request to `/credit/accounts/{account_token}/ledgerentries` to retrieve existing ledger entry tokens.
+
+          * Send a `GET` request to `/accounts/{account_token}/accounttransitions` to retrieve existing account transition tokens.
+
+          * Send a `GET` request to `/credit/accounts/{account_token}/payments/{payment_token}` to retrieve existing payment transition tokens.
+
+          * Send a `GET` request to `/accounts/{account_token}/statements` to retrieve existing statement summary tokens.
+
+          * Send a `GET` request to `/accounts/{account_token}/delinquencystate/transitions` to retrieve existing delinquency state transition tokens.
+
+          * Send a `GET` request to `/accounts/{account_token}/statements/{statement_summary_token}/paymentreminders/{token}` to retrieve existing payment reminder tokens.
+
+          * Send a `GET` request to `/credit/substatuses` to retrieve existing substatus tokens.
+
+          * Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens and identify the specific account for the resend event.'
+        explode: false
+        in: path
+        name: resource_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing journal entry token, ledger entry token, account transition token, payment transition token, statement summary token, delinquency transition token, or substatus token
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                account_statement_sample:
+                  summary: The following code block shows a sample of a resent `creditaccountstatements` event.
+                  value:
+                    account_token: my_credit_account_token
+                    available_credit: 0
+                    closing_balance: 506.41
+                    closing_date: 2025-04-01 03:59:59.999000+00:00
+                    created_time: 2023-08-18 22:04:31.261000+00:00
+                    credit_limit: 500
+                    credits: 0
+                    cycle_type: REVOLVING
+                    days_in_billing_cycle: 31
+                    fees: 15
+                    interest: 4.96
+                    opening_balance: 496.45
+                    opening_date: 2025-03-01 05:00:00+00:00
+                    past_due_amount: 10
+                    payments: 10
+                    purchases: 0
+                    token: my_credit_account_statement_token
+                account_transition_sample:
+                  summary: The following code block shows a sample of a resent `creditaccounttransitions` event.
+                  value:
+                    account_token: my_credit_account_token1234
+                    created_time: 2024-08-18 20:25:10.408000+00:00
+                    original_status: UNACTIVATED
+                    status: ACTIVE
+                    token: my_credit_account_transition_token1234
+                accountsignupbonus_example:
+                  summary: The following code block shows a sample of a resent `accountsignupbonus` event.
+                  value:
+                    account_token: my_account_token
+                    accrual_start_time: 2024-04-02 11:23:23+00:00
+                    journal_entry_token: my_journal_entry_token
+                    maturity_time: 2024-04-02 11:23:23+00:00
+                    reward_token: my_reward_token
+                    spend_total: 10
+                    status: ISSUED
+                    token: my_accountsignupbonus_token
+                    type: STATEMENT_CREDIT
+                delinquency_transition_example:
+                  summary: The following code block shows a sample of a resent `creditdelinquencytransitions` event.
+                  value:
+                    account_token: my_credit_account_token1234
+                    bucket_count: 2
+                    created_time: 2024-03-01 04:59:59.999000
+                    current_due: 40
+                    impact_time: 2024-03-01 04:59:59.999000
+                    is_rolled_back: false
+                    oldest_payment_due_date: 2023-02-01 04:59:59.999000
+                    original_status: CURRENT
+                    status: DELINQUENT
+                    token: my_delinquency_transition_token1234
+                    total_due: 140
+                    total_past_due: 100
+                    transition_trigger_reason: STATEMENT_GENERATION
+                    transition_trigger_time: 2024-03-01 04:59:59.999000
+                    updated_time: 2024-03-01 04:59:59.999000
+                journal_entry_example:
+                  summary: The following code block shows a sample of a resent `creditjournalentries` event.
+                  value:
+                    account_token: my_credit_account_token1234
+                    amount: 10
+                    card_token: my_credit_card_token1234
+                    created_time: 2024-08-18 22:07:21.422000+00:00
+                    currency_code: USD
+                    detail_object:
+                      acquirer:
+                        system_trace_audit_number: '376582'
+                      acquirer_fee_amount: 0
+                      acting_user_token: my_user_token
+                      amount: 10
+                      approval_code: '974406'
+                      card:
+                        last_four: '9949'
+                        metadata: {}
+                      card_acceptor:
+                        city: San Francisco
+                        country_code: USA
+                        mcc: '6411'
+                        mid: '1234'
+                        name: Jane's Bakery
+                        postal_code: '94115'
+                        state: CA
+                        street_address: 1989 Fillmore St
+                      card_token: my_credit_card_token1234
+                      created_time: 2024-08-18 22:06:52+00:00
+                      currency_code: USD
+                      duration: 837
+                      gpa:
+                        available_balance: 0
+                        balances:
+                          USD:
+                            available_balance: 0
+                            credit_balance: 0
+                            currency_code: USD
+                            impacted_amount: -10
+                            ledger_balance: 510.87
+                            pending_credits: 0
+                        credit_balance: 0
+                        currency_code: USD
+                        impacted_amount: -10
+                        ledger_balance: 510.87
+                        pending_credits: 0
+                      gpa_order:
+                        amount: 10
+                        created_time: 2024-08-18 22:06:53+00:00
+                        currency_code: USD
+                        funding:
+                          amount: 10
+                          gateway_log:
+                            duration: 485
+                            message: Approved or completed successfully
+                            order_number: my_gateway_token12345
+                            response:
+                              code: '200'
+                              data:
+                                jit_funding:
+                                  acting_user_token: my_user_token
+                                  amount: 10
+                                  method: pgfs.authorization
+                                  token: my_jit_funding_token1234
+                                  user_token: my_user_token
+                            timed_out: false
+                            transaction_id: my_transaction_id1234
+                          source:
+                            active: true
+                            created_time: 2024-10-14 17:26:35+00:00
+                            is_default_account: false
+                            last_modified_time: 2024-10-14 17:26:35+00:00
+                            name: credit_backed_funding_source
+                            token: '**********1ab2'
+                            type: programgateway
+                        funding_source_token: '**********1ab2'
+                        jit_funding:
+                          acting_user_token: my_user_token
+                          amount: 10
+                          method: pgfs.authorization
+                          token: my_transaction_id1234
+                          user_token: my_user_token
+                        last_modified_time: 2024-08-18 22:06:53+00:00
+                        response:
+                          code: '0000'
+                          memo: Approved or completed successfully
+                        state: PENDING
+                        token: my_gpa_order_token1234
+                        transaction_token: my_transaction_token1234
+                        user_token: my_user_token
+                      identifier: '234'
+                      issuer_payment_node: f8205a67b12b90d695b15704a64c074b
+                      issuer_received_time: 2024-08-18 22:06:52.771000+00:00
+                      network: DISCOVER
+                      network_reference_id: '484311571095'
+                      pos:
+                        is_installment: false
+                        is_recurring: false
+                        partial_approval_capable: true
+                        pin_present: false
+                        purchase_amount_only: false
+                      request_amount: 10
+                      response:
+                        code: '0000'
+                        memo: Approved or completed successfully
+                      settlement_date: 2024-08-18 00:00:00+00:00
+                      state: PENDING
+                      token: my_detail_token1234
+                      type: authorization
+                      user:
+                        metadata:
+                          key1: value1
+                          key2: value2
+                          notification_email: user@domain.com
+                          notification_language: spa
+                      user_token: my_user_token
+                      user_transaction_time: 2024-08-18 22:06:52+00:00
+                    detail_token: my_detail_token1234
+                    dispute_token: null
+                    group: PURCHASE
+                    id: '12345678'
+                    impact_time: 2024-08-18 22:07:21.422000+00:00
+                    memo: Jane's Bakery
+                    related_token: null
+                    request_time: 2024-08-18 22:06:52+00:00
+                    root_token: null
+                    status: PENDING
+                    token: my_journal_entry_token1234
+                    type: authorization
+                ledger_entry_sample:
+                  summary: The following code block shows a sample of a resent `creditledgerentries` event.
+                  value:
+                    account_token: my_credit_account_token1234
+                    amount: 10
+                    card_token: my_credit_card_token1234
+                    created_time: 2024-08-18 22:07:21.422000+00:00
+                    currency_code: USD
+                    detail_object:
+                      acquirer:
+                        system_trace_audit_number: '376582'
+                      acquirer_fee_amount: 0
+                      acting_user_token: my_user_token
+                      amount: 10
+                      approval_code: '974406'
+                      card:
+                        last_four: '9949'
+                        metadata: {}
+                      card_acceptor:
+                        city: San Francisco
+                        country_code: USA
+                        mcc: '6411'
+                        mid: '1234'
+                        name: Jane's Bakery
+                        postal_code: '94115'
+                        state: CA
+                        street_address: 1989 Fillmore St
+                      card_token: my_credit_card_token1234
+                      created_time: 2024-08-18 22:06:52+00:00
+                      currency_code: USD
+                      duration: 837
+                      gpa:
+                        available_balance: 0
+                        balances:
+                          USD:
+                            available_balance: 0
+                            credit_balance: 0
+                            currency_code: USD
+                            impacted_amount: -10
+                            ledger_balance: 510.87
+                            pending_credits: 0
+                        credit_balance: 0
+                        currency_code: USD
+                        impacted_amount: -10
+                        ledger_balance: 510.87
+                        pending_credits: 0
+                      gpa_order:
+                        amount: 10
+                        created_time: 2024-08-18 22:06:53+00:00
+                        currency_code: USD
+                        funding:
+                          amount: 10
+                          gateway_log:
+                            duration: 485
+                            message: Approved or completed successfully
+                            order_number: my_gateway_token12345
+                            response:
+                              code: '200'
+                              data:
+                                jit_funding:
+                                  acting_user_token: my_user_token
+                                  amount: 10
+                                  method: pgfs.authorization
+                                  token: my_jit_funding_token1234
+                                  user_token: my_user_token
+                            timed_out: false
+                            transaction_id: my_transaction_id1234
+                          source:
+                            active: true
+                            created_time: 2024-10-14 17:26:35+00:00
+                            is_default_account: false
+                            last_modified_time: 2024-10-14 17:26:35+00:00
+                            name: credit_backed_funding_source
+                            token: '**********1ab2'
+                            type: programgateway
+                        funding_source_token: '**********1ab2'
+                        jit_funding:
+                          acting_user_token: my_user_token
+                          amount: 10
+                          method: pgfs.authorization
+                          token: my_transaction_id1234
+                          user_token: my_user_token
+                        last_modified_time: 2024-08-18 22:06:53+00:00
+                        response:
+                          code: '0000'
+                          memo: Approved or completed successfully
+                        state: PENDING
+                        token: my_gpa_order_token1234
+                        transaction_token: my_transaction_token1234
+                        user_token: my_user_token
+                      identifier: '234'
+                      issuer_payment_node: f8205a67b12b90d695b15704a64c074b
+                      issuer_received_time: 2024-08-18 22:06:52.771000+00:00
+                      network: DISCOVER
+                      network_reference_id: '484311571095'
+                      pos:
+                        is_installment: false
+                        is_recurring: false
+                        partial_approval_capable: true
+                        pin_present: false
+                        purchase_amount_only: false
+                      request_amount: 10
+                      response:
+                        code: '0000'
+                        memo: Approved or completed successfully
+                      settlement_date: 2024-08-18 00:00:00+00:00
+                      state: PENDING
+                      token: my_detail_token1234
+                      type: authorization
+                      user:
+                        metadata:
+                          key1: value1
+                          key2: value2
+                          notification_email: user@domain.com
+                          notification_language: spa
+                      user_token: my_user_token
+                      user_transaction_time: 2024-08-18 22:06:52+00:00
+                    detail_token: my_detail_token1234
+                    dispute_token: null
+                    group: PURCHASE
+                    id: '12345678'
+                    impact_time: 2024-08-18 22:07:21.422000+00:00
+                    memo: Jane's Bakery
+                    related_token: null
+                    request_time: 2024-08-18 22:06:52+00:00
+                    root_token: null
+                    status: PENDING
+                    token: my_ledger_entry_token1234
+                    type: authorization
+                payment_transition_example:
+                  summary: The following code block shows a sample of a resent `creditpaymenttransitions` event.
+                  value:
+                    account_token: my_credit_account_token1234
+                    created_time: 2024-08-17 18:26:47.591000+00:00
+                    payment_token: my_credit_account_payment_token1234
+                    refund_details: null
+                    status: COMPLETED
+                    token: my_payment_transition_token1234
+                substatus_example:
+                  summary: The following code block shows a sample of a resent `substatus` event.
+                  value:
+                    attributes: []
+                    created_time: 2024-04-02 11:23:23+00:00
+                    events:
+                    - channel: SYSTEM
+                      created_time: 2024-04-02 11:23:23+00:00
+                      effective_date: 2024-04-02 11:23:23+00:00
+                      reason: Fraud system detected suspicious activity
+                      state: ACTIVE
+                    - channel: ADMIN
+                      created_time: 2024-04-02 11:23:23+00:00
+                      effective_date: 2024-04-02 11:23:23+00:00
+                      reason: Verified non-fraud with cardholder
+                      state: INACTIVE
+                    is_active: false
+                    resource_token: my_account_token
+                    resource_type: ACCOUNT
+                    state: INACTIVE
+                    substatus: FRAUD
+                    token: substatus_token
+                    updated_time: 2024-04-02 11:23:23+00:00
+              schema:
+                $ref: '#/components/schemas/WebhookEventResendContainerResponse'
+          description: Event response for which the webhook event was resent
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Resend credit event notification
+      tags:
+      - Statements
+components:
+  schemas:
+    JournalEntriesPage:
+      description: Return filtered transactions.
+      properties:
+        count:
+          description: Number of resources returned.
+          maximum: 100
+          minimum: 0
+          type: integer
+        data:
+          description: Contains one or more journal entries on a credit account.
+          items:
+            $ref: '#/components/schemas/JournalEntry'
+          maxItems: 100
+          minItems: 0
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    YearToDate:
+      description: Contains information about year-to-date totals for an account.
+      properties:
+        account_token:
+          description: Unique identifier of the associated credit account.
+          maxLength: 36
+          type: string
+        created_time:
+          description: Date and time when the year-to-date total was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        statement_token:
+          description: Unique identifier of the statement summary from which to retrieve year-to-date totals.
+          format: uuid
+          type: string
+        token:
+          description: Unique identifier of the year-to-date total.
+          format: uuid
+          type: string
+        total_fees:
+          description: Total fees charged year-to-date.
+          type: number
+        total_interest:
+          description: Total interest charged year-to-date.
+          type: number
+      required:
+      - account_token
+      - statement_token
+      - total_fees
+      - total_interest
+      type: object
+    StatementReward:
+      description: Contains information on statement rewards.
+      properties:
+        created_time:
+          description: Date and time when the statement reward was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        current_billing_cycle_reward:
+          description: Amount of rewards received in the current billing cycle.
+          type: number
+        previous_billing_cycle_reward:
+          description: Amount of rewards received in the previous billing cycle.
+          type: number
+        token:
+          description: Unique identifier of the rewards for a specific statement.
+          type: string
+      type: object
+    StatementSummaryPage:
+      description: Return filtered transactions.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: One or more statement summaries.
+          items:
+            $ref: '#/components/schemas/StatementSummary'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    CycleType:
+      description: 'Type of cycle.
+
+
+        * `BEGINNING_REVOLVING` - Account is beginning to revolve and just started carrying a balance
+
+        from the previous month.
+
+        * `REVOLVING` - Account is revolving and has been carrying a balance from month to month for more than one month.
+
+        * `END_REVOLVING` - Account is no longer revolving and the previous month''s balance is paid off.
+
+        * `TRANSACTING` - Account is not revolving and the balance is paid off each month.'
+      enum:
+      - BEGINNING_REVOLVING
+      - REVOLVING
+      - END_REVOLVING
+      - TRANSACTING
+      type: string
+    PaymentReminderPage:
+      description: Return payment reminders.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: Contains payment reminders on a credit account statement. Can be zero if none exist for the given statement.
+          items:
+            $ref: '#/components/schemas/PaymentReminderResponse'
+          minItems: 1
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    StatementFile:
+      description: Collection of statement files.
+      properties:
+        account_token:
+          description: Unique identifier of the credit account on which the statement PDF file is generated.
+          maxLength: 36
+          type: string
+        closing_date:
+          description: Date and time when the statement period ended.
+          format: date-time
+          type: string
+        opening_date:
+          description: Date and time when the statement period began.
+          format: date-time
+          type: string
+        signed_url:
+          description: Signed URL to retrieve the statement PDF file.
+          type: string
+        statement_summary_token:
+          description: Unique identifier of the statement summary.
+          format: uuid
+          type: string
+        token:
+          description: Unique identifier of the statement file.
+          type: string
+        type:
+          description: Type of file.
+          enum:
+          - STATEMENT_PDF
+          type: string
+      type: object
+    StatementInterestChargesPage:
+      description: Return paginated statement interest charges.
+      properties:
+        account_token:
+          description: Unique identifier of the credit account on which the statement interest charge is generated.
+          maxLength: 36
+          type: string
+        data:
+          description: Contains one or more interest charges on a statement.
+          items:
+            $ref: '#/components/schemas/StatementInterestCharge'
+          type: array
+        statement_summary_token:
+          description: Unique identifier of the statement summary.
+          type: string
+      required:
+      - account_token
+      - data
+      - statement_summary_token
+      type: object
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
+      type: string
+    PaymentReminderResponse:
+      description: Details of a payment reminder.
+      properties:
+        account_token:
+          description: Token of the associated account.
+          type: string
+        created_time:
+          description: Date and time when the Billing Cycle was created on Marqeta's credit platform
+          format: date-time
+          type: string
+        days_until_due:
+          description: Days until payment cutoff date
+          type: integer
+        payment_cutoff_date:
+          description: Last day a payment can be made before interest and fees are charged to the account.
+          format: date-time
+          type: string
+        payment_due_date:
+          description: Payment due date, based on the credit account settings.
+          format: date-time
+          type: string
+        remaining_minimum_payment_due:
+          description: Amount remaining on the latest statement's minimum payment, after it's adjusted for payments, returned payments, and applicable credits that occurred after the latest statement's closing date.
+          type: number
+        statement_summary_token:
+          description: Token of the associated statement summary
+          format: uuid
+          type: string
+        token:
+          description: Token of the payment reminder
+          type: string
+      type: object
+    StatementSummary:
+      description: Contains the summary data for an account's monthly statement.
+      properties:
+        account_token:
+          description: Unique identifier of the credit account on which the statement summary is generated.
+          maxLength: 36
+          type: string
+        available_credit:
+          description: Amount available to spend on the credit account, as of the statement closing date.
+          type: number
+        closing_balance:
+          description: Balance of the credit account when the statement period ended.
+          type: number
+        closing_date:
+          description: Date and time when the statement period ended.
+          format: date-time
+          type: string
+        created_time:
+          description: Date and time when the statement summary was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        credit_limit:
+          description: Maximum balance the credit account can carry, as of the statement closing date.
+          type: number
+        credits:
+          description: Total amount of credits received during the statement period.
+          type: number
+        cycle_type:
+          $ref: '#/components/schemas/CycleType'
+        days_in_billing_cycle:
+          description: Number of days in the billing cycle, also known as the statement period.
+          type: integer
+        fees:
+          description: 'Total amount of fees charged during the statement period.
+
+            Does not include periodic fees.'
+          type: number
+        interest:
+          description: Total amount of interest charged during the statement period.
+          type: number
+        min_payment_due:
+          description: Minimum payment that is due.
+          minimum: 0
+          type: number
+        opening_balance:
+          description: Balance of the credit account when the statement period began.
+          type: number
+        opening_date:
+          description: Date and time when the statement period began.
+          format: date-time
+          type: string
+        past_due_amount:
+          description: Total amount of the payment required to make the account current.
+          type: number
+        payment_due_date:
+          description: Date when the payment was due for this statement period.
+          format: date-time
+          type: string
+        payments:
+          description: Total amount of payments made during the statement period.
+          type: number
+        program_migration_time:
+          description: 'Date and time when the statement summary was migrated to Marqeta''s credit platform, in UTC.
+
+
+            The value of this field is `null` if it has not been migrated.'
+          format: date-time
+          type: string
+        purchases:
+          description: Total amount of purchases made during the statement period.
+          type: number
+        remaining_min_payment_due:
+          description: Amount of the minimum payment that remains unpaid for the previous statement period.
+          type: number
+        remaining_statement_balance:
+          description: Amount of the statement balance that remains unpaid for the previous statement period.
+          type: number
+        sda_closing_balance:
+          description: Secured deposit account closing balance for the statement period.
+          type: number
+        sda_opening_balance:
+          description: Secured deposit account opening balance for the statement period.
+          type: number
+        token:
+          description: Unique identifier of the statement summary.
+          format: uuid
+          type: string
+      required:
+      - account_token
+      - available_credit
+      - closing_balance
+      - closing_date
+      - created_time
+      - credits
+      - cycle_type
+      - days_in_billing_cycle
+      - fees
+      - interest
+      - opening_balance
+      - opening_date
+      - past_due_amount
+      - payments
+      - purchases
+      - token
+      type: object
+    StatementPaymentWarning:
+      description: Contains information on statement payment warnings.
+      properties:
+        disclosure:
+          description: 'Statement disclosure in the case of negative or no amortization, or no lifetime repayment for the minimum payment warning type.
+
+
+            * `NEGATIVE_OR_NO_AMORTIZATION` - Occurs when the interest amount is higher than the minimum payment; results in the outstanding balance remaining in perpetuity.
+
+            * `NO_LIFETIME_REPAYMENT` - Occurs when the interest amount is just below the minimum payment; results in the outstanding balance taking longer than a lifetime to pay off.'
+          enum:
+          - NEGATIVE_OR_NO_AMORTIZATION
+          - NO_LIFETIME_REPAYMENT
+          type: string
+        interest_paid:
+          description: 'For the minimum payment warning type, this value represents the total amount of interest to pay off the statement balance if only making the minimum payment each month.
+
+
+            For the 3 Year warning type, this value represents the total amount of interest if paying off the statement balance in three years.'
+          type: number
+        monthly_payment:
+          description: 'For the minimum payment warning type, this value is 0.
+
+
+            For the 3 Year warning type, this value represents the fixed monthly payment amount required to pay off the statement balance in three years.'
+          type: number
+        pay_off_period:
+          description: 'For the minimum payment warning type, this value represents the number of periods required to pay off the statement balance.
+
+
+            For the 3 Year warning type, this value is 36 (months).'
+          minimum: 0
+          type: integer
+        period_type:
+          description: Time unit of the pay off period.
+          enum:
+          - MONTH
+          - YEAR
+          type: string
+        total_paid:
+          description: 'For the minimum payment warning type, this value represents the total amount of principal and interest to pay off the statement balance if only making the minimum payment each month.
+
+
+            For the 3 Year warning type, this value represents the total amount of principal and interest if paying off the statement balance in three years.'
+          type: number
+        type:
+          description: 'Type of statement warning.
+
+
+            * `MIN_PAYMENT` - Displays the total estimated payment amount and how long it would take to pay off the statement balance if only making minimum payments.
+
+            * `3_YEAR` - Displays the monthly payment amount and total estimated payment amount if paying off the statement balance in three years.'
+          enum:
+          - MIN_PAYMENT
+          - 3_YEAR
+          type: string
+      type: object
+    StatementFilePage:
+      description: Returns paginated statement files.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: List of statement files.
+          items:
+            $ref: '#/components/schemas/StatementFile'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    StatementPaymentInfo:
+      description: Contains information on a statement payment.
+      properties:
+        created_time:
+          description: Date and time when the statement payment information was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        minimum_payment_due:
+          description: Minimum payment amount for the current statement period, based on the associated credit product settings.
+          type: number
+        new_statement_balance:
+          description: Balance on the credit account when the statement period ended.
+          type: number
+        payment_cutoff_date:
+          description: Last day a payment can be made before interest and fees are charged to the account.
+          format: date-time
+          type: string
+        payment_due_date:
+          description: Payment due date, based on the credit account settings.
+          format: date-time
+          type: string
+        statement_summary_token:
+          description: Unique identifier of the statement summary.
+          format: uuid
+          type: string
+        three_year_savings:
+          description: Savings amount if the balance is paid off in three years versus only making minimum payments.
+          type: number
+        token:
+          description: Unique identifier of the statement payment.
+          format: uuid
+          type: string
+        warnings:
+          description: One or more payoff warnings.
+          items:
+            $ref: '#/components/schemas/StatementPaymentWarning'
+          type: array
+      type: object
+    JournalEntry:
+      description: Contains information about a journal entry.
+      properties:
+        account_token:
+          description: Unique identifier of the credit account associated with the credit card used to make the journal entry.
+          format: string
+          type: string
+        amount:
+          description: Amount of the journal entry.
+          type: number
+        card_token:
+          description: Unique identifier of the credit card used to make the journal entry.
+          format: string
+          maxLength: 36
+          minLength: 8
+          type: string
+        created_time:
+          description: Date and time when the journal entry was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        currency_code:
+          $ref: '#/components/schemas/CurrencyCode'
+        detail_object:
+          type: object
+        detail_token:
+          description: Unique identifier of the journal entry's full details.
+          type: string
+        group:
+          description: Group to which the journal entry belongs.
+          enum:
+          - PURCHASE
+          - REFUND
+          - DISPUTE
+          - ORIGINAL_CREDIT
+          - FEE
+          - REWARD
+          - INTEREST
+          - PAYMENT
+          - ADJUSTMENT
+          - BALANCE_TRANSFER
+          - CASH_ADVANCE
+          - BALANCE_REFUND
+          type: string
+        id:
+          description: Eight-digit numeric identifier of the journal entry, an alternate identifier to the UUID that is useful for remembering and referencing.
+          maxLength: 8
+          minLength: 8
+          type: string
+        impact_time:
+          description: 'Date and time when the journal entry impacts the account balance.
+
+
+            For purchases, this is the time of the authorization.
+
+
+            For purchase authorization clearings, this is the time when the transaction is settled.'
+          format: date-time
+          type: string
+        memo:
+          description: Merchant name or description for the journal entry.
+          example: Whole Foods Market
+          type: string
+        metadata:
+          additionalProperties:
+            type: string
+          description: 'Contains key-value pairs with additional information about the journal entry.
+
+
+            For `DECLINED` and `ERROR` status journal entries, this field contains diagnostic information extracted from the transaction gateway response:
+
+
+            * `funding.gatewayLog.message` - Gateway decline or error message
+
+            * `funding.gatewayLog.timedOut` - Whether the gateway request timed out ("true" or "false")
+
+            * `funding.gateway.response.code` - Gateway HTTP response code
+
+            * `funding.gateway.response.data.jitFunding.memo` - Additional context from JIT funding
+
+            * `funding.gateway.response.data.jitFunding.declineReason` - Specific decline reason (e.g., "INSUFFICIENT_FUNDS", "CARD_EXPIRED")
+
+
+            This field is `null` for successful transactions with `PENDING` or `POSTED` status.'
+          nullable: true
+          type: object
+        original_currency:
+          $ref: '#/components/schemas/OriginalCurrency'
+        program_migration_time:
+          description: Date and time when the journal entry was migrated to Marqeta's credit platform, in UTC. Null if not migrated.
+          format: date-time
+          type: string
+        related_token:
+          description: 'Unique identifier of the original journal entry.
+
+            If the current journal entry is the original, this field is returned empty.'
+          type: string
+        request_time:
+          description: 'For purchases, the date and time of the authorization, which is when the user initiates the journal entry.
+
+
+            For other journal entry groups, equivalent to `impact_time`.'
+          format: date-time
+          type: string
+        root_token:
+          description: 'Unique identifier of the root journal entry.
+
+            If the current journal entry is the root, this field is returned empty.'
+          type: string
+        status:
+          description: 'Status of the journal entry.
+
+            This field is immutable and may not represent the current status.
+
+
+            * `PENDING` - Transaction is pending and impacts the account balance.
+
+            * `POSTED` - Transaction is posted and impacts the account balance.
+
+            * `DECLINED` - Transaction was declined and does NOT impact the account balance. These entries are persisted with full details including metadata about the decline reason.
+
+            * `ERROR` - Transaction encountered an error and does NOT impact the account balance. These entries are persisted with full details including metadata about the error.
+
+            * `CLEARED` - Transaction was cleared (final state for certain transaction types).
+
+
+            To view the current status of purchases, refunds, OCTs, and payments, see the `detail_object.state` field.
+
+            Transactions that start in `PENDING` can transition to `CLEARED`, `DECLINED`, or `ERROR`.
+
+            This transition of status is sent through webhook event notifications.
+
+
+            Journal entries that are final transactions, such as clearings, start and remain in a `POSTED` state.
+
+
+            *NOTE*:
+
+            `CLEARED` status does not have an impact on the account balance and is only sent through webhook event notifications.
+
+            For `CLEARED` status, `impact_time`, `request_time`, `created_time`, `token`, and `id` are returned blank.'
+          enum:
+          - PENDING
+          - POSTED
+          - DECLINED
+          - ERROR
+          - CLEARED
+          type: string
+        token:
+          description: Unique identifier of the journal entry.
+          type: string
+        type:
+          description: Journal entry event type.
+          example: '`authorization.clearing`'
+          type: string
+        user_token:
+          description: Unique identifier of the credit user.
+          type: string
+      required:
+      - account_token
+      - amount
+      - created_time
+      - currency_code
+      - detail_token
+      - group
+      - id
+      - impact_time
+      - request_time
+      - status
+      - token
+      - type
+      - user_token
+      type: object
+    OriginalCurrency:
+      description: Original Currency
+      properties:
+        amount:
+          description: original amount
+          example: 2
+          type: number
+        code:
+          description: Currency code, such as EUR or USD.
+          type: string
+      type: object
+    StatementInterestCharge:
+      description: Contains information on statement interest charges.
+      properties:
+        amount:
+          description: Amount of interest calculated for the billing period.
+          type: number
+        apr_type:
+          description: Type of APR.
+          enum:
+          - GO_TO
+          type: string
+        apr_value:
+          description: Annual percentage rate.
+          maximum: 100
+          minimum: 0
+          type: number
+        balance_subject_to_interest_rate:
+          description: Average daily balance used to calculate interest.
+          type: number
+        balance_type:
+          description: 'Type of balance.
+
+
+            * `PURCHASE` - The balance on purchases.'
+          enum:
+          - PURCHASE
+          type: string
+      type: object
+    WebhookEventResendContainerResponse:
+      description: Contains information about a webhook event.
+      properties:
+        unused:
+          description: Event notification that was resent to your webhook endpoint.
+          type: string
+      type: object
+    LedgerEntry:
+      description: Contains information about a ledger entry.
+      properties:
+        account_token:
+          description: Unique identifier of the credit account associated with the credit card used to make the ledger entry.
+          format: string
+          type: string
+        amount:
+          description: Amount of the ledger entry.
+          type: number
+        card_token:
+          description: Unique identifier of the credit card used to make the ledger entry.
+          format: string
+          maxLength: 36
+          minLength: 8
+          type: string
+        created_time:
+          description: Date and time when the ledger entry was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        currency_code:
+          $ref: '#/components/schemas/CurrencyCode'
+        detail_object:
+          description: 'Contains the ledger entry''s full details.
+
+            The fields returned in this object vary based on the ledger entry group.
+
+
+            The following lists each ledger entry group and the specific fields returned for each group.
+
+
+            * Purchases and refunds: see the <</core-api/transactions#getTransactions, transactions>> response fields.
+
+
+            * Disputes: see the <</core-api/credit-account-disputes#retrieveDispute, account disputes response fields.>>
+
+
+            * Original credit transaction (OCT): see the <</core-api/push-to-card-payments#_create_push_to_card_disbursement, Push-to-Card disbursement>> fields.
+
+
+            * Rewards: see the <</core-api/credit-account-rewards#createReward, account reward>> response fields.
+
+
+            * Payments: see the <</core-api/credit-account-payments#retrievePayment, account payment>> response fields.
+
+
+            * Balance refunds: see the <</core-api/credit-account-balance-refunds#createBalanceRefund, balance refund>> response fields.
+
+
+            * Adjustments: see the <</core-api/credit-account-adjustments#retrieveAdjustment, account adjustment>> response fields.
+
+
+            * Interest and fees: see fields below.'
+          type: object
+        detail_token:
+          description: Unique identifier of the ledger entry's full details.
+          type: string
+        group:
+          description: Group to which the ledger entry belongs.
+          enum:
+          - PURCHASE
+          - INTERNAL
+          - FEE
+          - REWARD
+          - INTEREST
+          - PAYMENT
+          - ADJUSTMENT
+          - BALANCE_TRANSFER
+          - CASH_ADVANCE
+          - BALANCE_REFUND
+          - ORIGINAL_CREDIT
+          type: string
+        id:
+          description: Eight-digit numeric identifier of the ledger entry, an alternate identifier to the UUID that is useful for remembering and referencing.
+          maxLength: 8
+          minLength: 8
+          type: string
+        impact_time:
+          description: 'Date and time when the ledger entry impacts the account balance.
+
+
+            For purchases, this is the time of the authorization.
+
+
+            For purchase authorization clearings, this is the time when the transaction is settled.'
+          format: date-time
+          type: string
+        memo:
+          description: Merchant name or description for the ledger entry.
+          example: Whole Foods Market
+          type: string
+        metadata:
+          additionalProperties:
+            type: string
+          description: 'Contains key-value pairs with additional information about the ledger entry.
+
+
+            For `DECLINED` and `ERROR` status ledger entries, this field contains diagnostic information extracted from the transaction gateway response:
+
+
+            * `funding.gatewayLog.message` - Gateway decline or error message
+
+            * `funding.gatewayLog.timedOut` - Whether the gateway request timed out ("true" or "false")
+
+            * `funding.gateway.response.code` - Gateway HTTP response code
+
+            * `funding.gateway.response.data.jitFunding.memo` - Additional context from JIT funding
+
+            * `funding.gateway.response.data.jitFunding.declineReason` - Specific decline reason (e.g., "INSUFFICIENT_FUNDS", "CARD_EXPIRED")
+
+
+            This field is `null` for successful transactions with `PENDING` or `POSTED` status.'
+          nullable: true
+          type: object
+        original_currency:
+          $ref: '#/components/schemas/OriginalCurrency'
+        related_token:
+          description: 'Unique identifier of the original ledger entry.
+
+            If the current ledger entry is the original, this field is returned empty.'
+          type: string
+        request_time:
+          description: 'For purchases, the date and time of the authorization, which is when the user initiates the ledger entry.
+
+
+            For other ledger entry groups, equivalent to `impact_time`.'
+          format: date-time
+          type: string
+        root_token:
+          description: 'Unique identifier of the root ledger entry.
+
+            If the current ledger entry is the root, this field is returned empty.'
+          type: string
+        status:
+          description: 'Status of the ledger entry when it was initially recorded and had an impact on the balance, either `PENDING` or `POSTED`.
+
+            This field is immutable and may not represent the current status.
+
+
+            To view the current status of purchases, refunds, OCTs, and payments, see the `detail_object.state` field.
+
+            These journal entries start in `PENDING` and can transition to `CLEARED`, `DECLINED`, or `ERROR`.
+
+            This transition of status is only sent through webhook event notifications.
+
+
+            Ledger entries that are final transactions, such as clearings, start and remain in a `POSTED` state.
+
+
+            *NOTE*:
+
+            `CLEARED` status does not have an impact on the account balance and is only sent through webhook event notifications.
+
+            For `CLEARED` status, `impact_time`, `request_time`, `created_time`, `token`, and `id` are returned blank.
+
+
+            `DECLINED` and `ERROR` statuses do not impact the account balance but ARE recorded in the ledger with full details including metadata about the failure reason.'
+          enum:
+          - PENDING
+          - POSTED
+          - DECLINED
+          - ERROR
+          - CLEARED
+          type: string
+        token:
+          description: Unique identifier of the ledger entry.
+          type: string
+        type:
+          description: Ledger entry event type.
+          example: '`authorization.clearing`'
+          type: string
+      required:
+      - account_token
+      - amount
+      - card_token
+      - created_time
+      - currency_code
+      - detail_token
+      - group
+      - id
+      - impact_time
+      - memo
+      - request_time
+      - status
+      - token
+      - type
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

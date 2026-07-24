@@ -1,0 +1,1164 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries Credit Accounts API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- description: '// Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    Use the credit accounts endpoints to create and manage accounts on Marqeta''s credit platform.
+
+    A credit account centers around a single line of credit that can be accessed by one or more <</core-api/credit-account-cards, cards>>.
+
+    An account''s attributes, such as the credit limit, APR, and fees, are inherited from the <</core-api/credit-policies, policies>> on its associated bundle.
+
+
+    For more on accounts, see <</developer-guides/about-credit-accounts, About Credit Accounts>>.'
+  name: Credit Accounts
+paths:
+  /accounts:
+    get:
+      description: 'Retrieve an array of credit accounts.
+
+
+        This endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>.'
+      operationId: listAccounts
+      parameters:
+      - description: Unique identifier of the credit card associated with the account.
+        explode: true
+        in: query
+        name: card_token
+        required: false
+        schema:
+          type: string
+          x-allowableValues: Existing card token
+        style: form
+      - description: Number of credit account resources to retrieve.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - description: Sort order index of the first resource in the returned array.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: 'Field on which to sort.
+
+          Prefix the field name with a hyphen (`-`) to sort in descending order.
+
+          Omit the hyphen to sort in ascending order.
+
+
+          *NOTE:*
+
+          You must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`.'
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -lastModifiedTime
+          enum:
+          - lastModifiedTime
+          - -lastModifiedTime
+          type: string
+        style: form
+      - description: If `true`, returns a lightweight response without any balances and usages.
+        explode: true
+        in: query
+        name: light_response
+        required: false
+        schema:
+          default: false
+          type: boolean
+          x-allowableValues: '`true`, `false`'
+        style: form
+      - description: 'Unique identifier of an existing secured account.
+
+          This field is required when policy product subtype is `SECURED`.'
+        explode: true
+        in: query
+        name: secured_account_token
+        required: false
+        schema:
+          type: string
+          x-allowableValues: Existing secured account token
+        style: form
+      - description: Unique identifier of the user by which to filter accounts.
+        explode: true
+        in: query
+        name: user_token
+        required: false
+        schema:
+          type: string
+          x-allowableValues: Existing user token
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                count: 1
+                data:
+                - activation_time: 2025-08-26 22:55:52.302000+00:00
+                  available_credit: 3232
+                  business_token: business_token123
+                  config:
+                    billing_cycle_day: 1
+                    card_level: TRADITIONAL
+                    e_disclosure_active: true
+                    fees:
+                    - active: true
+                      created_date: 2025-08-26 22:55:52.124000+00:00
+                      schedule:
+                      - effective_date: 2025-08-26 22:55:52.124000+00:00
+                        method: FLAT
+                        value: 25
+                      type: LATE_PAYMENT_FEE
+                      updated_date: 2025-08-26 22:55:52.124000+00:00
+                    - active: true
+                      created_date: 2025-09-03 19:06:27.946000+00:00
+                      schedule:
+                      - effective_date: 2025-09-03 19:06:27.946000+00:00
+                        method: FLAT
+                        value: 10
+                      type: RETURNED_PAYMENT_FEE
+                      updated_date: 2025-09-03 19:06:27.946000+00:00
+                    - active: true
+                      created_date: 2025-09-03 19:06:27.946000+00:00
+                      schedule:
+                      - method: PERCENTAGE
+                        value: 12.5
+                      type: FOREIGN_TRANSACTION_FEE
+                      updated_date: 2025-09-03 19:06:27.946000+00:00
+                    payment_due_day: 31
+                    payment_holds:
+                      ach_hold_days: 0
+                      check_hold_days: 0
+                    rewards: []
+                  created_time: 2025-08-26 22:55:52.100000+00:00
+                  credit_limit: 6000
+                  credit_product_token: credit_product_token1234
+                  currency_code: USD
+                  current_balance: 0
+                  description: Consumer credit account for John Jacob
+                  external_offer_id: external-offer-11
+                  latest_statement_cycle_type: TRANSACTING
+                  max_apr_schedules: []
+                  name: John Jacob
+                  remaining_min_payment_due: 25
+                  remaining_statement_balance: 2768
+                  status: ACTIVE
+                  substatuses: []
+                  token: credit_account_token1234
+                  type: CONSUMER
+                  updated_time: 2025-08-26 22:55:52.304000+00:00
+                  usages:
+                  - aprs:
+                    - active: true
+                      created_date: 2025-08-26 22:55:52.106000+00:00
+                      schedule:
+                      - effective_date: 2025-08-26 22:55:52.106000+00:00
+                        value: 14.99
+                      type: GO_TO
+                      updated_date: 2025-08-26 22:55:52.106000+00:00
+                    fees: []
+                    type: PURCHASE
+                  user_substatuses: []
+                  user_token: user_token1234
+                end_index: 4
+                is_more: true
+                start_index: 0
+              schema:
+                $ref: '#/components/schemas/AccountsPage'
+          description: Expected response to a valid request
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: List accounts
+      tags:
+      - Credit Accounts
+  /accounts/{account_token}:
+    get:
+      description: Retrieve a credit account.
+      operationId: retrieveAccount
+      parameters:
+      - description: Display the effective fee schedule only.
+        explode: true
+        in: query
+        name: effective_fee_schedule_only
+        required: false
+        schema:
+          default: false
+          type: boolean
+          x-allowableValues: '`true`, `false`'
+        style: form
+      - description: 'Unique identifier of the credit account to retrieve.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: If true, returns a lightweight response without any balances and usages.
+        explode: true
+        in: query
+        name: light_response
+        required: false
+        schema:
+          default: false
+          type: boolean
+          x-allowableValues: '`true`, `false`'
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                activation_time: 2021-08-26 22:55:52.302000+00:00
+                available_credit: 3232
+                config:
+                  billing_cycle_day: 1
+                  card_level: TRADITIONAL
+                  e_disclosure_active: true
+                  fees:
+                  - active: true
+                    created_date: 2021-08-26 22:55:52.124000+00:00
+                    schedule:
+                    - effective_date: 2021-08-26 22:55:52.124000+00:00
+                      method: FLAT
+                      value: 25
+                    type: LATE_PAYMENT_FEE
+                    updated_date: 2021-08-26 22:55:52.124000+00:00
+                  - active: true
+                    created_date: 2021-09-03 19:06:27.946000+00:00
+                    schedule:
+                    - effective_date: 2021-09-03 19:06:27.946000+00:00
+                      method: FLAT
+                      value: 10
+                    type: RETURNED_PAYMENT_FEE
+                    updated_date: 2021-09-03 19:06:27.946000+00:00
+                  - active: true
+                    created_date: 2021-09-03 19:06:27.946000+00:00
+                    schedule:
+                    - method: PERCENTAGE
+                      value: 12.5
+                    type: FOREIGN_TRANSACTION_FEE
+                    updated_date: 2021-09-03 19:06:27.946000+00:00
+                  payment_due_day: 31
+                  payment_holds:
+                    ach_hold_days: 0
+                    check_hold_days: 0
+                  rewards: []
+                created_time: 2021-08-26 22:55:52.100000+00:00
+                credit_limit: 6000
+                credit_product_token: credit_product_token1234
+                currency_code: USD
+                current_balance: 0
+                description: Consumer credit account for John Jacob
+                external_offer_id: external-offer-11
+                latest_statement_cycle_type: TRANSACTING
+                name: John Jacob
+                remaining_min_payment_due: 25
+                remaining_statement_balance: 2768
+                status: ACTIVE
+                token: credit_account_token1234
+                type: CONSUMER
+                updated_time: 2021-08-26 22:55:52.304000+00:00
+                usages:
+                - aprs:
+                  - active: true
+                    created_date: 2021-08-26 22:55:52.106000+00:00
+                    schedule:
+                    - effective_date: 2021-08-26 22:55:52.106000+00:00
+                      value: 14.99
+                    type: GO_TO
+                    updated_date: 2021-08-26 22:55:52.106000+00:00
+                  fees: []
+                  type: PURCHASE
+                user_token: user_token1234
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+          description: A JSON object containing account information
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Retrieve account
+      tags:
+      - Credit Accounts
+    put:
+      description: Update a credit account.
+      operationId: updateAccount
+      parameters:
+      - description: 'Unique identifier of the credit account to update.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            example:
+              config:
+                payment_holds:
+                  ach_hold_days: 3
+                  check_hold_days: 5
+              credit_limit:
+                value: 6000
+              latest_statement_cycle_type: TRANSACTING
+            schema:
+              $ref: '#/components/schemas/AccountUpdateReq'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                activation_time: 2021-08-26 22:55:52.302000+00:00
+                available_credit: 3232
+                config:
+                  billing_cycle_day: 1
+                  card_level: TRADITIONAL
+                  e_disclosure_active: true
+                  fees:
+                  - active: true
+                    created_date: 2021-08-26 22:55:52.124000+00:00
+                    schedule:
+                    - method: FLAT
+                      value: 25
+                    type: LATE_PAYMENT_FEE
+                    updated_date: 2021-08-26 22:55:52.124000+00:00
+                  - active: true
+                    created_date: 2021-09-03 19:06:27.946000+00:00
+                    schedule:
+                    - effective_date: 2021-09-03 19:06:27.946000+00:00
+                      method: FLAT
+                      value: 10
+                    type: RETURNED_PAYMENT_FEE
+                    updated_date: 2021-09-03 19:06:27.946000+00:00
+                  - active: true
+                    created_date: 2021-09-03 19:06:27.946000+00:00
+                    schedule:
+                    - method: PERCENTAGE
+                      value: 12.5
+                    type: FOREIGN_TRANSACTION_FEE
+                    updated_date: 2021-09-03 19:06:27.946000+00:00
+                  payment_due_day: 31
+                  payment_holds:
+                    ach_hold_days: 3
+                    check_hold_days: 5
+                  rewards: []
+                created_time: 2021-08-26 22:55:52.100000+00:00
+                credit_limit: 6000
+                credit_product_token: credit_product_token1234
+                currency_code: USD
+                current_balance: 0
+                description: Consumer credit account for John Jacob
+                external_offer_id: external-offer-11
+                latest_statement_cycle_type: TRANSACTING
+                max_apr_schedules: []
+                name: John Jacob
+                remaining_min_payment_due: 25
+                remaining_statement_balance: 2768
+                status: ACTIVE
+                substatuses: []
+                token: credit_account_token1234
+                type: CONSUMER
+                updated_time: 2021-08-26 22:55:52.304000+00:00
+                usages:
+                - aprs:
+                  - active: true
+                    created_date: 2021-08-26 22:55:52.106000+00:00
+                    schedule:
+                    - effective_date: 2021-08-26 22:55:52.106000+00:00
+                      value: 14.99
+                    type: GO_TO
+                    updated_date: 2021-08-26 22:55:52.106000+00:00
+                  fees: []
+                  type: PURCHASE
+                user_substatuses: []
+                user_token: user_token1234
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+          description: A JSON object containing account information.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Update account
+      tags:
+      - Credit Accounts
+components:
+  schemas:
+    AccountAprType:
+      description: 'Type of APR.
+
+
+        * `GO_TO` - Default APR rate that is applicable when any promotional periods expire.
+
+        * `PROMOTIONAL` - A temporary rate that is applicable for a specified period of time.'
+      enum:
+      - GO_TO
+      - PROMOTIONAL
+      type: string
+    Method:
+      description: 'Method, either a flat amount or a percentage.
+
+
+        *NOTE:*
+
+        Only `FLAT` is currently supported.'
+      enum:
+      - PERCENTAGE
+      - FLAT
+      type: string
+    AccountReward:
+      description: TODO Add description here
+      properties:
+        method:
+          $ref: '#/components/schemas/Method'
+        type:
+          $ref: '#/components/schemas/RewardType'
+        value:
+          description: Value of the reward, either a flat reward amount or percentage value.
+          maximum: 100
+          minimum: 0
+          type: number
+      required:
+      - method
+      - type
+      type: object
+    AprScheduleEntryResponse:
+      properties:
+        apply_next_cycle:
+          default: false
+          description: Whether the APR is ignored for the current billing cycle and applied on the next.
+          type: boolean
+        effective_date:
+          description: Date and time when the APR goes into effect, in UTC.
+          format: date-time
+          type: string
+        margin:
+          description: 'Number of percentage points added to the prime rate, used to calculate a variable value.
+
+
+            Used for variable values only.'
+          format: float
+          type: number
+        type:
+          default: FIXED
+          description: Indicates whether the APR value is fixed or variable.
+          enum:
+          - FIXED
+          - VARIABLE
+          type: string
+        value:
+          description: 'Percentage value of the APR.
+
+
+            If the APR type is `FIXED`, this is the value of the fixed rate.
+
+            If the APR type is `VARIABLE`, the value is calculated by adding the margin to the prime rate that was stored on Marqeta''s credit platform when your credit program was created.
+
+
+            When backdating an APR, this value cannot be greater than the value of the effective APR on the backdated date.'
+          maximum: 100
+          minimum: 0
+          type: number
+      required:
+      - value
+      type: object
+    AccountFee:
+      description: Contains fee configurations on a credit account.
+      properties:
+        method:
+          $ref: '#/components/schemas/Method'
+        type:
+          $ref: '#/components/schemas/FeeType'
+        value:
+          description: Value of the fee, either a flat fee amount or percentage value.
+          maximum: 9999.99
+          minimum: 0
+          type: number
+      required:
+      - method
+      - type
+      type: object
+    AccountUpdateReq:
+      properties:
+        apr_upper_limit:
+          description: Maximum APR percentage value that can be applied to the credit account.
+          maximum: 100
+          minimum: 0
+          type: number
+        config:
+          $ref: '#/components/schemas/AccountConfigUpdateReq'
+        credit_limit:
+          description: Contains information on the credit limit.
+          properties:
+            value:
+              description: Maximum balance the credit account can carry.
+              exclusiveMinimum: true
+              maximum: 9.9999999999999E11
+              minimum: 0
+              type: number
+          required:
+          - value
+          type: object
+        latest_statement_cycle_type:
+          $ref: '#/components/schemas/CycleType'
+        usages:
+          description: 'Contains one or more `usages` objects that contain information on how a credit account is used and what types of balances are permitted on the account.
+
+
+            You can pass only one `usages` object per `usages.type`.'
+          items:
+            $ref: '#/components/schemas/AccountUsageUpdateReq'
+          type: array
+        user_token:
+          description: 'User token tied to the credit account.
+
+            You can only update the value of the user token for business accounts.'
+          type: string
+      type: object
+    AprScheduleUpdateReq:
+      properties:
+        schedule:
+          description: Contains one or more `schedule` objects, which contain information about the annual percentage rates (APRs) associated with the type of balance on the credit account and when they are effective.
+          items:
+            $ref: '#/components/schemas/AprScheduleEntryUpdateReq'
+          type: array
+        type:
+          $ref: '#/components/schemas/AccountAprType'
+      required:
+      - schedule
+      - type
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    AccountResponse:
+      description: Contains information on a credit account.
+      properties:
+        activation_time:
+          description: Date and time when the credit account was activated on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        apr_upper_limit:
+          description: Maximum APR percentage value that can be applied to the credit account.
+          maximum: 100
+          minimum: 0
+          type: number
+        available_credit:
+          description: 'Amount of credit available for use on the credit account.
+
+            Optional for light responses.'
+          type: number
+        bundle_token:
+          description: Unique identifier of the associated bundle product.
+          type: string
+        business_substatuses:
+          description: Substatuses of the business under the credit account.
+          items:
+            description: Substatus of the business under the credit account.
+            type: string
+          type: array
+        business_token:
+          description: 'Unique identifier of the parent business program.
+
+
+            Either a `user_token` or `business_token` is returned, not both.'
+          type: string
+        config:
+          $ref: '#/components/schemas/AccountConfigResponse'
+        created_time:
+          description: Date and time when the credit account was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        credit_limit:
+          description: 'Maximum balance the credit account can carry.
+
+            Optional for light responses.'
+          exclusiveMinimum: true
+          maximum: 1000000
+          minimum: 0
+          type: number
+        credit_product_token:
+          description: Unique identifier of the associated credit product.
+          type: string
+        currency_code:
+          $ref: '#/components/schemas/CurrencyCode'
+        current_balance:
+          description: 'Current purchase balance on the credit account.
+
+            Optional for light responses.'
+          type: number
+        description:
+          description: Description for the credit account.
+          type: string
+        external_offer_id:
+          description: Unique identifier you provide of the associated external credit offer.
+          type: string
+        latest_statement_cycle_type:
+          $ref: '#/components/schemas/CycleType'
+        max_apr_schedules:
+          description: 'Contains `max_apr_schedule` objects, which provide information about any temporary overrides of the APRs on the credit account.
+
+            This could include special APR rates due to `account/user` substatus changes.'
+          items:
+            $ref: '#/components/schemas/MaxAPRSchedulesResponse'
+          minItems: 0
+          type: array
+        name:
+          description: Name of the credit account.
+          type: string
+        remaining_min_payment_due:
+          description: 'Amount remaining on the latest statement''s minimum payment after it is adjusted for payments, returned payments, and applicable credits that occurred after the latest statement''s closing date.
+
+            Optional for light responses.'
+          type: number
+        remaining_statement_balance:
+          description: 'Amount remaining on the latest statement''s balance after it is adjusted for payments, returned payments, and applicable credits that occurred after the latest statement''s closing date.
+
+            Optional for light responses.'
+          type: number
+        secured_account_token:
+          description: Unique identifier of the secured account.
+          maxLength: 36
+          type: string
+        status:
+          $ref: '#/components/schemas/AccountStatusEnum'
+        substatuses:
+          description: Substatuses of the credit account.
+          items:
+            description: Substatus of the credit account.
+            type: string
+          type: array
+        token:
+          description: Unique identifier of the credit account.
+          maxLength: 36
+          type: string
+        type:
+          $ref: '#/components/schemas/AccountType'
+        updated_time:
+          description: Date and time when the credit account was last updated on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        usages:
+          description: 'Contains one or more `usages` objects that contain information on how a credit account is used and what types of balances are permitted on the account.
+
+            Optional for light responses.'
+          items:
+            $ref: '#/components/schemas/AccountUsageResponse'
+          type: array
+        user_substatuses:
+          description: Substatuses of the users under the credit account.
+          items:
+            description: Substatus of the user under the credit account.
+            type: string
+          type: array
+        user_token:
+          description: 'Unique identifier of the primary account holder or an administrative user of a business account.
+
+
+            Either a `user_token` or `business_token` is returned, not both.'
+          type: string
+      required:
+      - config
+      - created_time
+      - currency_code
+      - status
+      - token
+      - type
+      - updated_time
+      type: object
+    AccountConfigMinPayment:
+      description: Contains configurations for a minimum payment override on a credit account, which overrides the minimum payment configurations on the associated credit product.
+      properties:
+        active:
+          description: Whether the minimum payment override is currently active.
+          type: boolean
+        min_payment_flat_amount:
+          description: Flat amount of the minimum payment override.
+          minimum: 0
+          type: number
+        min_payment_percentage:
+          description: Percentage of the total statement balance used to calculate the minimum payment override amount.
+          minimum: 0
+          type: number
+        override_end_time:
+          description: Date and time when the minimum payment override ends, in UTC.
+          format: date-time
+          type: string
+        override_start_time:
+          description: Date and time when the minimum payment override starts, in UTC.
+          format: date-time
+          type: string
+      type: object
+    CycleType:
+      description: 'Type of cycle.
+
+
+        * `BEGINNING_REVOLVING` - Account is beginning to revolve and just started carrying a balance
+
+        from the previous month.
+
+        * `REVOLVING` - Account is revolving and has been carrying a balance from month to month for more than one month.
+
+        * `END_REVOLVING` - Account is no longer revolving and the previous month''s balance is paid off.
+
+        * `TRANSACTING` - Account is not revolving and the balance is paid off each month.'
+      enum:
+      - BEGINNING_REVOLVING
+      - REVOLVING
+      - END_REVOLVING
+      - TRANSACTING
+      type: string
+    AccountUsageUpdateReq:
+      description: Contains information on how a credit account is used and what types of balances are permitted on the account.
+      properties:
+        aprs:
+          description: Contains one or more annual percentage rates (APRs) associated with the credit account.
+          items:
+            $ref: '#/components/schemas/AprScheduleUpdateReq'
+          type: array
+        type:
+          $ref: '#/components/schemas/BalanceType'
+      required:
+      - apr_type
+      - apr_value
+      - type
+      type: object
+    ConfigFeeScheduleEntry:
+      description: Contains information on a fee schedule.
+      properties:
+        effective_date:
+          description: Date and time when the fee goes into effect, in UTC.
+          format: date-time
+          type: string
+        method:
+          $ref: '#/components/schemas/FeeMethod'
+        value:
+          description: Amount of the fee.
+          maximum: 9999.99
+          minimum: 0
+          type: number
+      required:
+      - method
+      - value
+      type: object
+    AccountProductFeeType:
+      description: Type of fee.
+      enum:
+      - LATE_PAYMENT_FEE
+      - RETURNED_PAYMENT_FEE
+      - MONTHLY_FEE
+      - ANNUAL_FEE
+      - FOREIGN_TRANSACTION_FEE
+      type: string
+    AccountConfigUpdateReq:
+      description: Contains information relevant for updating configurations for electronic disclosures, fees, payment holds, and minimum payment.
+      properties:
+        e_disclosure_active:
+          default: false
+          description: A value of `true` indicates that the account holder consents to receiving disclosures and statements electronically.
+          type: boolean
+        fees:
+          description: Contains one or more fees associated with the credit account.
+          items:
+            $ref: '#/components/schemas/ConfigFeeScheduleReq'
+          type: array
+        min_payment:
+          $ref: '#/components/schemas/AccountConfigMinPayment'
+        payment_due_interval:
+          description: 'Specifies the payment due interval that is used to determine the payment due date for a billing cycle.
+
+            A value of -1 indicates one day prior to the next billing cycle date.
+
+
+            For consumer programs, a minimum gap of 21 days is required between when a statement is delivered and the payment due date.'
+          minimum: -1
+          type: integer
+        payment_holds:
+          $ref: '#/components/schemas/AccountConfigPaymentHolds'
+      type: object
+    AccountsPage:
+      description: Return paginated accounts.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: Contains one or more credit accounts.
+          items:
+            $ref: '#/components/schemas/AccountResponse'
+          type: array
+        end_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    AccountType:
+      description: Type of credit account.
+      enum:
+      - CONSUMER
+      - BUSINESS
+      type: string
+    MaxAPRSchedulesResponse:
+      properties:
+        end_date:
+          description: Date and time when the override APR ends, in UTC.
+          format: date-time
+          type: string
+        reason:
+          description: Reason for the override APR.
+          enum:
+          - SCRA
+          - MLA
+          - HARDSHIP
+          type: string
+        start_date:
+          description: Date and time when the override APR goes into effect, in UTC.
+          format: date-time
+          type: string
+        value:
+          description: 'The APR percentage value.
+
+            This is the value of the fixed rate during the override period.
+
+            The APR value must adhere to the constraints of the main schedule, such as maximum allowable values.'
+          maximum: 100
+          minimum: 0
+          type: number
+      required:
+      - reason
+      - start_date
+      - value
+      type: object
+    FeeType:
+      description: 'Type of fee.
+
+
+        *NOTE:*
+
+        Only `RETURNED_PAYMENT_FEE`, `LATE_PAYMENT_FEE`, `ANNUAL_FEE`, and `MONTHLY_FEE` are currently supported.
+
+        Do not pass other fees types.'
+      enum:
+      - FOREIGN_TRANSACTION_FEE
+      - OVER_LIMIT_FEE
+      - LATE_PAYMENT_FEE
+      - RETURNED_PAYMENT_FEE
+      - CARD_REPLACEMENT_FEE
+      - MINIMUM_INTEREST_FEE
+      - MINIMUM_INTEREST_FEE_REVERSAL
+      - ANNUAL_FEE
+      - MONTHLY_FEE
+      - ACCOUNT_FEE
+      type: string
+    BalanceType:
+      description: 'Type of balance.
+
+
+        * `PURCHASE` - The balance on purchases.'
+      enum:
+      - PURCHASE
+      type: string
+    ConfigFeeScheduleResponse:
+      description: Contains information returned when configuring fees.
+      properties:
+        active:
+          description: Whether the fee is active.
+          type: boolean
+        created_date:
+          description: Date and time when the fee was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        schedule:
+          description: Contains one or more fee schedules.
+          items:
+            $ref: '#/components/schemas/ConfigFeeScheduleEntry'
+          type: array
+        type:
+          $ref: '#/components/schemas/AccountProductFeeType'
+        updated_date:
+          description: Date and time when the fee was last updated on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+      type: object
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
+      type: string
+    RewardType:
+      description: Type of reward.
+      enum:
+      - AUTO_CASH_BACK
+      - CASH_BACK
+      - STATEMENT_CREDIT
+      type: string
+    AprScheduleEntryUpdateReq:
+      properties:
+        apply_next_cycle:
+          default: false
+          description: Whether the APR can be ignored for the current billing cycle and applied on the next.
+          type: boolean
+        effective_date:
+          description: 'Date and time when the APR goes into effect, in UTC.
+
+
+            If you do not include a date-time value, the system uses the date and time when the API request was received.
+
+
+            *NOTE:*
+
+            When passing multiple `schedule` objects, this field is required in all objects but the first.
+
+            If you do not include `effective_date` in the first `schedule`, the system uses the date and time when the API request was received.'
+          format: date-time
+          type: string
+        margin:
+          description: 'Number of percentage points added to the prime rate, used to calculate a variable value.
+
+
+            Used for variable values only.'
+          format: float
+          type: number
+        type:
+          default: FIXED
+          description: Indicates whether the APR value is fixed or variable.
+          enum:
+          - FIXED
+          - VARIABLE
+          type: string
+        value:
+          description: 'Percentage value of the APR.
+
+
+            If the APR type is `FIXED`, this is the value of the fixed rate.
+
+            If the APR type is `VARIABLE`, the value is calculated by adding the margin to the prime rate that was stored on Marqeta''s credit platform when your credit program was created.
+
+
+            When backdating an APR, this value cannot be greater than the value of the effective APR on the backdated date.'
+          maximum: 100
+          minimum: 0
+          type: number
+      required:
+      - value
+      type: object
+    AccountStatusEnum:
+      description: 'Status of the credit account.
+
+
+        *NOTE* `CHARGE_OFF` is not an allowable value for `original_status`.'
+      enum:
+      - UNACTIVATED
+      - ACTIVE
+      - SUSPENDED
+      - TERMINATED
+      - CHARGE_OFF
+      type: string
+    AccountConfigPaymentHolds:
+      description: Contains configurations for a payment hold.
+      properties:
+        ach_hold_days:
+          description: Number of days to hold an ACH payment.
+          maximum: 30
+          minimum: 0
+          type: integer
+        check_hold_days:
+          description: Number of days to hold a check payment.
+          maximum: 30
+          minimum: 0
+          type: integer
+      type: object
+    FeeMethod:
+      description: Method used to calculate the fee value.
+      enum:
+      - FLAT
+      - PERCENTAGE
+      type: string
+    AccountUsageResponse:
+      description: Contains information on how a credit account is used and what types of balances are permitted on the account.
+      properties:
+        aprs:
+          description: Contains one or more APRs associated with the type of balance on the credit account.
+          items:
+            $ref: '#/components/schemas/AprScheduleResponse'
+          type: array
+        fees:
+          description: Contains one or more fees associated with the usage type.
+          items:
+            $ref: '#/components/schemas/AccountFee'
+          type: array
+        type:
+          $ref: '#/components/schemas/BalanceType'
+      required:
+      - aprs
+      - type
+      type: object
+    ConfigFeeScheduleReq:
+      description: Contains information relevant to configuring fees.
+      properties:
+        schedule:
+          description: Contains one or more fee schedules.
+          items:
+            $ref: '#/components/schemas/ConfigFeeScheduleEntry'
+          type: array
+        type:
+          $ref: '#/components/schemas/AccountProductFeeType'
+      required:
+      - schedule
+      - type
+      type: object
+    AccountConfigResponse:
+      description: Contains information returned when configuring an account's billing cycle day, payment due day, fees, and more.
+      properties:
+        billing_cycle_day:
+          description: 'Day of the month when the billing cycle starts.
+
+            If an override value is not provided, the default value is derived from the bundle.'
+          maximum: 28
+          minimum: 1
+          type: integer
+        card_level:
+          default: NA
+          description: Level of the credit card.
+          enum:
+          - PREMIUM
+          - TRADITIONAL
+          - NA
+          type: string
+        e_disclosure_active:
+          default: false
+          description: A value of `true` indicates that the account holder consents to receiving disclosures and statements electronically.
+          type: boolean
+        fees:
+          description: Contains one or more fees associated with the credit account.
+          items:
+            $ref: '#/components/schemas/ConfigFeeScheduleResponse'
+          type: array
+        min_payment:
+          $ref: '#/components/schemas/AccountConfigMinPayment'
+        payment_due_day:
+          deprecated: true
+          description: Day of the month when the payment for the previous billing cycle is due.
+          maximum: 31
+          minimum: 31
+          type: integer
+        payment_due_interval:
+          default: -1
+          description: 'Specifies the payment due interval that is used to determine the payment due date for a billing cycle.
+
+            A value of -1 indicates one day prior to the next billing cycle date.'
+          minimum: -1
+          type: integer
+        payment_holds:
+          $ref: '#/components/schemas/AccountConfigPaymentHolds'
+        rewards:
+          description: Contains one or more rewards associated with the credit account.
+          items:
+            $ref: '#/components/schemas/AccountReward'
+          type: array
+      required:
+      - billing_cycle_day
+      - card_level
+      - e_disclosure_active
+      - payment_holds
+      type: object
+    AprScheduleResponse:
+      properties:
+        active:
+          description: Whether the APR is active.
+          type: boolean
+        created_date:
+          description: Date and time when the APR was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        schedule:
+          description: Contains one or more `schedule` objects, which contain information about the annual percentage rates (APRs) associated with the type of balance on the credit account and when they are effective.
+          items:
+            $ref: '#/components/schemas/AprScheduleEntryResponse'
+          minItems: 1
+          type: array
+        type:
+          $ref: '#/components/schemas/AccountAprType'
+        updated_date:
+          description: Date and time when the APR was last updated on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+      required:
+      - schedule
+      - type
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

@@ -1,0 +1,174 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries Accounts API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: Accounts
+paths:
+  /accounts/{account_token}/refunds/{refund_token}/transitions:
+    get:
+      description: Retrieve a list of transitions associated with the refund.
+      operationId: retrieveRefundTransitions
+      parameters:
+      - description: Unique identifier of the credit account
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: Unique identifier of the refund
+        explode: false
+        in: path
+        name: refund_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: 36 char max
+        style: simple
+      - description: The number of resources to retrieve.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          minimum: 1
+          type: integer
+        style: form
+      - description: The sort order index of the first resource in the returned array.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: 'Field on which to sort.
+
+          Prefix the field name with a hyphen (`-`) to sort in descending order.
+
+          Omit the hyphen to sort in ascending order.
+
+
+          *NOTE:*
+
+          You must sort using system field names such as `createdTime`, and not by the field names appearing in response bodies such as `created_time`.'
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -createdTime
+          enum:
+          - createdTime
+          - -createdTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundTransitionsPage'
+          description: Expected response to a valid request.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: List transitions associated with a refund
+      tags:
+      - Accounts
+components:
+  schemas:
+    RefundTransitionsPage:
+      description: Return paginated refund transition response.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: Contains one or more `transitions` objects, which contain information on a refund status transition.
+          items:
+            $ref: '#/components/schemas/RefundTransitionResponse'
+          type: array
+        end_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    RefundTransitionResponse:
+      description: Response containing refund transition information.
+      properties:
+        account_token:
+          description: Unique identifier of the credit account on which you want to transition a refund status.
+          type: string
+        created_time:
+          description: Date and time when the refund transition was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        refund_token:
+          description: Unique identifier of the refund whose status you want to transition.
+          type: string
+        status:
+          $ref: '#/components/schemas/RefundStatus'
+        token:
+          description: Unique identifier of the refund status transition.
+          type: string
+      required:
+      - account_token
+      - created_time
+      - refund_token
+      - status
+      - token
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    RefundStatus:
+      description: Current status of the refund.
+      enum:
+      - INITIATED
+      - PENDING
+      - PROCESSING
+      - SUBMITTED
+      - CANCELLED
+      - COMPLETED
+      - RETURNED
+      type: string
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

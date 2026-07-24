@@ -1,0 +1,155 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries Feedback API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: Feedback
+paths:
+  /feedback/fraud:
+    post:
+      description: This endpoint is to get a fraud feedback from the customer.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FraudFeedbackRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FraudFeedbackResponse'
+          description: Fraud feedback is created successfully.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request Error
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+          description: Unauthorized Error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenError'
+          description: Forbidden Error
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+      security:
+      - zionToken: []
+      summary: Creates a fraud feedback
+      tags:
+      - Feedback
+components:
+  schemas:
+    ForbiddenError:
+      properties:
+        error_code:
+          enum:
+          - '403'
+          type: string
+        error_message:
+          type: string
+      required:
+      - error_code
+      - error_message
+      type: object
+    BadRequestError:
+      properties:
+        error_code:
+          enum:
+          - '400'
+          type: string
+        error_message:
+          type: string
+      required:
+      - error_code
+      - error_message
+      type: object
+    InternalServerError:
+      properties:
+        error_code:
+          enum:
+          - '500'
+          type: string
+        error_message:
+          type: string
+      required:
+      - error_code
+      - error_message
+      type: object
+    FraudFeedbackResponse:
+      description: of the fraudfeedback response object
+      properties:
+        message:
+          maxLength: 256
+          type: string
+      required:
+      - message
+      type: object
+    UnauthorizedError:
+      properties:
+        error_code:
+          enum:
+          - '401'
+          type: string
+        error_message:
+          type: string
+      required:
+      - error_code
+      - error_message
+      type: object
+    FraudFeedbackRequest:
+      description: of the fraud object
+      properties:
+        actor:
+          description: This is the party making a call.
+          enum:
+          - UNKNOWN
+          - THIRD_PARTY_FRAUD
+          - CARD_USER_FRAUD
+          type: string
+        amount:
+          type: string
+        is_fraud:
+          type: boolean
+        status:
+          description: This is the value of the status of the fraud.
+          enum:
+          - CONFIRMED
+          - DISPUTED
+          type: string
+        transaction_token:
+          maxLength: 64
+          minLength: 3
+          type: string
+      required:
+      - actor
+      - amount
+      - is_fraud
+      - status
+      - transaction_token
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

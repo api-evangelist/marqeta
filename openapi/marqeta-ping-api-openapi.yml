@@ -1,0 +1,94 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries ping API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: ping
+paths:
+  /ping:
+    get:
+      description: Tests if the Marqeta server is available and responsive.
+      operationId: getPing
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ping_response'
+          description: Success
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns a heartbeat to the consumer
+      tags:
+      - ping
+    post:
+      operationId: postPing
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/echo_ping_request'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/echo_ping_response'
+          description: Success
+        '500':
+          content: {}
+          description: Server error
+      summary: Echo test for sending payload to server
+      tags:
+      - ping
+components:
+  schemas:
+    echo_ping_request:
+      properties:
+        payload:
+          description: Payload of the ping request.
+          type: string
+        token:
+          description: Unique identifier of the ping request.
+          type: string
+      type: object
+    ping_response:
+      properties:
+        env:
+          type: string
+        id:
+          type: string
+        revision:
+          type: string
+        success:
+          type: boolean
+        timestamp:
+          type: string
+        version:
+          type: string
+      type: object
+    echo_ping_response:
+      properties:
+        id:
+          type: string
+        payload:
+          type: string
+        success:
+          default: false
+          type: boolean
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

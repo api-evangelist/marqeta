@@ -1,0 +1,253 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries account holder groups API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: account holder groups
+paths:
+  /accountholdergroups:
+    get:
+      operationId: getAccountholdergroups
+      parameters:
+      - description: Number of items to retrieve. Count can be between 1 - 10 items.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 10
+          format: int32
+          type: integer
+        style: form
+      - description: Indicates from what row to start returning data.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: form
+      - description: Field by which to sort the returned items. Use any field in the model, or system fields lastModifiedTime or createdTime.
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -lastModifiedTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountHolderGroupListResponse'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Lists account holder groups
+      tags:
+      - account holder groups
+    post:
+      operationId: postAccountholdergroups
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/account_holder_group_request'
+        description: Account holder group object
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/account_holder_group_response'
+          description: Created
+        '400':
+          content: {}
+          description: Bad request
+        '409':
+          content: {}
+          description: Token already associated with a different payload
+        '500':
+          content: {}
+          description: Server error
+      summary: Creates an account holder group object
+      tags:
+      - account holder groups
+  /accountholdergroups/{token}:
+    get:
+      operationId: getAccountholdergroupsToken
+      parameters:
+      - description: Account holder group token
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/account_holder_group_response'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '404':
+          content: {}
+          description: Auto reload not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns a specific account holder group object
+      tags:
+      - account holder groups
+    put:
+      operationId: putAccountholdergroupsToken
+      parameters:
+      - explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/account_holder_group_update_request'
+        description: Account holder group update object
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/account_holder_group_response'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Updates an account holder group object
+      tags:
+      - account holder groups
+components:
+  schemas:
+    pre_kyc_controls:
+      properties:
+        balance_max:
+          description: Minimum is 0
+          exclusiveMinimum: false
+          minimum: 0
+          type: number
+        cash_access_enabled:
+          default: false
+          type: boolean
+        enable_non_program_loads:
+          default: false
+          type: boolean
+        international_enabled:
+          default: false
+          type: boolean
+        is_reloadable_pre_kyc:
+          default: false
+          type: boolean
+      type: object
+    account_holder_group_config:
+      properties:
+        is_reloadable:
+          default: false
+          type: boolean
+        kyc_required:
+          enum:
+          - ALWAYS
+          - CONDITIONAL
+          - NEVER
+          type: string
+        pre_kyc_controls:
+          $ref: '#/components/schemas/pre_kyc_controls'
+        real_time_fee_group_token:
+          maxLength: 36
+          minLength: 0
+          type: string
+      type: object
+    AccountHolderGroupListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/account_holder_group_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    account_holder_group_request:
+      properties:
+        config:
+          $ref: '#/components/schemas/account_holder_group_config'
+        name:
+          maxLength: 40
+          minLength: 1
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      type: object
+    account_holder_group_response:
+      properties:
+        config:
+          $ref: '#/components/schemas/account_holder_group_config'
+        name:
+          description: 40 char max
+          type: string
+        token:
+          description: 36 char max
+          type: string
+      type: object
+    account_holder_group_update_request:
+      properties:
+        config:
+          $ref: '#/components/schemas/account_holder_group_config'
+        name:
+          maxLength: 40
+          minLength: 1
+          type: string
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

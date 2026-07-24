@@ -1,0 +1,132 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries web push provisioning API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: web push provisioning
+paths:
+  /digitalwallets/wpp/parameters:
+    post:
+      operationId: getWPPParameters
+      parameters:
+      - description: Random pseudo unique value used for troubleshooting between multiple parties. 36 char max
+        example: 123d837e-958a-4e9f-bc97-4843ec948123
+        explode: false
+        in: header
+        name: req-sys-id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/request_for_wpp_parameters'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web_push_provisioning'
+          description: Ok
+          headers:
+            req-sys-id:
+              description: Random pseudo unique value used for troubleshooting between multiple parties. 36 char max
+              explode: false
+              schema:
+                type: string
+              style: simple
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_message_from_web_push_provisioning_request'
+          description: Bad request
+          headers:
+            req-sys-id:
+              description: Random pseudo unique value used for troubleshooting between multiple parties. 36 char max
+              explode: false
+              schema:
+                type: string
+              style: simple
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_message_from_web_push_provisioning_request'
+          description: Unauthorized
+          headers:
+            req-sys-id:
+              description: Random pseudo unique value used for troubleshooting between multiple parties. 36 char max
+              explode: false
+              schema:
+                type: string
+              style: simple
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_message_from_web_push_provisioning_request'
+          description: Internal Server Error
+          headers:
+            req-sys-id:
+              description: Random pseudo unique value used for troubleshooting between multiple parties. 36 char max
+              explode: false
+              schema:
+                type: string
+              style: simple
+      summary: 'API to query for the web push provisioning related parameters, such as: google piaid/integrator_id, apple partnerId, apple Card Template Identifier'
+      tags:
+      - web push provisioning
+components:
+  schemas:
+    error_message_from_web_push_provisioning_request:
+      properties:
+        error_code:
+          description: Code for the error that occurred.
+          example: '400401'
+          type: string
+        error_message:
+          description: Descriptive error message.
+          example: 'Invalid input(s): invalid user token'
+          type: string
+      required:
+      - error_code
+      - error_message
+      type: object
+    web_push_provisioning:
+      properties:
+        wpp_apple_card_template_id:
+          description: Identifier that Apple uses to identify the program to process the request for.
+          type: string
+        wpp_apple_partner_id:
+          description: Identifier that Apple uses to identify the program to provide the correct card art for.
+          type: string
+        wpp_google_piaid:
+          description: Identifier that Google uses to identify the program to process the request for and to provide the correct card art for.
+          type: string
+      type: object
+    request_for_wpp_parameters:
+      properties:
+        card_token:
+          description: Unique identifier of the card resource.
+          example: 5855opl9-abcc-4cb7-a330-xyze5799ea5
+          type: string
+      required:
+      - card_token
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

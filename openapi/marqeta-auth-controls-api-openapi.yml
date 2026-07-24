@@ -1,0 +1,631 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries auth controls API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: auth controls
+paths:
+  /authcontrols:
+    get:
+      operationId: getAuthcontrols
+      parameters:
+      - description: Card product token. Use "null" to get auth controls that are not associated with any card product.
+        explode: true
+        in: query
+        name: card_product
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: User token. Use "null" to get auth controls that are not associated with any user.
+        explode: true
+        in: query
+        name: user
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Number of items to retrieve. Count can be between 1 - 10 items.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          format: int32
+          type: integer
+        style: form
+      - description: Indicates from what row to start returning data.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: form
+      - description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+        explode: true
+        in: query
+        name: fields
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Field by which to sort the returned items. Use any field in the model, or system fields lastModifiedTime or createdTime.
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -lastModifiedTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthControlListResponse'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Lists all global auth control exceptions for the program
+      tags:
+      - auth controls
+    post:
+      operationId: postAuthcontrols
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/auth_control_request'
+        description: Auth control object
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/auth_control_response'
+          description: Created
+        '400':
+          content: {}
+          description: Bad request
+        '409':
+          content: {}
+          description: Token already associated with a different payload
+        '500':
+          content: {}
+          description: Server error
+      summary: Creates an auth control exception
+      tags:
+      - auth controls
+  /authcontrols/exemptmids:
+    get:
+      operationId: getAuthcontrolsExemptmids
+      parameters:
+      - description: Card product token. Use "null" to get auth controls that are not associated with any card product.
+        explode: true
+        in: query
+        name: card_product
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: User token. Use "null" to get auth controls that are not associated with any user.
+        explode: true
+        in: query
+        name: user
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Number of items to retrieve. Count can be between 1 - 10 items.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          format: int32
+          type: integer
+        style: form
+      - description: Indicates from what row to start returning data.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: form
+      - description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+        explode: true
+        in: query
+        name: fields
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Field by which to sort the returned items. Use any field in the model, or system fields lastModifiedTime or createdTime.
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -lastModifiedTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthControlExemptMidsListResponse'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Lists all auth control exempted MIDs for the program
+      tags:
+      - auth controls
+    post:
+      operationId: postAuthcontrolsExemptmids
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/auth_control_exempt_mids_request'
+        description: Auth control exempt MID object
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/auth_control_exempt_mids_response'
+          description: Created
+        '400':
+          content: {}
+          description: Bad request
+        '409':
+          content: {}
+          description: Token already associated with a different payload
+        '500':
+          content: {}
+          description: Server error
+      summary: Creates an auth control for exempting MIDs
+      tags:
+      - auth controls
+  /authcontrols/exemptmids/{token}:
+    get:
+      operationId: getAuthcontrolsExemptmidsToken
+      parameters:
+      - description: Auth control token
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/auth_control_exempt_mids_response'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '404':
+          content: {}
+          description: Auth control exception MIDs not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns a specific auth control exemptmids
+      tags:
+      - auth controls
+    put:
+      operationId: putAuthcontrolsExemptmidsToken
+      parameters:
+      - description: Auth control token
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/auth_control_exempt_mids_update_request'
+        required: false
+      responses:
+        '204':
+          content: {}
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Updates the status an auth control exemptmids
+      tags:
+      - auth controls
+  /authcontrols/{token}:
+    get:
+      operationId: getAuthcontrolsToken
+      parameters:
+      - description: Auth control token
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+        explode: true
+        in: query
+        name: fields
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/auth_control_response'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '404':
+          content: {}
+          description: Auth control not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns a specific auth control exception
+      tags:
+      - auth controls
+    put:
+      operationId: putAuthcontrolsToken
+      parameters:
+      - description: Auth control token
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/auth_control_update_request'
+        description: Auth control object
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/auth_control_response'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Updates an auth control exception
+      tags:
+      - auth controls
+components:
+  schemas:
+    auth_control_update_request:
+      properties:
+        active:
+          default: true
+          type: boolean
+        association:
+          $ref: '#/components/schemas/spend_control_association'
+        end_time:
+          format: date-time
+          type: string
+        merchant_scope:
+          $ref: '#/components/schemas/merchant_scope'
+        name:
+          maxLength: 255
+          minLength: 0
+          type: string
+        start_time:
+          format: date-time
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - token
+      type: object
+    AuthControlExemptMidsListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/auth_control_exempt_mids_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    auth_control_request:
+      properties:
+        active:
+          default: true
+          type: boolean
+        association:
+          $ref: '#/components/schemas/spend_control_association'
+        end_time:
+          format: date-time
+          type: string
+        merchant_scope:
+          $ref: '#/components/schemas/auth_control_merchant_scope'
+        name:
+          maxLength: 255
+          minLength: 0
+          type: string
+        start_time:
+          format: date-time
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - name
+      type: object
+    spend_control_association:
+      description: Defines the group of users to which the velocity control applies.
+      properties:
+        account_template_token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        card_product_token:
+          description: 'Unique identifier of the card product.
+
+
+            Pass either `card_product_token` or `user_token`, not both.'
+          maxLength: 36
+          minLength: 1
+          type: string
+        user_token:
+          description: 'Unique identifier of the cardholder.
+
+
+            Pass either `card_product_token` or `user_token`, not both.'
+          maxLength: 36
+          minLength: 1
+          type: string
+      type: object
+    auth_control_exempt_mids_request:
+      properties:
+        association:
+          $ref: '#/components/schemas/spend_control_association'
+        end_time:
+          format: date-time
+          type: string
+        merchant_group_token:
+          description: 36 char max
+          maxLength: 36
+          minLength: 1
+          type: string
+        mid:
+          maxLength: 36
+          minLength: 1
+          type: string
+        name:
+          maxLength: 255
+          minLength: 0
+          type: string
+        start_time:
+          format: date-time
+          type: string
+        token:
+          type: string
+      required:
+      - name
+      type: object
+    auth_control_exempt_mids_update_request:
+      properties:
+        active:
+          default: false
+          type: boolean
+      type: object
+    auth_control_response:
+      properties:
+        active:
+          default: true
+          type: boolean
+        association:
+          $ref: '#/components/schemas/spend_control_association'
+        end_time:
+          format: date-time
+          type: string
+        merchant_scope:
+          $ref: '#/components/schemas/auth_control_merchant_scope'
+        name:
+          maxLength: 255
+          minLength: 0
+          type: string
+        start_time:
+          format: date-time
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - name
+      type: object
+    auth_control_exempt_mids_response:
+      properties:
+        active:
+          default: false
+          type: boolean
+        association:
+          $ref: '#/components/schemas/spend_control_association'
+        created:
+          format: date-time
+          type: string
+        end_time:
+          format: date-time
+          type: string
+        last_updated:
+          format: date-time
+          type: string
+        merchant_group_token:
+          description: 36 char max
+          maxLength: 36
+          minLength: 1
+          type: string
+        mid:
+          maxLength: 36
+          minLength: 1
+          type: string
+        name:
+          maxLength: 255
+          minLength: 0
+          type: string
+        start_time:
+          format: date-time
+          type: string
+        token:
+          type: string
+      required:
+      - name
+      type: object
+    auth_control_merchant_scope:
+      properties:
+        mcc:
+          description: 4 char max
+          maxLength: 4
+          minLength: 1
+          type: string
+        mcc_group:
+          description: 36 char max
+          maxLength: 36
+          minLength: 1
+          type: string
+        merchant_group_token:
+          description: 36 char max
+          maxLength: 36
+          minLength: 1
+          type: string
+        mid:
+          description: 36 char max
+          maxLength: 36
+          minLength: 1
+          type: string
+      type: object
+    merchant_scope:
+      description: 'Defines the group of merchants to which the velocity control applies.
+
+
+        Populate no more than one field of the `merchant_scope` object.
+
+        If no fields are populated, the velocity control applies to all merchants.'
+      properties:
+        mcc:
+          description: 'Merchant Category Code (MCC).
+
+            Identifies the type of products or services provided by the merchant.
+
+
+            Enter a value to control spending on a particular type of product or service.'
+          maxLength: 4
+          minLength: 1
+          type: string
+        mcc_group:
+          description: 'Token identifying a group of MCCs.
+
+            Enter a value to control spending on a group of product or service types.
+
+
+            Send a `GET` request to `/mccgroups` to retrieve MCC group tokens.'
+          maxLength: 36
+          minLength: 1
+          type: string
+        mid:
+          description: 'Merchant identifier (MID).
+
+            Identifies a specific merchant.
+
+
+            Enter a value to control spending with a particular merchant.'
+          maxLength: 36
+          minLength: 1
+          type: string
+      type: object
+    AuthControlListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/auth_control_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

@@ -1,0 +1,672 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries card transitions API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: card transitions
+paths:
+  /cardtransitions:
+    post:
+      operationId: postCardtransitions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/card_transition_request'
+        required: false
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/card_transition_response'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '409':
+          content: {}
+          description: Token already associated with a different payload
+        '422':
+          content: {}
+          description: Cardholder not active
+        '500':
+          content: {}
+          description: Server error
+      summary: Creates a card transition object
+      tags:
+      - card transitions
+  /cardtransitions/card/{token}:
+    get:
+      operationId: getCardtransitionsCardToken
+      parameters:
+      - description: Card token
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Number of card transitions to retrieve
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          format: int32
+          minimum: 0
+          type: integer
+        style: form
+      - description: Start index
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: form
+      - description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+        explode: true
+        in: query
+        name: fields
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Sort order
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -createdTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardTransitionListResponse'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Lists all card transitions
+      tags:
+      - card transitions
+  /cardtransitions/{token}:
+    get:
+      operationId: getCardtransitionsToken
+      parameters:
+      - description: Card transition token
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+        explode: true
+        in: query
+        name: fields
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/card_transition_response'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '404':
+          content: {}
+          description: Transition not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns a card transition object
+      tags:
+      - card transitions
+components:
+  schemas:
+    text:
+      description: Specifies personalized text that appears on the card.
+      properties:
+        name_line_1:
+          $ref: '#/components/schemas/text_value'
+        name_line_2:
+          $ref: '#/components/schemas/text_value'
+        name_line_3:
+          $ref: '#/components/schemas/text_value'
+      required:
+      - name_line_1
+      type: object
+    card_personalization:
+      description: Specifies personalized attributes to be added to the card.
+      properties:
+        carrier:
+          $ref: '#/components/schemas/carrier'
+        images:
+          $ref: '#/components/schemas/images'
+        perso_type:
+          description: Specifies the type of card personalization.
+          enum:
+          - EMBOSS
+          - LASER
+          - FLAT
+          type: string
+        text:
+          $ref: '#/components/schemas/text'
+      required:
+      - text
+      type: object
+    card_metadata:
+      properties:
+        metadata:
+          additionalProperties:
+            type: string
+          type: object
+      type: object
+    card_transition_response:
+      properties:
+        barcode:
+          type: string
+        bulk_issuance_token:
+          type: string
+        card:
+          $ref: '#/components/schemas/card_metadata'
+        card_product_token:
+          maxLength: 36
+          minLength: 0
+          type: string
+        card_token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        channel:
+          enum:
+          - API
+          - IVR
+          - FRAUD
+          - ADMIN
+          - SYSTEM
+          type: string
+        created_time:
+          format: date-time
+          type: string
+        created_timestamp:
+          format: date-time
+          type: string
+        expedite:
+          default: false
+          type: boolean
+        expiration:
+          type: string
+        expiration_time:
+          type: string
+        fulfillment:
+          $ref: '#/components/schemas/CardFulfillmentRequest'
+        fulfillment_status:
+          enum:
+          - ISSUED
+          - ORDERED
+          - REJECTED
+          - SHIPPED
+          - DELIVERED
+          - DIGITALLY_PRESENTED
+          type: string
+        last_four:
+          type: string
+        new_pan_from_card_token:
+          type: string
+        pan:
+          type: string
+        pin_is_set:
+          default: false
+          type: boolean
+        reason:
+          maxLength: 255
+          minLength: 0
+          type: string
+        reason_code:
+          enum:
+          - '00'
+          - '01'
+          - '02'
+          - '03'
+          - '04'
+          - '05'
+          - '06'
+          - '07'
+          - 08
+          - 09
+          - '10'
+          - '11'
+          - '12'
+          - '13'
+          - '14'
+          - '15'
+          - '16'
+          - '17'
+          - '18'
+          - '19'
+          - '20'
+          - '21'
+          - '22'
+          - '23'
+          - '24'
+          - '25'
+          - '26'
+          - '27'
+          - '28'
+          - '29'
+          - '30'
+          - '31'
+          - '32'
+          - '86'
+          type: string
+        reissue_pan_from_card_token:
+          type: string
+        state:
+          enum:
+          - ACTIVE
+          - SUSPENDED
+          - TERMINATED
+          - UNACTIVATED
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        type:
+          enum:
+          - fulfillment.issued
+          - state.activated
+          - state.suspended
+          - state.reinstated
+          - state.terminated
+          - state.limited
+          - fulfillment.ordered
+          - fulfillment.rejected
+          - fulfillment.shipped
+          - fulfillment.delivered
+          - fulfillment.digitally_presented
+          readOnly: true
+          type: string
+        user:
+          $ref: '#/components/schemas/cardholder_metadata'
+        user_token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        validations:
+          $ref: '#/components/schemas/ValidationsResponse'
+      required:
+      - barcode
+      - card_product_token
+      - card_token
+      - channel
+      - expiration
+      - expiration_time
+      - fulfillment_status
+      - last_four
+      - pan
+      - pin_is_set
+      - state
+      - token
+      - type
+      - user_token
+      type: object
+    text_value:
+      properties:
+        value:
+          description: Line of personalized text printed on the card.
+          type: string
+      type: object
+    carrier:
+      description: Specifies attributes of the card carrier.
+      properties:
+        logo_file:
+          description: Specifies an image to display on the card carrier.
+          type: string
+        logo_thumbnail_file:
+          description: Specifies a thumbnail-sized rendering of the image specified in the `logo_file` field.
+          type: string
+        message_file:
+          description: Specifies a text file containing a custom message to print on the card carrier.
+          type: string
+        message_line:
+          description: Specifies a custom message that appears on the card carrier.
+          type: string
+        message_line_2:
+          description: Specifies the second line of a custom message that appears on the card carrier.
+          type: string
+        template_id:
+          description: Specifies the card carrier template to use.
+          type: string
+      type: object
+    CardTransitionListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/card_transition_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    UserValidationResponse:
+      properties:
+        birth_date:
+          default: false
+          description: yyyy-MM-dd
+          type: boolean
+        phone:
+          default: false
+          description: 10 char max, phone number
+          type: boolean
+        random_name_line1_postfix:
+          default: false
+          description: Six-char random name postfix
+          type: boolean
+        ssn:
+          default: false
+          description: Last four digits of SSN
+          type: boolean
+      required:
+      - birth_date
+      - phone
+      - random_name_line1_postfix
+      - ssn
+      type: object
+    images:
+      description: Specifies personalized images that appear on the card.
+      properties:
+        card:
+          $ref: '#/components/schemas/images_card'
+        carrier:
+          $ref: '#/components/schemas/ImagesCarrier'
+        carrier_return_window:
+          $ref: '#/components/schemas/images_carrier_return_window'
+        signature:
+          $ref: '#/components/schemas/images_signature'
+      type: object
+    shipping:
+      properties:
+        care_of_line:
+          description: 255 char max
+          type: string
+        method:
+          enum:
+          - LOCAL_MAIL
+          - LOCAL_MAIL_PACKAGE
+          - GROUND
+          - TWO_DAY
+          - OVERNIGHT
+          - INTERNATIONAL
+          - INTERNATIONAL_PRIORITY
+          - LOCAL_PRIORITY
+          - FEDEX_EXPEDITED
+          - FEDEX_REGULAR
+          - UPS_EXPEDITED
+          - UPS_REGULAR
+          - USPS_EXPEDITED
+          - USPS_REGULAR
+          type: string
+        recipient_address:
+          $ref: '#/components/schemas/fulfillment_address_request'
+        return_address:
+          $ref: '#/components/schemas/fulfillment_address_request'
+      type: object
+    cardholder_metadata:
+      description: Contains customer-provided information about the cardholder that performed the transaction.
+      properties:
+        metadata:
+          additionalProperties:
+            type: string
+          description: Associates customer-provided metadata with the cardholder.
+          type: object
+      type: object
+    ValidationsRequest:
+      properties:
+        user:
+          $ref: '#/components/schemas/UserValidationRequest'
+      type: object
+    ImagesCarrier:
+      description: Specifies personalized images that appear on the card carrier.
+      properties:
+        message_1:
+          description: Specifies a custom message that appears on the card carrier.
+          type: string
+        name:
+          description: Specifies a PNG image to display on the card carrier.
+          type: string
+      type: object
+    UserValidationRequest:
+      properties:
+        birth_date:
+          description: yyyy-MM-dd
+          format: date-time
+          type: string
+        phone:
+          description: 'Phone #'
+          maxLength: 255
+          minLength: 0
+          type: string
+        random_name_line1_postfix:
+          description: Six-char random name postfix
+          maxLength: 6
+          minLength: 6
+          type: string
+        ssn:
+          description: Last four digits of SSN
+          maxLength: 255
+          minLength: 0
+          type: string
+      type: object
+    ValidationsResponse:
+      properties:
+        user:
+          $ref: '#/components/schemas/UserValidationResponse'
+      required:
+      - user
+      type: object
+    images_signature:
+      description: Specifies an image of the cardholder's signature.
+      properties:
+        name:
+          description: Specifies a PNG image of the cardholder's signature.
+          type: string
+      type: object
+    images_card:
+      description: Specifies personalized images that appear on the card.
+      properties:
+        name:
+          description: Specifies a PNG image to display on the card.
+          type: string
+        thermal_color:
+          description: Specifies the color of the image displayed on the card.
+          type: string
+      type: object
+    images_carrier_return_window:
+      description: Specifies a custom image to display in the return address window of the card carrier envelope.
+      properties:
+        name:
+          description: Specifies a PNG image to display in the return address window of envelopes used for sending cards to cardholders.
+          type: string
+      type: object
+    fulfillment_address_request:
+      properties:
+        address1:
+          maxLength: 255
+          minLength: 0
+          type: string
+        address2:
+          maxLength: 255
+          minLength: 0
+          type: string
+        city:
+          maxLength: 40
+          minLength: 0
+          type: string
+        country:
+          maxLength: 40
+          minLength: 0
+          type: string
+        first_name:
+          maxLength: 40
+          minLength: 0
+          type: string
+        last_name:
+          maxLength: 40
+          minLength: 0
+          type: string
+        middle_name:
+          maxLength: 40
+          minLength: 0
+          type: string
+        phone:
+          maxLength: 20
+          minLength: 0
+          type: string
+        postal_code:
+          maxLength: 10
+          minLength: 0
+          type: string
+        state:
+          maxLength: 32
+          minLength: 0
+          type: string
+        zip:
+          maxLength: 10
+          minLength: 0
+          type: string
+      type: object
+    card_transition_request:
+      properties:
+        card_token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        channel:
+          enum:
+          - API
+          - IVR
+          - FRAUD
+          - ADMIN
+          - SYSTEM
+          type: string
+        reason:
+          maxLength: 255
+          minLength: 0
+          type: string
+        reason_code:
+          enum:
+          - '00'
+          - '01'
+          - '02'
+          - '03'
+          - '04'
+          - '05'
+          - '06'
+          - '07'
+          - 08
+          - 09
+          - '10'
+          - '11'
+          - '12'
+          - '13'
+          - '14'
+          - '15'
+          - '16'
+          - '17'
+          - '18'
+          - '19'
+          - '20'
+          - '21'
+          - '22'
+          - '23'
+          - '24'
+          - '25'
+          - '26'
+          - '27'
+          - '28'
+          - '29'
+          - '30'
+          - '31'
+          - '32'
+          - '86'
+          type: string
+        state:
+          enum:
+          - ACTIVE
+          - LIMITED
+          - SUSPENDED
+          - TERMINATED
+          readOnly: true
+          type: string
+        sync_state_with_dwts:
+          readOnly: true
+          type: boolean
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        validations:
+          $ref: '#/components/schemas/ValidationsRequest'
+      required:
+      - card_token
+      - channel
+      - state
+      type: object
+    CardFulfillmentRequest:
+      properties:
+        card_fulfillment_reason:
+          enum:
+          - NEW
+          - LOST_STOLEN
+          - EXPIRED
+          type: string
+        card_personalization:
+          $ref: '#/components/schemas/card_personalization'
+        shipping:
+          $ref: '#/components/schemas/shipping'
+      required:
+      - card_personalization
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

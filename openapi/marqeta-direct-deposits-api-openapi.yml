@@ -1,0 +1,577 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries direct deposits API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: direct deposits
+paths:
+  /directdeposits:
+    get:
+      operationId: getDirectdeposits
+      parameters:
+      - description: Number of direct deposits to retrieve
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          format: int32
+          maximum: 100
+          type: integer
+        style: form
+      - description: Start index
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: form
+      - description: Reversed after grace period
+        explode: true
+        in: query
+        name: reversed_after_grace_period
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: User token
+        explode: true
+        in: query
+        name: user_token
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Business token
+        explode: true
+        in: query
+        name: business_token
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Direct deposit state
+        explode: true
+        in: query
+        name: direct_deposit_state
+        required: false
+        schema:
+          enum:
+          - PENDING
+          - APPLIED
+          - REVERSED
+          - REJECTED
+          type: string
+        style: form
+      - description: Start settlement date
+        explode: true
+        in: query
+        name: start_settlement_date
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: End settlement date
+        explode: true
+        in: query
+        name: end_settlement_date
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Sort order
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -lastModifiedTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DirectDepositListResponse'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Lists all direct deposits
+      tags:
+      - direct deposits
+  /directdeposits/accounts/{user_or_business_token}:
+    get:
+      deprecated: true
+      operationId: getDirectdepositsAccountsUserorbusinesstoken
+      parameters:
+      - explode: false
+        in: path
+        name: user_or_business_token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepositAccountResponse'
+          description: Success
+        '400':
+          content: {}
+          description: Cardholder not found
+        '404':
+          content: {}
+          description: Account not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns an account and routing number which can be used for direct deposit
+      tags:
+      - direct deposits
+    put:
+      deprecated: true
+      operationId: putDirectdepositsAccountsUserorbusinesstoken
+      parameters:
+      - description: User or business token
+        explode: false
+        in: path
+        name: user_or_business_token
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepositAccountUpdateRequest'
+        description: Deposit account update request
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepositAccountResponse'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Updates a specific direct deposit account
+      tags:
+      - direct deposits
+  /directdeposits/transitions:
+    get:
+      operationId: getDirectdepositsTransitions
+      parameters:
+      - description: Number of direct deposit transitions to retrieve
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          format: int32
+          maximum: 100
+          type: integer
+        style: form
+      - description: User token
+        explode: true
+        in: query
+        name: user_token
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Business token
+        explode: true
+        in: query
+        name: business_token
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Direct deposit token
+        explode: true
+        in: query
+        name: direct_deposit_token
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Start index
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: form
+      - description: Sort order
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -createdTime
+          type: string
+        style: form
+      - description: 'Comma-delimited list of direct deposit states to display e.g. PENDING | REVERSED | APPLIED | REJECTED '
+        explode: true
+        in: query
+        name: states
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DirectDepositTransitionListResponse'
+          description: Success
+        '404':
+          content: {}
+          description: Not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns a list of direct deposit transitions
+      tags:
+      - direct deposits
+    post:
+      operationId: postDirectdepositsTransitions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DirectDepositTransitionRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DirectDepositTransitionResponse'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Creates a direct deposit transition
+      tags:
+      - direct deposits
+  /directdeposits/transitions/{token}:
+    get:
+      operationId: getDirectdepositsTransitionsToken
+      parameters:
+      - explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DirectDepositTransitionResponse'
+          description: Success
+        '404':
+          content: {}
+          description: Direct deposit transition not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns a direct deposit transition
+      tags:
+      - direct deposits
+  /directdeposits/{token}:
+    get:
+      operationId: getDirectdepositsToken
+      parameters:
+      - explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepositDepositResponse'
+          description: Success
+        '404':
+          content: {}
+          description: Direct deposit entry not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns a direct deposit entry
+      tags:
+      - direct deposits
+components:
+  schemas:
+    DepositAccountResponse:
+      properties:
+        account_number:
+          type: string
+        allow_immediate_credit:
+          default: false
+          type: boolean
+        business_token:
+          type: string
+        routing_number:
+          type: string
+        token:
+          type: string
+        user_token:
+          type: string
+      required:
+      - account_number
+      - routing_number
+      - token
+      type: object
+    DirectDepositTransitionResponse:
+      properties:
+        channel:
+          enum:
+          - API
+          - IVR
+          - FRAUD
+          - ADMIN
+          - SYSTEM
+          - NETWORK
+          - PROD_SUPPORT
+          - UNSUPPORTED
+          type: string
+        created_time:
+          format: date-time
+          type: string
+        direct_deposit_account_token:
+          type: string
+        direct_deposit_token:
+          type: string
+        reason:
+          type: string
+        reason_code:
+          type: string
+        state:
+          enum:
+          - PENDING
+          - APPLIED
+          - REVERSED
+          - REJECTED
+          type: string
+        token:
+          type: string
+        transaction_token:
+          type: string
+        type:
+          type: string
+      type: object
+    DirectDepositTransitionRequest:
+      properties:
+        channel:
+          enum:
+          - API
+          - SYSTEM
+          - PROD_SUPPORT
+          type: string
+        direct_deposit_token:
+          type: string
+        idempotentHash:
+          type: string
+        reason:
+          maxLength: 255
+          minLength: 0
+          type: string
+        reason_code:
+          enum:
+          - R01
+          - R02
+          - R03
+          - R04
+          - R06
+          - R08
+          - R09
+          - R10
+          - R11
+          - R14
+          - R15
+          - R16
+          - R17
+          - R18
+          - R20
+          - R23
+          - R24
+          - R29
+          type: string
+        state:
+          enum:
+          - PENDING
+          - APPLIED
+          - REVERSED
+          - REJECTED
+          type: string
+        token:
+          type: string
+      required:
+      - channel
+      - direct_deposit_token
+      - reason
+      - state
+      type: object
+    DirectDepositTransitionListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/DirectDepositTransitionResponse'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    DirectDepositListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/DepositDepositResponse'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    DepositDepositResponse:
+      description: Contains information about a direct deposit.
+      properties:
+        amount:
+          description: Amount being debited or credited.
+          type: number
+        business_token:
+          description: The unique identifier of the business account holder.
+          type: string
+        company_discretionary_data:
+          description: Company-specific data provided by the direct deposit originator.
+          type: string
+        company_entry_description:
+          description: Company-specific data provided by the direct deposit originator.
+          type: string
+        company_identification:
+          description: Alphanumeric code that identifies the direct deposit originator.
+          type: string
+        company_name:
+          description: Name of the direct deposit originator.
+          type: string
+        created_time:
+          description: Date and time when the direct deposit account was created.
+          format: date-time
+          type: string
+        direct_deposit_account_token:
+          description: The unique identifier of the direct deposit account.
+          type: string
+        individual_identification_number:
+          description: Accounting number by which the recipient is known to the direct deposit originator.
+          type: string
+        individual_name:
+          description: Name of the direct deposit recipient.
+          type: string
+        last_modified_time:
+          description: Date and time when the direct deposit account was last modified.
+          format: date-time
+          type: string
+        settlement_date:
+          description: Date and time when the credit or debit is applied.
+          format: date-time
+          type: string
+        standard_entry_class_code:
+          description: Three-letter code identifying the type of entry.
+          type: string
+        state:
+          description: Current status of the direct deposit record.
+          enum:
+          - PENDING
+          - APPLIED
+          - REVERSED
+          - REJECTED
+          type: string
+        state_reason:
+          description: Explanation for why the direct deposit record is in the current state.
+          type: string
+        state_reason_code:
+          description: Standard code describing the reason for the current state.
+          type: string
+        token:
+          description: The unique identifier of the direct deposit record.
+          type: string
+        type:
+          description: Determines whether funds are being debited from or credited to the account.
+          enum:
+          - CREDIT
+          - DEBIT
+          type: string
+        user_token:
+          description: The unique identifier of the user account holder.
+          type: string
+      type: object
+    DepositAccountUpdateRequest:
+      properties:
+        allow_immediate_credit:
+          default: false
+          type: boolean
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

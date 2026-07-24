@@ -1,0 +1,186 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries Internal - BIN Pools API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: Internal - BIN Pools
+paths:
+  /internal/binpools:
+    get:
+      description: Returns a list of all BIN pools
+      operationId: getAllPools
+      responses:
+        default:
+          content: {}
+          description: successful operation
+      summary: Get all BIN pools
+      tags:
+      - Internal - BIN Pools
+    post:
+      description: Creates a new BIN pool
+      operationId: createPool
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BinPoolCreateRequest'
+        description: Create request
+        required: true
+      responses:
+        default:
+          content: {}
+          description: successful operation
+      summary: Create BIN pool
+      tags:
+      - Internal - BIN Pools
+  /internal/binpools/{token}:
+    delete:
+      description: Soft deletes a BIN pool by setting active=false
+      operationId: deletePool
+      parameters:
+      - description: Pool token
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        default:
+          content: {}
+          description: successful operation
+      summary: Delete BIN pool
+      tags:
+      - Internal - BIN Pools
+    get:
+      description: Returns details of a specific BIN pool
+      operationId: getPool
+      parameters:
+      - description: Pool token
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        default:
+          content: {}
+          description: successful operation
+      summary: Get BIN pool by token
+      tags:
+      - Internal - BIN Pools
+    put:
+      description: Updates an existing BIN pool
+      operationId: updatePool
+      parameters:
+      - description: Pool token
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BinPoolUpdateRequest'
+        description: Update request
+        required: true
+      responses:
+        default:
+          content: {}
+          description: successful operation
+      summary: Update BIN pool
+      tags:
+      - Internal - BIN Pools
+components:
+  schemas:
+    BinPoolUpdateRequest:
+      description: Request to update a BIN pool
+      properties:
+        active:
+          description: Whether the pool is active
+          example: false
+          type: boolean
+        config:
+          description: JSON configuration object
+          example: '{\"reserved_capacity\": 20, \"min_available_bins\": 5}'
+          type: string
+        description:
+          description: Description of the BIN pool
+          example: Updated description
+          type: string
+        name:
+          description: Name of the BIN pool
+          example: Updated Pool Name
+          type: string
+        usage_type:
+          description: BIN selection strategy
+          enum:
+          - RANDOM
+          - LEAST_EXHAUSTED
+          - SEQUENTIAL
+          example: RANDOM
+          type: string
+      type: object
+    BinPoolCreateRequest:
+      description: Request to create a new BIN pool
+      properties:
+        bin_prefixes:
+          description: List of BIN prefixes to add to the pool
+          items:
+            type: string
+          type: array
+        config:
+          description: JSON configuration object
+          example: '{\"reserved_capacity\": 10, \"min_available_bins\": 2}'
+          type: string
+        description:
+          description: Description of the BIN pool
+          example: Primary pool for standard Visa cards
+          type: string
+        name:
+          description: Name of the BIN pool
+          example: Standard Visa Pool
+          type: string
+        pool_type:
+          description: Type of pool
+          enum:
+          - STANDARD
+          - GOOGLE_VCN
+          example: STANDARD
+          type: string
+        token:
+          description: Unique token for the BIN pool
+          example: standard-visa-pool-01
+          type: string
+        usage_type:
+          description: BIN selection strategy
+          enum:
+          - RANDOM
+          - LEAST_EXHAUSTED
+          - SEQUENTIAL
+          example: LEAST_EXHAUSTED
+          type: string
+      required:
+      - name
+      - token
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

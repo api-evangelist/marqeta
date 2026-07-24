@@ -1,0 +1,523 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries Adjustments API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- description: '// Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    Use the adjustments endpoints to create and retrieve account adjustments on Marqeta''s credit platform.
+
+    An account adjustment adjusts the amount of a <</core-api/credit-account-journal-entries, journal entry>> or account balance.
+
+
+    Creating an adjustment triggers the creation of a <</core-api/credit-account-journal-entries, journal entry>> belonging to the `ADJUSTMENT` group.
+
+    For more on adjustment journal entries, see <</developer-guides/about-credit-account-journal-entries#_adjustments, Adjustments>> in the About Credit Account Journal Entries guide.'
+  name: Adjustments
+paths:
+  /accounts/{account_token}/adjustments:
+    get:
+      description: 'Retrieve an array of adjustments for a credit account.
+
+
+        This endpoint supports <</core-api/sorting-and-pagination, pagination>>.'
+      operationId: getAdjustmentsByAccount
+      parameters:
+      - description: 'Unique identifier of the credit account for which you want to retrieve adjustments.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: Number of account adjustment resources to retrieve.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - description: Sort order index of the first resource in the returned array.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                count: 2
+                data:
+                - account_token: my_account_token_12
+                  adjustment_detail_object: null
+                  amount: -25
+                  currency_code: USD
+                  description: Waived late payment fee
+                  detail_token: null
+                  external_adjustment_id: null
+                  note: null
+                  original_ledger_entry_token: a0216141-13d6-e2e2-7227-abcd12345678
+                  reason: OTHER
+                  related_detail_object: null
+                  related_detail_token: null
+                  source_account_type: PROGRAM_FUNDING
+                  token: my_account_adjustment_token1234
+                  type: FEE
+                - account_token: my_account_token_12
+                  adjustment_detail_object:
+                    account_token: my_account_token_12
+                    average_daily_balance: 181.67
+                    created_date: 2024-08-01 07:00:19.755000+00:00
+                    currency_code: USD
+                    daily_periodic_rate: 0.00041068
+                    days_in_billing_cycle: 31
+                    goto_apr: 14.99
+                    interest_amount: 2.31
+                    statement_balance: 208.93
+                    statement_closing_date: 2024-08-01 03:59:59.999000+00:00
+                    statement_opening_date: 2024-07-01 04:00:00
+                    statement_token: statement_token_75b
+                    token: interest_detail_token1234
+                    updated_date: 2024-08-01 07:00:19.755000+00:00
+                  amount: -100
+                  currency_code: USD
+                  description: interest adjustment
+                  detail_token: interest_detail_token1234
+                  external_adjustment_id: e37e27a1-ad70-382e-846d-a31ab59d00f9
+                  note: interest adjustment for dispute
+                  original_ledger_entry_token: a0216141-13d6-e2e2-7227-abcd12345678
+                  reason: OTHER
+                  related_detail_object:
+                    account_token: account_token_12
+                    amount: 500
+                    category: FRAUD
+                    created_time: 2025-07-01 00:27:09+00:00
+                    ledger_entry_token: journal_entry_token1222
+                    notes: string
+                    resolved_at: 2025-07-01 00:27:09+00:00
+                    status: ACTIVE
+                    token: dispute_token_1234
+                    updated_time: 2025-07-01 00:27:09+00:00
+                  related_detail_token: dispute_token1234
+                  source_account_type: PROGRAM_FUNDING
+                  token: my_account_adjustment_token1234
+                  type: INTEREST
+                end_index: 1
+                is_more: false
+                start_index: 0
+              schema:
+                $ref: '#/components/schemas/AccountAdjustmentPage'
+          description: Expected response to a valid request.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: List account adjustments
+      tags:
+      - Adjustments
+    post:
+      description: Create an adjustment for an existing credit account.
+      operationId: createAdjustmentForAccount
+      parameters:
+      - description: 'Unique identifier of the credit account for which you want to create an adjustment.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            example:
+              amount: -25
+              currency_code: USD
+              description: Waived late payment fee
+              original_ledger_entry_token: 2384f927-e4fe-47af-8ff6-0712ee41a2eb
+              source_account_type: SPONSOR_BANK
+            schema:
+              $ref: '#/components/schemas/AccountAdjustmentReq'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              example:
+                account_token: my_account_token_12
+                adjustment_detail_object: null
+                amount: -25
+                created_time: 2025-04-01 23:41:58.802000+00:00
+                currency_code: USD
+                description: Waived late payment fee
+                detail_token: null
+                external_adjustment_id: null
+                note: null
+                original_ledger_entry_token: a0216141-13d6-e2e2-7227-abcd12345678
+                reason: OTHER
+                related_detail_object: null
+                related_detail_token: null
+                source_account_type: SPONSOR_BANK
+                token: my_account_adjustment_token1234
+                type: FEE
+              schema:
+                $ref: '#/components/schemas/AccountAdjustmentResponse'
+          description: Expected response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      summary: Create account adjustment
+      tags:
+      - Adjustments
+  /accounts/{account_token}/adjustments/{adjustment_token}:
+    get:
+      description: Retrieve an adjustment for a credit account.
+      operationId: retrieveAdjustment
+      parameters:
+      - description: 'Unique identifier of the credit account for which you want to retrieve an adjustment.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: 'Unique identifier of the adjustment to retrieve.
+
+
+          Send a `GET` request to `/credit/accounts/{account_token}/adjustments` to retrieve existing account adjustment tokens.'
+        explode: false
+        in: path
+        name: adjustment_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing adjustment token
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                account_token: my_account_token_12
+                adjustment_detail_object: null
+                amount: -25
+                currency_code: USD
+                description: Waived late payment fee
+                detail_token: null
+                external_adjustment_id: null
+                note: null
+                original_ledger_entry_token: a0216141-13d6-e2e2-7227-abcd12345678
+                reason: OTHER
+                related_detail_object: null
+                related_detail_token: null
+                source_account_type: SPONSOR_BANK
+                token: my_account_adjustment_token1234
+                type: FEE
+              schema:
+                $ref: '#/components/schemas/AccountAdjustmentResponse'
+          description: A JSON object containing account_adjustment information
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      summary: Retrieve account adjustment
+      tags:
+      - Adjustments
+components:
+  schemas:
+    AccountAdjustmentReq:
+      description: Contains information relevant to creating an account adjustment.
+      properties:
+        amount:
+          description: 'Amount of the adjustment.
+
+
+            Value must be negative if `original_ledger_entry_token` is not passed.'
+          maximum: 1000000
+          type: number
+        currency_code:
+          $ref: '#/components/schemas/CurrencyCode'
+        description:
+          description: Description of the adjustment.
+          maxLength: 255
+          minLength: 1
+          type: string
+        external_adjustment_id:
+          description: Unique identifier you provide of an associated external adjustment that exists outside Marqeta's credit platform.
+          format: uuid
+          type: string
+        note:
+          description: Additional information on the adjustment.
+          maxLength: 255
+          type: string
+        original_ledger_entry_token:
+          description: 'Unique identifier of the original journal entry needing the adjustment.
+
+
+            Required when adjusting an existing journal entry.'
+          format: uuid
+          type: string
+        reason:
+          description: 'Reason for the adjustment.
+
+
+            * `DISPUTE` - The adjustment occurred because a dispute was initiated.
+
+            * `DISPUTE_RESOLUTION` - The adjustment occurred because of the result of a dispute resolution.
+
+            * `RETURNED_OR_CANCELED_PAYMENT` - The adjustment occurred because a payment was returned or canceled.
+
+            * `OTHER` - Any other reason the adjustment occurred. For example, a waived fee or account write-off.'
+          enum:
+          - DISPUTE
+          - DISPUTE_RESOLUTION
+          - RETURNED_OR_CANCELED_PAYMENT
+          - OTHER
+          type: string
+        source_account_type:
+          description: The source account type.
+          enum:
+          - NETWORK
+          - SPONSOR_BANK
+          - MQ_RESERVE
+          - PROGRAM_FUNDING
+          type: string
+        token:
+          description: Unique identifier of the adjustment.
+          maxLength: 36
+          type: string
+      required:
+      - amount
+      - currency_code
+      - description
+      type: object
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
+      type: string
+    AccountAdjustmentResponse:
+      description: Contains information returned for account adjustment.
+      properties:
+        account_token:
+          description: Unique identifier of the credit account on which the adjustment was made.
+          maxLength: 36
+          type: string
+        adjustment_detail_object:
+          description: 'Contains the adjustment''s full details.
+
+
+            The fields returned in this object depend on the adjustment type.
+
+
+            Interest returns interest details.
+
+            For the specific fields returned, see the `detail_object` fields marked "Returned for interest journal entries" in the <</core-api/credit-account-journal-entries#getAccountJournalEntry, account journal entry response fields>>.
+
+
+            Disputes return dispute details.
+
+            For the specific fields returned, see the <</core-api/credit-account-disputes#retrieveDispute, dispute response fields>>.'
+          nullable: true
+          type: object
+        amount:
+          description: Amount of the adjustment.
+          type: number
+        created_time:
+          description: Date and time when the account adjustment was applied, in UTC.
+          format: date-time
+          type: string
+        currency_code:
+          $ref: '#/components/schemas/CurrencyCode'
+        description:
+          description: Description of the adjustment.
+          minLength: 1
+          type: string
+        detail_token:
+          description: 'Unique identifier of the adjustment detail.
+
+            For example, the token of the dispute, the interest charge, or the returned payment that prompted the adjustment.
+
+
+            Returned when the system automatically applies an adjustment.'
+          maxLength: 36
+          nullable: true
+          type: string
+        external_adjustment_id:
+          description: Unique identifier you provide of an associated external adjustment that exists outside Marqeta's credit platform.
+          format: uuid
+          nullable: true
+          type: string
+        note:
+          description: Additional information on the adjustment.
+          nullable: true
+          type: string
+        original_ledger_entry_token:
+          description: Unique identifier of the original journal entry needing the adjustment.
+          format: uuid
+          type: string
+        reason:
+          description: 'Reason for the adjustment.
+
+
+            * `DISPUTE` - The adjustment occurred because a dispute was initiated.
+
+            * `DISPUTE_RESOLUTION` - The adjustment occurred because of the result of a dispute resolution.
+
+            * `RETURNED_OR_CANCELED_PAYMENT` - The adjustment occurred because a payment was returned or canceled.
+
+            * `OTHER` - Any other reason the adjustment occurred. For example, a waived fee.'
+          enum:
+          - DISPUTE
+          - DISPUTE_RESOLUTION
+          - RETURNED_OR_CANCELED_PAYMENT
+          - OTHER
+          type: string
+        related_detail_object:
+          description: 'Contains full details of the related dispute or returned payment.
+
+
+            The fields returned in this object depend on whether a dispute or returned payment led to the interest adjustment.
+
+            A dispute returns dispute details; a returned payment returns payment details.
+
+
+            For more on the dispute details returned, see the <</core-api/credit-account-disputes#retrieveDispute, dispute response fields>>.
+
+
+            For more on the returned payment details returned, see the <</core-api/credit-account-payments#retrievePayment, payment response fields>>.
+
+
+            This field is returned for interest adjustments only.'
+          nullable: true
+          type: object
+        related_detail_token:
+          description: 'Unique identifier of the dispute or returned payment that prompted the interest adjustment.
+
+
+            This field is returned for interest adjustments only.'
+          maxLength: 36
+          nullable: true
+          type: string
+        source_account_type:
+          description: The source account type.
+          enum:
+          - NETWORK
+          - SPONSOR_BANK
+          - MQ_RESERVE
+          - PROGRAM_FUNDING
+          type: string
+        token:
+          description: 'Unique identifier of the adjustment.
+
+
+            If in the `detail_object`, unique identifier of the detail object.'
+          type: string
+        type:
+          description: 'Type of adjustment.
+
+
+            The adjustment is made on its correlating amount (for example, purchase adjustments are made on purchase amounts).
+
+            You can use general adjustments for standalone adjustments made on the credit account balance itself, which includes account write-offs, credits, and more.'
+          enum:
+          - PURCHASE
+          - FEE
+          - REWARD
+          - INTEREST
+          - GENERAL
+          type: string
+      required:
+      - account_token
+      - amount
+      - currency_code
+      - description
+      - reason
+      - source_account_type
+      - token
+      - type
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    AccountAdjustmentPage:
+      description: Returns paginated account adjustments.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: Contains one or more account adjustments.
+          items:
+            $ref: '#/components/schemas/AccountAdjustmentResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

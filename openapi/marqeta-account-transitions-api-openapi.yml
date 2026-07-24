@@ -1,0 +1,742 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries Account Transitions API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- description: '// Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    Use the account transitions endpoints to create and retrieve account transitions on Marqeta''s credit platform.
+
+    An account transition occurs when a <</core-api/credit-accounts, credit account>> transitions to a new status.
+
+
+    To receive webhook notifications when account transition events occur, see <</core-api/event-types#_credit_account_transition_events, Credit account transition events>> in Event Types.'
+  name: Account Transitions
+paths:
+  /accounts/{account_token}/accounttransitions:
+    get:
+      description: 'Retrieve an array of transitions on a credit account.
+
+
+        This endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>.'
+      operationId: listAccountTransitions
+      parameters:
+      - description: 'Unique identifier of the credit account for which you want to retrieve transitions.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: Number of account transition resources to retrieve.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - description: Sort order index of the first resource in the returned array.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: 'Field on which to sort.
+
+          Prefix the field name with a hyphen (`-`) to sort in descending order.
+
+          Omit the hyphen to sort in ascending order.
+
+
+          *NOTE:*
+
+          You must sort using system field names such as `createdTime`, and not by the field names appearing in response bodies such as `created_time`.'
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -createdTime
+          enum:
+          - createdTime
+          - -createdTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                count: 1
+                data:
+                - account_token: my_account_token_12
+                  created_time: 2023-09-03 19:22:45.290000+00:00
+                  original_status: UNACTIVATED
+                  status: ACTIVE
+                  token: my_account_transition_token1234
+                end_index: 0
+                is_more: false
+                start_index: 0
+              schema:
+                $ref: '#/components/schemas/AccountTransitionsPage'
+          description: A list of JSON objects containing paginated account transitions information.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: List account transitions
+      tags:
+      - Account Transitions
+    post:
+      description: Transition a credit account to a new status.
+      operationId: transitionAccount
+      parameters:
+      - description: 'Unique identifier of the credit account for which to transition a status.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            example:
+              status: ACTIVE
+            schema:
+              $ref: '#/components/schemas/AccountTransitionReq'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              example:
+                account_token: my_account_token_12
+                created_time: 2021-09-03 19:22:45.290000+00:00
+                original_status: UNACTIVATED
+                status: ACTIVE
+                token: my_account_transition_token1234
+              schema:
+                $ref: '#/components/schemas/AccountTransitionResponse'
+          description: A JSON object containing transition information.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Transition account status
+      tags:
+      - Account Transitions
+  /accounts/{account_token}/accounttransitions/{token}:
+    get:
+      description: Retrieve a transition for a credit account.
+      operationId: getAccountTransition
+      parameters:
+      - description: 'Unique identifier of the credit account for which you want to retrieve a transition.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: 'Unique identifier of the account transition you want to retrieve.
+
+
+          Send a `GET` request to `/credit/accounts/{account_token}/accounttransitions` to retrieve existing account transition tokens.'
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account transition token
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                account_token: my_account_token_12
+                created_time: 2021-09-03 19:22:45.290000+00:00
+                original_status: UNACTIVATED
+                status: ACTIVE
+                token: my_account_transition_token1234
+              schema:
+                $ref: '#/components/schemas/AccountTransitionResponse'
+          description: A JSON object containing account transition record.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Retrieve account transition
+      tags:
+      - Account Transitions
+  /webhooks/{event_type}/{resource_token}:
+    post:
+      description: 'Resends a credit event notification to your webhook endpoint.
+
+
+        Although you send this request as a `POST`, all parameters are passed in the URL and the body is empty.
+
+        The event notification is resent to your webhook endpoint and also returned in the response to this request.
+
+
+        For details on how to configure your webhook endpoint, see the About Webhooks <</developer-guides/about-webhooks#_tutorial, tutorial>>.
+
+        For the complete `/webhooks` endpoint reference, see <</core-api/webhooks, Webhooks>>.'
+      operationId: resendWebhookEvent
+      parameters:
+      - description: Specifies the type of event you want to resend.
+        explode: false
+        in: path
+        name: event_type
+        required: true
+        schema:
+          enum:
+          - ledgerentry
+          - journalentry
+          - accounttransition
+          - accountstatement
+          - paymenttransition
+          - delinquencytransition
+          - paymentreminders
+          - substatus
+          - accountsignupbonus
+          type: string
+        style: simple
+      - description: 'Unique identifier of the resource for which you want to resend a notification.
+
+
+          * Send a `GET` request to `/credit/accounts/{account_token}/journalentries` to retrieve existing journal entry tokens.
+
+          * Send a `GET` request to `/credit/accounts/{account_token}/ledgerentries` to retrieve existing ledger entry tokens.
+
+          * Send a `GET` request to `/accounts/{account_token}/accounttransitions` to retrieve existing account transition tokens.
+
+          * Send a `GET` request to `/credit/accounts/{account_token}/payments/{payment_token}` to retrieve existing payment transition tokens.
+
+          * Send a `GET` request to `/accounts/{account_token}/statements` to retrieve existing statement summary tokens.
+
+          * Send a `GET` request to `/accounts/{account_token}/delinquencystate/transitions` to retrieve existing delinquency state transition tokens.
+
+          * Send a `GET` request to `/accounts/{account_token}/statements/{statement_summary_token}/paymentreminders/{token}` to retrieve existing payment reminder tokens.
+
+          * Send a `GET` request to `/credit/substatuses` to retrieve existing substatus tokens.
+
+          * Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens and identify the specific account for the resend event.'
+        explode: false
+        in: path
+        name: resource_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing journal entry token, ledger entry token, account transition token, payment transition token, statement summary token, delinquency transition token, or substatus token
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                account_statement_sample:
+                  summary: The following code block shows a sample of a resent `creditaccountstatements` event.
+                  value:
+                    account_token: my_credit_account_token
+                    available_credit: 0
+                    closing_balance: 506.41
+                    closing_date: 2025-04-01 03:59:59.999000+00:00
+                    created_time: 2023-08-18 22:04:31.261000+00:00
+                    credit_limit: 500
+                    credits: 0
+                    cycle_type: REVOLVING
+                    days_in_billing_cycle: 31
+                    fees: 15
+                    interest: 4.96
+                    opening_balance: 496.45
+                    opening_date: 2025-03-01 05:00:00+00:00
+                    past_due_amount: 10
+                    payments: 10
+                    purchases: 0
+                    token: my_credit_account_statement_token
+                account_transition_sample:
+                  summary: The following code block shows a sample of a resent `creditaccounttransitions` event.
+                  value:
+                    account_token: my_credit_account_token1234
+                    created_time: 2024-08-18 20:25:10.408000+00:00
+                    original_status: UNACTIVATED
+                    status: ACTIVE
+                    token: my_credit_account_transition_token1234
+                accountsignupbonus_example:
+                  summary: The following code block shows a sample of a resent `accountsignupbonus` event.
+                  value:
+                    account_token: my_account_token
+                    accrual_start_time: 2024-04-02 11:23:23+00:00
+                    journal_entry_token: my_journal_entry_token
+                    maturity_time: 2024-04-02 11:23:23+00:00
+                    reward_token: my_reward_token
+                    spend_total: 10
+                    status: ISSUED
+                    token: my_accountsignupbonus_token
+                    type: STATEMENT_CREDIT
+                delinquency_transition_example:
+                  summary: The following code block shows a sample of a resent `creditdelinquencytransitions` event.
+                  value:
+                    account_token: my_credit_account_token1234
+                    bucket_count: 2
+                    created_time: 2024-03-01 04:59:59.999000
+                    current_due: 40
+                    impact_time: 2024-03-01 04:59:59.999000
+                    is_rolled_back: false
+                    oldest_payment_due_date: 2023-02-01 04:59:59.999000
+                    original_status: CURRENT
+                    status: DELINQUENT
+                    token: my_delinquency_transition_token1234
+                    total_due: 140
+                    total_past_due: 100
+                    transition_trigger_reason: STATEMENT_GENERATION
+                    transition_trigger_time: 2024-03-01 04:59:59.999000
+                    updated_time: 2024-03-01 04:59:59.999000
+                journal_entry_example:
+                  summary: The following code block shows a sample of a resent `creditjournalentries` event.
+                  value:
+                    account_token: my_credit_account_token1234
+                    amount: 10
+                    card_token: my_credit_card_token1234
+                    created_time: 2024-08-18 22:07:21.422000+00:00
+                    currency_code: USD
+                    detail_object:
+                      acquirer:
+                        system_trace_audit_number: '376582'
+                      acquirer_fee_amount: 0
+                      acting_user_token: my_user_token
+                      amount: 10
+                      approval_code: '974406'
+                      card:
+                        last_four: '9949'
+                        metadata: {}
+                      card_acceptor:
+                        city: San Francisco
+                        country_code: USA
+                        mcc: '6411'
+                        mid: '1234'
+                        name: Jane's Bakery
+                        postal_code: '94115'
+                        state: CA
+                        street_address: 1989 Fillmore St
+                      card_token: my_credit_card_token1234
+                      created_time: 2024-08-18 22:06:52+00:00
+                      currency_code: USD
+                      duration: 837
+                      gpa:
+                        available_balance: 0
+                        balances:
+                          USD:
+                            available_balance: 0
+                            credit_balance: 0
+                            currency_code: USD
+                            impacted_amount: -10
+                            ledger_balance: 510.87
+                            pending_credits: 0
+                        credit_balance: 0
+                        currency_code: USD
+                        impacted_amount: -10
+                        ledger_balance: 510.87
+                        pending_credits: 0
+                      gpa_order:
+                        amount: 10
+                        created_time: 2024-08-18 22:06:53+00:00
+                        currency_code: USD
+                        funding:
+                          amount: 10
+                          gateway_log:
+                            duration: 485
+                            message: Approved or completed successfully
+                            order_number: my_gateway_token12345
+                            response:
+                              code: '200'
+                              data:
+                                jit_funding:
+                                  acting_user_token: my_user_token
+                                  amount: 10
+                                  method: pgfs.authorization
+                                  token: my_jit_funding_token1234
+                                  user_token: my_user_token
+                            timed_out: false
+                            transaction_id: my_transaction_id1234
+                          source:
+                            active: true
+                            created_time: 2024-10-14 17:26:35+00:00
+                            is_default_account: false
+                            last_modified_time: 2024-10-14 17:26:35+00:00
+                            name: credit_backed_funding_source
+                            token: '**********1ab2'
+                            type: programgateway
+                        funding_source_token: '**********1ab2'
+                        jit_funding:
+                          acting_user_token: my_user_token
+                          amount: 10
+                          method: pgfs.authorization
+                          token: my_transaction_id1234
+                          user_token: my_user_token
+                        last_modified_time: 2024-08-18 22:06:53+00:00
+                        response:
+                          code: '0000'
+                          memo: Approved or completed successfully
+                        state: PENDING
+                        token: my_gpa_order_token1234
+                        transaction_token: my_transaction_token1234
+                        user_token: my_user_token
+                      identifier: '234'
+                      issuer_payment_node: f8205a67b12b90d695b15704a64c074b
+                      issuer_received_time: 2024-08-18 22:06:52.771000+00:00
+                      network: DISCOVER
+                      network_reference_id: '484311571095'
+                      pos:
+                        is_installment: false
+                        is_recurring: false
+                        partial_approval_capable: true
+                        pin_present: false
+                        purchase_amount_only: false
+                      request_amount: 10
+                      response:
+                        code: '0000'
+                        memo: Approved or completed successfully
+                      settlement_date: 2024-08-18 00:00:00+00:00
+                      state: PENDING
+                      token: my_detail_token1234
+                      type: authorization
+                      user:
+                        metadata:
+                          key1: value1
+                          key2: value2
+                          notification_email: user@domain.com
+                          notification_language: spa
+                      user_token: my_user_token
+                      user_transaction_time: 2024-08-18 22:06:52+00:00
+                    detail_token: my_detail_token1234
+                    dispute_token: null
+                    group: PURCHASE
+                    id: '12345678'
+                    impact_time: 2024-08-18 22:07:21.422000+00:00
+                    memo: Jane's Bakery
+                    related_token: null
+                    request_time: 2024-08-18 22:06:52+00:00
+                    root_token: null
+                    status: PENDING
+                    token: my_journal_entry_token1234
+                    type: authorization
+                ledger_entry_sample:
+                  summary: The following code block shows a sample of a resent `creditledgerentries` event.
+                  value:
+                    account_token: my_credit_account_token1234
+                    amount: 10
+                    card_token: my_credit_card_token1234
+                    created_time: 2024-08-18 22:07:21.422000+00:00
+                    currency_code: USD
+                    detail_object:
+                      acquirer:
+                        system_trace_audit_number: '376582'
+                      acquirer_fee_amount: 0
+                      acting_user_token: my_user_token
+                      amount: 10
+                      approval_code: '974406'
+                      card:
+                        last_four: '9949'
+                        metadata: {}
+                      card_acceptor:
+                        city: San Francisco
+                        country_code: USA
+                        mcc: '6411'
+                        mid: '1234'
+                        name: Jane's Bakery
+                        postal_code: '94115'
+                        state: CA
+                        street_address: 1989 Fillmore St
+                      card_token: my_credit_card_token1234
+                      created_time: 2024-08-18 22:06:52+00:00
+                      currency_code: USD
+                      duration: 837
+                      gpa:
+                        available_balance: 0
+                        balances:
+                          USD:
+                            available_balance: 0
+                            credit_balance: 0
+                            currency_code: USD
+                            impacted_amount: -10
+                            ledger_balance: 510.87
+                            pending_credits: 0
+                        credit_balance: 0
+                        currency_code: USD
+                        impacted_amount: -10
+                        ledger_balance: 510.87
+                        pending_credits: 0
+                      gpa_order:
+                        amount: 10
+                        created_time: 2024-08-18 22:06:53+00:00
+                        currency_code: USD
+                        funding:
+                          amount: 10
+                          gateway_log:
+                            duration: 485
+                            message: Approved or completed successfully
+                            order_number: my_gateway_token12345
+                            response:
+                              code: '200'
+                              data:
+                                jit_funding:
+                                  acting_user_token: my_user_token
+                                  amount: 10
+                                  method: pgfs.authorization
+                                  token: my_jit_funding_token1234
+                                  user_token: my_user_token
+                            timed_out: false
+                            transaction_id: my_transaction_id1234
+                          source:
+                            active: true
+                            created_time: 2024-10-14 17:26:35+00:00
+                            is_default_account: false
+                            last_modified_time: 2024-10-14 17:26:35+00:00
+                            name: credit_backed_funding_source
+                            token: '**********1ab2'
+                            type: programgateway
+                        funding_source_token: '**********1ab2'
+                        jit_funding:
+                          acting_user_token: my_user_token
+                          amount: 10
+                          method: pgfs.authorization
+                          token: my_transaction_id1234
+                          user_token: my_user_token
+                        last_modified_time: 2024-08-18 22:06:53+00:00
+                        response:
+                          code: '0000'
+                          memo: Approved or completed successfully
+                        state: PENDING
+                        token: my_gpa_order_token1234
+                        transaction_token: my_transaction_token1234
+                        user_token: my_user_token
+                      identifier: '234'
+                      issuer_payment_node: f8205a67b12b90d695b15704a64c074b
+                      issuer_received_time: 2024-08-18 22:06:52.771000+00:00
+                      network: DISCOVER
+                      network_reference_id: '484311571095'
+                      pos:
+                        is_installment: false
+                        is_recurring: false
+                        partial_approval_capable: true
+                        pin_present: false
+                        purchase_amount_only: false
+                      request_amount: 10
+                      response:
+                        code: '0000'
+                        memo: Approved or completed successfully
+                      settlement_date: 2024-08-18 00:00:00+00:00
+                      state: PENDING
+                      token: my_detail_token1234
+                      type: authorization
+                      user:
+                        metadata:
+                          key1: value1
+                          key2: value2
+                          notification_email: user@domain.com
+                          notification_language: spa
+                      user_token: my_user_token
+                      user_transaction_time: 2024-08-18 22:06:52+00:00
+                    detail_token: my_detail_token1234
+                    dispute_token: null
+                    group: PURCHASE
+                    id: '12345678'
+                    impact_time: 2024-08-18 22:07:21.422000+00:00
+                    memo: Jane's Bakery
+                    related_token: null
+                    request_time: 2024-08-18 22:06:52+00:00
+                    root_token: null
+                    status: PENDING
+                    token: my_ledger_entry_token1234
+                    type: authorization
+                payment_transition_example:
+                  summary: The following code block shows a sample of a resent `creditpaymenttransitions` event.
+                  value:
+                    account_token: my_credit_account_token1234
+                    created_time: 2024-08-17 18:26:47.591000+00:00
+                    payment_token: my_credit_account_payment_token1234
+                    refund_details: null
+                    status: COMPLETED
+                    token: my_payment_transition_token1234
+                substatus_example:
+                  summary: The following code block shows a sample of a resent `substatus` event.
+                  value:
+                    attributes: []
+                    created_time: 2024-04-02 11:23:23+00:00
+                    events:
+                    - channel: SYSTEM
+                      created_time: 2024-04-02 11:23:23+00:00
+                      effective_date: 2024-04-02 11:23:23+00:00
+                      reason: Fraud system detected suspicious activity
+                      state: ACTIVE
+                    - channel: ADMIN
+                      created_time: 2024-04-02 11:23:23+00:00
+                      effective_date: 2024-04-02 11:23:23+00:00
+                      reason: Verified non-fraud with cardholder
+                      state: INACTIVE
+                    is_active: false
+                    resource_token: my_account_token
+                    resource_type: ACCOUNT
+                    state: INACTIVE
+                    substatus: FRAUD
+                    token: substatus_token
+                    updated_time: 2024-04-02 11:23:23+00:00
+              schema:
+                $ref: '#/components/schemas/WebhookEventResendContainerResponse'
+          description: Event response for which the webhook event was resent
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Resend credit event notification
+      tags:
+      - Account Transitions
+components:
+  schemas:
+    AccountTransitionsPage:
+      description: Return paginated account transitions.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: Contains one or more account transitions.
+          items:
+            $ref: '#/components/schemas/AccountTransitionResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    AccountTransitionReq:
+      description: Information on the credit account transition.
+      properties:
+        status:
+          $ref: '#/components/schemas/AccountStatusEnum'
+        token:
+          description: Unique identifier of the credit account transition.
+          type: string
+      required:
+      - status
+      type: object
+    WebhookEventResendContainerResponse:
+      description: Contains information about a webhook event.
+      properties:
+        unused:
+          description: Event notification that was resent to your webhook endpoint.
+          type: string
+      type: object
+    AccountTransitionResponse:
+      description: Information on the credit account transition.
+      properties:
+        account_token:
+          description: Unique identifier of the credit account for which to transition a status.
+          maxLength: 36
+          type: string
+        created_time:
+          description: Date and time when the transition record was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        original_status:
+          $ref: '#/components/schemas/AccountStatusEnum'
+        status:
+          $ref: '#/components/schemas/AccountStatusEnum'
+        token:
+          description: Unique identifier of the credit account transition.
+          type: string
+      required:
+      - account_token
+      - created_time
+      - original_status
+      - status
+      - token
+      type: object
+    AccountStatusEnum:
+      description: 'Status of the credit account.
+
+
+        *NOTE* `CHARGE_OFF` is not an allowable value for `original_status`.'
+      enum:
+      - UNACTIVATED
+      - ACTIVE
+      - SUSPENDED
+      - TERMINATED
+      - CHARGE_OFF
+      type: string
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

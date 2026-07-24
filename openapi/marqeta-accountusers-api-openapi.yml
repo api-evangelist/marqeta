@@ -1,0 +1,114 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries AccountUsers API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: AccountUsers
+paths:
+  /accountusers/{user_token}:
+    get:
+      description: Retrieve a user's account information.
+      operationId: retrieveAccountUser
+      parameters:
+      - description: 'Unique identifier of the user to retrieve.
+
+          Send a `GET` request to `/account/users` to retrieve existing user tokens.'
+        explode: false
+        in: path
+        name: user_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing user token
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                address1: Addres Test
+                address2: 1 Under Stair Case Rd
+                city: New York
+                country: US
+                credit_accounts:
+                - is_primary: true
+                  token: account-token-5678
+                email: abc@hogwarts.edu
+                first_name: Harry
+                last_name: Potter
+                phone: '0000000000'
+                state: NY
+                token: user-token-1234
+                zip: '11217'
+              schema:
+                $ref: '#/components/schemas/AccountUserResponse'
+          description: User details and associated account information
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Retrieve user
+      tags:
+      - AccountUsers
+components:
+  schemas:
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    AccountUserResponse:
+      description: Object containing user information
+      properties:
+        address1:
+          type: string
+        address2:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        credit_accounts:
+          items:
+            properties:
+              is_primary:
+                type: boolean
+              token:
+                type: string
+            title: AccountUserResponseCreditAccounts
+            type: object
+          type: array
+        email:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        phone:
+          type: string
+        state:
+          type: string
+        token:
+          type: string
+        zip:
+          type: string
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

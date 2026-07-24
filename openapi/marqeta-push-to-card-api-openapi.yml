@@ -1,0 +1,555 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries push to card API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: push to card
+paths:
+  /pushtocards/disburse:
+    get:
+      operationId: getPushtocardsDisburse
+      parameters:
+      - description: Number of push-to-card disbursements to retrieve
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 10
+          format: int32
+          type: integer
+        style: form
+      - description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+        explode: true
+        in: query
+        name: fields
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Start index
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: form
+      - description: Sort order
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -createdTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PushToCardDisburseListResponse'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Lists all push-to-card disbursements
+      tags:
+      - push to card
+    post:
+      operationId: postPushtocardsDisburse
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/push_to_card_disburse_request'
+        required: false
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/push_to_card_disbursement_response'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '422':
+          content: {}
+          description: Payment instrument is not active
+        '500':
+          content: {}
+          description: Server error
+      summary: Initiates a push-to-card money disbursement
+      tags:
+      - push to card
+  /pushtocards/disburse/{token}:
+    get:
+      operationId: getPushtocardsDisburseToken
+      parameters:
+      - description: Push-to-card disbursement token
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+        explode: true
+        in: query
+        name: fields
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/push_to_card_disbursement_response'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '404':
+          content: {}
+          description: Push-to-card disbursement not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns a specific push-to-card disbursement
+      tags:
+      - push to card
+  /pushtocards/paymentcard:
+    get:
+      operationId: getPushtocardsPaymentcard
+      parameters:
+      - description: Number of push-to-card payment cards to retrieve
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 10
+          format: int32
+          type: integer
+        style: form
+      - description: User token
+        explode: true
+        in: query
+        name: user_token
+        required: true
+        schema:
+          type: string
+        style: form
+      - description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+        explode: true
+        in: query
+        name: fields
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Start index
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: form
+      - description: Sort order
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -createdTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PushToCardListResponse'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns all push-to-card payment card details
+      tags:
+      - push to card
+    post:
+      operationId: postPushtocardsPaymentcard
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/push_to_card_request'
+        required: false
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/push_to_card_response'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '409':
+          content: {}
+          description: Token already associated with a different payload
+        '422':
+          content: {}
+          description: Push-to-card information is invalid
+        '500':
+          content: {}
+          description: Server error
+      summary: Adds an external card to which funds will be pushed
+      tags:
+      - push to card
+  /pushtocards/paymentcard/{token}:
+    get:
+      operationId: getPushtocardsPaymentcardToken
+      parameters:
+      - description: Push-to-card token
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+        explode: true
+        in: query
+        name: fields
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/push_to_card_response'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '404':
+          content: {}
+          description: Push-to-card details not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns a specific paymentcard object
+      tags:
+      - push to card
+components:
+  schemas:
+    push_to_card_disburse_request:
+      properties:
+        amount:
+          maximum: 50000.0
+          minimum: 0.01
+          type: number
+        currency_code:
+          type: string
+        memo:
+          maxLength: 99
+          minLength: 1
+          type: string
+        payment_instrument_token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        soft_descriptor:
+          $ref: '#/components/schemas/PTCSoftDescriptor'
+        tags:
+          maxLength: 255
+          minLength: 1
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - amount
+      - currency_code
+      - payment_instrument_token
+      - token
+      type: object
+    PTCAddress:
+      properties:
+        city:
+          maxLength: 40
+          minLength: 1
+          type: string
+        country:
+          maxLength: 3
+          minLength: 3
+          type: string
+        county:
+          maxLength: 3
+          minLength: 3
+          type: string
+        line1:
+          maxLength: 255
+          minLength: 1
+          type: string
+        line2:
+          maxLength: 255
+          minLength: 0
+          type: string
+        postal_code:
+          type: string
+        state:
+          type: string
+      required:
+      - city
+      - county
+      - line1
+      - postal_code
+      - state
+      type: object
+    push_to_card_disbursement_response:
+      properties:
+        amount:
+          type: number
+        created_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        currency_code:
+          type: string
+        last_modified_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        memo:
+          maxLength: 99
+          minLength: 1
+          type: string
+        payment_instrument_token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        status:
+          type: string
+        tags:
+          maxLength: 255
+          minLength: 1
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - created_time
+      - last_modified_time
+      type: object
+    push_to_card_response:
+      properties:
+        address_1:
+          maxLength: 255
+          minLength: 1
+          type: string
+        address_2:
+          maxLength: 255
+          minLength: 1
+          type: string
+        city:
+          maxLength: 40
+          minLength: 1
+          type: string
+        country:
+          type: string
+        created_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        exp_date:
+          type: string
+        fast_fund_transfer_eligible:
+          default: false
+          type: boolean
+        gambling_fund_transfer_eligible:
+          default: false
+          type: boolean
+        last_four:
+          type: string
+        last_modified_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        last_name:
+          readOnly: true
+          type: string
+        name_on_card:
+          type: string
+        postal_code:
+          maxLength: 10
+          minLength: 1
+          type: string
+        state:
+          maxLength: 2
+          minLength: 1
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - created_time
+      - last_modified_time
+      type: object
+    PushToCardListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/push_to_card_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    push_to_card_request:
+      properties:
+        address_1:
+          maxLength: 255
+          minLength: 1
+          type: string
+        address_2:
+          maxLength: 255
+          minLength: 1
+          type: string
+        city:
+          maxLength: 40
+          minLength: 1
+          type: string
+        country:
+          type: string
+        cvv:
+          type: string
+        exp_date:
+          type: string
+        name_on_card:
+          maxLength: 50
+          minLength: 1
+          type: string
+        pan:
+          type: string
+        postal_code:
+          maxLength: 10
+          minLength: 1
+          type: string
+        state:
+          maxLength: 2
+          minLength: 1
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        user_token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - address_1
+      - city
+      - country
+      - cvv
+      - exp_date
+      - name_on_card
+      - pan
+      - postal_code
+      - state
+      - token
+      - user_token
+      type: object
+    PushToCardDisburseListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/push_to_card_disbursement_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    PTCPhone:
+      properties:
+        country_code:
+          type: string
+        number:
+          maxLength: 14
+          minLength: 4
+          type: string
+      required:
+      - number
+      type: object
+    PTCSoftDescriptor:
+      properties:
+        address:
+          $ref: '#/components/schemas/PTCAddress'
+        email:
+          type: string
+        name:
+          maxLength: 50
+          minLength: 0
+          type: string
+        phone:
+          $ref: '#/components/schemas/PTCPhone'
+      required:
+      - address
+      - name
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

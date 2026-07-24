@@ -1,0 +1,1194 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries Velocity Controls API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- description: '// Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    A velocity control limits how much users can spend.
+
+    You can configure velocity controls to limit how much users can spend and the number of transactions they can make in a given span of time.
+
+    You can apply velocity controls to a single user, to all users associated with a particular card product, or to all users in your program.
+
+
+    Only Program Managers can create or modify program-wide velocity controls.
+
+    A `POST` or `PUT` call from a role that does not have Program Manager permissions will receive a 403 error if its `association` field is null, or if it includes all of the fields in the request body.
+
+    Avoid this by passing a valid `user_token` or `card_product_token` in the velocity control''s `association` object, indicating that the request is specific to a user or card product, and not program-wide.
+
+    You should also only include the specific fields you want to update, because a `PUT` or `POST` with values for all fields is interpreted as a change that requires Program Manager permissions.
+
+
+    See <</developer-guides/controlling-spending, Controlling Spending>> for a tutorial that walks you through the creation of a spend control.
+
+
+    [NOTE]
+
+    Each program supports a maximum of 90 spend controls (velocity controls and <</core-api/authorization-controls, authorization controls>> combined).
+
+    The limit of 90 spend controls applies at the program level only; it does not affect the number of user-level spend controls you can use.'
+  name: Velocity Controls
+paths:
+  /velocitycontrols:
+    get:
+      description: 'Retrieves a list of all the velocity controls associated with a specific user or card product, or lists all the velocity controls defined for your program.
+
+
+        Include either a `user` or a `card_product` query parameter to indicate the user or card product whose associated velocity controls you want to retrieve (do not include both).
+
+
+        To list all velocity controls for your program, omit the `user` and `card_product` query parameters from your request.
+
+
+        This endpoint supports <</core-api/field-filtering, field filtering>> and <</core-api/sorting-and-pagination, pagination>>.'
+      operationId: getVelocitycontrols
+      parameters:
+      - description: 'Unique identifier of the card product.
+
+          Enter the string `null` to retrieve velocity controls that are not associated with any card product.'
+        explode: true
+        in: query
+        name: card_product
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: 'Unique identifier of the user.
+
+          Enter the string `null` to retrieve velocity controls that are not associated with any user.'
+        explode: true
+        in: query
+        name: user
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Number of velocity control resources to retrieve.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          format: int32
+          type: integer
+        style: form
+      - description: Sort order index of the first resource in the returned array.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: form
+      - description: 'Comma-delimited list of fields to return (`field_1,field_2`, and so on).
+
+          Leave blank to return all fields.'
+        explode: true
+        in: query
+        name: fields
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: 'Field on which to sort.
+
+          Use any field in the resource model, or one of the system fields `lastModifiedTime` or `createdTime`.
+
+          Prefix the field name with a hyphen (`-`) to sort in descending order.
+
+          Omit the hyphen to sort in ascending order.'
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -lastModifiedTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                count: 1
+                data:
+                - active: true
+                  amount_limit: 500.25
+                  approvals_only: true
+                  association:
+                    user_token: my_user_04
+                  currency_code: USD
+                  include_cashback: true
+                  include_credits: false
+                  include_purchases: true
+                  include_transfers: true
+                  include_withdrawals: true
+                  merchant_scope: {}
+                  token: my_velocitycontrol_01
+                  usage_limit: 10
+                  velocity_window: DAY
+                end_index: 0
+                is_more: false
+                start_index: 0
+              schema:
+                $ref: '#/components/schemas/VelocityControlListResponse'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: List velocity controls
+      tags:
+      - Velocity Controls
+    post:
+      description: 'Limits how much and how frequently a user can spend funds.
+
+        If multiple velocity controls apply to the same user, the user cannot exceed any of the defined spending limits.
+
+
+        [TIP]
+
+        You can create program-level controls in the sandbox environment.
+
+        However, you must work with your Marqeta representative to create program-level controls in a production environment.'
+      operationId: postVelocitycontrols
+      requestBody:
+        content:
+          application/json:
+            example:
+              amount_limit: 500.25
+              association:
+                user_token: my_user_04
+              currency_code: USD
+              token: my_velocitycontrol_01
+              usage_limit: 10
+              velocity_window: DAY
+            schema:
+              $ref: '#/components/schemas/velocity_control_request'
+        description: Velocity control object
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              example:
+                active: true
+                amount_limit: 500.25
+                approvals_only: true
+                association:
+                  user_token: my_user_04
+                currency_code: USD
+                include_cashback: true
+                include_credits: false
+                include_purchases: true
+                include_transfers: true
+                include_withdrawals: true
+                merchant_scope: {}
+                token: my_velocitycontrol_01
+                usage_limit: 10
+                velocity_window: DAY
+              schema:
+                $ref: '#/components/schemas/velocity_control_response'
+          description: Created
+        '400':
+          content: {}
+          description: Bad request
+        '409':
+          content: {}
+          description: Token already associated with a different payload
+        '500':
+          content: {}
+          description: Server error
+      summary: Create velocity control
+      tags:
+      - Velocity Controls
+  /velocitycontrols/user/{user_token}/available:
+    get:
+      description: 'Retrieves a list of the available balances of the velocity controls associated with a user.
+
+        This operation is unavailable for velocity controls with a window of `TRANSACTION`, because available balances do not apply to single-transaction velocity windows.
+
+
+        Depending on the control, the balance can include an available monetary amount, the number of transactions remaining, and the number of days remaining in the time window.
+
+
+        This endpoint supports <</core-api/field-filtering, field filtering>> and <</core-api/sorting-and-pagination, pagination>>.'
+      operationId: getVelocitycontrolsUserUsertokenAvailable
+      parameters:
+      - description: Unique identifier of the cardholder.
+        explode: false
+        in: path
+        name: user_token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Number of available balance resources to retrieve.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          format: int32
+          type: integer
+        style: form
+      - description: The sort order index of the first resource in the returned array.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: form
+      - description: 'Comma-delimited list of fields to return (`field_1,field_2`, and so on).
+
+          Leave blank to return all fields.'
+        explode: true
+        in: query
+        name: fields
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: 'Field on which to sort.
+
+          Use any field in the resource model, or one of the system fields `lastModifiedTime` or `createdTime`.
+
+          Prefix the field name with a hyphen (`-`) to sort in descending order.
+
+          Omit the hyphen to sort in ascending order.'
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -lastModifiedTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                count: 2
+                data:
+                - active: true
+                  amount_limit: 296.25
+                  approvals_only: true
+                  association: {}
+                  available:
+                    amount: 296.0
+                    days_remaining: 1
+                    uses: 1
+                  currency_code: USD
+                  include_cashback: true
+                  include_credits: false
+                  include_purchases: true
+                  include_transfers: true
+                  include_withdrawals: true
+                  merchant_scope:
+                    mcc: '3058'
+                  name: Jane Doe
+                  token: card_3
+                  usage_limit: 1
+                  velocity_window: DAY
+                - active: true
+                  amount_limit: 500.25
+                  approvals_only: true
+                  association: {}
+                  available:
+                    amount: 500.5
+                    days_remaining: 1
+                    uses: 1000
+                  currency_code: '840'
+                  include_cashback: true
+                  include_credits: false
+                  include_purchases: true
+                  include_transfers: true
+                  include_withdrawals: true
+                  merchant_scope:
+                    mcc: '1234'
+                  token: card_4
+                  usage_limit: 1000
+                  velocity_window: DAY
+                end_index: 1
+                is_more: false
+                start_index: 0
+              schema:
+                $ref: '#/components/schemas/VelocityControlBalanceListResponse'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: List user velocity control balances
+      tags:
+      - Velocity Controls
+  /velocitycontrols/{token}:
+    get:
+      description: Retrieves a specific velocity control.
+      operationId: getVelocitycontrolsToken
+      parameters:
+      - description: Unique identifier of the velocity control resource.
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 'Comma-delimited list of fields to return (`field_1,field_2`, and so on).
+
+          Leave blank to return all fields.'
+        explode: true
+        in: query
+        name: fields
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                active: true
+                amount_limit: 500.25
+                approvals_only: true
+                association:
+                  user_token: my_user_04
+                currency_code: USD
+                include_cashback: true
+                include_credits: false
+                include_purchases: true
+                include_transfers: true
+                include_withdrawals: true
+                merchant_scope: {}
+                token: my_velocitycontrol_01
+                usage_limit: 10
+                velocity_window: DAY
+              schema:
+                $ref: '#/components/schemas/velocity_control_response'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '404':
+          content: {}
+          description: Velocity control not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns a specific velocity control
+      tags:
+      - Velocity Controls
+    put:
+      description: Updates a specific velocity control.
+      operationId: putVelocitycontrolsToken
+      parameters:
+      - description: Unique identifier of the velocity control resource.
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            example:
+              amount_limit: 1000.25
+              token: my_velocitycontrol_01
+              usage_limit: 20
+            schema:
+              $ref: '#/components/schemas/velocity_control_update_request'
+        description: Velocity control object
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                active: true
+                amount_limit: 1000.25
+                approvals_only: true
+                association:
+                  user_token: my_user_04
+                currency_code: USD
+                include_cashback: true
+                include_credits: false
+                include_purchases: true
+                include_transfers: true
+                include_withdrawals: true
+                merchant_scope: {}
+                token: my_velocitycontrol_01
+                usage_limit: 20
+                velocity_window: DAY
+              schema:
+                $ref: '#/components/schemas/velocity_control_response'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Update velocity control
+      tags:
+      - Velocity Controls
+    delete:
+      operationId: deleteVelocitycontrolsToken
+      parameters:
+      - description: Velocity control token
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/velocity_control_response'
+          description: Success
+        '404':
+          content: {}
+          description: Velocity control not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Sets a specific velocity control to inactive to soft delete it
+      tags:
+      - Velocity Controls
+  /velocitycontrols/account/{account_token}/available:
+    get:
+      operationId: getVelocitycontrolsAccountAccountTokenAvailable
+      parameters:
+      - description: Account token
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VelocityControlBalanceListResponse'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Retrieve velocity control available balances for an account token
+      tags:
+      - Velocity Controls
+components:
+  schemas:
+    VelocityControlListResponse:
+      properties:
+        count:
+          description: 'Number of resources retrieved.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+        data:
+          description: 'Array of velocity control objects.
+
+
+            Objects are returned as appropriate to your query.'
+          items:
+            $ref: '#/components/schemas/velocity_control_response'
+          type: array
+        end_index:
+          description: 'Sort order index of the last resource in the returned array.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          description: 'A value of `true` indicates that more unreturned resources exist.
+
+            A value of `false` indicates that no more unreturned resources exist.
+
+
+            This field is returned if there are resources in your returned array.'
+          type: boolean
+        start_index:
+          description: 'The sort order index of the last resource in the returned array.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+      type: object
+    spend_control_association:
+      description: Defines the group of users to which the velocity control applies.
+      properties:
+        account_template_token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        card_product_token:
+          description: 'Unique identifier of the card product.
+
+
+            Pass either `card_product_token` or `user_token`, not both.'
+          maxLength: 36
+          minLength: 1
+          type: string
+        user_token:
+          description: 'Unique identifier of the cardholder.
+
+
+            Pass either `card_product_token` or `user_token`, not both.'
+          maxLength: 36
+          minLength: 1
+          type: string
+      type: object
+    money_in_transaction:
+      description: 'Defines the original credit transaction (OCT) types that are subject to velocity control.
+
+        Your request can contain either a `money_in_transaction` object or the `include_credits` field, not both.'
+      properties:
+        include_credits_types:
+          description: Specifies the types of credits to include in the original credit transaction (OCT).
+          items:
+            type: string
+          type: array
+        include_network_load_types:
+          description: Indicates whether or not cash and check network load transactions will be subject to velocity control.
+          items:
+            type: string
+          type: array
+      type: object
+    velocity_control_balance_response:
+      properties:
+        active:
+          description: Indicates whether the velocity control is active.
+          type: boolean
+        amount_limit:
+          description: 'Maximum monetary sum that can be cleared within the time period defined by the `velocity_window` field.
+
+            Refunds and reversals cannot exceed this limit.'
+          exclusiveMinimum: false
+          minimum: 0
+          type: number
+        approvals_only:
+          description: 'If set to `true`, only approved transactions are subject to control.
+
+            If set to `false`, only declined transactions are subject to control.'
+          type: boolean
+        association:
+          $ref: '#/components/schemas/spend_control_association'
+        available:
+          $ref: '#/components/schemas/available'
+        currency_code:
+          description: Three-character ISO 4217 currency code.
+          type: string
+        include_cashback:
+          description: If set to `true`, the cashback components of point-of-sale transactions are subject to control.
+          type: boolean
+        include_credits:
+          description: If set to `true`, original credit transactions (OCT) are subject to control.
+          type: boolean
+        include_purchases:
+          description: 'If set to `true`, the following transactions are subject to control:
+
+
+            * *Account funding:* All account funding transactions
+
+            * *Cashback:* Only the purchase component of cashback transactions
+
+            * *Purchase transactions:* All authorizations, PIN debit transactions, and incremental transactions
+
+            * *Quasi-cash:* All quasi-cash transactions
+
+            * *Refunds:* All refund transactions (see <</developer-guides/controlling-spending#_controls_to_limit_amount_and_frequency_of_spending, Controls to limit amount and frequency of spending>> for more information)
+
+            * *Reversals:* All reversal transactions'
+          type: boolean
+        include_transfers:
+          description: 'If set to `true`, account-to-account transfers are subject to control.
+
+            Account-to-account transfers are not currently supported.'
+          type: boolean
+        include_withdrawals:
+          description: If set to `true`, ATM withdrawals are subject to control.
+          type: boolean
+        merchant_scope:
+          $ref: '#/components/schemas/merchant_scope'
+        money_in_transaction:
+          $ref: '#/components/schemas/money_in_transaction'
+        name:
+          description: Description of how the velocity control restricts spending, for example, "Max spend of $500 per day" or "Max spend of $5000 per month for non-exempt employees".
+          maxLength: 255
+          minLength: 0
+          type: string
+        token:
+          description: Unique identifier of the velocity control.
+          maxLength: 36
+          minLength: 1
+          type: string
+        usage_limit:
+          description: Maximum number of times a card can be used within the time period defined by the `velocity_window` field.
+          format: int32
+          minimum: -1
+          type: integer
+        velocity_window:
+          description: 'Defines the time period to which the `amount_limit` and `usage_limit` fields apply:
+
+
+            * *DAY* – one day; days begin at 00:00:00 UTC.
+
+            * *WEEK* – one week; weeks begin Sundays at 00:00:00 UTC.
+
+            * *MONTH* – one month; months begin on the first day of month at 00:00:00 UTC.
+
+            * *LIFETIME* – forever; time period never expires.
+
+            * *TRANSACTION* – a single transaction.'
+          enum:
+          - DAY
+          - WEEK
+          - MONTH
+          - LIFETIME
+          - TRANSACTION
+          type: string
+      required:
+      - amount_limit
+      - available
+      - currency_code
+      - velocity_window
+      type: object
+    VelocityControlBalanceListResponse:
+      properties:
+        count:
+          description: 'Number of velocity control resources retrieved.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+        data:
+          description: 'Array of velocity control objects that include available balances.
+
+
+            Objects are returned as appropriate to your query.'
+          items:
+            $ref: '#/components/schemas/velocity_control_balance_response'
+          type: array
+        end_index:
+          description: 'Sort order index of the last resource in the returned array.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          description: 'A value of `true` indicates that more unreturned resources exist.
+
+            A value of `false` indicates that no more unreturned resources exist.
+
+
+            This field is returned if there are resources in your returned array.'
+          type: boolean
+        start_index:
+          description: 'Sort order index of the last resource in the returned array.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+      type: object
+    available:
+      description: 'Specifies the available balances of the velocity controls associated with a user.
+
+
+        This object is not returned if the velocity control window is `TRANSACTION`, because available balances do not apply to single-transaction velocity windows.'
+      properties:
+        amount:
+          description: Total amount of spend remaining in the velocity control.
+          exclusiveMinimum: false
+          minimum: 0
+          type: number
+        days_remaining:
+          description: Number of days remaining in the velocity control time window.
+          format: int32
+          type: integer
+        uses:
+          default: 0
+          description: Number of uses remaining in the velocity control.
+          format: int32
+          type: integer
+      required:
+      - amount
+      - uses
+      type: object
+    merchant_scope:
+      description: 'Defines the group of merchants to which the velocity control applies.
+
+
+        Populate no more than one field of the `merchant_scope` object.
+
+        If no fields are populated, the velocity control applies to all merchants.'
+      properties:
+        mcc:
+          description: 'Merchant Category Code (MCC).
+
+            Identifies the type of products or services provided by the merchant.
+
+
+            Enter a value to control spending on a particular type of product or service.'
+          maxLength: 4
+          minLength: 1
+          type: string
+        mcc_group:
+          description: 'Token identifying a group of MCCs.
+
+            Enter a value to control spending on a group of product or service types.
+
+
+            Send a `GET` request to `/mccgroups` to retrieve MCC group tokens.'
+          maxLength: 36
+          minLength: 1
+          type: string
+        mid:
+          description: 'Merchant identifier (MID).
+
+            Identifies a specific merchant.
+
+
+            Enter a value to control spending with a particular merchant.'
+          maxLength: 36
+          minLength: 1
+          type: string
+      type: object
+    velocity_control_request:
+      properties:
+        active:
+          description: Indicates whether the velocity control is active.
+          type: boolean
+        amount_limit:
+          description: 'Maximum monetary sum that can be cleared within the time period defined by the `velocity_window` field.
+
+            Refunds and reversals cannot exceed this limit.'
+          exclusiveMinimum: false
+          minimum: 0
+          type: number
+        approvals_only:
+          description: 'If set to `true`, only approved transactions are subject to control.
+
+            If set to `false`, only declined transactions are subject to control.'
+          type: boolean
+        association:
+          $ref: '#/components/schemas/spend_control_association'
+        currency_code:
+          description: Three-character ISO 4217 currency code.
+          type: string
+        include_cashback:
+          description: If set to `true`, the cashback components of point-of-sale transactions are subject to control.
+          type: boolean
+        include_credits:
+          description: 'If set to `true`, original credit transactions (OCT) are subject to control.
+
+            Your request can contain either a `money_in_transaction` object or the `include_credits` field, not both.'
+          type: boolean
+        include_purchases:
+          description: 'If set to `true`, the following transactions are subject to control:
+
+
+            * *Account funding:* All account funding transactions
+
+            * *Cashback:* Only the purchase component of cashback transactions
+
+            * *Purchase transactions:* All authorizations, PIN debit transactions, and incremental transactions
+
+            * *Quasi-cash:* All quasi-cash transactions
+
+            * *Refunds:* All refund transactions (see <</developer-guides/controlling-spending#_controls_to_limit_amount_and_frequency_of_spending, Controls to limit amount and frequency of spending>> for more information)
+
+            * *Reversals:* All reversal transactions'
+          type: boolean
+        include_transfers:
+          description: 'If set to `true`, account-to-account transfers are subject to control.
+
+            Account-to-account transfers are not currently supported.'
+          type: boolean
+        include_withdrawals:
+          description: If set to `true`, ATM withdrawals are subject to control.
+          type: boolean
+        merchant_scope:
+          $ref: '#/components/schemas/merchant_scope'
+        money_in_transaction:
+          $ref: '#/components/schemas/money_in_transaction'
+        name:
+          description: 'Description of how the velocity control restricts spending, for example, "Max spend of $500 per day" or "Max spend of $5000 per month for non-exempt employees".
+
+
+            Ensure that the description you provide here adequately captures the kind of restriction exerted by this velocity control, because the Marqeta platform will send this information to you in a webhook in the event that the transaction authorization attempt is declined by the velocity control.
+
+
+            *NOTE:* This field is very important.
+
+            If your program has multiple velocity controls in place, it is not always clear which one prevented the transaction from being approved.
+
+            Adding specific details to this field gives you more contextual information when debugging or monitoring declined authorization attempts.'
+          maxLength: 255
+          minLength: 0
+          type: string
+        token:
+          description: 'Unique identifier of the velocity control.
+
+
+            If you do not include a token, the system will generate one automatically.
+
+            This token is necessary for use in other API calls, so we recommend that rather than let the system generate one, you use a simple string that is easy to remember.
+
+            This value cannot be updated.'
+          maxLength: 36
+          minLength: 1
+          type: string
+        usage_limit:
+          description: 'Maximum number of times a card can be used within the time period defined by the `velocity_window` field.
+
+
+            If `velocity_window` is set to `TRANSACTION`, do not include a `usage_limit` in your request.
+
+
+            Set to `-1` to indicate that the card can be used an unlimited number of times.'
+          format: int32
+          minimum: -1
+          type: integer
+        velocity_window:
+          description: 'Defines the time period to which the `amount_limit` and `usage_limit` fields apply:
+
+
+            * *DAY* – one day; days begin at 00:00:00 UTC.
+
+            * *WEEK* – one week; weeks begin Sundays at 00:00:00 UTC.
+
+            * *MONTH* – one month; months begin on the first day of month at 00:00:00 UTC.
+
+            * *LIFETIME* – forever; time period never expires.
+
+            * *TRANSACTION* – a single transaction.
+
+
+            // (2023-05-03): This statement was validated by Processing, as part of a customer inquiry.
+
+            *NOTE:* If set to `DAY`, `WEEK`, or `MONTH`, the velocity control takes effect retroactively from the beginning of the specified period.
+
+            The amount and usage data already collected within the first period is counted toward the limits.
+
+            If set to `LIFETIME`, the velocity control only applies to transactions on or after the date and time that the velocity control was created.
+
+            `LIFETIME` velocity controls are not retroactively applied to historical transactions.
+
+
+            // (2023-05-03): Commenting this note out, as it is untrue in testing as reported by customers and confirmed by transaction engine team
+
+            //*NOTE:* Editing any of the following fields on a velocity control resets its usage and amount count to 0:
+
+
+            //* `merchant_scope.mcc`
+
+            //* `merchant_scope.mid`
+
+            //* `merchant_scope.mcc_group`
+
+            //* `association.user_token`
+
+            //* `association.card_product_token`'
+          enum:
+          - DAY
+          - WEEK
+          - MONTH
+          - LIFETIME
+          - TRANSACTION
+          type: string
+      required:
+      - amount_limit
+      - currency_code
+      - velocity_window
+      type: object
+    velocity_control_response:
+      properties:
+        active:
+          description: Indicates whether the velocity control is active.
+          type: boolean
+        amount_limit:
+          description: 'Maximum monetary sum that can be cleared within the time period defined by the `velocity_window` field.
+
+            Refunds and reversals cannot exceed this limit.'
+          exclusiveMinimum: false
+          minimum: 0
+          type: number
+        approvals_only:
+          description: 'If set to `true`, only approved transactions are subject to control.
+
+            If set to `false`, only declined transactions are subject to control.'
+          type: boolean
+        association:
+          $ref: '#/components/schemas/spend_control_association'
+        currency_code:
+          description: Three-character ISO 4217 currency code.
+          type: string
+        include_cashback:
+          description: If set to `true`, the cashback components of point-of-sale transactions are subject to control.
+          type: boolean
+        include_credits:
+          description: If set to `true`, original credit transactions (OCT) are subject to control.
+          type: boolean
+        include_purchases:
+          description: 'If set to `true`, the following transactions are subject to control:
+
+
+            * *Account funding:* All account funding transactions
+
+            * *Cashback:* Only the purchase component of cashback transactions
+
+            * *Purchase transactions:* All authorizations, PIN debit transactions, and incremental transactions
+
+            * *Quasi-cash:* All quasi-cash transactions
+
+            * *Refunds:* All refund transactions (see <</developer-guides/controlling-spending#_controls_to_limit_amount_and_frequency_of_spending, Controls to limit amount and frequency of spending>> for more information)
+
+            * *Reversals:* All reversal transactions'
+          type: boolean
+        include_transfers:
+          description: 'If set to `true`, account-to-account transfers are subject to control.
+
+            Account-to-account transfers are not currently supported.'
+          type: boolean
+        include_withdrawals:
+          description: If set to `true`, ATM withdrawals are subject to control.
+          type: boolean
+        merchant_scope:
+          $ref: '#/components/schemas/merchant_scope'
+        money_in_transaction:
+          $ref: '#/components/schemas/money_in_transaction'
+        name:
+          description: 'Description of how the velocity control restricts spending.
+
+            For example, "Max spend of $500 per day" or "Max spend of $5000 per month for non-exempt employees".'
+          maxLength: 255
+          minLength: 0
+          type: string
+        token:
+          description: Unique identifier of the velocity control.
+          maxLength: 36
+          minLength: 1
+          type: string
+        usage_limit:
+          description: Maximum number of times a card can be used within the time period defined by the `velocity_window` field.
+          format: int32
+          minimum: -1
+          type: integer
+        velocity_window:
+          description: 'Defines the time period to which the `amount_limit` and `usage_limit` fields apply:
+
+
+            * *DAY* – one day; days begin at 00:00:00 UTC.
+
+            * *WEEK* – one week; weeks begin Sundays at 00:00:00 UTC.
+
+            * *MONTH* – one month; months begin on the first day of month at 00:00:00 UTC.
+
+            * *LIFETIME* – forever; time period never expires.
+
+            * *TRANSACTION* – a single transaction.'
+          enum:
+          - DAY
+          - WEEK
+          - MONTH
+          - LIFETIME
+          - TRANSACTION
+          type: string
+      required:
+      - amount_limit
+      - currency_code
+      - velocity_window
+      type: object
+    velocity_control_update_request:
+      properties:
+        active:
+          description: Indicates whether the velocity control is active.
+          type: boolean
+        amount_limit:
+          description: 'Maximum monetary sum that can be cleared within the time period defined by the `velocity_window` field.
+
+            Refunds and reversals cannot exceed this limit.'
+          exclusiveMinimum: false
+          minimum: 0
+          type: number
+        approvals_only:
+          description: 'If set to `true`, only approved transactions are subject to control.
+
+            If set to `false`, only declined transactions are subject to control.'
+          type: boolean
+        association:
+          $ref: '#/components/schemas/spend_control_association'
+        currency_code:
+          description: Three-character ISO 4217 currency code.
+          type: string
+        include_cashback:
+          description: If set to `true`, the cashback components of point-of-sale transactions are subject to control.
+          type: boolean
+        include_credits:
+          description: 'If set to `true`, original credit transactions are subject to control.
+
+            Your request can contain either a `money_in_transaction` object or the `include_credits` field, not both.'
+          type: boolean
+        include_purchases:
+          description: 'If set to `true`, the following transactions are subject to control:
+
+
+            * *Account funding:* All account funding transactions
+
+            * *Cashback:* Only the purchase component of cashback transactions
+
+            * *Purchase transactions:* All authorizations, PIN debit transactions, and incremental transactions
+
+            * *Quasi-cash:* All quasi-cash transactions
+
+            * *Refunds:* All refund transactions (see <</developer-guides/controlling-spending#_controls_to_limit_amount_and_frequency_of_spending, Controls to limit amount and frequency of spending>> for more information)
+
+            * *Reversals:* All reversal transactions'
+          type: boolean
+        include_transfers:
+          description: 'If set to `true`, account-to-account transfers are subject to control.
+
+            Account-to-account transfers are not currently supported.'
+          type: boolean
+        include_withdrawals:
+          description: If set to `true`, ATM withdrawals are subject to control.
+          type: boolean
+        merchant_scope:
+          $ref: '#/components/schemas/merchant_scope'
+        money_in_transaction:
+          $ref: '#/components/schemas/money_in_transaction'
+        name:
+          description: 'Description of how the velocity control restricts spending.
+
+            For example, "Max spend of $500 per day" or "Max spend of $5000 per month for non-exempt employees".
+
+
+            Ensure that the description you provide here adequately captures the kind of restriction exerted by this velocity control, because the Marqeta platform will send this information to you in a webhook in the event that the transaction authorization attempt is declined by the velocity control.
+
+
+            *NOTE:* This field is very important.
+
+            If your program has multiple velocity controls in place, it is not always clear which one prevented the transaction from being approved.
+
+            Adding specific details to this field gives you more contextual information when debugging or monitoring declined authorization attempts.'
+          maxLength: 255
+          minLength: 0
+          type: string
+        token:
+          description: Unique identifier of the velocity control resource.
+          maxLength: 36
+          minLength: 1
+          type: string
+        usage_limit:
+          description: 'Maximum number of times a card can be used within the time period defined by the `velocity_window` field.
+
+
+            If `velocity_window` is set to `TRANSACTION`, do not include a `usage_limit` in your request.'
+          format: int32
+          minimum: -1
+          type: integer
+        velocity_window:
+          description: 'Defines the time period to which the `amount_limit` and `usage_limit` fields apply:
+
+
+            * *DAY* – one day; days begin at 00:00:00 UTC.
+
+            * *WEEK* – one week; weeks begin Sundays at 00:00:00 UTC.
+
+            * *MONTH* – one month; months begin on the first day of month at 00:00:00 UTC.
+
+            * *LIFETIME* – forever; time period never expires.
+
+            * *TRANSACTION* – a single transaction.
+
+
+            // (2023-05-03): This statement was validated by Processing, as part of a customer inquiry.
+
+            *NOTE:* If set to `DAY`, `WEEK`, or `MONTH`, the velocity control takes effect retroactively from the beginning of the specified period.
+
+            The amount and usage data already collected within the first period is counted toward the limits.
+
+            If set to `LIFETIME`, the velocity control only applies to transactions on or after the date and time that the velocity control was created.
+
+            `LIFETIME` velocity controls are not retroactively applied to historical transactions.
+
+
+            // (2023-05-03): Commenting this note out, as it is untrue in testing as reported by customers and confirmed by transaction engine team
+
+            //*NOTE:* Editing any of the following fields on a velocity control resets its usage and amount count to 0:
+
+
+            //* `merchant_scope.mcc`
+
+            //* `merchant_scope.mid`
+
+            //* `merchant_scope.mcc_group`
+
+            //* `association.user_token`
+
+            //* `association.card_product_token`'
+          enum:
+          - DAY
+          - WEEK
+          - MONTH
+          - QUARTER
+          - YEAR
+          - LIFETIME
+          - TRANSACTION
+          type: string
+      required:
+      - token
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

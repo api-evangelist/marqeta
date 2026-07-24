@@ -1,0 +1,219 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries Account API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: Account
+paths:
+  /accounts/{account_token}/billingcycle:
+    get:
+      description: Retrieves the billing cycle details for a specific account token.
+      operationId: retrieveBillingCycleForAccount
+      parameters:
+      - description: 'Unique identifier of the credit account for which you want to retrieve delinquency state details.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountBillingCycleResponse'
+          description: Successful response
+        '404':
+          description: Billing cycle not found
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Get billing cycle by account token
+      tags:
+      - Account
+  /accounts/{account_token}/periodicfeeschedules:
+    get:
+      description: Get all active and upcoming periodic fee schedules of an account
+      operationId: getPeriodicFeeSchedules
+      parameters:
+      - description: account token
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Number of periodic fee schedule resources to retrieve.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - description: Sort order index of the first resource in the returned array.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PeriodicFeeSchedulePage'
+          description: Expected response to a valid request.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Get all active and upcoming periodic fee schedules of an account
+      tags:
+      - Account
+components:
+  schemas:
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    PeriodicFeeSchedulePage:
+      description: Return paginated periodic fee schedules on a credit account.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: List of account periodic fee schedules.
+          items:
+            $ref: '#/components/schemas/PeriodicFeeSchedule'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    PeriodicFeeSchedule:
+      description: periodic fee schedules on account
+      properties:
+        amount:
+          description: fee amount
+          type: number
+        effective_date:
+          description: date the fee becomes effective
+          format: date
+          type: string
+        next_fee_impact_date:
+          description: date of the next time fee will be charged
+          format: date
+          type: string
+        type:
+          description: type of fee to be charged
+          enum:
+          - ANNUAL_FEE
+          - MONTHLY_FEE
+          type: string
+      type: object
+    AccountBillingCycleResponse:
+      description: Details of a billing cycle.
+      properties:
+        account_token:
+          description: Token of the associated account.
+          type: string
+        created_time:
+          description: Date and time when the Billing Cycle was created on Marqeta's credit platform
+          format: date-time
+          type: string
+        current_end_time:
+          description: End time of the current billing cycle.
+          format: date-time
+          type: string
+        current_payment_due_date:
+          description: Payment due date for the current billing cycle.
+          format: date-time
+          type: string
+        current_start_time:
+          description: Start time of the current billing cycle.
+          format: date-time
+          type: string
+        next_end_time:
+          description: End time of the next billing cycle.
+          format: date-time
+          type: string
+        next_payment_due_date:
+          description: Payment due date for the next billing cycle.
+          format: date-time
+          type: string
+        next_start_time:
+          description: Start time of the next billing cycle.
+          format: date-time
+          type: string
+        short_code:
+          description: Unique identifier of the billing cycle's short code.
+          type: string
+        updated_time:
+          description: Date and time when the BillingCycle was last updated on Marqeta's credit platform
+          format: date-time
+          type: string
+      required:
+      - account_token
+      - created_time
+      - current_end_time
+      - current_payment_due_date
+      - current_start_time
+      - next_end_time
+      - next_payment_due_date
+      - next_start_time
+      - short_code
+      - updated_time
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

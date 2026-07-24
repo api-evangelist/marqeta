@@ -1,0 +1,618 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries direct deposit accounts API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: direct deposit accounts
+paths:
+  /depositaccounts:
+    post:
+      operationId: createAccount
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DirectDepositAccountRequest'
+        description: Create direct deposit account for cardholder
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/direct_deposit_account_response'
+          description: Created
+        '404':
+          content: {}
+          description: Not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Creates new direct deposit account for cardholder.
+      tags:
+      - direct deposit accounts
+  /depositaccounts/account/{account_number}/user:
+    get:
+      operationId: getUserForDirectDepositAccount
+      parameters:
+      - description: Get user associated with direct deposit account number
+        explode: false
+        in: path
+        name: account_number
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/direct_deposit_account_response'
+          description: Success
+        '404':
+          content: {}
+          description: Not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Get User for Plain Text Account Number
+      tags:
+      - direct deposit accounts
+  /depositaccounts/transitions:
+    post:
+      operationId: createTransition
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DirectDepositAccountTransitionRequest'
+        description: Create transition for direct deposit account
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/direct_deposit_account_transition_response'
+          description: Created
+        '404':
+          content: {}
+          description: Not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Creates new transition for a direct deposit account.
+      tags:
+      - direct deposit accounts
+  /depositaccounts/transitions/{token}:
+    get:
+      operationId: getDirectDepositAccountTransition
+      parameters:
+      - description: Get specific direct deposit account transition
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/direct_deposit_account_transition_response'
+          description: Success
+        '404':
+          content: {}
+          description: Not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Get direct deposit account transition.
+      tags:
+      - direct deposit accounts
+  /depositaccounts/user/{token}:
+    get:
+      operationId: getUserDirectDepositAccounts
+      parameters:
+      - description: Number of users to retrieve
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          format: int32
+          type: integer
+        style: form
+      - description: Start index
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: form
+      - description: Sort order
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -lastModifiedTime
+          type: string
+        style: form
+      - description: Direct deposit account status
+        explode: true
+        in: query
+        name: state
+        required: false
+        schema:
+          enum:
+          - ACTIVE
+          - SUSPENDED
+          - TERMINATED
+          - UNSUPPORTED
+          - UNACTIVATED
+          - LIMITED
+          type: string
+        style: form
+      - description: Get specific direct deposit account
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DirectDepositAccountListResponse'
+          description: Success
+        '404':
+          content: {}
+          description: Not found
+        '500':
+          content: {}
+          description: Server error
+      summary: List all specific direct deposit accounts.
+      tags:
+      - direct deposit accounts
+  /depositaccounts/{token}:
+    get:
+      operationId: getDirectDepositAccount
+      parameters:
+      - description: Get specific direct deposit account
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/direct_deposit_account_response'
+          description: Success
+        '404':
+          content: {}
+          description: Not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Get direct deposit account.
+      tags:
+      - direct deposit accounts
+    put:
+      deprecated: true
+      operationId: update
+      parameters:
+      - explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepositAccountUpdateRequest'
+        description: Update direct deposit account
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/direct_deposit_account_response'
+          description: Success
+        '404':
+          content: {}
+          description: Not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Update direct deposit account.
+      tags:
+      - direct deposit accounts
+  /depositaccounts/{token}/cdd:
+    get:
+      operationId: getCDDInfo
+      parameters:
+      - description: Get CDD info for a specific DDA token
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/customer_due_diligence_response'
+          description: Success
+        '404':
+          content: {}
+          description: Not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Get direct deposit account transition list for card holder.
+      tags:
+      - direct deposit accounts
+  /depositaccounts/{token}/cdd/{cddtoken}:
+    put:
+      operationId: updateCDDInfo
+      parameters:
+      - explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: cddtoken
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerDueDiligenceUpdateRequest'
+        description: Update CDD answers
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/customer_due_diligence_response'
+          description: Success
+        '404':
+          content: {}
+          description: Not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Update CDD answers for Direct Deposit Account
+      tags:
+      - direct deposit accounts
+  /depositaccounts/{user_token}/transitions:
+    get:
+      operationId: getTransitionList
+      parameters:
+      - description: Number of users to retrieve
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          format: int32
+          type: integer
+        style: form
+      - description: Start index
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: form
+      - description: Sort order
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -createdTime
+          type: string
+        style: form
+      - description: Get direct deposit account transition list for user
+        explode: false
+        in: path
+        name: user_token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/direct_deposit_account_transition_response'
+          description: Success
+        '404':
+          content: {}
+          description: Not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Get direct deposit account transition list for card holder.
+      tags:
+      - direct deposit accounts
+components:
+  schemas:
+    direct_deposit_account_response:
+      properties:
+        account_number:
+          maxLength: 17
+          minLength: 13
+          type: string
+        allow_immediate_credit:
+          default: false
+          type: boolean
+        business_token:
+          maxLength: 36
+          minLength: 36
+          type: string
+        created_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        last_modified_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        routing_number:
+          maxLength: 9
+          minLength: 9
+          type: string
+        state:
+          maxLength: 10
+          minLength: 6
+          type: string
+        token:
+          maxLength: 36
+          minLength: 36
+          type: string
+        type:
+          maxLength: 36
+          minLength: 7
+          type: string
+        user_token:
+          maxLength: 36
+          minLength: 36
+          type: string
+      required:
+      - account_number
+      - allow_immediate_credit
+      - business_token
+      - created_time
+      - last_modified_time
+      - routing_number
+      - state
+      - token
+      - user_token
+      type: object
+    DirectDepositAccountTransitionRequest:
+      properties:
+        account_token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        channel:
+          enum:
+          - API
+          - IVR
+          - FRAUD
+          - ADMIN
+          - SYSTEM
+          - NETWORK
+          - PROD_SUPPORT
+          - UNSUPPORTED
+          type: string
+        reason:
+          maxLength: 255
+          minLength: 1
+          type: string
+        state:
+          enum:
+          - ACTIVE
+          - SUSPENDED
+          - TERMINATED
+          - UNSUPPORTED
+          - UNACTIVATED
+          - LIMITED
+          type: string
+        token:
+          type: string
+      required:
+      - account_token
+      - channel
+      type: object
+    CustomerDueDiligenceUpdateRequest:
+      properties:
+        answer:
+          type: string
+      type: object
+    DirectDepositAccountListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/direct_deposit_account_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    customer_due_diligence_response:
+      properties:
+        account_token:
+          type: string
+        answer:
+          type: string
+        bank:
+          type: string
+        question:
+          type: string
+        token:
+          type: string
+        type:
+          type: string
+      required:
+      - account_token
+      - answer
+      - bank
+      - question
+      - token
+      - type
+      type: object
+    CustomerDueDiligenceRequest:
+      properties:
+        answer:
+          type: string
+        question:
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - answer
+      - question
+      type: object
+    direct_deposit_account_transition_response:
+      properties:
+        account_token:
+          maxLength: 36
+          minLength: 36
+          type: string
+        business_token:
+          maxLength: 36
+          minLength: 36
+          type: string
+        channel:
+          maxLength: 10
+          minLength: 6
+          type: string
+        created_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        reason:
+          maxLength: 255
+          minLength: 0
+          type: string
+        state:
+          maxLength: 10
+          minLength: 6
+          type: string
+        token:
+          maxLength: 36
+          minLength: 36
+          type: string
+        user_token:
+          maxLength: 36
+          minLength: 36
+          type: string
+      required:
+      - account_token
+      - business_token
+      - channel
+      - created_time
+      - reason
+      - state
+      - token
+      - user_token
+      type: object
+    DirectDepositAccountRequest:
+      properties:
+        allow_immediate_credit:
+          default: false
+          type: boolean
+        business_token:
+          description: Required if 'user_token' is null
+          maxLength: 36
+          minLength: 1
+          type: string
+        customer_due_diligence:
+          description: Required if account type = Checking
+          items:
+            $ref: '#/components/schemas/CustomerDueDiligenceRequest'
+          type: array
+        token:
+          type: string
+        type:
+          enum:
+          - DEPOSIT_ACCOUNT
+          - CHECKING
+          - SAVINGS
+          - INTEREST_BEARING
+          type: string
+        user_token:
+          description: Required if 'business_token' is null
+          maxLength: 36
+          minLength: 1
+          type: string
+      type: object
+    DepositAccountUpdateRequest:
+      properties:
+        allow_immediate_credit:
+          default: false
+          type: boolean
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

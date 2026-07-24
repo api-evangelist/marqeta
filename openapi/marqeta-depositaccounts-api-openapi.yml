@@ -1,0 +1,41 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries Depositaccounts API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: Depositaccounts
+paths:
+  /depositaccounts/user/{token}/direct:
+    get:
+      deprecated: true
+      operationId: getDepositAccountUserToken
+      parameters:
+      - description: Token
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        default:
+          content: {}
+          description: successful operation
+      summary: Get deposit account user token.
+      tags:
+      - Depositaccounts
+components:
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

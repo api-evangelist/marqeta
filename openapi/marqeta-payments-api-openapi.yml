@@ -1,0 +1,1305 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries Payments API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- description: '// Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    Use the payments endpoints to create and retrieve payments made on a <</core-api/credit-accounts, credit account>>, release payment holds, or transition payment statuses.
+
+
+    A payment is an amount paid toward an account balance to reduce the total amount owed on the account.
+
+    For more on payments, see <</developer-guides/about-credit-account-payments, About Credit Account Payments>>.
+
+
+    To receive webhook notifications when ACH payment transition events occur, see <</core-api/event-types#_credit_account_payment_transition_events, Credit account payment transition events>> in Event Types.
+
+
+    Creating a payment triggers the creation of a <</core-api/credit-account-journal-entries, journal entry>> belonging to the `PAYMENT` group.
+
+    For more on payment journal entries, see <</developer-guides/about-credit-account-journal-entries#_payments, Payments>> in the About Credit Account Journal Entries guide.'
+  name: Payments
+paths:
+  /accounts/{account_token}/payments:
+    get:
+      description: 'Retrieve an array of payments on a credit account.
+
+
+        This endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>.'
+      operationId: listPayments
+      parameters:
+      - description: 'Unique identifier of the credit account for which to retrieve payments.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: Beginning of the date range of the payments to return.
+        explode: true
+        in: query
+        name: start_date
+        required: false
+        schema:
+          example: 2024-01-01
+          format: date
+          type: string
+        style: form
+      - description: End of the date range of the payments to return.
+        explode: true
+        in: query
+        name: end_date
+        required: false
+        schema:
+          example: 2024-02-01
+          format: date
+          type: string
+        style: form
+      - description: Number of account payments resources to retrieve.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - description: Sort order index of the first resource in the returned array.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: 'Field on which to sort.
+
+          Prefix the field name with a hyphen (`-`) to sort in descending order.
+
+          Omit the hyphen to sort in ascending order.
+
+
+          *NOTE:*
+
+          You must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`.'
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -lastModifiedTime
+          enum:
+          - lastModifiedTime
+          - -lastModifiedTime
+          type: string
+        style: form
+      - description: Array of statuses by which to filter payments.
+        explode: true
+        in: query
+        name: statuses
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/PaymentStatus'
+          type: array
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                count: 2
+                data:
+                - account_token: 7d68f45b-1232-4283-a0ea-6b0418d37692
+                  amount: 2500
+                  created_time: 2024-01-31 15:03:09.717000+00:00
+                  currency_code: USD
+                  description: Account statement payment
+                  hold_days: 1
+                  hold_end_time: 2024-02-03 11:32:24.727000+00:00
+                  is_manually_released: false
+                  metadata: \"bank_account_last_4_digits\":\"7234\\"bank_name\":\"Bank Finance Plus\"
+                  method: ACH
+                  on_hold: false
+                  payment_source_token: 4474c16b-7ba7-435b-8854-237d492e3f32
+                  returned_details: null
+                  status: COMPLETED
+                  token: 4749ab00-fec1-471c-ac5b-b8d31d06d7e4
+                  transitions:
+                  - account_token: 7d68f45b-1232-4283-a0ea-6b0418d37692
+                    created_time: 2024-02-01 02:04:11.645000+00:00
+                    payment_token: 4749ab00-fec1-471c-ac5b-b8d31d06d7e4
+                    status: PROCESSING
+                    token: b62d45d5-4495-4490-a898-3781229b235d
+                  - account_token: 7d68f45b-1232-4283-a0ea-6b0418d37692
+                    created_time: 2024-02-01 03:39:22.505000+00:00
+                    payment_token: 4749ab00-fec1-471c-ac5b-b8d31d06d7e4
+                    status: SUBMITTED
+                    token: 82d79178-5c97-41c2-80e5-bd99bb6bb61c
+                  - account_token: 7d68f45b-1232-4283-a0ea-6b0418d37692
+                    created_time: 2024-01-31 15:30:45.028000+00:00
+                    payment_token: 4749ab00-fec1-471c-ac5b-b8d31d06d7e4
+                    status: PENDING
+                    token: c2a83d12-eeff-460a-b88a-bf7a2e40b251
+                  - account_token: 7d68f45b-1232-4283-a0ea-6b0418d37692
+                    created_time: 2024-02-02 11:32:24.727000+00:00
+                    payment_token: 4749ab00-fec1-471c-ac5b-b8d31d06d7e4
+                    status: COMPLETED
+                    token: 156b5134-b37d-49cf-89d5-7123b321ba5c
+                  - account_token: 7d68f45b-1232-4283-a0ea-6b0418d37692
+                    created_time: 2024-01-31 15:03:09.723000+00:00
+                    payment_token: 4749ab00-fec1-471c-ac5b-b8d31d06d7e4
+                    status: INITIATED
+                    token: 64ca6c83-937c-4d37-86ae-14766bf87540
+                  updated_time: 2024-02-03 12:00:30.072000+00:00
+                - account_token: my_account_token_12
+                  allocations:
+                  - amount: 25
+                    bucket: PRINCIPAL
+                  - amount: 15
+                    bucket: INTEREST
+                  - amount: 5
+                    bucket: FEES
+                  amount: 25
+                  created_time: 2024-09-03 23:03:05.675000+00:00
+                  currency_code: USD
+                  description: minimum payment
+                  hold_days: 0
+                  is_manually_released: false
+                  method: CHECK
+                  on_hold: false
+                  status: COMPLETED
+                  token: my_payment_25
+                  transitions:
+                  - account_token: my_account_token_12
+                    created_time: 2024-09-03 23:03:05.683000+00:00
+                    payment_token: my_payment_25
+                    status: COMPLETED
+                    token: my_transition_token1234
+                  updated_time: 2024-09-03 23:03:05.675000+00:00
+                end_index: 2
+                is_more: false
+                start_index: 0
+              schema:
+                $ref: '#/components/schemas/PaymentsPage'
+          description: Paginated list of payments for the given token.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: List account payments
+      tags:
+      - Payments
+    post:
+      description: Create a new payment to apply toward a credit account's balance.
+      operationId: createPayment
+      parameters:
+      - description: 'Unique identifier of the credit account for which to create a payment.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            example:
+              amount: 2500
+              currency_code: USD
+              description: Account statement payment
+              method: ACH
+              payment_source_token: payment_source_token_1112
+              token: payment_token_1239
+            schema:
+              $ref: '#/components/schemas/PaymentCreateReq'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              example:
+                account_token: 7d68f45b-1232-4283-a0ea-6b0418d37692
+                amount: 2500
+                created_time: 2024-01-31 15:03:09.717000+00:00
+                currency_code: USD
+                description: Account statement payment
+                hold_days: 1
+                hold_end_time: 2024-02-03 11:32:24.727000+00:00
+                is_manually_released: false
+                metadata: \"bank_account_last_4_digits\":\"7234\\"bank_name\":\"Bank Finance Plus\"
+                method: ACH
+                on_hold: false
+                payment_source_token: 4474c16b-7ba7-435b-8854-237d492e3f32
+                refund_details: null
+                returned_details: null
+                status: COMPLETED
+                token: 4749ab00-fec1-471c-ac5b-b8d31d06d7e4
+                transitions:
+                - account_token: 7d68f45b-1232-4283-a0ea-6b0418d37692
+                  created_time: 2024-02-01 02:04:11.645000+00:00
+                  payment_token: 4749ab00-fec1-471c-ac5b-b8d31d06d7e4
+                  status: PROCESSING
+                  token: b62d45d5-4495-4490-a898-3781229b235d
+                - account_token: 7d68f45b-1232-4283-a0ea-6b0418d37692
+                  created_time: 2024-02-01 03:39:22.505000+00:00
+                  payment_token: 4749ab00-fec1-471c-ac5b-b8d31d06d7e4
+                  status: SUBMITTED
+                  token: 82d79178-5c97-41c2-80e5-bd99bb6bb61c
+                - account_token: 7d68f45b-1232-4283-a0ea-6b0418d37692
+                  created_time: 2024-01-31 15:30:45.028000+00:00
+                  payment_token: 4749ab00-fec1-471c-ac5b-b8d31d06d7e4
+                  status: PENDING
+                  token: c2a83d12-eeff-460a-b88a-bf7a2e40b251
+                - account_token: 7d68f45b-1232-4283-a0ea-6b0418d37692
+                  created_time: 2024-02-02 11:32:24.727000+00:00
+                  payment_token: 4749ab00-fec1-471c-ac5b-b8d31d06d7e4
+                  status: COMPLETED
+                  token: 156b5134-b37d-49cf-89d5-7123b321ba5c
+                - account_token: 7d68f45b-1232-4283-a0ea-6b0418d37692
+                  created_time: 2024-01-31 15:03:09.723000+00:00
+                  payment_token: 4749ab00-fec1-471c-ac5b-b8d31d06d7e4
+                  status: INITIATED
+                  token: 64ca6c83-937c-4d37-86ae-14766bf87540
+                updated_time: 2024-02-03 12:00:30.072000+00:00
+              schema:
+                $ref: '#/components/schemas/PaymentDetailResponse'
+          description: Newly created payment or existing payment with provided payment token.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Create account payment
+      tags:
+      - Payments
+  /accounts/{account_token}/payments/{payment_token}:
+    get:
+      description: Retrieve a payment for a credit account.
+      operationId: retrievePayment
+      parameters:
+      - description: 'Unique identifier of the credit account for which to retrieve a payment.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: 'Unique identifier of the payment to retrieve.
+
+
+          Send a `GET` request to `/credit/accounts/{token}/payments` to retrieve existing payment tokens.'
+        explode: false
+        in: path
+        name: payment_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing payment token
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                account_token: 7d68f45b-1232-4283-a0ea-6b0418d37692
+                amount: 2500
+                created_time: 2024-01-31 15:03:09.717000+00:00
+                currency_code: USD
+                description: Account statement payment
+                hold_days: 1
+                hold_end_time: 2024-02-03 11:32:24.727000+00:00
+                is_manually_released: false
+                metadata: \"bank_account_last_4_digits\":\"7234\\"bank_name\":\"Bank Finance Plus\"
+                method: ACH
+                on_hold: false
+                payment_source_token: 4474c16b-7ba7-435b-8854-237d492e3f32
+                returned_details: null
+                status: COMPLETED
+                token: 4749ab00-fec1-471c-ac5b-b8d31d06d7e4
+                transitions:
+                - account_token: 7d68f45b-1232-4283-a0ea-6b0418d37692
+                  created_time: 2024-02-01 02:04:11.645000+00:00
+                  payment_token: 4749ab00-fec1-471c-ac5b-b8d31d06d7e4
+                  status: PROCESSING
+                  token: b62d45d5-4495-4490-a898-3781229b235d
+                - account_token: 7d68f45b-1232-4283-a0ea-6b0418d37692
+                  created_time: 2024-02-01 03:39:22.505000+00:00
+                  payment_token: 4749ab00-fec1-471c-ac5b-b8d31d06d7e4
+                  status: SUBMITTED
+                  token: 82d79178-5c97-41c2-80e5-bd99bb6bb61c
+                - account_token: 7d68f45b-1232-4283-a0ea-6b0418d37692
+                  created_time: 2024-01-31 15:30:45.028000+00:00
+                  payment_token: 4749ab00-fec1-471c-ac5b-b8d31d06d7e4
+                  status: PENDING
+                  token: c2a83d12-eeff-460a-b88a-bf7a2e40b251
+                - account_token: 7d68f45b-1232-4283-a0ea-6b0418d37692
+                  created_time: 2024-02-02 11:32:24.727000+00:00
+                  payment_token: 4749ab00-fec1-471c-ac5b-b8d31d06d7e4
+                  status: COMPLETED
+                  token: 156b5134-b37d-49cf-89d5-7123b321ba5c
+                - account_token: 7d68f45b-1232-4283-a0ea-6b0418d37692
+                  created_time: 2024-01-31 15:03:09.723000+00:00
+                  payment_token: 4749ab00-fec1-471c-ac5b-b8d31d06d7e4
+                  status: INITIATED
+                  token: 64ca6c83-937c-4d37-86ae-14766bf87540
+                updated_time: 2024-02-03 12:00:30.072000+00:00
+              schema:
+                $ref: '#/components/schemas/PaymentDetailResponse'
+          description: Payment object
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Retrieve account payment
+      tags:
+      - Payments
+  /accounts/{account_token}/payments/{payment_token}/releasehold:
+    post:
+      description: Manually release a payment hold on a credit account.
+      operationId: releasePaymentHold
+      parameters:
+      - description: 'Unique identifier of the credit account on which a payment hold is being released.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: 'Unique identifier of the payment currently on hold.
+
+
+          Send a `GET` request to `/credit/accounts/{account_token}/payments` to retrieve existing payment tokens.'
+        explode: false
+        in: path
+        name: payment_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing payment token
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                account_token: my_account_token_12
+                amount: 25
+                created_time: 2024-09-09 22:42:35.065000+00:00
+                currency_code: USD
+                description: minimum payment
+                hold_days: 5
+                hold_end_time: 2024-09-09 22:48:09.721000+00:00
+                is_manually_released: true
+                metadata: check_number123
+                method: CHECK
+                on_hold: false
+                status: COMPLETED
+                token: my_payment_25
+                transitions:
+                - account_token: account-12
+                  created_time: 2024-09-09 22:42:35.068000+00:00
+                  payment_token: my_payment_25
+                  status: COMPLETED
+                  token: my_transition_token1234
+                updated_time: 2024-09-09 22:48:09.722000+00:00
+              schema:
+                $ref: '#/components/schemas/PaymentDetailResponse'
+          description: Expected response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Release payment hold
+      tags:
+      - Payments
+  /accounts/{account_token}/payments/{payment_token}/transitions:
+    post:
+      description: Transition a credit account payment's status to a new status.
+      operationId: transitionPayment
+      parameters:
+      - description: 'Unique identifier of the credit account for which you want to transition a payment status.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: 'Unique identifier of the payment whose status you want to transition.
+
+
+          Send a `GET` request to `/credit/accounts/{account_token}/payments` endpoint to retrieve existing payment tokens for a given account.'
+        explode: false
+        in: path
+        name: payment_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing payment token
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            example:
+              status: RETURNED
+            schema:
+              $ref: '#/components/schemas/PaymentTransitionReq'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentTransitionResponse'
+          description: Payment Transition Response object.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Transition account payment status
+      tags:
+      - Payments
+  /webhooks/{event_type}/{resource_token}:
+    post:
+      description: 'Resends a credit event notification to your webhook endpoint.
+
+
+        Although you send this request as a `POST`, all parameters are passed in the URL and the body is empty.
+
+        The event notification is resent to your webhook endpoint and also returned in the response to this request.
+
+
+        For details on how to configure your webhook endpoint, see the About Webhooks <</developer-guides/about-webhooks#_tutorial, tutorial>>.
+
+        For the complete `/webhooks` endpoint reference, see <</core-api/webhooks, Webhooks>>.'
+      operationId: resendWebhookEvent
+      parameters:
+      - description: Specifies the type of event you want to resend.
+        explode: false
+        in: path
+        name: event_type
+        required: true
+        schema:
+          enum:
+          - ledgerentry
+          - journalentry
+          - accounttransition
+          - accountstatement
+          - paymenttransition
+          - delinquencytransition
+          - paymentreminders
+          - substatus
+          - accountsignupbonus
+          type: string
+        style: simple
+      - description: 'Unique identifier of the resource for which you want to resend a notification.
+
+
+          * Send a `GET` request to `/credit/accounts/{account_token}/journalentries` to retrieve existing journal entry tokens.
+
+          * Send a `GET` request to `/credit/accounts/{account_token}/ledgerentries` to retrieve existing ledger entry tokens.
+
+          * Send a `GET` request to `/accounts/{account_token}/accounttransitions` to retrieve existing account transition tokens.
+
+          * Send a `GET` request to `/credit/accounts/{account_token}/payments/{payment_token}` to retrieve existing payment transition tokens.
+
+          * Send a `GET` request to `/accounts/{account_token}/statements` to retrieve existing statement summary tokens.
+
+          * Send a `GET` request to `/accounts/{account_token}/delinquencystate/transitions` to retrieve existing delinquency state transition tokens.
+
+          * Send a `GET` request to `/accounts/{account_token}/statements/{statement_summary_token}/paymentreminders/{token}` to retrieve existing payment reminder tokens.
+
+          * Send a `GET` request to `/credit/substatuses` to retrieve existing substatus tokens.
+
+          * Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens and identify the specific account for the resend event.'
+        explode: false
+        in: path
+        name: resource_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing journal entry token, ledger entry token, account transition token, payment transition token, statement summary token, delinquency transition token, or substatus token
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                account_statement_sample:
+                  summary: The following code block shows a sample of a resent `creditaccountstatements` event.
+                  value:
+                    account_token: my_credit_account_token
+                    available_credit: 0
+                    closing_balance: 506.41
+                    closing_date: 2025-04-01 03:59:59.999000+00:00
+                    created_time: 2023-08-18 22:04:31.261000+00:00
+                    credit_limit: 500
+                    credits: 0
+                    cycle_type: REVOLVING
+                    days_in_billing_cycle: 31
+                    fees: 15
+                    interest: 4.96
+                    opening_balance: 496.45
+                    opening_date: 2025-03-01 05:00:00+00:00
+                    past_due_amount: 10
+                    payments: 10
+                    purchases: 0
+                    token: my_credit_account_statement_token
+                account_transition_sample:
+                  summary: The following code block shows a sample of a resent `creditaccounttransitions` event.
+                  value:
+                    account_token: my_credit_account_token1234
+                    created_time: 2024-08-18 20:25:10.408000+00:00
+                    original_status: UNACTIVATED
+                    status: ACTIVE
+                    token: my_credit_account_transition_token1234
+                accountsignupbonus_example:
+                  summary: The following code block shows a sample of a resent `accountsignupbonus` event.
+                  value:
+                    account_token: my_account_token
+                    accrual_start_time: 2024-04-02 11:23:23+00:00
+                    journal_entry_token: my_journal_entry_token
+                    maturity_time: 2024-04-02 11:23:23+00:00
+                    reward_token: my_reward_token
+                    spend_total: 10
+                    status: ISSUED
+                    token: my_accountsignupbonus_token
+                    type: STATEMENT_CREDIT
+                delinquency_transition_example:
+                  summary: The following code block shows a sample of a resent `creditdelinquencytransitions` event.
+                  value:
+                    account_token: my_credit_account_token1234
+                    bucket_count: 2
+                    created_time: 2024-03-01 04:59:59.999000
+                    current_due: 40
+                    impact_time: 2024-03-01 04:59:59.999000
+                    is_rolled_back: false
+                    oldest_payment_due_date: 2023-02-01 04:59:59.999000
+                    original_status: CURRENT
+                    status: DELINQUENT
+                    token: my_delinquency_transition_token1234
+                    total_due: 140
+                    total_past_due: 100
+                    transition_trigger_reason: STATEMENT_GENERATION
+                    transition_trigger_time: 2024-03-01 04:59:59.999000
+                    updated_time: 2024-03-01 04:59:59.999000
+                journal_entry_example:
+                  summary: The following code block shows a sample of a resent `creditjournalentries` event.
+                  value:
+                    account_token: my_credit_account_token1234
+                    amount: 10
+                    card_token: my_credit_card_token1234
+                    created_time: 2024-08-18 22:07:21.422000+00:00
+                    currency_code: USD
+                    detail_object:
+                      acquirer:
+                        system_trace_audit_number: '376582'
+                      acquirer_fee_amount: 0
+                      acting_user_token: my_user_token
+                      amount: 10
+                      approval_code: '974406'
+                      card:
+                        last_four: '9949'
+                        metadata: {}
+                      card_acceptor:
+                        city: San Francisco
+                        country_code: USA
+                        mcc: '6411'
+                        mid: '1234'
+                        name: Jane's Bakery
+                        postal_code: '94115'
+                        state: CA
+                        street_address: 1989 Fillmore St
+                      card_token: my_credit_card_token1234
+                      created_time: 2024-08-18 22:06:52+00:00
+                      currency_code: USD
+                      duration: 837
+                      gpa:
+                        available_balance: 0
+                        balances:
+                          USD:
+                            available_balance: 0
+                            credit_balance: 0
+                            currency_code: USD
+                            impacted_amount: -10
+                            ledger_balance: 510.87
+                            pending_credits: 0
+                        credit_balance: 0
+                        currency_code: USD
+                        impacted_amount: -10
+                        ledger_balance: 510.87
+                        pending_credits: 0
+                      gpa_order:
+                        amount: 10
+                        created_time: 2024-08-18 22:06:53+00:00
+                        currency_code: USD
+                        funding:
+                          amount: 10
+                          gateway_log:
+                            duration: 485
+                            message: Approved or completed successfully
+                            order_number: my_gateway_token12345
+                            response:
+                              code: '200'
+                              data:
+                                jit_funding:
+                                  acting_user_token: my_user_token
+                                  amount: 10
+                                  method: pgfs.authorization
+                                  token: my_jit_funding_token1234
+                                  user_token: my_user_token
+                            timed_out: false
+                            transaction_id: my_transaction_id1234
+                          source:
+                            active: true
+                            created_time: 2024-10-14 17:26:35+00:00
+                            is_default_account: false
+                            last_modified_time: 2024-10-14 17:26:35+00:00
+                            name: credit_backed_funding_source
+                            token: '**********1ab2'
+                            type: programgateway
+                        funding_source_token: '**********1ab2'
+                        jit_funding:
+                          acting_user_token: my_user_token
+                          amount: 10
+                          method: pgfs.authorization
+                          token: my_transaction_id1234
+                          user_token: my_user_token
+                        last_modified_time: 2024-08-18 22:06:53+00:00
+                        response:
+                          code: '0000'
+                          memo: Approved or completed successfully
+                        state: PENDING
+                        token: my_gpa_order_token1234
+                        transaction_token: my_transaction_token1234
+                        user_token: my_user_token
+                      identifier: '234'
+                      issuer_payment_node: f8205a67b12b90d695b15704a64c074b
+                      issuer_received_time: 2024-08-18 22:06:52.771000+00:00
+                      network: DISCOVER
+                      network_reference_id: '484311571095'
+                      pos:
+                        is_installment: false
+                        is_recurring: false
+                        partial_approval_capable: true
+                        pin_present: false
+                        purchase_amount_only: false
+                      request_amount: 10
+                      response:
+                        code: '0000'
+                        memo: Approved or completed successfully
+                      settlement_date: 2024-08-18 00:00:00+00:00
+                      state: PENDING
+                      token: my_detail_token1234
+                      type: authorization
+                      user:
+                        metadata:
+                          key1: value1
+                          key2: value2
+                          notification_email: user@domain.com
+                          notification_language: spa
+                      user_token: my_user_token
+                      user_transaction_time: 2024-08-18 22:06:52+00:00
+                    detail_token: my_detail_token1234
+                    dispute_token: null
+                    group: PURCHASE
+                    id: '12345678'
+                    impact_time: 2024-08-18 22:07:21.422000+00:00
+                    memo: Jane's Bakery
+                    related_token: null
+                    request_time: 2024-08-18 22:06:52+00:00
+                    root_token: null
+                    status: PENDING
+                    token: my_journal_entry_token1234
+                    type: authorization
+                ledger_entry_sample:
+                  summary: The following code block shows a sample of a resent `creditledgerentries` event.
+                  value:
+                    account_token: my_credit_account_token1234
+                    amount: 10
+                    card_token: my_credit_card_token1234
+                    created_time: 2024-08-18 22:07:21.422000+00:00
+                    currency_code: USD
+                    detail_object:
+                      acquirer:
+                        system_trace_audit_number: '376582'
+                      acquirer_fee_amount: 0
+                      acting_user_token: my_user_token
+                      amount: 10
+                      approval_code: '974406'
+                      card:
+                        last_four: '9949'
+                        metadata: {}
+                      card_acceptor:
+                        city: San Francisco
+                        country_code: USA
+                        mcc: '6411'
+                        mid: '1234'
+                        name: Jane's Bakery
+                        postal_code: '94115'
+                        state: CA
+                        street_address: 1989 Fillmore St
+                      card_token: my_credit_card_token1234
+                      created_time: 2024-08-18 22:06:52+00:00
+                      currency_code: USD
+                      duration: 837
+                      gpa:
+                        available_balance: 0
+                        balances:
+                          USD:
+                            available_balance: 0
+                            credit_balance: 0
+                            currency_code: USD
+                            impacted_amount: -10
+                            ledger_balance: 510.87
+                            pending_credits: 0
+                        credit_balance: 0
+                        currency_code: USD
+                        impacted_amount: -10
+                        ledger_balance: 510.87
+                        pending_credits: 0
+                      gpa_order:
+                        amount: 10
+                        created_time: 2024-08-18 22:06:53+00:00
+                        currency_code: USD
+                        funding:
+                          amount: 10
+                          gateway_log:
+                            duration: 485
+                            message: Approved or completed successfully
+                            order_number: my_gateway_token12345
+                            response:
+                              code: '200'
+                              data:
+                                jit_funding:
+                                  acting_user_token: my_user_token
+                                  amount: 10
+                                  method: pgfs.authorization
+                                  token: my_jit_funding_token1234
+                                  user_token: my_user_token
+                            timed_out: false
+                            transaction_id: my_transaction_id1234
+                          source:
+                            active: true
+                            created_time: 2024-10-14 17:26:35+00:00
+                            is_default_account: false
+                            last_modified_time: 2024-10-14 17:26:35+00:00
+                            name: credit_backed_funding_source
+                            token: '**********1ab2'
+                            type: programgateway
+                        funding_source_token: '**********1ab2'
+                        jit_funding:
+                          acting_user_token: my_user_token
+                          amount: 10
+                          method: pgfs.authorization
+                          token: my_transaction_id1234
+                          user_token: my_user_token
+                        last_modified_time: 2024-08-18 22:06:53+00:00
+                        response:
+                          code: '0000'
+                          memo: Approved or completed successfully
+                        state: PENDING
+                        token: my_gpa_order_token1234
+                        transaction_token: my_transaction_token1234
+                        user_token: my_user_token
+                      identifier: '234'
+                      issuer_payment_node: f8205a67b12b90d695b15704a64c074b
+                      issuer_received_time: 2024-08-18 22:06:52.771000+00:00
+                      network: DISCOVER
+                      network_reference_id: '484311571095'
+                      pos:
+                        is_installment: false
+                        is_recurring: false
+                        partial_approval_capable: true
+                        pin_present: false
+                        purchase_amount_only: false
+                      request_amount: 10
+                      response:
+                        code: '0000'
+                        memo: Approved or completed successfully
+                      settlement_date: 2024-08-18 00:00:00+00:00
+                      state: PENDING
+                      token: my_detail_token1234
+                      type: authorization
+                      user:
+                        metadata:
+                          key1: value1
+                          key2: value2
+                          notification_email: user@domain.com
+                          notification_language: spa
+                      user_token: my_user_token
+                      user_transaction_time: 2024-08-18 22:06:52+00:00
+                    detail_token: my_detail_token1234
+                    dispute_token: null
+                    group: PURCHASE
+                    id: '12345678'
+                    impact_time: 2024-08-18 22:07:21.422000+00:00
+                    memo: Jane's Bakery
+                    related_token: null
+                    request_time: 2024-08-18 22:06:52+00:00
+                    root_token: null
+                    status: PENDING
+                    token: my_ledger_entry_token1234
+                    type: authorization
+                payment_transition_example:
+                  summary: The following code block shows a sample of a resent `creditpaymenttransitions` event.
+                  value:
+                    account_token: my_credit_account_token1234
+                    created_time: 2024-08-17 18:26:47.591000+00:00
+                    payment_token: my_credit_account_payment_token1234
+                    refund_details: null
+                    status: COMPLETED
+                    token: my_payment_transition_token1234
+                substatus_example:
+                  summary: The following code block shows a sample of a resent `substatus` event.
+                  value:
+                    attributes: []
+                    created_time: 2024-04-02 11:23:23+00:00
+                    events:
+                    - channel: SYSTEM
+                      created_time: 2024-04-02 11:23:23+00:00
+                      effective_date: 2024-04-02 11:23:23+00:00
+                      reason: Fraud system detected suspicious activity
+                      state: ACTIVE
+                    - channel: ADMIN
+                      created_time: 2024-04-02 11:23:23+00:00
+                      effective_date: 2024-04-02 11:23:23+00:00
+                      reason: Verified non-fraud with cardholder
+                      state: INACTIVE
+                    is_active: false
+                    resource_token: my_account_token
+                    resource_type: ACCOUNT
+                    state: INACTIVE
+                    substatus: FRAUD
+                    token: substatus_token
+                    updated_time: 2024-04-02 11:23:23+00:00
+              schema:
+                $ref: '#/components/schemas/WebhookEventResendContainerResponse'
+          description: Event response for which the webhook event was resent
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Resend credit event notification
+      tags:
+      - Payments
+components:
+  schemas:
+    PaymentsPage:
+      description: Returns paginated payments
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: Contains one or more payments on a credit account.
+          items:
+            $ref: '#/components/schemas/PaymentDetailResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    RefundDetailsResponse:
+      description: Contains details for a refund.
+      nullable: true
+      properties:
+        description:
+          description: Description of the refund.
+          type: string
+        method:
+          $ref: '#/components/schemas/RefundMethod'
+        status:
+          $ref: '#/components/schemas/RefundStatus'
+      required:
+      - description
+      - method
+      - status
+      type: object
+    PaymentTransitionReq:
+      description: Request used to transition the status of a payment.
+      properties:
+        refund_details:
+          $ref: '#/components/schemas/RefundDetails'
+        status:
+          $ref: '#/components/schemas/PaymentStatus'
+        token:
+          description: Unique identifier of the payment status transition.
+          maxLength: 36
+          type: string
+        waive_returned_payment_fee:
+          description: A value of `true` indicates that a returned payment fee should not be applied if one is applicable. This is false by default. This field is only considered during a transition to either `REFUNDED` or `RETURNED`
+          type: boolean
+      required:
+      - status
+      type: object
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
+      type: string
+    PaymentDetailResponse:
+      description: Response containing payment details with transition history.
+      properties:
+        account_token:
+          description: Unique identifier of the credit account on which the payment is made.
+          maxLength: 36
+          type: string
+        allocations:
+          description: List of objects that contain information about how a payment is allocated.
+          items:
+            $ref: '#/components/schemas/PaymentAllocationResponse'
+          type: array
+        amount:
+          description: Total amount of the payment.
+          minimum: 0
+          type: number
+        created_time:
+          description: Date and time when the payment was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        currency_code:
+          $ref: '#/components/schemas/CurrencyCode'
+        description:
+          description: Description of the payment.
+          type: string
+        hold_days:
+          default: 0
+          description: After a payment completes, the number of days to hold the available credit on the account before increasing it.
+          type: integer
+        hold_end_time:
+          description: Date and time when the available credit hold is released.
+          format: date-time
+          type: string
+        is_manually_released:
+          default: false
+          description: Whether the available credit hold was manually released for this payment.
+          type: boolean
+        metadata:
+          description: Customer-defined additional information about the payment (for example, a check number).
+          type: string
+        method:
+          description: Method of payment.
+          enum:
+          - ACH
+          - CHECK
+          - DEBIT
+          - CASH
+          - SECURED_CARD
+          type: string
+        on_hold:
+          default: false
+          description: Whether the available credit is on hold for this payment.
+          type: boolean
+        payment_schedule_token:
+          description: Unique identifier of the payment schedule.
+          type: string
+        payment_source_token:
+          description: 'Unique identifier of the payment source.
+
+
+            Required for ACH payments.'
+          type: string
+        program_migration_time:
+          description: 'Date and time when the statement summary was migrated to Marqeta''s credit platform, in UTC.
+
+
+            The value of this field is `null` if it has not been migrated.'
+          format: date-time
+          type: string
+        refund_details:
+          $ref: '#/components/schemas/RefundDetailsResponse'
+        returned_details:
+          $ref: '#/components/schemas/ReturnedDetails'
+        status:
+          $ref: '#/components/schemas/PaymentStatus'
+        token:
+          description: 'Unique identifier of the payment.
+
+
+            If in the `detail_object`, unique identifier of the detail object.'
+          type: string
+        transitions:
+          description: Contains one or more `transitions` objects, which contain information about a payment status transition.
+          items:
+            $ref: '#/components/schemas/PaymentTransitionResponse'
+          type: array
+        updated_time:
+          description: Date and time when the payment was last updated on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        waive_returned_payment_fee:
+          description: 'A value of `true` indicates that a returned payment fee should not be applied.
+
+            The default value of this field is `false`.
+
+
+            This field is only considered when transitioning the status of the fee to `REFUNDED`.'
+          type: boolean
+      required:
+      - account_token
+      - amount
+      - created_time
+      - currency_code
+      - description
+      - hold_days
+      - method
+      - status
+      - token
+      - transitions
+      - updated_time
+      type: object
+    PaymentStatus:
+      description: Current status of the payment or refund.
+      enum:
+      - INITIATED
+      - PENDING
+      - PROCESSING
+      - SUBMITTED
+      - CANCELLED
+      - COMPLETED
+      - RETURNED
+      - REFUNDED
+      - SYS_ERROR
+      - ACH_ERROR
+      type: string
+    ReturnedDetails:
+      description: Contains information on a returned payment.
+      nullable: true
+      properties:
+        return_code:
+          description: 'Return code for the returned payment.
+
+            For more, see <</developer-guides/ach-origination#_nacha_ach_return_codes, NACHA ACH return codes>>.'
+          type: string
+        return_reason:
+          description: 'Reason the payment was returned.
+
+            For more, see <</developer-guides/ach-origination#_nacha_ach_return_codes, NACHA ACH return codes>>.'
+          type: string
+      required:
+      - return_code
+      - return_reason
+      type: object
+    PaymentAllocationResponse:
+      description: Object containing payment allocation information.
+      properties:
+        amount:
+          description: Total amount of the payment allocation.
+          minimum: 0
+          type: number
+        bucket:
+          description: Category to which a portion of the payment is allocated.
+          enum:
+          - PRINCIPAL
+          - INTEREST
+          - FEES
+          type: string
+      required:
+      - amount
+      - bucket
+      type: object
+    WebhookEventResendContainerResponse:
+      description: Contains information about a webhook event.
+      properties:
+        unused:
+          description: Event notification that was resent to your webhook endpoint.
+          type: string
+      type: object
+    RefundMethod:
+      description: Payment instrument used to issue the refund.
+      enum:
+      - ACH
+      - CHECK
+      type: string
+    RefundStatus:
+      description: Current status of the refund.
+      enum:
+      - INITIATED
+      - PENDING
+      - PROCESSING
+      - SUBMITTED
+      - CANCELLED
+      - COMPLETED
+      - RETURNED
+      type: string
+    RefundDetails:
+      description: Contains details for a refund.
+      properties:
+        description:
+          description: Description of the refund.
+          type: string
+        method:
+          $ref: '#/components/schemas/RefundMethod'
+      required:
+      - description
+      - method
+      type: object
+    PaymentCreateReq:
+      description: 'Object that is created when a user pays a portion or all of their statement balance.
+
+
+        Applies to immediate payments only.
+
+        Once the value is set to `ACTIVE`, it cannot be edited or deleted.'
+      properties:
+        amount:
+          description: Amount of the payment.
+          minimum: 0
+          type: number
+        currency_code:
+          $ref: '#/components/schemas/CurrencyCode'
+        description:
+          description: Description of the payment.
+          maxLength: 255
+          type: string
+        hold_days:
+          description: Overrides the configured default number of days for which to hold ACH and check payments.
+          maximum: 30
+          minimum: 0
+          type: integer
+        impact_time:
+          description: Date and time when the payment impacts the account balance and fee calculations.
+          format: date-time
+          type: string
+        metadata:
+          description: Customer-defined additional information about the payment (for example, a check number).
+          maxLength: 255
+          type: string
+        method:
+          description: Method of payment.
+          enum:
+          - ACH
+          - CHECK
+          - DEBIT
+          - CASH
+          - SECURED_CARD
+          type: string
+        payment_source_token:
+          description: Unique identifier of the payment source. Required for ACH payments.
+          maxLength: 36
+          type: string
+        token:
+          description: Unique identifier of the payment.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+      required:
+      - amount
+      - currency_code
+      - description
+      - method
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    PaymentTransitionResponse:
+      description: Response containing payment transition information.
+      properties:
+        account_token:
+          description: Unique identifier of the credit account on which you want to transition a payment status.
+          type: string
+        created_time:
+          description: Date and time when the payment transition was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        payment_token:
+          description: Unique identifier of the payment whose status you want to transition.
+          type: string
+        status:
+          $ref: '#/components/schemas/PaymentStatus'
+        token:
+          description: Unique identifier of the payment status transition.
+          type: string
+      required:
+      - account_token
+      - payment_token
+      - status
+      - token
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

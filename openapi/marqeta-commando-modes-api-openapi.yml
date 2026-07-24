@@ -1,0 +1,324 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries commando modes API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: commando modes
+paths:
+  /commandomodes:
+    get:
+      operationId: getCommandomodes
+      parameters:
+      - description: Number of commando modes to retrieve
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          format: int32
+          type: integer
+        style: form
+      - description: Start index
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: form
+      - description: Sort order
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -lastModifiedTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommandoModeListResponse'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Lists all commando mode control sets
+      tags:
+      - commando modes
+  /commandomodes/transitions/{token}:
+    get:
+      operationId: getCommandomodesTransitionsToken
+      parameters:
+      - description: Commando mode transition token
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/commando_mode_transition_response'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '404':
+          content: {}
+          description: Transition not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns a specific commando mode transition
+      tags:
+      - commando modes
+  /commandomodes/{commandomode_token}/transitions:
+    get:
+      operationId: getCommandomodesCommandomodetokenTransitions
+      parameters:
+      - description: Number of transitions to retrieve
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          format: int32
+          type: integer
+        style: form
+      - description: Start index
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: form
+      - description: Sort order
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -createdTime
+          type: string
+        style: form
+      - description: Commando mode token
+        explode: false
+        in: path
+        name: commandomode_token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommandoModeTransitionListResponse'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Lists all commando mode transitions related to a commando mode control set
+      tags:
+      - commando modes
+  /commandomodes/{token}:
+    get:
+      operationId: getCommandomodesToken
+      parameters:
+      - explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/commando_mode_response'
+          description: Success
+        '404':
+          content: {}
+          description: Commando mode not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns a specific commando mode control set
+      tags:
+      - commando modes
+components:
+  schemas:
+    commando_mode_response:
+      properties:
+        commando_mode_enables:
+          $ref: '#/components/schemas/commando_mode_enables'
+        created_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        current_state:
+          $ref: '#/components/schemas/commando_mode_nested_transition'
+        last_modified_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        program_gateway_funding_source_token:
+          type: string
+        real_time_standin_criteria:
+          $ref: '#/components/schemas/real_time_standin_criteria'
+        token:
+          type: string
+      required:
+      - created_time
+      - last_modified_time
+      type: object
+    CommandoModeTransitionListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/commando_mode_transition_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    commando_mode_transition_response:
+      properties:
+        commando_mode_token:
+          type: string
+        created_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        name:
+          type: string
+        token:
+          type: string
+        transition:
+          $ref: '#/components/schemas/commando_mode_nested_transition'
+        type:
+          type: string
+      required:
+      - created_time
+      type: object
+    CommandoModeListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/commando_mode_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    commando_mode_enables:
+      properties:
+        auth_controls:
+          items:
+            type: string
+          type: array
+        ignore_card_suspended_state:
+          default: false
+          type: boolean
+        program_funding_source:
+          type: string
+        use_cache_balance:
+          default: false
+          type: boolean
+        velocity_controls:
+          items:
+            type: string
+          maxItems: 2147483647
+          minItems: 1
+          type: array
+      required:
+      - program_funding_source
+      type: object
+    commando_mode_nested_transition:
+      properties:
+        channel:
+          enum:
+          - API
+          - SYSTEM
+          - ADMIN
+          type: string
+        commando_enabled:
+          default: false
+          type: boolean
+        reason:
+          type: string
+        username:
+          type: string
+      required:
+      - channel
+      - commando_enabled
+      type: object
+    real_time_standin_criteria:
+      properties:
+        enabled:
+          default: false
+          type: boolean
+        include_application_errors:
+          default: false
+          type: boolean
+        include_connection_errors:
+          default: false
+          type: boolean
+        include_response_timeouts:
+          default: false
+          type: boolean
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

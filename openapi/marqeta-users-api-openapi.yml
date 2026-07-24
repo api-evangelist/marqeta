@@ -1,0 +1,2947 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries Users API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- description: '// Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    // This source file is used by InfoDev to generate API reference documentation.
+
+    // File location in GitHub is:
+
+    // https://github.marqeta.com/openapi/coreapi/blob/main/openapi/users/openapi.yaml
+
+
+    The `users` resource represents a person who accesses Marqeta-administered funds via a Marqeta card (whether physical or virtual).
+
+    This endpoint enables you to create and manage users on the Marqeta platform.
+
+
+    This resource stores user attributes such as name, address, and date of birth, as well as financial information such as balances.
+
+    By default, every user automatically has a general purpose account (GPA) that is used for the funding of transfers and is therefore an `account holder`.
+
+    Note that account balances reside at the account holder level — there are no separate `account` or `balance` objects.
+
+
+    You can use the `/users` endpoint to create parent-child relationships between two users (where one user is the parent and the other is the child) or between a business and a user (where the business is the parent and the user is the child).
+
+    This relationship provides reporting to the parent about how cards of children are used and enables the parent to monitor and even restrict card usage.
+
+
+    [NOTE]
+
+    A user can simultaneously be a child of a business and a parent of other users if the user is not configured to use a parent''s account balances and the user''s child is configured to use a parent''s account balances.
+
+    For more information on account holders, see <</developer-guides/about-account-holders, About Account Holders>>.'
+  name: Users
+paths:
+  /users:
+    get:
+      description: 'To return an array of all of a program''s users, send a `GET` request to the `/users` endpoint.
+
+        This endpoint supports <</core-api/field-filtering, field filtering>> and <</core-api/sorting-and-pagination, pagination>>.
+
+        To narrow your result set to users that match certain criteria, see the <<search_users,Search users>> endpoint.
+
+
+        The `business_token` field is conditionally returned in the response (it cannot be set through the API).
+
+        You can use this field in conjunction with the `parent_token` field to determine whether the user has a parent or grandparent that is a business:
+
+
+        [cols="1,1,1"]
+
+        |===
+
+        | parent_token | business_token | Description
+
+
+        | Not populated
+
+        | Not populated
+
+        | User does not have a parent.
+
+
+        | Populated
+
+        | Not populated
+
+        | User''s parent is a user.
+
+
+        | Populated; matches `business_token`
+
+        | Populated; matches `parent_token`
+
+        | User''s parent is a business.
+
+
+        | Populated; does not match `business_token`
+
+        | Populated; does not match `parent_token`
+
+        | User''s parent is a user and their grandparent is a business.
+
+        |==='
+      operationId: getUsers
+      parameters:
+      - description: Number of user resources to retrieve.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          format: int32
+          type: integer
+        style: form
+      - description: Sort order index of the first resource in the returned array.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: form
+      - description: Search type.
+        explode: true
+        in: query
+        name: search_type
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: 'Comma-delimited list of fields to return (`field_1,field_2`, and so on).
+
+          Leave blank to return all fields.'
+        explode: true
+        in: query
+        name: fields
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: 'Field on which to sort.
+
+          Use any field in the resource model, or one of the system fields `lastModifiedTime` or `createdTime`.
+
+          Prefix the field name with a hyphen (`-`) to sort in descending order.
+
+          Omit the hyphen to sort in ascending order.'
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -lastModifiedTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                count: 2
+                data:
+                - account_holder_group_token: DEFAULT_AHG
+                  active: true
+                  address1: 1234 Grove Street
+                  birth_date: 1991-01-01
+                  city: Berkeley
+                  country: USA
+                  created_time: 2022-08-16 19:43:02+00:00
+                  email: jane.doe@company.com
+                  first_name: Jane
+                  gender: F
+                  identifications:
+                  - type: SSN
+                    value: '5555'
+                  last_modified_time: 2022-08-16 19:43:02+00:00
+                  last_name: Doe
+                  metadata:
+                    authentication_answer1: Cashier
+                    authentication_answer2: Trabant
+                    authentication_answer3: Blue
+                    authentication_question1: What was your first job?
+                    authentication_question2: What make was your first car?
+                    authentication_question3: What is your favorite color?
+                    notification_email: jane.doe@home.com
+                    notification_language: spa
+                  password: P@ssw0rd
+                  phone: '15105551212'
+                  postal_code: '94702'
+                  state: CA
+                  status: ACTIVE
+                  token: my_user_01
+                  uses_parent_account: false
+                - account_holder_group_token: DEFAULT_AHG
+                  active: true
+                  address1: 2345 Main Street
+                  birth_date: 1992-02-02
+                  city: Berkeley
+                  country: USA
+                  created_time: 2023-03-14 00:45:00+00:00
+                  email: john.doe@company.com
+                  first_name: John
+                  gender: M
+                  identifications:
+                  - type: SSN
+                    value: '4444'
+                  last_modified_time: 2023-03-14 00:45:00+00:00
+                  last_name: Doe
+                  metadata:
+                    key1: value1
+                    key2: value2
+                  password: my-password
+                  phone: '15105551212'
+                  postal_code: '94702'
+                  state: CA
+                  status: ACTIVE
+                  token: my_user_02
+                  uses_parent_account: false
+                end_index: 1
+                is_more: false
+                start_index: 0
+              schema:
+                $ref: '#/components/schemas/UserCardHolderListResponse'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: List users
+      tags:
+      - Users
+    post:
+      description: 'This endpoint enables you to create a user.
+
+        A new user''s initial status depends on the <</core-api/kyc-verification, Know Your Customer (KYC) requirements>> of the program or associated <</core-api/account-holder-groups, account holder group>>.
+
+
+        [cols="1,1,1,1"]
+
+        |===
+
+        | KYC Required | Initial User Status | User Active on Creation | User Limitations
+
+
+        | Always
+
+        | `UNVERIFIED`
+
+        | Optional
+
+        | Cannot load funds; cannot activate cards.
+
+
+        | Conditionally
+
+        | `LIMITED`
+
+        | Optional
+
+        | Restricted by rules in `accountholdergroups.pre_kyc_controls`.
+
+
+        | Never
+
+        | `ACTIVE`
+
+        | Required
+
+        | None.
+
+        |===
+
+
+        [NOTE]
+
+        Use the `/usertransitions` endpoints to transition user resources between statuses and to view the history of a user''s status.
+
+        Do not set the value of the `user.active` field directly.
+
+        For more information on status changes, see <</core-api/user-transitions#postUsertransitions, Create User Transition>>.
+
+
+        To perform KYC verification on users, the user object must have the following fields configured:
+
+
+        * `first_name` (legal first name only, no prefixes)
+
+        * `last_name` (legal last name only, no suffixes)
+
+        * `address1` (cannot be a PO Box)
+
+        * `city`
+
+        * `state`
+
+        * `postal_code`
+
+        * `country`
+
+        * `birth_date`
+
+        * `identifications`
+
+        * `phone` (required in some cases)
+
+        * `email` (required in some cases)
+
+
+        [NOTE]
+
+        The `identifications` requirement depends on your program''s configuration.
+
+        To determine if you should provide a full or abbreviated identification number, contact your Marqeta representative.
+
+        KYC verification requires the full Social Security Number (SSN) or Individual Taxpayer Identification Number (ITIN) of the user.
+
+
+        To create a child user, you must identify the parent user or business and determine whether the child user shares an account with the parent.
+
+
+        The parent must be an existing user or business.
+
+        On the child user, set the `parent_token` field to the value of the parent''s `token` field.
+
+        If either the parent or the grandparent is a business, a `business_token` field is added to the user.
+
+        This field''s value is set to the token of either the parent or grandparent (whichever is the business).
+
+
+        The `uses_parent_account` field determines whether the child shares balances with the parent (`true`) or whether the child balances are independent of the parent (`false`).
+
+        If you do not specify a value for `uses_parent_account`, it is set to `false` by default (the user does not share the parent''s balance) and returned in the response body.
+
+        This field cannot be updated, so you must decide upon creation whether the child user shares the parent balance.
+
+
+        Sharing an account with a parent user affects how the child user interacts with cards as follows:
+
+
+        * A child user cannot spend funds if its parent is not active.
+
+        * An active child user can activate cards, whether the parent is active or not.'
+      operationId: postUsers
+      requestBody:
+        content:
+          application/json:
+            example:
+              address1: 1234 Grove Street
+              birth_date: 1991-01-01
+              birth_place: US
+              city: Berkeley
+              country: USA
+              email: jane.doe@company.com
+              first_name: Jane
+              gender: F
+              identifications:
+              - type: SSN
+                value: '111234444'
+              last_name: Doe
+              metadata:
+                authentication_answer1: Cashier
+                authentication_answer2: Trabant
+                authentication_answer3: Blue
+                authentication_question1: What was your first job?
+                authentication_question2: What make was your first car?
+                authentication_question3: What is your favorite color?
+                notification_email: jane.doe@home.com
+                notification_language: spa
+              password: P@ssw0rd
+              phone: '15105551212'
+              postal_code: '94702'
+              state: CA
+              title: Chief Comptroller
+              token: my_user_01
+              uses_parent_account: false
+            schema:
+              $ref: '#/components/schemas/card_holder_model'
+        required: false
+      responses:
+        '201':
+          content:
+            application/json:
+              example:
+                account_holder_group_token: DEFAULT_AHG
+                active: true
+                address1: 1234 Grove Street
+                birth_date: 1991-01-01
+                birth_place: US
+                city: Berkeley
+                corporate_card_holder: false
+                country: USA
+                created_time: 2023-03-26 20:21:24+00:00
+                email: jane.doe6@company.com
+                first_name: Jane
+                gender: F
+                last_modified_time: 2023-03-26 20:21:24+00:00
+                last_name: Doe
+                metadata:
+                  authentication_answer1: Cashier
+                  authentication_answer2: Trabant
+                  authentication_answer3: Blue
+                  authentication_question1: What was your first job?
+                  authentication_question2: What make was your first car?
+                  authentication_question3: What is your favorite color?
+                  notification_email: jane.doe@home.com
+                  notification_language: spa
+                password: P@ssw0rd
+                phone: '15105551212'
+                ssn: '5555'
+                state: CA
+                status: ACTIVE
+                title: Chief Comptroller
+                token: my_user_01
+                uses_parent_account: false
+                zip: '94702'
+              schema:
+                $ref: '#/components/schemas/user_card_holder_response'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '409':
+          content: {}
+          description: Request already processed with a different payload
+        '412':
+          content: {}
+          description: Pre-condition setup issue
+        '500':
+          content: {}
+          description: Server error
+      summary: Create user
+      tags:
+      - Users
+  /users/auth/changepassword:
+    post:
+      description: 'To change a user password, send a `POST` request to the `/users/auth/changepassword` endpoint and include the `current_password` and `new_password` in link:http://www.json.org/[JSON, window="_blank"] format in the body of the request.
+
+        This endpoint operates in the context of a currently logged-in user.
+
+
+        A successful password change returns an empty response body with a response code of `204 No Content`.'
+      operationId: postUsersAuthChangepassword
+      requestBody:
+        content:
+          application/json:
+            example:
+              current_password: my_old_password
+              new_password: my_new_password
+            schema:
+              $ref: '#/components/schemas/password_update_model'
+        description: Password update object
+        required: true
+      responses:
+        '204':
+          content: {}
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '401':
+          content: {}
+          description: Unauthorized
+        '500':
+          content: {}
+          description: Server error
+      summary: Update user password
+      tags:
+      - Users
+  /users/auth/clientaccesstoken:
+    post:
+      description: 'Each time you want to display a virtual card''s sensitive data (for example, when using `marqeta.js`), you must first request a new, single-use client access token from the Marqeta platform by sending a `POST` request to the `/users/auth/clientaccesstoken` endpoint.
+
+        Unredeemed client access tokens expire after five minutes.'
+      operationId: postUsersAuthClientaccesstoken
+      requestBody:
+        content:
+          application/json:
+            example:
+              card_token: my_card_01
+            schema:
+              $ref: '#/components/schemas/client_access_token_request'
+        required: false
+      responses:
+        '201':
+          content:
+            application/json:
+              example:
+                created: 2022-07-29 12:00:00+00:00
+                expires: 2022-07-29 12:05:00+00:00
+                token: ewogICJ0b2tlbiI6ICI5NzIwMDkwNS00ODc0LTRkMWEtODEzMS1jMWI3NDAwNzJjM2MmYXBwbGljYXRpb25fdG9rZW49eW91cl9hcHBsaWNhdGlvbl90b2tlbiIsCiAgImFwcGxpY2F0aW9uIjogewogICAgInRva2VuIjogInlvdXJfYXBwbGljYXRpb25fdG9rZW4iLAogICAgImFjdGl2ZSI6IHRydWUsCiAgICAiY2xpZW50X2FwaV9iYXNlX3VybCI6ICJodHRwOi8vd2lkZ2V0cy1lbnYubWFycWV0YS5jb20vY2xpZW50L2FwaS92MSIsCiAgICAiYXNzZXRzX3VybCI6ICJodHRwOi8vd2lkZ2V0cy1lbnYubWFycWV0YS5jb20vY2xpZW50L2Fzc2V0cy8xLjAuMCIsCiAgICAiY2xpZW50dG9rZW5hcHBsaWNhdGlvbklkIjogIjU3MDI2OTJhMGI4ZGNlOTg1YWVmNTExMiIKICB9LAogICJhcHBsaWNhdGlvbl90b2tlbiI6IG51bGwsCiAgImV4cGlyZXMiOiAiMjAxOC0xMi0zMVQyMzo1OTo1OSswMDAwIiwKICAiY2FyZF90b2tlbiI6ICJ0b2tlbl9vZl90aGVfY2FyZF95b3VfbmVlZF90b19wcmVzZW50IiwKICAiYWNjZXNzZWQiOiBudWxsLAogICJjbGllbnR0b2tlbklkIjogIjU5MTc2Y2JlMGI4ZGNlOTg1YWVmNTEzMCIsCiAgImNyZWF0ZWQiOiAiMjAxOC0wMS0wMVQwMDowMDowMCswMDAwIgp9
+              schema:
+                $ref: '#/components/schemas/client_access_token_response'
+          description: Created
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '401':
+          content: {}
+          description: Unauthorized
+        '500':
+          content: {}
+          description: Server error
+      summary: Create client access token
+      tags:
+      - Users
+  /users/auth/clientaccesstoken/{token}:
+    get:
+      description: To retrieve application and card information using a client access token, send a `GET` request to the `/users/auth/clientaccesstoken/{token}` endpoint.
+      operationId: getUsersAuthClientaccesstokenToken
+      parameters:
+      - description: Client access token.
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Unique identifier of the `application` object.
+        explode: true
+        in: query
+        name: application_token
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                created: 2022-07-29 12:00:00+00:00
+                expires: 2022-07-29 12:05:00+00:00
+                token: ewogICJ0b2tlbiI6ICI5NzIwMDkwNS00ODc0LTRkMWEtODEzMS1jMWI3NDAwNzJjM2MmYXBwbGljYXRpb25fdG9rZW49eW91cl9hcHBsaWNhdGlvbl90b2tlbiIsCiAgImFwcGxpY2F0aW9uIjogewogICAgInRva2VuIjogInlvdXJfYXBwbGljYXRpb25fdG9rZW4iLAogICAgImFjdGl2ZSI6IHRydWUsCiAgICAiY2xpZW50X2FwaV9iYXNlX3VybCI6ICJodHRwOi8vd2lkZ2V0cy1lbnYubWFycWV0YS5jb20vY2xpZW50L2FwaS92MSIsCiAgICAiYXNzZXRzX3VybCI6ICJodHRwOi8vd2lkZ2V0cy1lbnYubWFycWV0YS5jb20vY2xpZW50L2Fzc2V0cy8xLjAuMCIsCiAgICAiY2xpZW50dG9rZW5hcHBsaWNhdGlvbklkIjogIjU3MDI2OTJhMGI4ZGNlOTg1YWVmNTExMiIKICB9LAogICJhcHBsaWNhdGlvbl90b2tlbiI6IG51bGwsCiAgImV4cGlyZXMiOiAiMjAxOC0xMi0zMVQyMzo1OTo1OSswMDAwIiwKICAiY2FyZF90b2tlbiI6ICJ0b2tlbl9vZl90aGVfY2FyZF95b3VfbmVlZF90b19wcmVzZW50IiwKICAiYWNjZXNzZWQiOiBudWxsLAogICJjbGllbnR0b2tlbklkIjogIjU5MTc2Y2JlMGI4ZGNlOTg1YWVmNTEzMCIsCiAgImNyZWF0ZWQiOiAiMjAxOC0wMS0wMVQwMDowMDowMCswMDAwIgp9
+              schema:
+                $ref: '#/components/schemas/client_access_token_response'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '401':
+          content: {}
+          description: Unauthorized
+        '403':
+          content: {}
+          description: Forbidden
+        '500':
+          content: {}
+          description: Server error
+      summary: Retrieve client access token
+      tags:
+      - Users
+  /users/auth/login:
+    post:
+      description: 'To log in a user and return a user access token, send a `POST` request to the `/users/auth/login` endpoint and include the user details in link:http://www.json.org/[JSON, window="_blank"] format in the body of the request.
+
+
+        [TIP]
+
+        To check a user''s credentials without logging out the user, call the `/users/auth/onetime` endpoint.'
+      operationId: postUsersAuthLogin
+      requestBody:
+        content:
+          application/json:
+            example:
+              email: jane.doe@company.com
+              password: P@ssw0rd
+              user_token: my_user_01
+            schema:
+              $ref: '#/components/schemas/login_request_model'
+        description: User login object
+        required: false
+      responses:
+        '204':
+          content:
+            application/json:
+              example:
+                access_token:
+                  expires: 2027-03-01 21:02:04+00:00
+                  one_time: false
+                  token: e12b1f64-1444-4aa3-83d9-347800c68e94
+                user:
+                  active: true
+                  created_time: 2023-04-01 17:52:39+00:00
+                  email: jane.doe@company.com
+                  last_modified_time: 2023-04-01 17:52:39+00:00
+                  password: P@ssw0rd
+                  token: my_user_01
+                  uses_parent_account: false
+              schema:
+                $ref: '#/components/schemas/login_response_model'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '401':
+          content: {}
+          description: Unauthorized
+        '500':
+          content: {}
+          description: Server error
+      summary: Log in user
+      tags:
+      - Users
+  /users/auth/logout:
+    post:
+      description: 'To log out a user, send a `POST` request to the `/users/auth/logout` endpoint.
+
+
+        A successful logout returns an empty response body with a response code of `204 No Content`.'
+      operationId: postUsersAuthLogout
+      responses:
+        '204':
+          content: {}
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '401':
+          content: {}
+          description: Unauthorized
+        '500':
+          content: {}
+          description: Server error
+      summary: Log out user
+      tags:
+      - Users
+  /users/auth/onetime:
+    post:
+      description: 'This endpoint returns a single-use access token.
+
+        This type of token authorizes a single request to access API endpoints and data associated with a particular user.
+
+        A single-use access token differs from a user access token (as returned by `POST` `/users/auth/login`) only in the number of times it can be used.
+
+
+        To return a single-use access token, send a `POST` request to the `/users/auth/onetime` endpoint.
+
+        Provide one of these sets of input data:
+
+
+        * *Case #1* – Application token and user access token
+
+        * *Case #2* – Application token, admin access token, and user token
+
+        * *Case #3* – Application token, user''s Marqeta password, and user''s email address
+
+
+        In each case, provide the application token as the HTTP Basic Authentication username in the request header''s Authorization field.
+
+        When applicable, provide the user access token or admin access token as the HTTP Basic Authentication password.
+
+        When applicable, provide the user token or user''s Marqeta password and email address in link:http://www.json.org/[JSON, window="_blank"] format in the request body.
+
+
+        Before instantiating an embedded Marqeta widget, call this endpoint to obtain the single-use access token required as input (cases #1 and #2).
+
+
+        This endpoint is also useful when you want to check a user''s credentials before performing a sensitive operation without having to log out the user (case #3).
+
+
+        [NOTE]
+
+        Calling this endpoint and returning a single-use access token does not invalidate the user''s current user access token.'
+      operationId: postUsersAuthOnetime
+      requestBody:
+        content:
+          application/json:
+            examples:
+              case_one:
+                summary: '*Case 1:* Authorization: Basic `my_application_token:my_user_access_token`'
+                value: {}
+              case_three:
+                summary: '*Case 3:* Authorization: Basic `my_application_token`'
+                value:
+                  email: jane.doe@company.com
+                  password: P@ssw0rd
+              case_two:
+                summary: '*Case 2:* Authorization: Basic `my_application_token:my_admin_access_token`'
+                value:
+                  user_token: my_user_token
+            schema:
+              $ref: '#/components/schemas/one_time_request_model'
+        description: One-time object
+        required: false
+      responses:
+        '201':
+          content:
+            application/json:
+              example:
+                expires: 2024-04-01 00:00:00+00:00
+                one_time: true
+                token: 697e0bde-ea52-44bd-8150-0e0f83e9625d
+              schema:
+                $ref: '#/components/schemas/access_token_response'
+          description: Created
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '401':
+          content: {}
+          description: Unauthorized
+        '500':
+          content: {}
+          description: Server error
+      summary: Create single-use token
+      tags:
+      - Users
+  /users/auth/resetpassword:
+    post:
+      description: 'Use this endpoint to generate a password reset token for a user.
+
+        Send a `POST` request to the `/users/auth/resetpassword` endpoint and include the user''s email address in link:http://www.json.org/[JSON, window="_blank"] format in the body of the request.
+
+        This request generates and sends an email message containing the `user_token` and `password_reset_token` to the user''s email address.
+
+        You must customize the email message with a link that passes the `user_token` and `password_reset_token` to a web page where a subsequent request updates the password.
+
+
+        A successful request returns an empty response body with a response code of `204 No Content`.'
+      operationId: postUsersAuthResetpassword
+      requestBody:
+        content:
+          application/json:
+            example:
+              email: jane.doe@company.com
+            schema:
+              $ref: '#/components/schemas/reset_user_password_email_model'
+        required: false
+      responses:
+        '204':
+          content: {}
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '401':
+          content: {}
+          description: Unauthorized
+        '500':
+          content: {}
+          description: Server error
+      summary: Request user password reset token
+      tags:
+      - Users
+  /users/auth/resetpassword/{token}:
+    post:
+      description: 'To reset the user''s password, send a `POST` request to the `/users/auth/resetpassword/{token}` endpoint that includes a password reset token generated using the `POST /users/auth/resetpassword` operation.
+
+        Include the `user_token` and `new_password` in link:http://www.json.org/[JSON, window="_blank"] format in the body of the request.
+
+        Include the `password_reset_token` as a path parameter.
+
+
+        A successful password reset returns an empty response body with a response code of `204 No Content`.'
+      operationId: postUsersAuthResetpasswordToken
+      parameters:
+      - description: Password reset token generated using the `POST /users/auth/resetpassword` operation.
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            example:
+              new_password: newPassword123@
+              user_token: my_user_01
+            schema:
+              $ref: '#/components/schemas/reset_user_password_model'
+        required: false
+      responses:
+        '204':
+          content: {}
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '401':
+          content: {}
+          description: Unauthorized
+        '500':
+          content: {}
+          description: Server error
+      summary: Reset user password
+      tags:
+      - Users
+  /users/auth/verifyemail:
+    post:
+      description: 'Send a `POST` request to the `/users/auth/verifyemail` endpoint to request an email verification token.
+
+        No input parameters are required because this operation is performed in the context of an authenticated user.
+
+
+        This initial request generates and sends an email message containing the email verification token to the cardholder''s email address.
+
+        This email message must include a link that passes the email verification token to a web page where a subsequent request verifies the email address.
+
+
+        A successful request returns an empty response body with a response code of `204 No Content`.'
+      operationId: postUsersAuthVerifyemail
+      responses:
+        '204':
+          content: {}
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '401':
+          content: {}
+          description: Unauthorized
+        '500':
+          content: {}
+          description: Server error
+      summary: Request email verification token
+      tags:
+      - Users
+  /users/auth/verifyemail/{token}:
+    post:
+      description: 'To verify a user''s email address, send a `POST` request to the `/users/auth/verifyemail/{email_verification_token}` endpoint that includes an `email_verification_token` generated using the `POST /users/auth/verifyemail` operation.
+
+        Include the `email_verification_token` as a path parameter.
+
+
+        A successful email verification returns an empty response body with a response code of `204 No Content`.'
+      operationId: postUsersAuthVerifyemailToken
+      parameters:
+      - description: Email verification token generated using the `POST /users/auth/verifyemail` operation.
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '204':
+          content: {}
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '401':
+          content: {}
+          description: Unauthorized
+        '500':
+          content: {}
+          description: Server error
+      summary: Verify email address
+      tags:
+      - Users
+  /users/lookup:
+    post:
+      description: 'To search for one or more users, send a `POST` request to the `/users/lookup` endpoint.
+
+        Include in the message body any parameters by which you want to query.
+
+        This endpoint supports <</core-api/field-filtering, field filtering>> and <</core-api/sorting-and-pagination, pagination>>.'
+      operationId: postUsersLookup
+      parameters:
+      - description: Number of user resources to retrieve.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          format: int32
+          type: integer
+        style: form
+      - description: Sort order index of the first resource in the returned array.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: form
+      - description: Search type.
+        explode: true
+        in: query
+        name: search_type
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: 'Comma-delimited list of fields to return (`field_1,field_2`, and so on).
+
+          Leave blank to return all fields.'
+        explode: true
+        in: query
+        name: fields
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: 'Field on which to sort.
+
+          Use any field in the resource model, or one of the system fields `lastModifiedTime` or `createdTime`.
+
+          Prefix the field name with a hyphen (`-`) to sort in descending order.
+
+          Omit the hyphen to sort in ascending order.'
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -lastModifiedTime
+          type: string
+        style: form
+      requestBody:
+        content:
+          application/json:
+            example:
+              first_name: Jane
+            schema:
+              $ref: '#/components/schemas/user_card_holder_search_model'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                count: 1
+                data:
+                - account_holder_group_token: DEFAULT_AHG
+                  active: true
+                  address1: 1234 Grove Street
+                  birth_date: 1991-01-01
+                  city: Berkeley
+                  country: USA
+                  created_time: 2023-03-16 20:26:28+00:00
+                  email: jane.doe@company.com
+                  first_name: Jane
+                  gender: F
+                  identifications:
+                  - type: DRIVERS_LICENSE
+                    value: '12345'
+                  last_modified_time: 2023-03-16 20:26:29+00:00
+                  last_name: Doe
+                  metadata: {}
+                  password: P@ssw0rd
+                  phone: '15105551212'
+                  postal_code: '94702'
+                  state: CA
+                  status: ACTIVE
+                  token: my_user_01
+                  uses_parent_account: false
+                end_index: 1
+                is_more: false
+                start_index: 0
+              schema:
+                $ref: '#/components/schemas/UserCardHolderListResponse'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Search users
+      tags:
+      - Users
+  /users/{parent_token}/children:
+    get:
+      description: 'To retrieve users who are children of a parent user or business, send a `GET` request to the `/users/{parent_token}/children` endpoint.
+
+        Include the parent''s user or business token as a URL path parameter.
+
+
+        The `business_token` field is conditionally returned in the response (it cannot be set through the API).
+
+        You can use this field in conjunction with the `parent_token` field to determine whether the user has a parent or grandparent that is a business:
+
+
+        [cols="1,1,1"]
+
+        |===
+
+        | parent_token | business_token | Description
+
+
+        | Not populated
+
+        | Not populated
+
+        | User does not have a parent.
+
+
+        | Populated
+
+        | Not populated
+
+        | User''s parent is a user.
+
+
+        | Populated; matches `business_token`
+
+        | Populated; matches `parent_token`
+
+        | User''s parent is a business.
+
+
+        | Populated; does not match `business_token`
+
+        | Populated; does not match `parent_token`
+
+        | User''s parent is a user and their grandparent is a business.
+
+        |===
+
+
+        This endpoint supports <</core-api/field-filtering, field filtering>>.'
+      operationId: getUsersParenttokenChildren
+      parameters:
+      - description: Number of user resources to retrieve.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          format: int32
+          type: integer
+        style: form
+      - description: Sort order index of the first resource in the returned array.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: form
+      - description: Unique identifier of the parent account holder.
+        explode: false
+        in: path
+        name: parent_token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 'Comma-delimited list of fields to return (`field_1,field_2`, and so on).
+
+          Leave blank to return all fields.'
+        explode: true
+        in: query
+        name: fields
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: 'Field on which to sort.
+
+          Use any field in the resource model, or one of the system fields `lastModifiedTime` or `createdTime`.
+
+          Prefix the field name with a hyphen (`-`) to sort in descending order.
+
+          Omit the hyphen to sort in ascending order.'
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -lastModifiedTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                count: 1
+                data:
+                - account_holder_group_token: DEFAULT_AHG
+                  active: true
+                  address1: 123 Main Street
+                  city: Oakland
+                  country: USA
+                  created_time: 2022-08-16 19:46:58+00:00
+                  email: john_smith@company.com
+                  first_name: John
+                  gender: M
+                  identifications:
+                  - birth_date: 1986-04-01
+                    type: SSN
+                    value: '7777'
+                  last_modified_time: 2022-08-16 19:46:58+00:00
+                  last_name: Smith
+                  metadata: {}
+                  parent_token: my_user_01
+                  password: P@55word
+                  phone: '15101111111'
+                  postal_code: '94601'
+                  state: CA
+                  status: ACTIVE
+                  token: child_of_parent
+                  uses_parent_account: true
+                end_index: 0
+                is_more: false
+                start_index: 0
+              schema:
+                $ref: '#/components/schemas/UserCardHolderListResponse'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: List user child accounts
+      tags:
+      - Users
+  /users/{token}:
+    get:
+      description: 'To retrieve a specific user, send a `GET` request to the `/users/{token}` endpoint.
+
+        Include the user `token` path parameter to specify the user to return.
+
+
+        The `business_token` field is conditionally returned in the response (it cannot be set through the API).
+
+        You can use this field in conjunction with the `parent_token` field to determine whether the user has a parent or grandparent that is a business:
+
+
+        [cols="1,1,1"]
+
+        |===
+
+        | parent_token | business_token | Description
+
+
+        | Not populated
+
+        | Not populated
+
+        | User does not have a parent.
+
+
+        | Populated
+
+        | Not populated
+
+        | User''s parent is a user.
+
+
+        | Populated; matches `business_token`
+
+        | Populated; matches `parent_token`
+
+        | User''s parent is a business.
+
+
+        | Populated; does not match `business_token`
+
+        | Populated; does not match `parent_token`
+
+        | User''s parent is a user and their grandparent is a business.
+
+        |===
+
+
+        This endpoint supports <</core-api/field-filtering, field filtering>>.'
+      operationId: getUsersToken
+      parameters:
+      - description: Unique identifier of the user resource.
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 'Comma-delimited list of fields to return (`field_1,field_2`, and so on).
+
+          Leave blank to return all fields.'
+        explode: true
+        in: query
+        name: fields
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                account_holder_group_token: DEFAULT_AHG
+                active: true
+                address1: 1234 Grove Street
+                birth_date: 1991-01-01
+                birth_place: US
+                city: Berkeley
+                country: USA
+                created_time: 2022-08-16 19:39:34+00:00
+                email: jane.doe@company.com
+                first_name: Jane
+                gender: F
+                identifications:
+                - type: SSN
+                  value: '5555'
+                last_modified_time: 2022-08-16 19:39:34+00:00
+                last_name: Doe
+                metadata:
+                  authentication_answer1: Cashier
+                  authentication_answer2: Trabant
+                  authentication_answer3: Blue
+                  authentication_question1: What was your first job?
+                  authentication_question2: What make was your first car?
+                  authentication_question3: What is your favorite color?
+                  notification_email: jane.doe@home.com
+                  notification_language: spa
+                password: P@ssw0rd
+                phone: '15105551212'
+                postal_code: '94702'
+                state: CA
+                status: ACTIVE
+                title: Chief Comptroller
+                token: my_user_01
+                uses_parent_account: false
+              schema:
+                $ref: '#/components/schemas/user_card_holder_response'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '404':
+          content: {}
+          description: Cardholder not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Retrieve user
+      tags:
+      - Users
+    put:
+      description: 'To update a specific user resource, send a `PUT` request to the `/users/{token}` endpoint.
+
+        Include the user `token` path parameter to specify the user to update.
+
+
+        To unlink a child user account from a parent account, pass a null value to the `parent_token` field of the child user resource.'
+      operationId: putUsersToken
+      parameters:
+      - description: Unique identifier of the user resource you want to update.
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            example:
+              address1: 4321 Grove Street
+            schema:
+              $ref: '#/components/schemas/UserCardHolderUpdateModel'
+        description: User object
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                account_holder_group_token: DEFAULT_AHG
+                active: true
+                address1: 4321 Grove Street
+                corporate_card_holder: false
+                created_time: 2023-01-29 00:12:20+00:00
+                last_modified_time: 2023-09-23 21:41:24+00:00
+                metadata: {}
+                status: ACTIVE
+                token: my_user_01
+                uses_parent_account: false
+              schema:
+                $ref: '#/components/schemas/card_holder_model'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Update user
+      tags:
+      - Users
+  /users/{token}/ssn:
+    get:
+      description: 'To retrieve the government-issued identification number for a user, send a `GET` request to the `/users/{token}/ssn` endpoint.
+
+        Include the `token` path parameter to specify the user whose identification number (SSN, ITIN, TIN, NIN, SIN) you wish to return.
+
+        You can indicate whether to return the full number or the last four digits only.'
+      operationId: getUsersTokenSsn
+      parameters:
+      - description: Unique identifier of the user resource.
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 'To return the full identification number, set to `true`.
+
+          To return only the last four digits, set to `false`.
+
+
+          If the identifications array contains only the last four digits of the identification number, the `/users/{token}/ssn` endpoint will return only the last four digits, regardless of the `full_ssn` parameter.'
+        explode: true
+        in: query
+        name: full_ssn
+        required: false
+        schema:
+          type: boolean
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                ssn: '5555'
+              schema:
+                $ref: '#/components/schemas/ssn_response_model'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Retrieve user identification number
+      tags:
+      - Users
+  /users/phonenumber/{phone_number}:
+    get:
+      operationId: getUsersPhonenumberPhonenumber
+      parameters:
+      - description: Phone number
+        explode: false
+        in: path
+        name: phone_number
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Number of users to retrieve
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          format: int32
+          type: integer
+        style: form
+      - description: Start index
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: form
+      - description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+        explode: true
+        in: query
+        name: fields
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Sort order
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -lastModifiedTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCardHolderListResponse'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Lists all users who match a phone number
+      tags:
+      - Users
+  /users/{token}/notes:
+    get:
+      operationId: getUsersTokenNotes
+      parameters:
+      - description: User token
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Start index
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: form
+      - description: Number of notes to retrieve
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          format: int32
+          type: integer
+        style: form
+      - description: Created by
+        explode: true
+        in: query
+        name: created_by
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Comma-delimited list of created by user roles
+        explode: true
+        in: query
+        name: created_by_user_role
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Include private notes and private fields in note response
+        explode: true
+        in: query
+        name: include_private
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: Search type
+        explode: true
+        in: query
+        name: search_type
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+        explode: true
+        in: query
+        name: fields
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Sort order
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -lastModifiedTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardHolderNoteListResponse'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '401':
+          content: {}
+          description: Unauthorized
+        '403':
+          content: {}
+          description: Forbidden
+        '404':
+          content: {}
+          description: Cardholder not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Lists cardholder notes
+      tags:
+      - Users
+    post:
+      operationId: postUsersTokenNotes
+      parameters:
+      - description: User token
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/cardholder_note_request_model'
+        required: false
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/cardholder_note_response_model'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '401':
+          content: {}
+          description: Unauthorized
+        '403':
+          content: {}
+          description: Forbidden
+        '500':
+          content: {}
+          description: Server error
+      summary: Creates a note for the cardholder
+      tags:
+      - Users
+  /users/{token}/notes/{notes_token}:
+    put:
+      operationId: putUsersTokenNotesNotestoken
+      parameters:
+      - description: User token
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Notes token
+        explode: false
+        in: path
+        name: notes_token
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/cardholder_note_update_request_model'
+        required: false
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/cardholder_note_response_model'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '401':
+          content: {}
+          description: Unauthorized
+        '403':
+          content: {}
+          description: Forbidden
+        '500':
+          content: {}
+          description: Server error
+      summary: Updates a specific note for a cardholder
+      tags:
+      - Users
+  /views/users/{time_agg}:
+    get:
+      operationId: getUsers
+      summary: Retrieve user activity data
+      description: Returns cardholder (user) data aggregated over the specified time period. Includes registration counts, KYC status distributions, and account status summaries for program reporting.
+      tags:
+      - Users
+      parameters:
+      - $ref: '#/components/parameters/time_agg'
+      - $ref: '#/components/parameters/program'
+      - $ref: '#/components/parameters/fields'
+      - $ref: '#/components/parameters/start_date'
+      - $ref: '#/components/parameters/end_date'
+      - $ref: '#/components/parameters/format'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/offset'
+      responses:
+        '200':
+          description: User data for the specified time period.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsersResponse'
+            text/csv:
+              schema:
+                type: string
+                description: CSV-formatted user data.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /views/users/detail:
+    get:
+      operationId: getUsersDetail
+      summary: Retrieve detailed user information
+      description: Returns detailed information for each cardholder in your program, including current account status, KYC verification status, associated cards, and GPA balance summary.
+      tags:
+      - Users
+      parameters:
+      - $ref: '#/components/parameters/program'
+      - $ref: '#/components/parameters/fields'
+      - $ref: '#/components/parameters/format'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/offset'
+      responses:
+        '200':
+          description: Detailed user records.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsersDetailResponse'
+            text/csv:
+              schema:
+                type: string
+                description: CSV-formatted detailed user data.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    IdentificationResponseModel:
+      description: Contains identifications associated with the cardholder.
+      properties:
+        expiration_date:
+          description: Expiration date of the identification, if applicable.
+          readOnly: true
+          type: string
+        issuing_country:
+          readOnly: true
+          type: string
+        type:
+          description: Type of identification.
+          enum:
+          - SSN
+          - TIN
+          - SIN
+          - NIN
+          - PASSPORT_NUMBER
+          - DRIVERS_LICENSE
+          - BUSINESS_NUMBER
+          - BUSINESS_TAX_ID
+          - TAXPAYER_REFERENCE
+          readOnly: true
+          type: string
+        value:
+          description: Number associated with the identification.
+          readOnly: true
+          type: string
+      type: object
+    CardHolderNoteListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/cardholder_note_response_model'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    cardholder_note_response_model:
+      properties:
+        created_by:
+          maxLength: 255
+          minLength: 0
+          type: string
+        created_by_user_role:
+          enum:
+          - USER
+          - ADMIN
+          - BANK_USER
+          - BANK_ADMIN
+          - MARQETA_PD
+          - MARQETA_ADMIN
+          type: string
+        created_time:
+          format: date-time
+          type: string
+        description:
+          type: string
+        last_modified_time:
+          format: date-time
+          type: string
+        private:
+          default: false
+          type: boolean
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - created_by
+      - description
+      type: object
+    user_card_holder_response:
+      description: Contains information about a cardholder.
+      properties:
+        account_holder_group_token:
+          description: Associates the specified account holder group with the cardholder.
+          maxLength: 36
+          minLength: 0
+          type: string
+        active:
+          default: false
+          description: Specifies if the cardholder is in the `ACTIVE` state on the Marqeta platform.
+          type: boolean
+        address1:
+          description: Cardholder's address.
+          maxLength: 255
+          minLength: 0
+          type: string
+        address2:
+          description: Additional address information for the cardholder.
+          maxLength: 255
+          minLength: 0
+          type: string
+        authentication:
+          $ref: '#/components/schemas/Authentication'
+        birth_date:
+          description: Cardholder's date of birth.
+          type: string
+        birth_place:
+          description: Country where the cardholder was born.
+          maxLength: 255
+          minLength: 0
+          type: string
+        business_token:
+          description: Unique identifier of the business resource.
+          type: string
+        city:
+          description: City where the cardholder resides.
+          maxLength: 40
+          minLength: 0
+          type: string
+        company:
+          description: Company name.
+          maxLength: 255
+          minLength: 0
+          type: string
+        corporate_card_holder:
+          default: false
+          description: Specifies if the cardholder holds a corporate card.
+          type: boolean
+        country:
+          description: Country where the cardholder resides.
+          maxLength: 40
+          minLength: 0
+          type: string
+        created_time:
+          description: Date and time when the resource was created, in UTC.
+          format: date-time
+          type: string
+        email:
+          description: Valid email address of the cardholder.
+          maxLength: 255
+          minLength: 1
+          type: string
+        first_name:
+          description: Cardholder's first name.
+          maxLength: 40
+          minLength: 0
+          type: string
+        gender:
+          description: Gender of the cardholder.
+          enum:
+          - F
+          - M
+          maxLength: 1
+          minLength: 0
+          type: string
+        honorific:
+          description: 'Cardholder''s title or prefix: Dr., Miss, Mr., Ms., and so on.'
+          maxLength: 10
+          minLength: 0
+          type: string
+        id_card_expiration_date:
+          description: Expiration date of the cardholder's identification.
+          readOnly: true
+          type: string
+        id_card_number:
+          description: Cardholder's identification card number.
+          maxLength: 255
+          minLength: 0
+          type: string
+        identifications:
+          description: One or more objects containing identifications associated with the cardholder.
+          items:
+            $ref: '#/components/schemas/IdentificationResponseModel'
+          type: array
+        ip_address:
+          description: Cardholder's IP address.
+          maxLength: 39
+          minLength: 0
+          type: string
+        last_modified_time:
+          description: Date and time when the resource was last updated, in UTC.
+          format: date-time
+          type: string
+        last_name:
+          description: Cardholder's last name.
+          maxLength: 40
+          minLength: 0
+          type: string
+        metadata:
+          additionalProperties:
+            type: string
+          description: Associates any additional metadata you provide with the cardholder.
+          type: object
+        middle_name:
+          description: Cardholder's middle name.
+          maxLength: 40
+          minLength: 0
+          type: string
+        nationality:
+          description: Cardholder's nationality.
+          maxLength: 255
+          minLength: 0
+          type: string
+        notes:
+          description: Any additional information pertaining to the cardholder.
+          maxLength: 255
+          minLength: 0
+          type: string
+        parent_token:
+          description: Unique identifier of the parent user or business resource.
+          maxLength: 36
+          minLength: 1
+          type: string
+        passport_expiration_date:
+          description: Expiration date of the cardholder's passport.
+          readOnly: true
+          type: string
+        passport_number:
+          description: Cardholder's passport number.
+          maxLength: 40
+          minLength: 0
+          type: string
+        password:
+          description: Password to the cardholder's user account on the Marqeta platform.
+          maxLength: 255
+          minLength: 1
+          type: string
+        phone:
+          description: Cardholder's telephone number.
+          maxLength: 255
+          minLength: 0
+          type: string
+        postal_code:
+          description: Postal code of the cardholder's address.
+          maxLength: 10
+          minLength: 0
+          type: string
+        ssn:
+          description: Cardholder's Social Security Number (SSN).
+          type: string
+        state:
+          description: State or province where the cardholder resides.
+          maxLength: 2
+          minLength: 0
+          type: string
+        status:
+          description: Specifies the status of the cardholder on the Marqeta platform.
+          enum:
+          - UNVERIFIED
+          - LIMITED
+          - ACTIVE
+          - SUSPENDED
+          - CLOSED
+          - TERMINATED
+          type: string
+        title:
+          description: Professional title of the cardholder, such as Chief Comptroller.
+          maxLength: 255
+          minLength: 0
+          type: string
+        token:
+          description: Unique identifier of the cardholder.
+          maxLength: 36
+          minLength: 1
+          type: string
+        uses_parent_account:
+          default: false
+          description: Indicates whether the child shares balances with the parent (`true`), or the child's balances are independent of the parent (`false`).
+          type: boolean
+        zip:
+          description: United States ZIP code of the cardholder's address.
+          maxLength: 10
+          minLength: 0
+          type: string
+      required:
+      - created_time
+      - last_modified_time
+      type: object
+    reset_user_password_email_model:
+      properties:
+        email:
+          description: Cardholder email address.
+          maxLength: 255
+          minLength: 1
+          type: string
+      required:
+      - email
+      type: object
+    ssn_response_model:
+      description: Contains tax identification information.
+      properties:
+        nin:
+          description: National Identification Number (NIN).
+          type: string
+        sin:
+          description: Social Insurance Number (SIN).
+          type: string
+        ssn:
+          description: United States Social Security Number (SSN) or Individual Taxpayer Identification Number (ITIN).
+          type: string
+        tin:
+          description: Taxpayer Identification Number (TIN).
+          type: string
+      type: object
+    cardholder_note_update_request_model:
+      properties:
+        description:
+          type: string
+      required:
+      - description
+      type: object
+    client_access_token_response:
+      properties:
+        application:
+          $ref: '#/components/schemas/Application'
+        card_token:
+          description: Unique identifier of the card whose sensitive information you want to display.
+          type: string
+        created:
+          description: Date and time when the client access token was created, in UTC.
+          format: date-time
+          type: string
+        expires:
+          description: Date and time when the client access token expires, in UTC.
+          format: date-time
+          type: string
+        token:
+          description: Value of the client access token to redeem when displaying sensitive card data.
+          type: string
+      type: object
+    UsersDetailResponse:
+      type: object
+      description: Detailed user records response.
+      properties:
+        meta:
+          $ref: '#/components/schemas/DivaResponseMeta'
+        data:
+          type: array
+          description: Array of detailed user records.
+          items:
+            type: object
+            properties:
+              user_token:
+                type: string
+                description: Unique identifier of the user.
+              status:
+                type: string
+                description: Current account status.
+              kyc_required:
+                type: string
+                description: KYC requirement status.
+              created_time:
+                type: string
+                format: date-time
+                description: ISO 8601 user creation timestamp.
+              gpa_balance:
+                type: number
+                description: Current GPA available balance.
+              card_count:
+                type: integer
+                description: Number of cards associated with the user.
+    ErrorResponse:
+      type: object
+      description: Standard error response returned by the Marqeta DiVA API.
+      properties:
+        error_code:
+          type: string
+          description: Machine-readable error code.
+        error_message:
+          type: string
+          description: Human-readable error description.
+    UserCardHolderListResponse:
+      properties:
+        count:
+          description: 'Number of resources to retrieve.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+        data:
+          description: 'Array of user objects.
+
+
+            Objects are returned as appropriate to your query.'
+          items:
+            $ref: '#/components/schemas/card_holder_model'
+          type: array
+        end_index:
+          description: 'Sort order index of the first resource in the returned array.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          description: 'A value of `true` indicates that more unreturned resources exist.
+
+            A value of `false` indicates that no more unreturned resources exist.
+
+
+            This field is returned if there are resources in your returned array.'
+          type: boolean
+        start_index:
+          description: 'Sort order index of the first resource in the returned array.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+      type: object
+    user_card_holder_search_model:
+      properties:
+        dda:
+          description: 'Performs a match on the specified deposit account number.
+
+            Send a `GET` request to `/directdeposits/accounts/{user_token}` to retrieve the deposit account number for a specific cardholder.'
+          type: string
+        email:
+          description: Performs a non-case-sensitive, exact match on the cardholder's `email` field.
+          maxLength: 255
+          minLength: 1
+          type: string
+        first_name:
+          description: 'Performs a non-case-sensitive match on the cardholder''s `first_name` field.
+
+            Matching is partial on the beginning of the name.
+
+            For example, a match on "Alex" returns both "Alex" and "Alexander".'
+          maxLength: 40
+          minLength: 0
+          type: string
+        last_name:
+          description: 'Performs a non-case-sensitive match on the cardholder''s `last_name` field.
+
+            Matching is partial on the beginning of the name.
+
+            For example, a match on "Smith" returns both "Smith" and "Smithfield".'
+          maxLength: 40
+          minLength: 0
+          type: string
+        phone:
+          description: Performs a match on the cardholder's `phone` field.
+          maxLength: 255
+          minLength: 0
+          type: string
+        ssn:
+          description: Performs a match on the cardholder's identification number.
+          type: string
+      type: object
+    cardholder_note_request_model:
+      properties:
+        created_by:
+          maxLength: 255
+          minLength: 0
+          type: string
+        created_by_user_role:
+          enum:
+          - USER
+          - ADMIN
+          - BANK_USER
+          - BANK_ADMIN
+          - MARQETA_PD
+          - MARQETA_ADMIN
+          type: string
+        description:
+          type: string
+        private:
+          default: false
+          type: boolean
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - created_by
+      - description
+      type: object
+    card_holder_model:
+      description: Contains information about a cardholder.
+      properties:
+        account_holder_group_token:
+          description: 'Associates the specified account holder group with the cardholder.
+
+
+            Send a `GET` request to `/accountholdergroups` to retrieve account holder group tokens.'
+          maxLength: 36
+          minLength: 0
+          type: string
+        active:
+          default: true
+          description: 'Specifies if the cardholder is in the `ACTIVE` state on the Marqeta platform.
+
+
+            *NOTE:* Do not set the value of the `user.active` field directly.
+
+            Instead, use the `/usertransitions` endpoints to transition user resources between statuses.
+
+            For more information on status changes, see <</core-api/user-transitions#postUsertransitions, Create User Transition>>.'
+          type: boolean
+        address1:
+          description: 'Cardholder''s address.
+
+
+            *NOTE:* Required for KYC verification (US-based cardholders only).
+
+            Cannot perform KYC if set to a PO Box.'
+          maxLength: 255
+          minLength: 0
+          type: string
+        address2:
+          description: 'Additional address information for the cardholder.
+
+
+            *NOTE:* Cannot perform KYC if set to a PO Box.'
+          maxLength: 255
+          minLength: 0
+          type: string
+        birth_date:
+          description: 'Cardholder''s date of birth.
+
+
+            *NOTE:* Required for KYC verification (US-based cardholders only).'
+          type: string
+        birth_place:
+          description: Country where the cardholder was born.
+          maxLength: 255
+          minLength: 0
+          type: string
+        city:
+          description: 'City where the cardholder resides.
+
+
+            *NOTE:* Required for KYC verification (US-based cardholders only).'
+          maxLength: 40
+          minLength: 0
+          type: string
+        company:
+          description: Company name.
+          maxLength: 255
+          minLength: 0
+          type: string
+        corporate_card_holder:
+          default: false
+          description: Specifies if the cardholder holds a corporate card.
+          type: boolean
+        country:
+          description: 'Country where the cardholder resides.
+
+
+            *NOTE:* Required for KYC verification (US-based cardholders only).'
+          maxLength: 40
+          minLength: 0
+          type: string
+        email:
+          description: 'Valid email address of the cardholder.
+
+
+            This value must be unique among users.
+
+
+            *NOTE:* Required for KYC verification by certain banks (US-based cardholders only).
+
+            To determine if you must provide an email address, contact your Marqeta representative.'
+          maxLength: 255
+          minLength: 1
+          type: string
+        first_name:
+          description: 'Cardholder''s first name.
+
+
+            *NOTE:* Required for KYC verification (US-based cardholders only).'
+          maxLength: 40
+          minLength: 0
+          type: string
+        gender:
+          description: Gender of the cardholder.
+          enum:
+          - F
+          - M
+          maxLength: 1
+          minLength: 0
+          type: string
+        honorific:
+          description: 'Cardholder''s title or prefix: Dr., Miss, Mr., Ms., and so on.'
+          maxLength: 10
+          minLength: 0
+          type: string
+        id_card_expiration_date:
+          description: Expiration date of the cardholder's identification card.
+          type: string
+        id_card_number:
+          description: Cardholder's identification card number.
+          maxLength: 255
+          minLength: 0
+          type: string
+        identifications:
+          description: One or more objects containing identifications associated with the cardholder.
+          items:
+            $ref: '#/components/schemas/IdentificationRequestModel'
+          type: array
+        ip_address:
+          description: Cardholder's IP address.
+          maxLength: 39
+          minLength: 0
+          type: string
+        last_name:
+          description: 'Cardholder''s last name.
+
+
+            *NOTE:* Required for KYC verification (US-based cardholders only).'
+          maxLength: 40
+          minLength: 0
+          type: string
+        metadata:
+          additionalProperties:
+            type: string
+          description: Associates any additional metadata you provide with the cardholder.
+          type: object
+        middle_name:
+          description: Cardholder's middle name.
+          maxLength: 40
+          minLength: 0
+          type: string
+        nationality:
+          description: Cardholder's nationality.
+          maxLength: 255
+          minLength: 0
+          type: string
+        notes:
+          description: Any additional information pertaining to the cardholder.
+          maxLength: 255
+          minLength: 0
+          type: string
+        parent_token:
+          description: 'Unique identifier of the parent user or business resource.
+
+            Send a `GET` request to `/users` to retrieve user resource tokens or to `/businesses` to retrieve business resource tokens.
+
+
+            Required if `uses_parent_account = true`.
+
+            This user or business is configured as the parent of the current user.'
+          maxLength: 36
+          minLength: 1
+          type: string
+        passport_expiration_date:
+          description: Expiration date of the cardholder's passport.
+          type: string
+        passport_number:
+          description: Cardholder's passport number.
+          maxLength: 40
+          minLength: 0
+          type: string
+        password:
+          description: "Password to the cardholder's user account on the Marqeta platform.\n\n* Must contain at least one numeral +\n* Must contain at least one lowercase letter +\n* Must contain at least one uppercase letter +\n* Must contain at least one of these symbols:   +\n `@` `#` `$` `%` `!` `^` `&` `*` `(` `)`   +\n `\\` `_` `+` `~` `-` `=` `[` `]` `{` `}`   +\n `,` `;` `:` `'` `\"` `.` `/` `<` `>` `?` ```"
+          maxLength: 255
+          minLength: 0
+          type: string
+        phone:
+          description: 'Telephone number of the cardholder (including area code), prepended by the `+` symbol and the 1- to 3-digit country calling code.
+
+            Do not include hyphens, spaces, or parentheses.
+
+
+            *NOTE:* Required for KYC verification by certain banks (US-based cardholders only).
+
+            To determine if you must provide a phone number, contact your Marqeta representative.'
+          maxLength: 16
+          minLength: 0
+          type: string
+        postal_code:
+          description: 'Postal code of the cardholder''s address.
+
+
+            *NOTE:* Required for KYC verification (US-based cardholders only).'
+          maxLength: 10
+          minLength: 0
+          type: string
+        ssn:
+          description: Cardholder's Social Security Number (SSN) or Individual Taxpayer Identification Number (ITIN).
+          type: string
+        state:
+          description: 'State or province where the cardholder resides.
+
+
+            *NOTE:* <</core-api/kyc-verification#_valid_state_provincial_territorial_and_federal_abbreviations, Valid two-character abbreviation>> required for KYC verification (US-based cardholders only).'
+          maxLength: 32
+          minLength: 0
+          type: string
+        title:
+          description: 'Professional title of the cardholder, such as Chief Comptroller.
+
+
+            *NOTE:* Do not use this field for honorific titles such as Mr., Mrs., Miss, Ms., Mx., Sir, or Dame.
+
+            Instead, add these to the `honorific` field.'
+          maxLength: 255
+          minLength: 0
+          type: string
+        token:
+          description: 'Unique identifier of the cardholder.
+
+            If you do not include a token, the system generates one automatically.
+
+            This token is necessary for use in other API calls, so we recommend that rather than let the system generate one, you use a simple string that is easy to remember.
+
+            This value cannot be updated.'
+          maxLength: 36
+          minLength: 1
+          type: string
+        uses_parent_account:
+          default: false
+          description: 'Indicates whether the child shares balances with the parent (`true`), or the child''s balances are independent of the parent (`false`).
+
+
+            If set to `true`, you must also include a `parent_token` in the request.
+
+            This value cannot be updated.'
+          type: boolean
+      type: object
+    login_request_model:
+      properties:
+        email:
+          description: Cardholder email address.
+          type: string
+        password:
+          description: Password to the cardholder's user account on the Marqeta platform.
+          maxLength: 255
+          minLength: 1
+          type: string
+        user_token:
+          description: 'Identifies the cardholder to log in.
+
+
+            Send a `GET` request to `/users` to retrieve user tokens.'
+          maxLength: 36
+          minLength: 1
+          type: string
+      type: object
+    access_token_response:
+      description: Contains a cardholder's login access information.
+      properties:
+        accesstoken_id:
+          type: string
+        application:
+          $ref: '#/components/schemas/Application'
+        expires:
+          description: Date and time when the access token expires.
+          format: date-time
+          type: string
+        master_roles:
+          description: Array of master roles.
+          items:
+            type: string
+          type: array
+        one_time:
+          description: Indicates whether the access token is a single-use token.
+          type: boolean
+        token:
+          description: Unique identifier of the access token.
+          type: string
+        token_type:
+          description: Specifies the type of access token.
+          type: string
+        user_token:
+          description: Unique identifier of the user resource.
+          type: string
+      required:
+      - expires
+      type: object
+    login_response_model:
+      properties:
+        access_token:
+          $ref: '#/components/schemas/access_token_response'
+        user:
+          $ref: '#/components/schemas/user_card_holder_response'
+      type: object
+    Application:
+      description: Contains client application information.
+      properties:
+        access_code:
+          description: Access code of the client application.
+          type: string
+        assets_url:
+          description: URL of the client application assets.
+          type: string
+        client_api_base_url:
+          description: Base URL of the client API.
+          type: string
+        environment:
+          description: Client application's environment.
+          type: string
+        program:
+          description: Name of the program on the Marqeta platform.
+          type: string
+        program_short_code:
+          description: Short code of the program on the Marqeta platform.
+          type: string
+        token:
+          description: Unique identifier of the `application` object.
+          type: string
+      type: object
+    password_update_model:
+      properties:
+        current_password:
+          description: Current password to the cardholder's user account on the Marqeta platform.
+          maxLength: 255
+          minLength: 1
+          type: string
+        new_password:
+          description: "New password to the cardholder's user account on the Marqeta platform.\n\n* Must contain at least one numeral +\n* Must contain at least one lowercase letter +\n* Must contain at least one uppercase letter +\n* Must contain at least one of these symbols:   +\n `@` `#` `$` `%` `!` `^` `&` `*` `(` `)`   +\n `\\` `_` `+` `~` `-` `=` `[` `]` `{` `}`   +\n `,` `;` `:` `'` `\"` `.` `/` `<` `>` `?` ```"
+          maxLength: 255
+          minLength: 1
+          type: string
+      required:
+      - current_password
+      - new_password
+      type: object
+    reset_user_password_model:
+      properties:
+        new_password:
+          description: New password to the cardholder's user account on the Marqeta platform.
+          maxLength: 255
+          minLength: 1
+          type: string
+        user_token:
+          description: Unique identifier of the cardholder.
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - new_password
+      - user_token
+      type: object
+    one_time_request_model:
+      properties:
+        email:
+          description: 'Cardholder email address.
+
+
+            Required when neither the user token nor the admin access token is provided as the Basic Authentication password (case #3).'
+          maxLength: 255
+          minLength: 1
+          type: string
+        password:
+          description: 'Password to the cardholder''s user account on the Marqeta platform.
+
+
+            Required when neither the user token nor the admin access token is provided as the Basic Authentication password (case #3).'
+          maxLength: 255
+          minLength: 1
+          type: string
+        user_token:
+          description: 'Identifies the cardholder whose data is accessed.
+
+            Send a `GET` request to `/users` to retrieve cardholder tokens.
+
+
+            Required when the Basic Authentication password is set to an admin access token (case #2).'
+          maxLength: 36
+          minLength: 1
+          type: string
+      type: object
+    UsersResponse:
+      type: object
+      description: User activity data response.
+      properties:
+        meta:
+          $ref: '#/components/schemas/DivaResponseMeta'
+        data:
+          type: array
+          description: Array of user activity records.
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                description: Aggregation period date.
+              program:
+                type: string
+                description: Program identifier.
+              new_user_count:
+                type: integer
+                description: Number of new users registered during the period.
+              active_user_count:
+                type: integer
+                description: Number of active users at end of period.
+              kyc_passed_count:
+                type: integer
+                description: Number of users who passed KYC during the period.
+    client_access_token_request:
+      properties:
+        application_token:
+          description: Unique identifier of the `application` object.
+          maxLength: 255
+          minLength: 1
+          type: string
+        card_token:
+          description: Unique identifier of the card whose sensitive information you want to display.
+          maxLength: 255
+          minLength: 1
+          type: string
+      required:
+      - card_token
+      type: object
+    Authentication:
+      description: Contains the cardholder's email address and password information.
+      properties:
+        email_verified:
+          default: false
+          description: Specifies whether the email address has been verified.
+          type: boolean
+        email_verified_time:
+          description: Date and time when the email address was verified.
+          format: date-time
+          type: string
+        last_password_update_channel:
+          description: Specifies the channel through which the password was last changed.
+          enum:
+          - USER_CHANGE
+          - USER_RESET
+          type: string
+        last_password_update_time:
+          description: Date and time when the password was last changed.
+          format: date-time
+          type: string
+      type: object
+    IdentificationRequestModel:
+      description: Contains identifications associated with the cardholder.
+      properties:
+        expiration_date:
+          description: Expiration date of the identification, if applicable.
+          type: string
+        issuing_country:
+          readOnly: true
+          type: string
+        type:
+          description: 'Type of identification.
+
+
+            *NOTE:* Full Social Security Number (SSN) is required for US-based user cardholder KYC verification, using the `SSN` type.
+
+            Full Employer Identification Number (EIN) is required for business cardholder KYC verification, using the `BUSINESS_TAX_ID` or `BUSINESS_NUMBER` type.
+
+            For business directors, use one of SSN, TIN, SIN, or NIN.
+
+            Nine digits only, no delimiters.
+
+            `123456789`, for example.'
+          enum:
+          - SSN
+          - TIN
+          - SIN
+          - NIN
+          - PASSPORT_NUMBER
+          - DRIVERS_LICENSE
+          - BUSINESS_NUMBER
+          - BUSINESS_TAX_ID
+          - TAXPAYER_REFERENCE
+          readOnly: true
+          type: string
+        value:
+          description: Number associated with the identification.
+          readOnly: true
+          type: string
+      required:
+      - type
+      type: object
+    DivaResponseMeta:
+      type: object
+      description: Metadata included in DiVA API paginated responses.
+      properties:
+        total_count:
+          type: integer
+          description: Total number of records matching the query.
+        limit:
+          type: integer
+          description: Maximum records returned per page.
+        offset:
+          type: integer
+          description: Current page offset.
+        has_more:
+          type: boolean
+          description: Whether additional pages of data are available.
+    UserCardHolderUpdateModel:
+      properties:
+        account_holder_group_token:
+          description: 'Associates the specified account holder group with the cardholder.
+
+            Send a `GET` request to `/accountholdergroups` to retrieve account holder group tokens.'
+          maxLength: 36
+          minLength: 0
+          type: string
+        address1:
+          description: 'Cardholder address.
+
+
+            *NOTE:* Required for KYC verification (US-based cardholders only).
+
+            Cannot perform KYC if set to a PO Box.'
+          maxLength: 255
+          minLength: 0
+          type: string
+        address2:
+          description: 'Additional address information for the cardholder.
+
+
+            *NOTE:* Cannot perform KYC if set to a PO Box.'
+          maxLength: 255
+          minLength: 0
+          type: string
+        birth_date:
+          description: 'Cardholder date of birth.
+
+
+            *NOTE:* Required for KYC verification (US-based cardholders only).'
+          type: string
+        birth_place:
+          description: Country where the cardholder was born.
+          maxLength: 255
+          minLength: 0
+          type: string
+        city:
+          description: 'The city that corresponds to the address.
+
+
+            *NOTE:* Required for KYC verification (US-based cardholders only).'
+          maxLength: 40
+          minLength: 0
+          type: string
+        company:
+          description: Company name.
+          maxLength: 255
+          minLength: 0
+          type: string
+        corporate_card_holder:
+          default: false
+          description: Specifies if the cardholder holds a corporate card.
+          type: boolean
+        country:
+          description: 'Country in which the cardholder resides.
+
+
+            *NOTE:* Required for KYC verification (US-based cardholders only).'
+          maxLength: 40
+          minLength: 0
+          type: string
+        email:
+          description: 'Valid email address for the cardholder.
+
+
+            This value must be unique among cardholders.'
+          maxLength: 255
+          minLength: 1
+          type: string
+        first_name:
+          description: 'Cardholder first name.
+
+
+            *NOTE:* Required for KYC verification (US-based cardholders only).'
+          maxLength: 40
+          minLength: 0
+          type: string
+        gender:
+          description: Gender of the cardholder.
+          enum:
+          - F
+          - M
+          maxLength: 1
+          minLength: 0
+          type: string
+        honorific:
+          description: 'Cardholder title or prefix: Ms., Mr., Miss, Mrs.'
+          maxLength: 10
+          minLength: 0
+          type: string
+        id_card_expiration_date:
+          description: Expiration date of the cardholder's identification card.
+          type: string
+        id_card_number:
+          description: Cardholder's identification card number.
+          maxLength: 255
+          minLength: 0
+          type: string
+        identifications:
+          description: One or more objects containing identifications associated with the cardholder.
+          items:
+            $ref: '#/components/schemas/IdentificationRequestModel'
+          type: array
+        ip_address:
+          description: Cardholder IP address.
+          maxLength: 39
+          minLength: 0
+          type: string
+        last_name:
+          description: 'Cardholder last name.
+
+
+            *NOTE:* Required for KYC verification (US-based cardholders only).'
+          maxLength: 40
+          minLength: 0
+          type: string
+        metadata:
+          additionalProperties:
+            type: string
+          description: Associates any additional metadata you provide with the cardholder.
+          type: object
+        middle_name:
+          description: Cardholder middle name.
+          maxLength: 40
+          minLength: 0
+          type: string
+        nationality:
+          description: Cardholder nationality.
+          maxLength: 255
+          minLength: 0
+          type: string
+        notes:
+          description: Any additional information pertaining to the cardholder.
+          maxLength: 255
+          minLength: 0
+          type: string
+        parent_token:
+          description: 'Unique identifier of an existing user or business resource.
+
+
+            Required if `uses_parent_account = true`.
+
+            This account holder is configured as the parent of the current cardholder.
+
+
+            To unlink a child account from a parent account, update this field to a null value.'
+          maxLength: 36
+          minLength: 1
+          type: string
+        passport_expiration_date:
+          description: Expiration date of the cardholder's passport.
+          type: string
+        passport_number:
+          description: Cardholder passport number.
+          maxLength: 40
+          minLength: 0
+          type: string
+        password:
+          description: Cardholder's user account password on the Marqeta platform.
+          maxLength: 255
+          minLength: 0
+          type: string
+        phone:
+          description: 'Cardholder telephone number (including area code), prepended by the `+` symbol and the 1- to 3-digit country calling code.
+
+            Do not include hyphens, spaces, or parentheses.'
+          maxLength: 16
+          minLength: 0
+          type: string
+        postal_code:
+          description: 'Postal code of the cardholder''s address.
+
+
+            *NOTE:* Required for KYC verification (US-based cardholders only).'
+          maxLength: 10
+          minLength: 0
+          type: string
+        ssn:
+          description: Cardholder's Social Security Number (SSN) or Individual Taxpayer Identification Number (ITIN).
+          type: string
+        state:
+          description: 'State where the cardholder resides (`CA` for California, for example).
+
+
+            *NOTE:* <</core-api/kyc-verification#_valid_state_provincial_territorial_and_federal_abbreviations, Two-character abbreviation>> required for KYC verification (US-based cardholders only).'
+          maxLength: 32
+          minLength: 0
+          type: string
+        title:
+          description: Professional title of the cardholder, such as Chief Comptroller.
+          maxLength: 255
+          minLength: 0
+          type: string
+        token:
+          description: Unique identifier of the cardholder.
+          maxLength: 36
+          minLength: 1
+          type: string
+        uses_parent_account:
+          default: false
+          description: 'Indicates whether the child shares balances with the parent (`true`), or the child''s balances are independent of the parent (`false`).
+
+
+            If set to `true`, you must also include a `parent_token` in the request.
+
+            This value cannot be updated.'
+          type: boolean
+      type: object
+  parameters:
+    offset:
+      name: offset
+      in: query
+      description: Zero-based offset for pagination.
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+    time_agg:
+      name: time_agg
+      in: path
+      required: true
+      description: Aggregation time level for the data. Use 'day' for daily rollups, 'week' for weekly rollups, 'month' for monthly rollups, or 'detail' for individual record-level data.
+      schema:
+        type: string
+        enum:
+        - day
+        - week
+        - month
+        - detail
+    format:
+      name: format
+      in: query
+      description: Response format. Use 'json' for JSON responses or 'csv' for comma-separated bulk file format. Defaults to json.
+      schema:
+        type: string
+        enum:
+        - json
+        - csv
+        default: json
+    start_date:
+      name: start_date
+      in: query
+      description: Start date for filtering data (format YYYY-MM-DD). Returns records on or after this date.
+      schema:
+        type: string
+        format: date
+    limit:
+      name: limit
+      in: query
+      description: Maximum number of records to return per request.
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 10000
+        default: 1000
+    program:
+      name: program
+      in: query
+      required: true
+      description: The name of your Marqeta card program. This parameter is required for most DiVA API endpoints to scope the data to your program.
+      schema:
+        type: string
+    fields:
+      name: fields
+      in: query
+      description: Comma-delimited list of fields to include in the response. If not specified, all available fields are returned.
+      schema:
+        type: string
+    end_date:
+      name: end_date
+      in: query
+      description: End date for filtering data (format YYYY-MM-DD). Returns records on or before this date.
+      schema:
+        type: string
+        format: date
+  responses:
+    Unauthorized:
+      description: Unauthorized. The provided application token and access token credentials are invalid or missing.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Bad request. One or more required query parameters are missing or contain invalid values.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

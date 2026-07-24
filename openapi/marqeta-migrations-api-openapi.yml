@@ -1,0 +1,227 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries Migrations API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: Migrations
+paths:
+  /migrations/accounts/{account_token}/finalize:
+    get:
+      description: 'Called to retrieve the finalize status of a migrated account
+
+        '
+      operationId: getFinalizeAccountMigrationStatus
+      parameters:
+      - description: 'Unique identifier of the credit account for which you want to get the finalize status.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FinalizeMigrationStatusResponse'
+          description: Expected response to a valid request
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Get finalize status
+      tags:
+      - Migrations
+  /migrations/accounts/{account_token}/getaccountbalances:
+    get:
+      description: Retrieve the current balance, available credit for a credit account.
+      operationId: getAccountBalances
+      parameters:
+      - description: 'Unique identifier of the credit account for which you want to retrieve fees.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalculatedBalanceResponse'
+          description: Expected response to a valid request.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Get the current balance and available credit for a credit account
+      tags:
+      - Migrations
+  /migrations/accounts/{account_token}/statements/{statement_summary_token}/files:
+    post:
+      description: Sync a statement asset to a migrated statement summary.
+      operationId: syncStatementAsset
+      parameters:
+      - description: 'Unique identifier of the credit account for which you want to sync a statement asset.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: Unique identifier of the migrated statement summary for which you want to sync an asset.
+        explode: false
+        in: path
+        name: statement_summary_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing statement summary token
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SyncStatementAssetReq'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MigrationResponse'
+          description: Expected response to a valid request
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - nileToken: []
+      summary: Sync statement asset
+      tags:
+      - Migrations
+components:
+  schemas:
+    CalculatedBalanceResponse:
+      properties:
+        available_credit:
+          description: the latest balance of the account from the migrated program
+          type: number
+        current_balance:
+          description: the latest balance of the account from the migrated program
+          type: number
+      type: object
+    SyncStatementAssetReq:
+      properties:
+        asset_token:
+          description: Unique identifier of the statement asset in Credit File Template.
+          format: uuid
+          type: string
+        short_code:
+          description: Unique identifier of the program.
+          type: string
+      required:
+      - asset_token
+      - short_code
+      type: object
+    MigrationResponse:
+      properties:
+        success:
+          type: boolean
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    FinalizeMigrationStatusResponse:
+      description: Finalize status of a migrated account.
+      properties:
+        account_token:
+          description: Unique identifier of the credit account with associated finalize response.
+          maxLength: 36
+          type: string
+        available_credit_adjustment:
+          description: the amount of the available credit adjustment created.
+          type: number
+        created_time:
+          description: Date and time when the finalize status was created, in UTC.
+          format: date-time
+          type: string
+        current_balance_adjustment:
+          description: the amount of the curent balance adjustment created.
+          type: number
+        expected_available_credit:
+          description: the latest balance of the account from the migrated program
+          type: number
+        expected_current_balance:
+          description: the latest balance of the account from the migrated program
+          type: number
+        final_available_credit:
+          description: the latest balance of the account from the migrated program
+          type: number
+        final_current_balance:
+          description: the latest balance of the account from the migrated program
+          type: number
+        status:
+          description: Finalize status of the account.
+          enum:
+          - PROCESSING
+          - COMPLETED
+          - FAILED
+          type: string
+        token:
+          description: Unique identifier of the finalize entry.
+          maxLength: 36
+          type: string
+        updated_time:
+          description: Date and time when the finalize status was updated, in UTC.
+          format: date-time
+          type: string
+        user_token:
+          description: Unique user token tied to the credit account.
+          maxLength: 36
+          type: string
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

@@ -1,0 +1,98 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries Views API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: Views
+  description: View endpoints provide programmatic access to aggregated platform data derived from card program activity. Each view represents a specific dataset such as transactions, balances, or card states, aggregated at a configurable time level.
+paths:
+  /views:
+    get:
+      operationId: listViews
+      summary: List available views
+      description: Returns a list of all available view endpoints for the DiVA API. Each view provides access to a specific type of program data aggregated at a defined level. Use this endpoint to discover which datasets are available for your program.
+      tags:
+      - Views
+      parameters:
+      - $ref: '#/components/parameters/program'
+      responses:
+        '200':
+          description: A list of available view endpoints.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ViewsListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    ViewsListResponse:
+      type: object
+      description: Response containing the list of available DiVA API view endpoints.
+      properties:
+        views:
+          type: array
+          description: Array of available view endpoint descriptors.
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Name of the view endpoint.
+              path:
+                type: string
+                description: URL path for the view endpoint.
+              description:
+                type: string
+                description: Description of the data provided by this view.
+              time_aggregations:
+                type: array
+                description: Supported time aggregation levels for this view.
+                items:
+                  type: string
+    ErrorResponse:
+      type: object
+      description: Standard error response returned by the Marqeta DiVA API.
+      properties:
+        error_code:
+          type: string
+          description: Machine-readable error code.
+        error_message:
+          type: string
+          description: Human-readable error description.
+  responses:
+    Unauthorized:
+      description: Unauthorized. The provided application token and access token credentials are invalid or missing.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Bad request. One or more required query parameters are missing or contain invalid values.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  parameters:
+    program:
+      name: program
+      in: query
+      required: true
+      description: The name of your Marqeta card program. This parameter is required for most DiVA API endpoints to scope the data to your program.
+      schema:
+        type: string
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

@@ -1,0 +1,132 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries fee refunds API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: fee refunds
+paths:
+  /feerefunds:
+    post:
+      operationId: postFeeRefunds
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/fee_refund_request'
+        required: false
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/fee_refund_response'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '409':
+          content: {}
+          description: Request already processed with a different payload
+        '422':
+          content: {}
+          description: Rule violations
+        '500':
+          content: {}
+          description: Server error
+      summary: Creates a fee refund
+      tags:
+      - fee refunds
+components:
+  schemas:
+    fee:
+      description: Contains details about the fee.
+      properties:
+        amount:
+          description: Amount of the fee.
+          type: number
+        created_time:
+          description: Date and time when the `fees` object was created, in UTC.
+          format: date-time
+          type: string
+        currency_code:
+          description: Three-digit ISO 4217 currency code.
+          type: string
+        last_modified_time:
+          description: Date and time when the `fees` object was last modified, in UTC.
+          format: date-time
+          type: string
+        memo:
+          description: Optional property to be used as Dispaly field when the fee is applied 255 char max
+          type: string
+        name:
+          description: Name of the fee.
+          type: string
+        tags:
+          description: Descriptive metadata about the fee.
+          type: string
+        token:
+          description: Unique identifier of the `fees` object.
+          type: string
+      required:
+      - amount
+      - created_time
+      - currency_code
+      - last_modified_time
+      - name
+      - token
+      type: object
+    fee_refund_response:
+      properties:
+        created_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        fee:
+          $ref: '#/components/schemas/fee'
+        memo:
+          maxLength: 99
+          minLength: 1
+          type: string
+        original_fee_transaction_token:
+          type: string
+        overrideAmount:
+          type: number
+        state:
+          type: string
+        tags:
+          maxLength: 255
+          minLength: 0
+          type: string
+        token:
+          description: 36 char max
+          maxLength: 36
+          minLength: 1
+          type: string
+        transaction_token:
+          type: string
+      required:
+      - created_time
+      - fee
+      - token
+      - transaction_token
+      type: object
+    fee_refund_request:
+      properties:
+        original_fee_transaction_token:
+          type: string
+        tags:
+          type: string
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

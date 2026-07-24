@@ -1,0 +1,764 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries Payment Schedules API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- description: '// Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    Use the payment schedule endpoints to create and retrieve payment schedules and payment schedule transitions on a <</core-api/credit-accounts, credit account>>.
+
+
+    A payment schedule allows you to schedule a one-time or recurring payment on a credit account.
+
+    For more on payments, see <</developer-guides/about-credit-account-payments, About Credit Account Payments>>.
+
+
+    To receive webhook notifications when ACH payment transition events occur, see <</core-api/event-types#_credit_account_payment_transition_events, Credit account payment transition events>> in Event Types.
+
+
+    Making a payment on a payment schedule triggers the creation of a <</core-api/credit-account-journal-entries, journal entry>> belonging to the `PAYMENT` group.
+
+    For more on payment journal entries, see <</developer-guides/about-credit-account-journal-entries#_payments, Payments>> in the About Credit Account Journal Entries guide.'
+  name: Payment Schedules
+paths:
+  /accounts/{account_token}/paymentschedules:
+    get:
+      description: 'Retrieve an array of payment schedules on a specific credit account.
+
+
+        This endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>.'
+      operationId: retrievePaymentSchedules
+      parameters:
+      - description: 'Unique identifier of the credit account for which you want to retrieve payment schedules.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: Status of the payment schedules to retrieve.
+        explode: true
+        in: query
+        name: statuses
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/PaymentScheduleStatus'
+          type: array
+        style: form
+      - description: Frequency of the payment schedules to retrieve.
+        explode: true
+        in: query
+        name: frequency
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/PaymentScheduleFrequency'
+          type: array
+        style: form
+      - description: Number of payment schedule resources to retrieve.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          minimum: 1
+          type: integer
+        style: form
+      - description: Sort order index of the first resource in the returned array.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: 'Field on which to sort.
+
+          Prefix the field name with a hyphen (`-`) to sort in descending order.
+
+          Omit the hyphen to sort in ascending order.
+
+
+          *NOTE:*
+
+          You must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`.'
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -lastModifiedTime
+          enum:
+          - lastModifiedTime
+          - -lastModifiedTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                count: 2
+                data:
+                - account_token: account1
+                  amount: null
+                  amount_category: REMAINING_STATEMENT_BALANCE
+                  created_time: 2023-08-22 22:17:11.407000+00:00
+                  currency_code: USD
+                  description: Sample payoff
+                  frequency: MONTHLY
+                  next_payment_impact_date: 2023-08-31
+                  payment_day: PAYMENT_DUE_DAY
+                  payment_source_token: source1
+                  status: ACTIVE
+                  token: mytoken
+                  updated_time: 2023-08-22 22:17:11.407000+00:00
+                - account_token: account1
+                  amount: 100
+                  amount_category: FIXED
+                  created_time: 2023-07-22 22:13:31.426000+00:00
+                  currency_code: USD
+                  description: Sample payment
+                  frequency: ONCE
+                  next_payment_impact_date: 2023-08-10
+                  payment_day: PAYMENT_DUE_DAY
+                  payment_source_token: source1
+                  status: COMPLETED
+                  token: mytoken1
+                  updated_time: 2023-07-22 22:13:31.426000+00:00
+                end_index: 1
+                is_more: false
+                start_index: 0
+              schema:
+                $ref: '#/components/schemas/PaymentSchedulePage'
+          description: Expected response to a valid request.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: List payment schedules
+      tags:
+      - Payment Schedules
+    post:
+      description: Create a new payment schedule, either one-time or recurring.
+      operationId: createPaymentSchedule
+      parameters:
+      - description: 'Unique identifier of the credit account for which you want to create a payment schedule.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            example:
+              amount: 100
+              amount_category: FIXED
+              currency_code: USD
+              description: Account statement payment
+              frequency: MONTHLY
+              payment_day: PAYMENT_DUE_DAY
+              payment_source_token: payment_source_token_1112
+              token: payment_schedule_token_1239
+            schema:
+              $ref: '#/components/schemas/PaymentScheduleCreateReq'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              example:
+                account_token: 12f10563-d5f2-11ec-889b-bd3a73e55331
+                amount: 2500
+                amount_category: FIXED
+                created_time: 2024-01-12 15:03:09.717000+00:00
+                currency_code: USD
+                description: Scheduled account payment
+                frequency: ONCE
+                next_payment_impact_date: 2024-01-31
+                payment_source_token: 7d68f45b-1232-4283-a0ea-6b0418d37692
+                status: COMPLETED
+                token: 4749ab00-fec1-471c-ac5b-b8d31d06d7e4
+              schema:
+                $ref: '#/components/schemas/PaymentScheduleResponse'
+          description: Newly created payment schedule.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Create payment schedule
+      tags:
+      - Payment Schedules
+  /accounts/{account_token}/paymentschedules/{payment_schedule_token}:
+    get:
+      description: Retrieve a single payment schedule on a specific credit account.
+      operationId: retrievePaymentSchedule
+      parameters:
+      - description: 'Unique identifier of the credit account for which you want to retrieve a payment schedule.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: 'Unique identifier of the payment schedule that you want to retrieve.
+
+
+          Send a `GET` request to `/credit/accounts/{account_token}/paymentschedules` to retrieve existing payment schedule tokens.'
+        explode: false
+        in: path
+        name: payment_schedule_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing payment schedule token
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                account_token: 12f10563-d5f2-11ec-889b-bd3a73e55331
+                amount: 2500
+                amount_category: FIXED
+                created_time: 2024-01-12 15:03:09.717000+00:00
+                currency_code: USD
+                description: Scheduled account payment
+                frequency: ONCE
+                next_payment_impact_date: 2024-01-31
+                payment_source_token: 7d68f45b-1232-4283-a0ea-6b0418d37692
+                status: COMPLETED
+                token: 4749ab00-fec1-471c-ac5b-b8d31d06d7e4
+              schema:
+                $ref: '#/components/schemas/PaymentScheduleResponse'
+          description: Expected response to a valid request.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Retrieve payment schedule
+      tags:
+      - Payment Schedules
+  /accounts/{account_token}/paymentschedules/{payment_schedule_token}/transitions:
+    get:
+      description: Retrieve an array of payment schedule transitions on a specific credit account.
+      operationId: retrievePaymentScheduleTransitions
+      parameters:
+      - description: 'Unique identifier of the credit account for which you want to retrieve payment schedule transitions.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: 'Unique identifier of the payment schedule for which you want to retrieve transitions.
+
+
+          Send a `GET` request to `/credit/accounts/{account_token}/paymentschedules` to retrieve existing payment schedule tokens.'
+        explode: false
+        in: path
+        name: payment_schedule_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing payment schedule token
+        style: simple
+      - description: Number of payment schedule resources to retrieve.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          minimum: 1
+          type: integer
+        style: form
+      - description: Sort order index of the first resource in the returned array.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: 'Field on which to sort.
+
+          Prefix the field name with a hyphen (`-`) to sort in descending order.
+
+          Omit the hyphen to sort in ascending order.
+
+
+          *NOTE:*
+
+          You must sort using system field names such as `createdTime`, and not by the field names appearing in response bodies such as `created_time`.'
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -createdTime
+          enum:
+          - createdTime
+          - -createdTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                count: 2
+                data:
+                - account_token: account1
+                  created_time: 2023-08-23 11:25:34.342000+00:00
+                  payment_schedule_token: payment1
+                  status: TERMINATED
+                  token: transition1
+                  updated_time: 2023-08-23 11:25:34.342000+00:00
+                - account_token: account2
+                  created_time: 2023-08-22 22:17:11.407000+00:00
+                  payment_schedule_token: payment2
+                  status: ACTIVE
+                  token: transition2
+                  updated_time: 2023-08-22 22:17:11.407000+00:00
+                end_index: 1
+                is_more: false
+                start_index: 0
+              schema:
+                $ref: '#/components/schemas/PaymentScheduleTransitionPage'
+          description: Expected response to a valid request
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Retrieve payment schedule transitions
+      tags:
+      - Payment Schedules
+    post:
+      description: Transition a payment schedule to a new status.
+      operationId: createPaymentScheduleTransition
+      parameters:
+      - description: 'Unique identifier of the credit account on which to transition a payment schedule.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: 'Unique identifier of the payment schedule whose status is to transition.
+
+
+          Send a `GET` request to `/credit/accounts/{account_token}/paymentschedules` to retrieve existing payment schedule tokens.'
+        explode: false
+        in: path
+        name: payment_schedule_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing payment schedule token
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            example:
+              status: TERMINATED
+              token: 4749ab00-fec1-471c-ac5b-b8d31d06d7e4
+            schema:
+              $ref: '#/components/schemas/PaymentScheduleTransitionCreateReq'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              example:
+                account_token: credit_account_token_1232
+                created_time: 2024-01-12 15:03:09.717000+00:00
+                payment_schedule_token: payment_schedule_token_1232
+                status: TERMINATED
+                token: payment_schedule_transition_token_111
+                updated_time: 2024-01-12 15:03:09.717000+00:00
+              schema:
+                $ref: '#/components/schemas/PaymentScheduleTransitionResponse'
+          description: Newly created payment schedule transition.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Create payment schedule transition
+      tags:
+      - Payment Schedules
+  /accounts/{account_token}/paymentschedules/{payment_schedule_token}/transitions/{token}:
+    get:
+      description: Retrieve a single payment schedule transition on a specific credit account.
+      operationId: retrievePaymentScheduleTransition
+      parameters:
+      - description: 'Unique identifier of the credit account for which you want to retrieve a payment schedule transition.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: 'Unique identifier of the payment schedule you want to retrieve.
+
+
+          Send a `GET` request to `/credit/accounts/{account_token}/paymentschedules` to retrieve existing payment schedule tokens.'
+        explode: false
+        in: path
+        name: payment_schedule_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing payment schedule token
+        style: simple
+      - description: 'Unique identifier of the payment schedule transition you want to retrieve.
+
+
+          Send a `GET` request to `/credit/accounts/{account_token}/paymentschedules/{payment_schedule_token}/transitions` to retrieve existing payment schedule transition tokens.'
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing payment schedule transition token
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                account_token: account1
+                created_time: 2023-08-22 22:17:11.407000+00:00
+                payment_schedule_token: payment1
+                status: ACTIVE
+                token: transition2
+                updated_time: 2023-08-22 22:17:11.407000+00:00
+              schema:
+                $ref: '#/components/schemas/PaymentScheduleTransitionResponse'
+          description: Expected response to a valid request.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Retrieve payment schedule transition
+      tags:
+      - Payment Schedules
+components:
+  schemas:
+    PaymentScheduleAmountCategory:
+      description: A category used to determine the actual payment amount.
+      enum:
+      - FIXED
+      - MINIMUM_PAYMENT
+      - REMAINING_STATEMENT_BALANCE
+      - CURRENT_BALANCE
+      type: string
+    PaymentScheduleFrequency:
+      description: Defines how often to make a scheduled payment.
+      enum:
+      - ONCE
+      - MONTHLY
+      type: string
+    PaymentScheduleStatus:
+      description: Status of the payment schedule.
+      enum:
+      - ACTIVE
+      - COMPLETED
+      - TERMINATED
+      type: string
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
+      type: string
+    PaymentSchedulePage:
+      description: Returns paginated information for multiple payment schedules.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: List of payment schedules.
+          items:
+            $ref: '#/components/schemas/PaymentScheduleResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    PaymentScheduleTransitionCreateReq:
+      description: Details to create a payment schedule transition
+      properties:
+        status:
+          $ref: '#/components/schemas/PaymentScheduleStatus'
+        token:
+          description: Unique identifier of the payment schedule transition.
+          maxLength: 36
+          type: string
+      required:
+      - status
+      type: object
+    PaymentScheduleTransitionPage:
+      description: Returns paginated information for multiple payment schedule transitions.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: List of payment schedule transitions.
+          items:
+            $ref: '#/components/schemas/PaymentScheduleTransitionResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    PaymentScheduleTransitionResponse:
+      description: A payment schedule transition on a credit account.
+      properties:
+        account_token:
+          description: 'Unique identifier of the credit account on which to transition a payment schedule.
+
+
+            Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+          type: string
+        created_time:
+          description: Date and time when the payment schedule transition was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        payment_schedule_token:
+          description: 'Unique identifier of the payment schedule whose status is to transition.
+
+
+            Send a `GET` request to `/credit/accounts/{account_token}/paymentschedules` to retrieve existing payment schedule tokens.'
+          type: string
+        status:
+          $ref: '#/components/schemas/PaymentScheduleStatus'
+        token:
+          description: Unique identifier of the payment schedule transition.
+          type: string
+        updated_time:
+          description: Date and time when the payment schedule transition was last updated on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+      type: object
+    PaymentScheduleCreateReq:
+      description: Information to create a payment schedule.
+      properties:
+        amount:
+          description: 'Amount of the payment.
+
+
+            Required if `amount_category` is `FIXED`.'
+          type: number
+        amount_category:
+          $ref: '#/components/schemas/PaymentScheduleAmountCategory'
+        currency_code:
+          $ref: '#/components/schemas/CurrencyCode'
+        description:
+          description: Description of the payment schedule.
+          maxLength: 255
+          type: string
+        frequency:
+          $ref: '#/components/schemas/PaymentScheduleFrequency'
+        next_payment_impact_date:
+          description: 'Date to make a one-time payment.
+
+
+            Required if frequency is `ONCE`.'
+          format: date
+          type: string
+        payment_day:
+          description: 'Day on which monthly payments are made.
+
+
+            Required if `frequency` is `MONTHLY`.'
+          enum:
+          - PAYMENT_DUE_DAY
+          type: string
+        payment_source_token:
+          description: Unique identifier of the payment source. Required for ACH payments.
+          maxLength: 36
+          type: string
+        token:
+          description: Unique identifier of the payment schedule.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+      required:
+      - amount_category
+      - currency_code
+      - frequency
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    PaymentScheduleResponse:
+      description: A future one-time or recurring payment schedule.
+      properties:
+        account_token:
+          description: Unique identifier of the credit account on which the payment schedule is made.
+          type: string
+        amount:
+          description: 'Amount of the payment.
+
+
+            Returned if the `amount_category` is `FIXED`.'
+          nullable: true
+          type: number
+        amount_category:
+          $ref: '#/components/schemas/PaymentScheduleAmountCategory'
+        created_time:
+          description: Date and time when the payment schedule was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        currency_code:
+          $ref: '#/components/schemas/CurrencyCode'
+        description:
+          description: Description of the payment schedule.
+          type: string
+        frequency:
+          $ref: '#/components/schemas/PaymentScheduleFrequency'
+        next_payment_impact_date:
+          description: 'Date to make a one-time payment.
+
+
+            Returned if `frequency` is `ONCE`.'
+          format: date
+          type: string
+        payment_day:
+          description: 'Day on which monthly payments are made.
+
+
+            Returned if the `frequency` is `MONTHLY`.'
+          enum:
+          - PAYMENT_DUE_DAY
+          type: string
+        payment_source_token:
+          description: Unique identifier of a payment source if applicable.
+          type: string
+        status:
+          $ref: '#/components/schemas/PaymentScheduleStatus'
+        token:
+          description: Unique identifier of the payment schedule.
+          type: string
+        updated_time:
+          description: Date and time when the payment schedule was last updated on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+      required:
+      - account_token
+      - amount_category
+      - currency_code
+      - frequency
+      - status
+      - token
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

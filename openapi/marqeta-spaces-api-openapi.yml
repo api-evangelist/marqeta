@@ -1,0 +1,146 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries Spaces API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: Spaces
+paths:
+  /spaces:
+    get:
+      operationId: getSpaces
+      responses:
+        default:
+          content: {}
+          description: successful operation
+      summary: Get spaces.
+      tags:
+      - Spaces
+    post:
+      operationId: createSpace
+      responses:
+        default:
+          content: {}
+          description: successful operation
+      summary: Create space.
+      tags:
+      - Spaces
+  /spaces/redis-queue/{queueName}:
+    delete:
+      operationId: deleteQueue
+      parameters:
+      - explode: false
+        in: path
+        name: queueName
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        default:
+          content: {}
+          description: successful operation
+      tags:
+      - Spaces
+  /spaces/{space}/{key}:
+    delete:
+      operationId: deleteSpace
+      parameters:
+      - explode: false
+        in: path
+        name: space
+        required: true
+        schema:
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: key
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        default:
+          content: {}
+          description: successful operation
+      summary: Delete space.
+      tags:
+      - Spaces
+    get:
+      operationId: getSpace
+      parameters:
+      - explode: false
+        in: path
+        name: space
+        required: true
+        schema:
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: key
+        required: true
+        schema:
+          type: string
+        style: simple
+      - explode: true
+        in: query
+        name: timeout
+        required: false
+        schema:
+          format: int64
+          type: integer
+        style: form
+      responses:
+        default:
+          content: {}
+          description: successful operation
+      summary: Get space.
+      tags:
+      - Spaces
+    post:
+      operationId: createSpaceForKey
+      parameters:
+      - explode: false
+        in: path
+        name: space
+        required: true
+        schema:
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: key
+        required: true
+        schema:
+          type: string
+        style: simple
+      - explode: true
+        in: query
+        name: timeout
+        required: false
+        schema:
+          format: int64
+          type: integer
+        style: form
+      responses:
+        default:
+          content: {}
+          description: successful operation
+      summary: Create space for key.
+      tags:
+      - Spaces
+components:
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

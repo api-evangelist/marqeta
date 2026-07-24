@@ -1,0 +1,199 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries Admin API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: Admin
+paths:
+  /admin/replayfailedstatements:
+    post:
+      description: Replays all failed statement from statement error processing table
+      operationId: replayFailedStatements
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+          description: Replays all failed statements
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - nileToken: []
+      summary: Replays all failed statement from statement error processing table
+      tags:
+      - Admin
+  /admin/replayfailedstatements/{short_code}:
+    post:
+      description: Replays all failed statements by short code from statement error processing table
+      operationId: replayFailedStatementsByShortCode
+      parameters:
+      - description: Short code of the program
+        explode: false
+        in: path
+        name: short_code
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+          description: Replays all failed statements by shortcode
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - nileToken: []
+      summary: Replays all failed statements by short code from statement error processing table
+      tags:
+      - Admin
+  /admin/schedulestatements:
+    post:
+      description: Schedules statements for applicable accounts
+      operationId: scheduleStatements
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+          description: Schedules statements for applicable accounts
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - nileToken: []
+      summary: Schedules statements for applicable accounts
+      tags:
+      - Admin
+  /admin/{short_code}/replayfailedstatement/{account_token}:
+    post:
+      description: Creates and enables a feature flag for a specified program short code
+      operationId: replaySingleFailedStatement
+      parameters:
+      - description: Short code of the program
+        explode: false
+        in: path
+        name: short_code
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: account token of the account
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+          description: Method unimplemented
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - nileToken: []
+      summary: Replays single failed statement by short code  and account token from statement error processing table
+      tags:
+      - Admin
+  /admin/{short_code}/retryachpayments:
+    post:
+      description: Create a new ACHO ACH transfer for payment who's current transfer has failed and is in ERROR state.
+      operationId: retryAchPayment
+      parameters:
+      - description: Short code of the program
+        explode: false
+        in: path
+        name: short_code
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RetryAchPaymentReq'
+        description: Create a new ACHO ACH transfer
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetryAchPaymentReq'
+          description: Expected response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - nileToken: []
+      summary: Create a new ACHO ACH transfer
+      tags:
+      - Admin
+components:
+  schemas:
+    RetryAchPaymentReq:
+      description: Request body that can be used to create a new ACHO transfer for a given payment.
+      properties:
+        new_acho_ach_transfer_token:
+          type: string
+        payment_token:
+          type: string
+      required:
+      - new_acho_ach_transfer_token
+      - payment_token
+      type: object
+    Success:
+      description: Successful response for operation
+      properties:
+        success:
+          description: Denotes whether the operation is successful or not
+          type: boolean
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

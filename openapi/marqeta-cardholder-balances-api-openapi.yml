@@ -1,0 +1,243 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries cardholder balances API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: cardholder balances
+paths:
+  /balances/account/{token}:
+    get:
+      description: balances/account/{token}
+      operationId: getAccountBalancesToken
+      parameters:
+      - description: The unique token associated with the user or business account. This token is required to fetch the corresponding account balance.
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/account_balance_response'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '404':
+          content: {}
+          description: Account not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns account balance for an account
+      tags:
+      - cardholder balances
+  /balances/user/{token}:
+    get:
+      description: /balances/user/{token}
+      operationId: getUserAccountBalances
+      parameters:
+      - description: The unique token identifying the user or business. This token is required to retrieve the associated account balances.
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user_accounts_balance_response'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '403':
+          content: {}
+          description: Forbidden
+        '404':
+          content: {}
+          description: Account not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns account balances for a cardholder
+      tags:
+      - cardholder balances
+  /balances/{token}:
+    get:
+      operationId: getBalancesToken
+      parameters:
+      - description: User or Business token
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/cardholder_balances'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns account balances for a cardholder
+      tags:
+      - cardholder balances
+components:
+  schemas:
+    account_balance:
+      properties:
+        balances:
+          additionalProperties:
+            $ref: '#/components/schemas/CurrencyBalance'
+          type: object
+        default_currency_code:
+          type: string
+        description:
+          type: string
+        impacted_amount:
+          type: number
+        last_updated_time:
+          format: date-time
+          type: string
+        token:
+          type: string
+        type:
+          type: string
+      type: object
+    user_accounts_balance_response:
+      properties:
+        account_balances:
+          items:
+            $ref: '#/components/schemas/account_balance'
+          type: array
+        user_token:
+          type: string
+      required:
+      - account_balances
+      type: object
+    cardholder_balance:
+      description: Returns general purpose account (GPA) balances for a user or business.
+      properties:
+        available_balance:
+          description: 'Ledger balance minus any authorized transactions that have not yet cleared.
+
+            Also known as the cardholder''s purchasing power.
+
+            When using JIT Funding, this balance is usually equal to $0.00.'
+          type: number
+        balances:
+          additionalProperties:
+            $ref: '#/components/schemas/cardholder_balance'
+          description: Contains GPA balance information, organized by currency code.
+          type: object
+        cached_balance:
+          description: Not currently in use.
+          type: number
+        credit_balance:
+          description: Not currently in use.
+          type: number
+        currency_code:
+          description: Three-digit ISO 4217 currency code.
+          type: string
+        impacted_amount:
+          description: Balance change based on the amount of the transaction.
+          type: number
+        last_updated_time:
+          description: Date and time when the resource was last updated, in UTC.
+          format: date-time
+          type: string
+        ledger_balance:
+          description: 'When using standard funding: The funds that are available to spend immediately, including funds from any authorized transactions that have not yet cleared.
+
+            When using Just-in-Time (JIT) Funding: Authorized funds that are currently on hold, but not yet cleared.'
+          type: number
+        pending_credits:
+          description: ACH loads that have been accepted, but for which the funding time has not yet elapsed.
+          type: number
+      required:
+      - available_balance
+      - balances
+      - credit_balance
+      - currency_code
+      - last_updated_time
+      - ledger_balance
+      - pending_credits
+      type: object
+    CurrencyBalance:
+      properties:
+        available_balance:
+          type: number
+        cached_balance:
+          type: number
+        credit_balance:
+          type: number
+        impacted_amount:
+          type: number
+        ledger_balance:
+          type: number
+        pending_credits:
+          type: number
+      type: object
+    cardholder_balances:
+      properties:
+        gpa:
+          $ref: '#/components/schemas/cardholder_balance'
+        links:
+          items:
+            $ref: '#/components/schemas/link'
+          type: array
+          uniqueItems: true
+      required:
+      - gpa
+      - links
+      type: object
+    link:
+      properties:
+        href:
+          readOnly: true
+          type: string
+        method:
+          type: string
+        rel:
+          type: string
+      required:
+      - href
+      - method
+      - rel
+      type: object
+    account_balance_response:
+      properties:
+        account_balance:
+          $ref: '#/components/schemas/account_balance'
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

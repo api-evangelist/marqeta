@@ -1,0 +1,261 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries mcc groups API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: mcc groups
+paths:
+  /mccgroups:
+    get:
+      operationId: getMccgroups
+      parameters:
+      - description: MCC
+        explode: true
+        in: query
+        name: mcc
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Number of items to retrieve. Count can be between 1 - 10 items.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 10
+          format: int32
+          type: integer
+        style: form
+      - description: Indicates from what row to start returning data.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: form
+      - description: Field by which to sort the returned items. Use any field in the model, or system fields lastModifiedTime or createdTime.
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -lastModifiedTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MCCGroupListResponse'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Lists all MCC groups
+      tags:
+      - mcc groups
+    post:
+      operationId: postMccgroups
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/mcc_group_model'
+        description: MCC group
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mcc_group_model'
+          description: Created
+        '400':
+          content: {}
+          description: Bad request
+        '409':
+          content: {}
+          description: Token already associated with a different payload
+        '500':
+          content: {}
+          description: Server error
+      summary: Creates an MCC group
+      tags:
+      - mcc groups
+  /mccgroups/{token}:
+    get:
+      operationId: getMccgroupsToken
+      parameters:
+      - description: MCC group token
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mcc_group_model'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '404':
+          content: {}
+          description: MCC group not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns a specific MCC group
+      tags:
+      - mcc groups
+    put:
+      operationId: putMccgroupsToken
+      parameters:
+      - explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/mcc_group_update_model'
+        description: MCC group
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mcc_group_update_model'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Updates an MCC group
+      tags:
+      - mcc groups
+components:
+  schemas:
+    AuthControls:
+      properties:
+        hold_expiration_days:
+          default: 7
+          format: int32
+          type: integer
+        hold_increase:
+          $ref: '#/components/schemas/hold_increase'
+      type: object
+    mcc_group_model:
+      properties:
+        active:
+          default: false
+          type: boolean
+        config:
+          $ref: '#/components/schemas/MCCConfig'
+        mccs:
+          items:
+            properties: {}
+            type: object
+          maxItems: 500
+          minItems: 0
+          type: array
+        name:
+          maxLength: 255
+          minLength: 0
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - mccs
+      - name
+      type: object
+    MCCGroupListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/mcc_group_model'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    hold_increase:
+      properties:
+        type:
+          default: AMOUNT
+          enum:
+          - AMOUNT
+          - PERCENT
+          - UP_TO_LIMIT
+          type: string
+        value:
+          type: number
+      required:
+      - type
+      - value
+      type: object
+    mcc_group_update_model:
+      properties:
+        active:
+          default: false
+          type: boolean
+        config:
+          $ref: '#/components/schemas/MCCConfig'
+        mccs:
+          items:
+            type: string
+          maxItems: 500
+          minItems: 1
+          type: array
+        name:
+          type: string
+      type: object
+    MCCConfig:
+      properties:
+        authorization_controls:
+          $ref: '#/components/schemas/AuthControls'
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

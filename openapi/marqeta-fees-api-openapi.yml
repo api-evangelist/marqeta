@@ -1,0 +1,739 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries Fees API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- description: '// Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    // This source file is used by InfoDev to generate API reference documentation. File location in GitHub is:
+
+    // File location in GitHub is: openapi/fees/openapi.yaml
+
+
+    A `fees` resource represents a monetary assessment against an account holder''s general purpose account (GPA).
+
+    Assessing a fee transfers funds from the account holder''s GPA account to your program''s fee account.
+
+    By default, every account has a GPA account used for the funding of transfers.
+
+
+    You can assess fees either post-transaction or in real time.
+
+    Real-time fee assessment ensures the account has sufficient funds available to cover both the transaction amount and the fee before authorization of the transaction.
+
+    To assess fees in real time, you must create a real-time fee group using the `/realtimefeegroups` endpoint.
+
+
+    When assessing a post-transaction fee, you can either debit existing GPA funds, or pull in new funds from a funding source.
+
+    To use existing GPA funds, use the `/feetransfers` endpoint.
+
+    To pull in new funds, use the fees array in `/gpaorders`.
+
+
+    [NOTE]
+
+    If your program uses Gateway JIT Funding, you cannot assess fees.'
+  name: Fees
+paths:
+  /accounts/{account_token}/fees:
+    get:
+      description: 'Retrieve an array of fees for a credit account.
+
+
+        This endpoint supports <</core-api/sorting-and-pagination, pagination>>.'
+      operationId: getFeesByAccount
+      parameters:
+      - description: 'Unique identifier of the credit account for which you want to retrieve fees.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: Number of account fee resources to retrieve.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - description: Sort order index of the first resource in the returned array.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                count: 2
+                data:
+                - account_token: my_account_token_12
+                  amount: 10
+                  applied_to_amount: null
+                  channel: API
+                  created_time: 2025-04-01 23:41:58.802000+00:00
+                  currency_code: USD
+                  description: Account was opened
+                  journal_tokens:
+                  - journal_token1
+                  method: FLAT
+                  status: POSTED
+                  subtype: ACCOUNT_OPENING_FEE
+                  token: my_account_fee_token1234
+                  type: ACCOUNT_FEE
+                  value: 10
+                - account_token: my_account_token_12
+                  amount: 19
+                  applied_to_amount: null
+                  channel: API
+                  created_time: 2022-04-05 18:25:47.751000+00:00
+                  currency_code: USD
+                  description: Metal card requested
+                  journal_tokens:
+                  - journal_token2
+                  method: FLAT
+                  status: POSTED
+                  subtype: UPGRADE_FEE
+                  token: my_account_fee_token456
+                  type: ACCOUNT_FEE
+                  value: 19
+                end_index: 1
+                is_more: false
+                start_index: 0
+              schema:
+                $ref: '#/components/schemas/AccountFeePage'
+          description: Expected response to a valid request.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: List account fees
+      tags:
+      - Fees
+    post:
+      description: Create a fee for an existing credit account.
+      operationId: createFee
+      parameters:
+      - description: 'Unique identifier of the credit account for which you want to create a fee.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            example:
+              amount: 10
+              currency_code: USD
+              description: Account was opened
+              subtype: ACCOUNT_OPENING_FEE
+              type: ACCOUNT_FEE
+            schema:
+              $ref: '#/components/schemas/AccountFeeReq'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              example:
+                account_token: my_account_token_12
+                amount: 10
+                applied_to_amount: null
+                channel: API
+                created_time: 2025-04-01 23:41:58.802000+00:00
+                currency_code: USD
+                description: Account was opened
+                journal_tokens:
+                - journal_token123
+                method: FLAT
+                status: POSTED
+                subtype: ACCOUNT_OPENING_FEE
+                token: my_account_fee_token1234
+                type: ACCOUNT_FEE
+                value: 10
+              schema:
+                $ref: '#/components/schemas/AccountFeeResponse'
+          description: Expected response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      summary: Create fee for an account
+      tags:
+      - Fees
+  /accounts/{account_token}/fees/{fee_token}:
+    get:
+      description: Retrieve a fee for a credit account.
+      operationId: retrieveFee
+      parameters:
+      - description: 'Unique identifier of the credit account for which you want to retrieve the fee.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: 'Unique identifier of the fee to retrieve.
+
+
+          Send a `GET` request to `/credit/accounts/{account_token}/fees` to retrieve existing account fee tokens.'
+        explode: false
+        in: path
+        name: fee_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing fee token
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                account_token: my_account_token_12
+                amount: 10
+                applied_to_amount: null
+                channel: API
+                created_time: 2025-04-01 23:41:58.802000+00:00
+                currency_code: USD
+                description: Account was opened
+                journal_tokens:
+                - journal_token123
+                method: FLAT
+                status: POSTED
+                subtype: ACCOUNT_OPENING_FEE
+                token: my_account_fee_token1234
+                type: ACCOUNT_FEE
+                value: 10
+              schema:
+                $ref: '#/components/schemas/AccountFeeResponse'
+          description: A JSON object containing account_fee information
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      summary: Retrieve account fee
+      tags:
+      - Fees
+  /fees:
+    get:
+      operationId: getFees
+      parameters:
+      - description: Number of fees to retrieve
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 100
+          format: int32
+          type: integer
+        style: form
+      - description: Start index
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: form
+      - description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+        explode: true
+        in: query
+        name: fields
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Sort order
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -createdTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeeListResponse'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Lists all fees
+      tags:
+      - Fees
+    post:
+      operationId: postFees
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/fee_request'
+        required: false
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/fee_response'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '409':
+          content: {}
+          description: Request already processed with a different payload
+        '500':
+          content: {}
+          description: Server error
+      summary: Creates a fee
+      tags:
+      - Fees
+  /fees/{token}:
+    get:
+      operationId: getFeesToken
+      parameters:
+      - description: Fee token
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/fee_response'
+          description: Success
+        '404':
+          content: {}
+          description: Fee not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns a specific fee
+      tags:
+      - Fees
+    put:
+      operationId: putFeesToken
+      parameters:
+      - description: Fee token
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/fee_update_request'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/fee_response'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Updates a specific fee
+      tags:
+      - Fees
+components:
+  schemas:
+    fee_response:
+      properties:
+        active:
+          readOnly: true
+          type: boolean
+        amount:
+          type: number
+        category:
+          readOnly: true
+          type: string
+        created_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          readOnly: true
+          type: string
+        currency_code:
+          readOnly: true
+          type: string
+        fee_attributes:
+          $ref: '#/components/schemas/fee_attributes'
+        last_modified_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          readOnly: true
+          type: string
+        memo:
+          description: 255 char max
+          type: string
+        name:
+          description: 50 char max
+          type: string
+        tags:
+          description: 255 char max
+          type: string
+        token:
+          description: 36 char max
+          type: string
+        type:
+          readOnly: true
+          type: string
+      required:
+      - active
+      - amount
+      - created_time
+      - currency_code
+      - last_modified_time
+      - name
+      - token
+      type: object
+    AccountFeeResponse:
+      description: Contains information returned for account fee.
+      properties:
+        account_token:
+          description: Unique identifier of the credit account on which the fee was made.
+          maxLength: 36
+          type: string
+        amount:
+          description: Amount of the fee.
+          type: number
+        applied_to_amount:
+          description: The amount to which the fee was applied (applicable only for certain fees).
+          nullable: true
+          type: number
+        channel:
+          description: Indicates how the fee was created.
+          enum:
+          - API
+          - SYSTEM
+          type: string
+        created_time:
+          description: Date and time when the account fee was applied, in UTC.
+          format: date-time
+          type: string
+        currency_code:
+          $ref: '#/components/schemas/CurrencyCode'
+        description:
+          description: Description of the fee.
+          type: string
+        journal_tokens:
+          items:
+            description: A list of associated journal tokens.
+            type: string
+          type: array
+        method:
+          description: The way fee is calculated.
+          enum:
+          - PERCENTAGE
+          - FLAT
+          type: string
+        status:
+          description: Status of the fee.
+          enum:
+          - PENDING
+          - POSTED
+          - REVERSED
+          type: string
+        subtype:
+          description: Subtype of fee.
+          enum:
+          - ACCOUNT_OPENING_FEE
+          - UPGRADE_FEE
+          - CASH_FEE
+          type: string
+        token:
+          description: Unique identifier of the fee.
+          type: string
+        type:
+          description: Type of fee.
+          enum:
+          - ACCOUNT_FEE
+          - RETURNED_PAYMENT_FEE
+          - FOREIGN_TRANSACTION_FEE
+          - OVER_LIMIT_FEE
+          - LATE_PAYMENT_FEE
+          - CARD_REPLACEMENT_FEE
+          - MINIMUM_INTEREST_FEE
+          - ANNUAL_FEE
+          - MONTHLY_FEE
+          - MINIMUM_INTEREST_FEE_REVERSAL
+          type: string
+        value:
+          description: Value of the fee.
+          type: number
+      required:
+      - account_token
+      - amount
+      - channel
+      - currency_code
+      - description
+      - journal_tokens
+      - method
+      - status
+      - subtype
+      - token
+      - type
+      - value
+      type: object
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
+      type: string
+    fee_request:
+      properties:
+        active:
+          default: true
+          type: boolean
+        amount:
+          type: number
+        category:
+          enum:
+          - STANDALONE
+          - REALTIME
+          type: string
+        currency_code:
+          type: string
+        fee_attributes:
+          $ref: '#/components/schemas/fee_attributes'
+        memo:
+          maxLength: 255
+          minLength: 0
+          type: string
+        name:
+          maxLength: 50
+          minLength: 1
+          type: string
+        tags:
+          maxLength: 255
+          minLength: 1
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        type:
+          enum:
+          - FLAT
+          - PERCENTAGE
+          type: string
+      required:
+      - amount
+      - currency_code
+      - name
+      type: object
+    AccountFeePage:
+      description: Returns paginated account fees.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: Contains one or more account fees.
+          items:
+            $ref: '#/components/schemas/AccountFeeResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    FeeListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/fee_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    fee_update_request:
+      properties:
+        active:
+          default: true
+          type: boolean
+        amount:
+          type: number
+        category:
+          enum:
+          - STANDALONE
+          - REALTIME
+          type: string
+        currency_code:
+          type: string
+        fee_attributes:
+          $ref: '#/components/schemas/fee_attributes'
+        memo:
+          maxLength: 255
+          minLength: 0
+          type: string
+        name:
+          maxLength: 50
+          minLength: 1
+          type: string
+        tags:
+          maxLength: 255
+          minLength: 1
+          type: string
+        type:
+          enum:
+          - FLAT
+          - PERCENTAGE
+          type: string
+      type: object
+    AccountFeeReq:
+      description: Contains information relevant to creating an account fee.
+      properties:
+        amount:
+          description: 'Amount of the fee.
+
+
+            Value must be positive.'
+          maximum: 1000000
+          type: number
+        currency_code:
+          $ref: '#/components/schemas/CurrencyCode'
+        description:
+          description: Description of the fee.
+          maxLength: 255
+          minLength: 1
+          type: string
+        subtype:
+          description: Subtype of the fee. Required if fee type is ACCOUNT_FEE that can have ACCOUNT_OPENING_FEE or UPGRADE_FEE subtypes.
+          enum:
+          - ACCOUNT_OPENING_FEE
+          - UPGRADE_FEE
+          - CASH_FEE
+          type: string
+        token:
+          description: Unique identifier of the fee.
+          maxLength: 36
+          type: string
+        type:
+          description: Type of the fee.
+          enum:
+          - ACCOUNT_FEE
+          - RETURNED_PAYMENT_FEE
+          type: string
+      required:
+      - amount
+      - currency_code
+      - type
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    fee_attributes:
+      properties:
+        reason:
+          type: string
+        region:
+          type: string
+        status:
+          type: string
+        transaction_type:
+          type: string
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

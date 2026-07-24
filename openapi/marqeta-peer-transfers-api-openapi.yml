@@ -1,0 +1,329 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries peer transfers API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: peer transfers
+paths:
+  /peertransfers:
+    post:
+      operationId: postPeertransfers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/peer_transfer_request'
+        required: false
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/peer_transfer_response'
+          description: Success
+        '400':
+          content: {}
+          description: 'Invalid fields detected: either sender or recipient is not found'
+        '409':
+          content: {}
+          description: Request already processed with a different payload
+        '422':
+          content: {}
+          description: Rule violations
+        '500':
+          content: {}
+          description: Server error
+      summary: Performs a peer transfer from one user to another
+      tags:
+      - peer transfers
+  /peertransfers/user/{user_or_business_token}:
+    get:
+      operationId: getPeertransfersUserUserorbusinesstoken
+      parameters:
+      - description: User or business token
+        explode: false
+        in: path
+        name: user_or_business_token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Number of transfers to retrieve
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 25
+          format: int32
+          type: integer
+        style: form
+      - description: Start index
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: form
+      - description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+        explode: true
+        in: query
+        name: fields
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/peer_transfer_response'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns all peer transfers for a user
+      tags:
+      - peer transfers
+  /peertransfers/user/{user_or_business_token}/recipient:
+    get:
+      operationId: getPeertransfersUserUserorbusinesstokenRecipient
+      parameters:
+      - description: User or business token
+        explode: false
+        in: path
+        name: user_or_business_token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Number of transfers to retrieve
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 25
+          format: int32
+          type: integer
+        style: form
+      - description: Start index
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: form
+      - description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+        explode: true
+        in: query
+        name: fields
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/peer_transfer_response'
+          description: Success
+        '404':
+          content: {}
+          description: User token not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns received peer transfers for a user
+      tags:
+      - peer transfers
+  /peertransfers/user/{user_or_business_token}/sender:
+    get:
+      operationId: getPeertransfersUserUserorbusinesstokenSender
+      parameters:
+      - description: User or business token
+        explode: false
+        in: path
+        name: user_or_business_token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Number of transfers to retrieve
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 25
+          format: int32
+          type: integer
+        style: form
+      - description: Start index
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: form
+      - description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+        explode: true
+        in: query
+        name: fields
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/peer_transfer_response'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns sent peer transfers for a user
+      tags:
+      - peer transfers
+  /peertransfers/{token}:
+    get:
+      operationId: getPeertransfersToken
+      parameters:
+      - explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/peer_transfer_response'
+          description: Success
+        '404':
+          content: {}
+          description: Transfer token not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns details of a previous transfer
+      tags:
+      - peer transfers
+components:
+  schemas:
+    peer_transfer_request:
+      properties:
+        amount:
+          type: number
+        currency_code:
+          type: string
+        memo:
+          maxLength: 99
+          minLength: 1
+          type: string
+        recipient_business_token:
+          description: Required if 'recipient_business_token' is null
+          maxLength: 36
+          minLength: 1
+          type: string
+        recipient_user_token:
+          description: Required if 'recipient_business_token' is null
+          maxLength: 36
+          minLength: 1
+          type: string
+        sender_business_token:
+          description: Required if 'send_user_token' is null
+          maxLength: 36
+          minLength: 1
+          type: string
+        sender_user_token:
+          description: Required if 'send_business_token' is null
+          maxLength: 36
+          minLength: 1
+          type: string
+        tags:
+          maxLength: 255
+          minLength: 1
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - amount
+      - currency_code
+      type: object
+    peer_transfer_response:
+      description: Contains information about an intra-account transfer, including sender and recipient tokens, transfer amount, and currency code.
+      properties:
+        amount:
+          description: Amount of the transfer.
+          type: number
+        created_time:
+          format: date-time
+          type: string
+        currency_code:
+          description: Three-digit ISO 4217 currency code.
+          type: string
+        memo:
+          description: Additional descriptive text about the intra-account transfer.
+          type: string
+        recipient_business_token:
+          description: Specifies the business account holder that receives funds.
+          type: string
+        recipient_user_token:
+          description: Specifies the user account holder that receives funds.
+          type: string
+        sender_business_token:
+          description: Specifies the business account holder that sends funds.
+          type: string
+        sender_user_token:
+          description: Specifies the user account holder that sends funds.
+          type: string
+        tags:
+          description: Metadata about the intra-account transfer.
+          type: string
+        token:
+          description: Unique identifier of the intra-account transfer request.
+          type: string
+      required:
+      - amount
+      - created_time
+      - currency_code
+      - token
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

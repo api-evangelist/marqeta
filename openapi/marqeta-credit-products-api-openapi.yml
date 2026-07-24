@@ -1,0 +1,1181 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries Credit Products API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- description: '// Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    [IMPORTANT]
+
+    This feature is deprecated and replaced by credit product policies, which is part of the bundles feature.
+
+    For more on policies and bundles in a credit program, see <</developer-guides/credit-programs-dashboard, Managing Credit Programs in the Marqeta Dashboard>>.
+
+
+    The credit products feature on Marqeta''s credit platform enables you to create and manage a credit product and customize its characteristics, such as the credit line range and required fees or APRs.
+
+    Credit product characteristics determine the behaviors and attributes of associated credit accounts.
+
+    For more on credit products, see <</developer-guides/about-credit-products, About Credit Products>>.
+
+
+    To receive webhook notifications when product transition events occur, see <</core-api/event-types#_credit_product_transition_events, Credit product transition events>> in Event Types.
+
+
+    [IMPORTANT]
+
+    ====
+
+    To create and manage credit products, you must use the link:https://app.marqeta.com/[Marqeta Dashboard, window="_blank"].
+
+    For more, see <</developer-guides/credit-products-dashboard, Managing Credit Products in the Marqeta Dashboard>>.
+
+
+    &#160; +
+
+
+    The following endpoints are displayed for reference purposes only.
+
+    ===='
+  name: Credit Products
+paths:
+  /products:
+    get:
+      description: 'Retrieve an array of credit products.
+
+
+        This endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>.'
+      operationId: listProducts
+      parameters:
+      - description: An array of statuses by which to filter credit products.
+        explode: true
+        in: query
+        name: status
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/ResourceStatus'
+          type: array
+        style: form
+      - description: Number of credit product resources to retrieve.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - description: Sort order index of the first resource in the returned array.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: 'Field on which to sort.
+
+          Prefix the field name with a hyphen (`-`) to sort in descending order.
+
+          Omit the hyphen to sort in ascending order.
+
+
+          *NOTE:*
+
+          You must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`.'
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -lastModifiedTime
+          enum:
+          - lastModifiedTime
+          - -lastModifiedTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                count: 2
+                data:
+                - card_product_tokens:
+                  - my_card_product1234
+                  classification: CONSUMER
+                  config:
+                    billing_cycle_day: 1
+                    fees:
+                    - LATE_PAYMENT_FEE
+                    fees_config: []
+                    payment_due_day: 31
+                    periodic_fees:
+                    - frequency: ANNUAL
+                      number_of_days_post_activation: 5
+                    - frequency: MONTHLY
+                      number_of_days_post_activation: 28
+                    rewards_config: []
+                  created_time: 2023-09-03 19:03:21.035000+00:00
+                  credit_line:
+                    max: 200000
+                    min: 25
+                  currency_code: USD
+                  description: Description of credit product
+                  interest_calculation:
+                    day_count: ACTUAL
+                    exclude_tran_types:
+                    - ANNUAL_FEE
+                    - LATE_PAYMENT_FEE
+                    - CASH_BACK_STATEMENT_CREDIT
+                    grace_days_application: NEXT_CYCLE_DATE
+                    interest_application:
+                    - PRINCIPAL
+                    - FEES
+                    interest_on_grace_reactivation: ACCRUE_FULL_CYCLE
+                    method: AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS
+                    minimum_interest: 1
+                  min_payment_calculation:
+                    include_overlimit_amount: false
+                    include_past_due_amount: false
+                    min_payment_flat_amount: 25
+                    min_payment_percentage:
+                      include_fees_charged: []
+                      include_interest_charged: false
+                      percentage_of_balance: 1
+                  min_payment_flat_amount: 25
+                  min_payment_percentage: 1
+                  name: Gold Card
+                  payment_allocation_order:
+                  - INTEREST
+                  - FEES
+                  - PRINCIPAL
+                  product_sub_type: CREDIT_CARD
+                  product_type: REVOLVING
+                  status: ACTIVE
+                  token: my_credit_product_token1234
+                  updated_time: 2023-09-03 19:03:21.035000+00:00
+                  usage:
+                  - PURCHASE
+                - card_product_tokens:
+                  - card-product-token-d308
+                  - card-product-token-cc10
+                  classification: CONSUMER
+                  config:
+                    billing_cycle_day: 1
+                    fees:
+                    - LATE_PAYMENT_FEE
+                    fees_config: []
+                    payment_due_day: 31
+                    periodic_fees:
+                    - frequency: ANNUAL
+                      number_of_days_post_activation: 5
+                    - frequency: MONTHLY
+                      number_of_days_post_activation: 28
+                    rewards_config: []
+                  created_time: 2023-10-26 14:46:26.678000+00:00
+                  credit_line:
+                    max: 20000
+                    min: 200
+                  currency_code: USD
+                  description: Platinum consumer product
+                  interest_calculation:
+                    day_count: ACTUAL
+                    exclude_tran_types:
+                    - LATE_PAYMENT_FEE
+                    - ANNUAL_FEE
+                    - CASH_BACK_STATEMENT_CREDIT
+                    grace_days_application: NEXT_CYCLE_DATE
+                    interest_application:
+                    - PRINCIPAL
+                    - FEES
+                    interest_on_grace_reactivation: ACCRUE_FULL_CYCLE
+                    method: AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS
+                    minimum_interest: 1
+                  min_payment_flat_amount: 22
+                  min_payment_percentage: 2
+                  name: My Platinum Credit Product
+                  payment_allocation_order:
+                  - INTEREST
+                  - FEES
+                  - PRINCIPAL
+                  product_sub_type: CREDIT_CARD
+                  product_type: REVOLVING
+                  status: ACTIVE
+                  token: credit-product-token-9163
+                  updated_time: 2023-10-26 16:45:19.908000+00:00
+                  usage:
+                  - PURCHASE
+                end_index: 0
+                is_more: true
+                start_index: 0
+              schema:
+                $ref: '#/components/schemas/ProductsPage'
+          description: Expected response to a valid request
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: List credit products
+      tags:
+      - Credit Products
+    post:
+      description: Create a credit product.
+      operationId: createProduct
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              card_product_tokens:
+              - my_card_product1234
+              classification: CONSUMER
+              config:
+                billing_cycle_day: 1
+                fees:
+                - LATE_PAYMENT_FEE
+                payment_due_day: 31
+                periodic_fees: []
+              credit_line:
+                max: 200000
+                min: 25
+              currency_code: USD
+              interest_calculation:
+                day_count: ACTUAL
+                exclude_tran_types:
+                - ANNUAL_FEE
+                - LATE_PAYMENT_FEE
+                - CASH_BACK_STATEMENT_CREDIT
+                grace_days_application: NEXT_CYCLE_DATE
+                interest_application:
+                - PRINCIPAL
+                - FEES
+                interest_on_grace_reactivation: ACCRUE_FULL_CYCLE
+                method: AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS
+                minimum_interest: 1
+              min_payment_calculation:
+                include_overlimit_amount: true
+                include_past_due_amount: true
+                min_payment_flat_amount: 25
+                min_payment_percentage:
+                  include_fees_charged:
+                  - LATE_PAYMENT_FEE
+                  include_interest_charged: false
+                  percentage_of_balance: 1
+              min_payment_flat_amount: 25
+              min_payment_percentage: 1
+              name: my_credit_product1234
+              payment_allocation_order:
+              - INTEREST
+              - FEES
+              - PRINCIPAL
+              product_sub_type: CREDIT_CARD
+              product_type: REVOLVING
+              status: ACTIVE
+              usage:
+              - PURCHASE
+            schema:
+              $ref: '#/components/schemas/ProductCreateReq'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              example:
+                card_product_tokens:
+                - my_card_product1234
+                classification: CONSUMER
+                config:
+                  billing_cycle_day: 1
+                  fees:
+                  - LATE_PAYMENT_FEE
+                  fees_config: []
+                  payment_due_day: 31
+                  periodic_fees: []
+                  rewards_config: []
+                created_time: 2021-09-03 19:03:21.035000+00:00
+                credit_line:
+                  max: 200000
+                  min: 25
+                currency_code: USD
+                description: Description of credit product
+                interest_calculation:
+                  day_count: ACTUAL
+                  exclude_tran_types:
+                  - ANNUAL_FEE
+                  - LATE_PAYMENT_FEE
+                  - CASH_BACK_STATEMENT_CREDIT
+                  grace_days_application: NEXT_CYCLE_DATE
+                  interest_application:
+                  - PRINCIPAL
+                  - FEES
+                  interest_on_grace_reactivation: ACCRUE_FULL_CYCLE
+                  method: AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS
+                  minimum_interest: 1
+                min_payment_calculation:
+                  include_overlimit_amount: false
+                  include_past_due_amount: false
+                  min_payment_flat_amount: 25
+                  min_payment_percentage:
+                    include_fees_charged: []
+                    include_interest_charged: false
+                    percentage_of_balance: 1
+                min_payment_flat_amount: 25
+                min_payment_percentage: 1
+                name: Gold Card
+                payment_allocation_order:
+                - INTEREST
+                - FEES
+                - PRINCIPAL
+                product_sub_type: CREDIT_CARD
+                product_type: REVOLVING
+                status: ACTIVE
+                token: my_credit_product_token1234
+                updated_time: 2021-09-03 19:03:21.035000+00:00
+                usage:
+                - PURCHASE
+              schema:
+                $ref: '#/components/schemas/ProductResponse'
+          description: Expected response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Create credit product
+      tags:
+      - Credit Products
+  /products/{token}:
+    get:
+      description: Retrieve a credit product.
+      operationId: retrieveProduct
+      parameters:
+      - description: 'Unique identifier of the credit product to retrieve.
+
+
+          Send a `GET` request to `/credit/products` to retrieve existing credit product tokens.'
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing credit product token
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                card_product_tokens:
+                - card-product-token-2222
+                classification: CONSUMER
+                config:
+                  billing_cycle_day: 1
+                  fees:
+                  - LATE_PAYMENT_FEE
+                  payment_due_day: 31
+                  periodic_fees:
+                  - frequency: ANNUAL
+                    number_of_days_post_activation: 5
+                  - frequency: MONTHLY
+                    number_of_days_post_activation: 28
+                created_time: 2020-12-17 00:11:46+00:00
+                credit_line:
+                  max: 3500
+                  min: 1500
+                currency_code: USD
+                description: Description of Gold Product
+                interest_calculation:
+                  day_count: ACTUAL
+                  exclude_tran_types:
+                  - ANNUAL_FEE
+                  - LATE_PAYMENT_FEE
+                  - CASH_BACK_STATEMENT_CREDIT
+                  grace_days_application: NEXT_CYCLE_DATE
+                  interest_application:
+                  - PRINCIPAL
+                  - FEES
+                  interest_on_grace_reactivation: ACCRUE_FULL_CYCLE
+                  method: AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS
+                  minimum_interest: 1
+                min_payment_flat_amount: 0.01
+                min_payment_percentage: 0.0001
+                name: Gold Product
+                payment_allocation_order:
+                - INTEREST
+                - FEES
+                - PRINCIPAL
+                product_sub_type: CREDIT_CARD
+                product_type: REVOLVING
+                status: DRAFT
+                token: credit-product-token1111
+                updated_time: 2020-12-17 00:11:46+00:00
+                usage:
+                - PURCHASE
+              schema:
+                $ref: '#/components/schemas/ProductResponse'
+          description: A JSON object containing product information
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Retrieve credit product
+      tags:
+      - Credit Products
+  /products/{token}/lineage:
+    get:
+      description: 'Retrieve the lineage of a credit product, which is an array of related credit products whose lineage can be traced back to the same original credit product.
+
+
+        This endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>.'
+      operationId: lineageProducts
+      parameters:
+      - description: 'Unique identifier of the credit product whose lineage you want to retrieve.
+
+
+          Send a `GET` request to `/credit/products` to retrieve existing credit product tokens.'
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing credit product token
+        style: simple
+      - description: An array of statuses by which to filter credit products.
+        explode: true
+        in: query
+        name: status
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/ResourceStatus'
+          type: array
+        style: form
+      - description: Number of credit product resources to retrieve.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - description: Sort order index of the first resource in the returned array.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: 'Field on which to sort.
+
+          Prefix the field name with a hyphen (`-`) to sort in descending order.
+
+          Omit the hyphen to sort in ascending order.
+
+
+          *NOTE:*
+
+          You must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`.'
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -lastModifiedTime
+          enum:
+          - lastModifiedTime
+          - -lastModifiedTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                count: 3
+                data:
+                - card_product_tokens:
+                  - card-product-token-d308
+                  - card-product-token-cc10
+                  classification: CONSUMER
+                  config:
+                    billing_cycle_day: 1
+                    payment_due_day: 31
+                  created_time: 2023-10-26 14:46:26.678000+00:00
+                  credit_line:
+                    max: 20000
+                    min: 200
+                  currency_code: USD
+                  description: Platinum consumer product
+                  interest_calculation:
+                    day_count: ACTUAL
+                    exclude_tran_types:
+                    - LATE_PAYMENT_FEE
+                    - ANNUAL_FEE
+                    - CASH_BACK_STATEMENT_CREDIT
+                    grace_days_application: NEXT_CYCLE_DATE
+                    interest_application:
+                    - PRINCIPAL
+                    - FEES
+                    interest_on_grace_reactivation: ACCRUE_FULL_CYCLE
+                    method: AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS
+                    minimum_interest: 1
+                  min_payment_calculation:
+                    include_overlimit_amount: false
+                    include_past_due_amount: true
+                    min_payment_flat_amount: 22
+                    min_payment_percentage:
+                      include_fees_charged: []
+                      include_interest_charged: false
+                      percentage_of_balance: 2
+                  min_payment_flat_amount: 22
+                  min_payment_percentage: 2
+                  name: My Platinum Credit Product
+                  parent_product_token: credit-product-token-366b
+                  payment_allocation_order:
+                  - INTEREST
+                  - FEES
+                  - PRINCIPAL
+                  product_sub_type: CREDIT_CARD
+                  product_type: REVOLVING
+                  status: ACTIVE
+                  token: credit-product-token-9163
+                  updated_time: 2023-10-26 16:45:19.908000+00:00
+                  usage:
+                  - PURCHASE
+                - card_product_tokens:
+                  - card-product-token-d308
+                  classification: CONSUMER
+                  config:
+                    billing_cycle_day: 1
+                    payment_due_day: 31
+                  created_time: 2023-10-26 14:43:11.187000+00:00
+                  credit_line:
+                    max: 20000
+                    min: 200
+                  currency_code: USD
+                  description: Platinum consumer product
+                  interest_calculation:
+                    day_count: ACTUAL
+                    exclude_tran_types:
+                    - LATE_PAYMENT_FEE
+                    - ANNUAL_FEE
+                    - CASH_BACK_STATEMENT_CREDIT
+                    grace_days_application: NEXT_CYCLE_DATE
+                    interest_application:
+                    - PRINCIPAL
+                    - FEES
+                    interest_on_grace_reactivation: ACCRUE_FULL_CYCLE
+                    method: AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS
+                    minimum_interest: 1
+                  min_payment_calculation:
+                    include_overlimit_amount: false
+                    include_past_due_amount: false
+                    min_payment_flat_amount: 22
+                    min_payment_percentage:
+                      include_fees_charged: []
+                      include_interest_charged: false
+                      percentage_of_balance: 2
+                  min_payment_flat_amount: 22
+                  min_payment_percentage: 2
+                  name: My Platinum Credit Product
+                  payment_allocation_order:
+                  - INTEREST
+                  - FEES
+                  - PRINCIPAL
+                  product_sub_type: CREDIT_CARD
+                  product_type: REVOLVING
+                  status: ARCHIVED
+                  token: credit-product-token-366b
+                  updated_time: 2023-10-26 16:45:19.907000+00:00
+                  usage:
+                  - PURCHASE
+                - card_product_tokens:
+                  - card-product-token-d308
+                  - card-product-token-cc10
+                  classification: CONSUMER
+                  config:
+                    billing_cycle_day: 1
+                    payment_due_day: 31
+                  created_time: 2023-10-26 14:44:54.770000+00:00
+                  credit_line:
+                    max: 20000
+                    min: 200
+                  currency_code: USD
+                  description: Platinum consumer product
+                  interest_calculation:
+                    day_count: ACTUAL
+                    exclude_tran_types:
+                    - LATE_PAYMENT_FEE
+                    - ANNUAL_FEE
+                    - CASH_BACK_STATEMENT_CREDIT
+                    grace_days_application: NEXT_CYCLE_DATE
+                    interest_application:
+                    - PRINCIPAL
+                    - FEES
+                    interest_on_grace_reactivation: ACCRUE_FULL_CYCLE
+                    method: AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS
+                    minimum_interest: 1
+                  min_payment_calculation:
+                    include_overlimit_amount: false
+                    include_past_due_amount: false
+                    min_payment_flat_amount: 22
+                    min_payment_percentage:
+                      include_fees_charged: []
+                      include_interest_charged: false
+                      percentage_of_balance: 2
+                  min_payment_flat_amount: 22
+                  min_payment_percentage: 2
+                  name: My Platinum Credit Product
+                  parent_product_token: credit-product-token-366b
+                  payment_allocation_order:
+                  - INTEREST
+                  - FEES
+                  - PRINCIPAL
+                  product_sub_type: CREDIT_CARD
+                  product_type: REVOLVING
+                  status: REJECTED
+                  token: credit-product-token-4373
+                  updated_time: 2023-10-26 14:45:26.015000+00:00
+                  usage:
+                  - PURCHASE
+                end_index: 2
+                is_more: false
+                start_index: 0
+              schema:
+                $ref: '#/components/schemas/ProductsPage'
+          description: Expected response to a valid request
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Retrieve credit product lineage
+      tags:
+      - Credit Products
+components:
+  schemas:
+    ResourceStatus:
+      description: 'Status of the credit product.
+
+
+        * `DRAFT` - The credit product is in the process of being created.
+
+        * `PENDING_APPROVAL` - The credit product has been created and is awaiting approval.
+
+        * `SENT_FOR_REVISION` - The credit product has been returned for revision.
+
+        * `ACTIVE` - The credit product is active.
+
+        * `REJECTED` - The credit product has been rejected; this status cannot be changed.
+
+        * `ARCHIVED` - The previously active credit product has been archived.'
+      enum:
+      - DRAFT
+      - PENDING_APPROVAL
+      - SENT_FOR_REVISION
+      - ACTIVE
+      - REJECTED
+      - ARCHIVED
+      type: string
+    ProductMinPaymentCalculation:
+      description: Contains information used to calculate the minimum payment amount.
+      properties:
+        include_past_due_amount:
+          description: Whether to include the past due amount when calculating the minimum payment.
+          type: boolean
+        min_payment_flat_amount:
+          description: Minimum payment, expressed as a flat amount, due on the payment due day.
+          minimum: 0.01
+          type: number
+        min_payment_percentage:
+          $ref: '#/components/schemas/ProductMinPaymentPercentage'
+      required:
+      - include_overlimit_amount
+      - include_past_due_amount
+      - min_payment_flat_amount
+      - min_payment_percentage
+      type: object
+    ProductConfig:
+      description: Contains information on configurations for billing cycle day, payment due day, and fees.
+      properties:
+        billing_cycle_day:
+          description: Day of the month when the billing cycle starts.
+          maximum: 28
+          minimum: 1
+          type: integer
+        billing_cycle_day_strategy:
+          default: MANUAL
+          description: Determines if the billing cycle day is manually set or determined dynamically during account creation based on cycling logic.
+          enum:
+          - MANUAL
+          type: string
+        billing_cycle_frequency:
+          default: MONTHLY
+          description: Frequency at which the account is billed.
+          enum:
+          - MONTHLY
+          type: string
+        fees:
+          description: One or more fee types.
+          items:
+            $ref: '#/components/schemas/ProductFeeType'
+          type: array
+        payment_due_day:
+          deprecated: true
+          description: 'Day of month the payment for the previous billing cycle is due.
+
+
+            This field is deprecated.
+
+            Use the `product.payment_due_interval` field instead.
+
+            To retrieve `payment_due_interval`, see <</core-api/credit-products#retrieveProduct, Retrieve credit product, config.payment_due_interval>>.'
+          maximum: 31
+          minimum: 31
+          type: integer
+        payment_due_interval:
+          default: -1
+          description: 'Specifies the payment due interval that is used to determine the payment due date for a billing cycle.
+
+            A value of -1 indicates one day prior to the next billing cycle date.
+
+
+            For consumer programs, a minimum gap of 21 days is required between when a statement is delivered and the payment due date.'
+          minimum: -1
+          type: integer
+        periodic_fees:
+          description: Contains one or more periodic fees.
+          items:
+            description: Contains information on a periodic fee.
+            properties:
+              frequency:
+                description: How frequently the fee is charged.
+                enum:
+                - ANNUAL
+                - MONTHLY
+                type: string
+              number_of_days_post_activation:
+                description: 'Number of days after an account is activated that the initial fee is charged.
+
+                  For example, if the value in this field is `30`, then the initial fee is charged 30 days after an account is activated.'
+                maximum: 1000
+                minimum: 1
+                type: integer
+            required:
+            - frequency
+            - number_of_days_post_activation
+            title: ProductConfigPeriodicFees
+            type: object
+          type: array
+      required:
+      - billing_cycle_day
+      type: object
+    ProductClassification:
+      default: CONSUMER
+      description: 'Specifies for whom the credit product is intended.
+
+
+        * `CONSUMER` - The credit product is intended for individual consumers.
+
+        * `SMALL_AND_MEDIUM_BUSINESS` - The credit product is intended for small and medium business.'
+      enum:
+      - CONSUMER
+      - SMALL_AND_MEDIUM_BUSINESS
+      type: string
+    InterestCalculation:
+      description: Contains the configurations for interest calculation.
+      properties:
+        day_count:
+          description: Day-count convention.
+          enum:
+          - ACTUAL
+          type: string
+        exclude_tran_types:
+          default:
+          - ANNUAL_FEE
+          - MONTHLY_FEE
+          - LATE_PAYMENT_FEE
+          - CASH_BACK_STATEMENT_CREDIT
+          - FOREIGN_TRANSACTION_FEE
+          description: One or more transactions that are excluded from current billing period's interest charge, but included in next.
+          items:
+            enum:
+            - LATE_PAYMENT_FEE
+            - ANNUAL_FEE
+            - MONTHLY_FEE
+            - CASH_BACK_STATEMENT_CREDIT
+            - RETURNED_PAYMENT_FEE
+            - FOREIGN_TRANSACTION_FEE
+            type: string
+          type: array
+        grace_days_application:
+          description: Determines the last day of grace period based on which interest charges are calculated.
+          enum:
+          - NEXT_CYCLE_DATE
+          type: string
+        interest_application:
+          default:
+          - PRINCIPAL
+          - FEES
+          description: One or more balance types on which interest is applied.
+          items:
+            enum:
+            - PRINCIPAL
+            - FEES
+            - INTEREST
+            type: string
+          minItems: 1
+          type: array
+        interest_on_grace_reactivation:
+          $ref: '#/components/schemas/InterestOnGraceReactivationEnum'
+        method:
+          description: Method of interest calculation.
+          enum:
+          - AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS
+          type: string
+        minimum_interest:
+          description: When interest is applied, this value determines the minimum amount of interest that can be charged.
+          maximum: 9.9999999999999E11
+          minimum: 0
+          type: number
+      required:
+      - day_count
+      - grace_days_application
+      - interest_application
+      - interest_on_grace_reactivation
+      - method
+      - minimum_interest
+      type: object
+    BalanceType:
+      description: 'Type of balance.
+
+
+        * `PURCHASE` - The balance on purchases.'
+      enum:
+      - PURCHASE
+      type: string
+    ProductResponse:
+      description: 'Specifies shared details for a credit program.
+
+
+        Once set to `ACTIVE`, cannot be edited or deleted.'
+      properties:
+        card_product_tokens:
+          description: One or more associated card product tokens.
+          items:
+            type: string
+          minItems: 1
+          type: array
+        classification:
+          $ref: '#/components/schemas/ProductClassification'
+        config:
+          $ref: '#/components/schemas/ProductConfig'
+        created_time:
+          description: Date and time when the credit product was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        credit_line:
+          $ref: '#/components/schemas/ProductCreditLine'
+        currency_code:
+          $ref: '#/components/schemas/CurrencyCode'
+        description:
+          description: Description of the credit product.
+          type: string
+        interest_calculation:
+          $ref: '#/components/schemas/InterestCalculation'
+        min_payment_calculation:
+          $ref: '#/components/schemas/ProductMinPaymentCalculation'
+        min_payment_flat_amount:
+          description: Minimum payment, expressed as a flat amount, due on the payment due day.
+          minimum: 0.01
+          type: number
+        min_payment_percentage:
+          description: Minimum payment, expressed as a percentage of the total statement balance, due on the payment due day.
+          maximum: 100
+          minimum: 0.0001
+          type: number
+        name:
+          description: Name of the credit product.
+          type: string
+        parent_product_token:
+          description: Unique identifier of the parent credit product.
+          type: string
+        payment_allocation_order:
+          default:
+          - INTEREST
+          - FEES
+          - PRINCIPAL
+          description: Ordered list of balance types to which payments are allocated, from first to last.
+          items:
+            $ref: '#/components/schemas/PaymentAllocationOrderEnum'
+          minItems: 1
+          type: array
+        product_sub_type:
+          $ref: '#/components/schemas/ProductSubType'
+        product_type:
+          $ref: '#/components/schemas/ProductType'
+        status:
+          $ref: '#/components/schemas/ResourceStatus'
+        token:
+          description: Unique identifier of the credit product.
+          type: string
+        updated_time:
+          description: Date and time when the credit product was last updated on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        usage:
+          description: One or more usage types for the credit product.
+          items:
+            $ref: '#/components/schemas/BalanceType'
+          minItems: 1
+          type: array
+      type: object
+    ProductSubType:
+      default: CREDIT_CARD
+      description: 'Subtype of the credit product type.
+
+
+        * `CREDIT_CARD` - Card that enables the cardholder to make purchases on credit.
+
+        * `SECURED_CARD` - Card backed by a user-funded deposit that enables the cardholder to make purchases on credit.'
+      enum:
+      - CREDIT_CARD
+      - SECURED_CARD
+      type: string
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
+      type: string
+    ProductsPage:
+      description: Returns paginated products.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: Contains one or more credit product objects.
+          items:
+            $ref: '#/components/schemas/ProductResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    ProductMinPaymentPercentage:
+      description: Contains information used to calculate the minimum payment percentage.
+      properties:
+        include_all_fees_charged:
+          description: Whether to include all fees charged when calculating the minimum payments.
+          type: boolean
+        include_fees_charged:
+          description: One or more fee types to include when calculating the minimum payment.
+          items:
+            $ref: '#/components/schemas/ProductFeeType'
+          type: array
+        percentage_of_balance:
+          description: Minimum payment, expressed as a percentage of the total statement balance, due on the payment due day.
+          maximum: 100
+          minimum: 0.0001
+          type: number
+      required:
+      - include_fees_charged
+      - include_interest_charged
+      - percentage_of_balance
+      type: object
+    ProductCreateReq:
+      description: 'Specifies shared details for a credit program.
+
+
+        Once set to `ACTIVE`, cannot be edited or deleted.'
+      properties:
+        card_product_tokens:
+          description: One or more associated card product tokens.
+          items:
+            type: string
+          minItems: 1
+          type: array
+        classification:
+          $ref: '#/components/schemas/ProductClassification'
+        config:
+          $ref: '#/components/schemas/ProductConfig'
+        credit_line:
+          $ref: '#/components/schemas/ProductCreditLine'
+        currency_code:
+          $ref: '#/components/schemas/CurrencyCode'
+        description:
+          description: Description of the credit product.
+          maxLength: 255
+          type: string
+        interest_calculation:
+          $ref: '#/components/schemas/InterestCalculation'
+        min_payment_calculation:
+          $ref: '#/components/schemas/ProductMinPaymentCalculation'
+        min_payment_flat_amount:
+          description: Minimum payment, expressed as a flat amount, due on the payment due day.
+          minimum: 0.01
+          type: number
+        min_payment_percentage:
+          description: Minimum payment, expressed as a percentage of the total statement balance, due on the payment due day.
+          maximum: 100
+          minimum: 0.0001
+          type: number
+        name:
+          description: Name of the credit product.
+          maxLength: 255
+          type: string
+        payment_allocation_order:
+          default:
+          - INTEREST
+          - FEES
+          - PRINCIPAL
+          description: Ordered list of balance types to which payments are allocated, from first to last.
+          items:
+            $ref: '#/components/schemas/PaymentAllocationOrderEnum'
+          minItems: 1
+          type: array
+        product_sub_type:
+          $ref: '#/components/schemas/ProductSubType'
+        product_type:
+          $ref: '#/components/schemas/ProductType'
+        status:
+          $ref: '#/components/schemas/ResourceStatus'
+        token:
+          description: Unique identifier of the credit product.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+        usage:
+          description: One or more usage types for the credit product.
+          items:
+            $ref: '#/components/schemas/BalanceType'
+          minItems: 1
+          type: array
+      required:
+      - card_product_tokens
+      - classification
+      - config
+      - credit_line
+      - currency_code
+      - interest_calculation
+      - min_payment_flat_amount
+      - min_payment_percentage
+      - name
+      - payment_allocation_order
+      - product_sub_type
+      - product_type
+      - usage
+      type: object
+    InterestOnGraceReactivationEnum:
+      description: Determines whether to charge or waive interest for the billing period when the balance is paid off.
+      enum:
+      - ACCRUE_FULL_CYCLE
+      - ACCRUE_PAYMENT_DATE
+      - WAIVE
+      type: string
+    ProductFeeType:
+      description: Type of fee.
+      enum:
+      - LATE_PAYMENT_FEE
+      - RETURNED_PAYMENT_FEE
+      - FOREIGN_TRANSACTION_FEE
+      type: string
+    PaymentAllocationOrderEnum:
+      description: Ordered list of balance types to which payments are allocated, from first to last.
+      enum:
+      - INTEREST
+      - FEES
+      - PRINCIPAL
+      type: string
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    ProductType:
+      default: REVOLVING
+      description: 'Type of credit product.
+
+
+        `REVOLVING` - Allows users to continuously borrow and pay debts up to the credit limit.'
+      enum:
+      - REVOLVING
+      type: string
+    ProductCreditLine:
+      description: Contains information on the credit line range.
+      properties:
+        max:
+          description: Maximum credit limit.
+          exclusiveMinimum: false
+          maximum: 9.9999999999999E11
+          minimum: 0
+          type: number
+        min:
+          description: Minimum credit limit.
+          exclusiveMinimum: false
+          maximum: 9.9999999999999E11
+          minimum: 0
+          type: number
+      required:
+      - max
+      - min
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

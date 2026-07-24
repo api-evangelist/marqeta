@@ -1,0 +1,2880 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries Bundles API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- description: '// Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    The bundles feature on Marqeta''s credit platform enables you to create and manage bundles by choosing the specific policies that make up a bundle.
+
+    A bundle must contain one document policy, credit product policy, fee policy, APR policy, and an optional reward policy.
+
+    The configurations of each policy in a bundle determine the characteristics and attributes of the bundle''s associated credit accounts, reward programs, disclosures, and more.
+
+    For more on how to configure a policy, see <</core-api/credit-policies, Policies>>.
+
+
+    [IMPORTANT]
+
+    ====
+
+    To create and manage bundles, you must use the link:https://app.marqeta.com/[Marqeta Dashboard, window="_blank"].
+
+    For more on bundles in the dashboard, see <</developer-guides/credit-programs-dashboard, Managing Credit Programs in the Marqeta Dashboard>>.
+
+
+    &#160; +
+
+
+    The following endpoints are displayed for reference purposes only.
+
+    ===='
+  name: Bundles
+paths:
+  /bundles:
+    get:
+      description: 'Retrieve an array of bundles.
+
+
+        This endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>.'
+      operationId: listBundles
+      parameters:
+      - description: Number of bundles resources to retrieve.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - description: Sort order index of the first resource in the returned array.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: 'Field on which to sort.
+
+          Prefix the field name with a hyphen (`-`) to sort in descending order.
+
+          Omit the hyphen to sort in ascending order.
+
+
+          *NOTE:*
+
+          You must sort using system field names such as `lastModifiedTime`, not by the field names appearing in response bodies: for example, `last_modified_time`.'
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -lastModifiedTime
+          enum:
+          - lastModifiedTime
+          - -lastModifiedTime
+          type: string
+        style: form
+      - description: An array of statuses by which to filter bundles.
+        explode: true
+        in: query
+        name: status
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/BundleResourceStatus'
+          type: array
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                count: 2
+                data:
+                - apr_policy_detail:
+                    created_time: 2024-04-01 23:41:58.802000+00:00
+                    description: A gold APR policy
+                    effective_date: 2024-05-01
+                    name: Gold APR Policy
+                    purchases:
+                      external_token: my_external_purchase_token1234
+                      name: A purchase at a merchant
+                      tiers:
+                      - apr: 0
+                        margin_rate: 1
+                      - apr: 0
+                        margin_rate: 5
+                    token: my_apr_policy_token_1234
+                    updated_time: 2024-04-05 16:04:48.643000+00:00
+                  apr_policy_token: my_apr_policy_token_1234
+                  created_time: 2024-04-01 23:41:58.802000+00:00
+                  credit_product_policy_detail:
+                    card_products:
+                    - level: TRADITIONAL
+                      network: VISA
+                      token: my_card_product_token1234
+                    classification: CONSUMER
+                    created_time: 2024-04-01 23:41:58.802000+00:00
+                    credit_line:
+                      max: 3500
+                      min: 50
+                    currency_code: USD
+                    description: A gold credit product policy
+                    interest_calculation:
+                      application_of_credits:
+                        cycle_type: END_REVOLVING
+                        day: 15
+                      day_count: ACTUAL
+                      exclude_tran_types:
+                      - ANNUAL_FEE
+                      - LATE_PAYMENT_FEE
+                      - CASH_BACK_STATEMENT_CREDIT
+                      grace_days_application: NEXT_CYCLE_DATE
+                      interest_application:
+                      - PRINCIPAL
+                      - FEES
+                      interest_on_grace_reactivation: ACCRUE_PAYMENT_DATE
+                      method: AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS
+                      minimum_interest: 1
+                    name: Gold Credit Product Policy
+                    payments:
+                      allocation_order:
+                      - INTEREST
+                      - FEES
+                      - PRINCIPAL
+                      billing_cycle_day: 1
+                      due_day: 31
+                      min_payment_calculation:
+                        include_overlimit_amount: true
+                        include_past_due_amount: false
+                        min_payment_flat_amount: 20
+                        min_payment_percentage:
+                          include_fees_charged:
+                          - LATE_PAYMENT_FEE
+                          include_interest_charged: false
+                          percentage_of_balance: 1
+                    product_sub_type: CREDIT_CARD
+                    product_type: REVOLVING
+                    token: my_credit_product_policy_token_1234
+                    updated_time: 2024-04-05 16:04:48.643000+00:00
+                    usage:
+                    - PURCHASE
+                  credit_product_policy_token: my_credit_product_policy_token_1234
+                  description: A gold credit bundle
+                  document_policy_detail:
+                    account_statement:
+                      template_token: an_account_statement_template_token1234
+                      template_urls:
+                        html: https://url.com/an_account_statement_template_token1234.html
+                    benefits_disclosure:
+                      asset_token: a_benefits_disclosure_asset_token1234
+                      asset_urls:
+                        html: https://url.com/a_benefits_disclosure_asset_token1234.html
+                        pdf: https://url.com/a_benefits_disclosure_asset_token1234.pdf
+                        png: https://url.com/a_benefits_disclosure_asset_token1234.png
+                    card_member_agreement:
+                      asset_token: a_card_member_agreement_asset_token1234
+                      asset_urls:
+                        html: https://url.com/a_card_member_agreement_asset_token1234.html
+                        pdf: https://url.com/a_card_member_agreement_asset_token1234.pdf
+                        png: https://url.com/a_card_member_agreement_asset_token1234.png
+                    created_time: 2025-04-01 23:41:58.802000+00:00
+                    e_disclosure:
+                      asset_token: a_e_disclosure_asset_token1234
+                      asset_urls:
+                        html: https://url.com/a_e_disclosure_asset_token1234.html
+                        pdf: https://url.com/a_e_disclosure_asset_token1234.pdf
+                        png: https://url.com/a_e_disclosure_asset_token1234.png
+                    name: My Document Policy
+                    notice_of_adverse_action:
+                      template_token: a_notice_of_adverse_action_template_token1234
+                      template_urls:
+                        html: https://url.com/a_notice_of_adverse_action_template_token1234.html
+                    privacy_policy:
+                      asset_token: a_privacy_policy_asset_token1234
+                      asset_urls:
+                        html: https://url.com/a_privacy_policy_asset_token1234.html
+                        pdf: https://url.com/a_privacy_policy_asset_token1234.pdf
+                        png: https://url.com/a_privacy_policy_asset_token1234.png
+                    rewards_disclosure:
+                      asset_token: a_rewards_disclosure_asset_token1234
+                      asset_urls:
+                        html: https://url.com/a_rewards_disclosure_asset_token1234.html
+                        pdf: https://url.com/a_rewards_disclosure_asset_token1234.pdf
+                        png: https://url.com/a_rewards_disclosure_asset_token1234.png
+                      template_token: a_rewards_disclosure_template_token1234
+                      template_urls:
+                        html: https://url.com/a_rewards_disclosure_template_token1234.html
+                    summary_of_credit_terms:
+                      asset_token: a_summary_of_credit_terms_asset_token1234
+                      asset_urls:
+                        html: https://url.com/a_summary_of_credit_terms_asset_token1234.html
+                        pdf: https://url.com/a_summary_of_credit_terms_asset_token1234.pdf
+                        png: https://url.com/a_summary_of_credit_terms_asset_token1234.png
+                      template_token: a_summary_of_credit_terms_template_token1234
+                      template_urls:
+                        html: https://url.com/a_summary_of_credit_terms_template_token1234.html
+                    terms_schedule:
+                      template_token: a_terms_schedule_template_token1234
+                      template_urls:
+                        html: https://url.com/a_terms_schedule_template_token1234.html
+                    token: my_document_policy_token_1234
+                    updated_time: 2025-04-05 16:04:48.643000+00:00
+                  document_policy_token: my_document_policy_token_1234
+                  fee_policy_detail:
+                    account:
+                      foreign_transaction_fee:
+                        default_method: PERCENTAGE
+                        default_value: 12.5
+                      late_payment:
+                        default_method: FLAT
+                        default_value: 10
+                      returned_payment:
+                        default_method: FLAT
+                        default_value: 10
+                    created_time: 2024-04-01 23:41:58.802000+00:00
+                    description: A gold fee policy
+                    name: Gold Fee Policy
+                    token: my_fee_policy_token_1234
+                    updated_time: 2024-04-05 16:04:48.643000+00:00
+                  fee_policy_token: my_fee_policy_token_1234
+                  name: Gold Credit Bundle
+                  offer_policy_detail:
+                    created_time: 2024-04-01 23:41:58.802000+00:00
+                    description: A gold offer policy
+                    name: Gold Offer Policy
+                    token: my_offer_policy_token_1234
+                    updated_time: 2024-04-05 16:04:48.643000+00:00
+                  offer_policy_token: my_offer_policy_token_1234
+                  parent_token: my_parent_token_1234
+                  reward_policy_detail:
+                    accrual_strategy: DEFAULT
+                    conversions:
+                    - conversion_increment: 10
+                      conversion_rate: 0.001
+                      currency: USD
+                      type: STATEMENT_CREDIT
+                    created_time: 2025-04-01 23:41:58.802000+00:00
+                    description: A gold reward policy
+                    exclusions:
+                      custom_exclusions:
+                      - 2000-2999
+                      - '4321'
+                      use_default_exclusions: false
+                    name: Gold Reward Policy
+                    redemption_strategy: MANUAL
+                    rounding_strategy: ROUND_HALF_EVEN
+                    rules:
+                    - amount: null
+                      attributes:
+                        mcc:
+                        - 0001-1499
+                        - '1500'
+                      calculation_type: PER_TRANSACTION
+                      description: Earn 3x on selected categories.
+                      multiplier: 3
+                      type: MULTIPLIER_PER_TRANSACTION
+                    settlement_strategy: STATEMENT
+                    token: my_reward_policy_token_1234
+                    updated_time: 2025-04-05 16:04:48.643000+00:00
+                  reward_policy_token: my_reward_policy_token_1234
+                  status: DRAFT
+                  token: my_bundle_token_1234
+                  updated_time: 2024-04-05 16:04:48.643000+00:00
+                - apr_policy_detail:
+                    created_time: 2024-04-01 23:41:58.802000+00:00
+                    description: A silver APR policy
+                    effective_date: 2024-06-01
+                    name: Silver APR Policy
+                    purchases:
+                      external_token: my_external_purchase_token4321
+                      name: A purchase at a merchant
+                      tiers:
+                      - apr: 0
+                        margin_rate: 3
+                      - apr: 0
+                        margin_rate: 6
+                    token: my_apr_policy_token_4321
+                    updated_time: 2024-04-05 16:04:48.643000+00:00
+                  apr_policy_token: my_apr_policy_token_4321
+                  created_time: 2024-04-01 23:41:58.802000+00:00
+                  credit_product_policy_detail:
+                    card_products:
+                    - level: TRADITIONAL
+                      network: VISA
+                      token: my_card_product_token4321
+                    classification: CONSUMER
+                    created_time: 2024-04-01 23:41:58.802000+00:00
+                    credit_line:
+                      max: 3100
+                      min: 50
+                    currency_code: USD
+                    description: A silver credit product policy
+                    interest_calculation:
+                      application_of_credits:
+                        cycle_type: END_REVOLVING
+                        day: 15
+                      day_count: ACTUAL
+                      exclude_tran_types:
+                      - ANNUAL_FEE
+                      - LATE_PAYMENT_FEE
+                      - CASH_BACK_STATEMENT_CREDIT
+                      grace_days_application: NEXT_CYCLE_DATE
+                      interest_application:
+                      - PRINCIPAL
+                      - FEES
+                      interest_on_grace_reactivation: ACCRUE_PAYMENT_DATE
+                      method: AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS
+                      minimum_interest: 1
+                    name: Silver Credit Product Policy
+                    payments:
+                      allocation_order:
+                      - INTEREST
+                      - FEES
+                      - PRINCIPAL
+                      billing_cycle_day: 1
+                      due_day: 31
+                      min_payment_calculation:
+                        include_overlimit_amount: true
+                        include_past_due_amount: false
+                        min_payment_flat_amount: 20
+                        min_payment_percentage:
+                          include_fees_charged:
+                          - LATE_PAYMENT_FEE
+                          include_interest_charged: false
+                          percentage_of_balance: 1
+                    product_sub_type: CREDIT_CARD
+                    product_type: REVOLVING
+                    token: my_credit_product_policy_token_4321
+                    updated_time: 2024-04-05 16:04:48.643000+00:00
+                    usage:
+                    - PURCHASE
+                  credit_product_policy_token: my_credit_product_policy_token_4321
+                  description: A silver credit bundle
+                  document_policy_detail:
+                    account_statement:
+                      template_token: an_account_statement_template_token4321
+                      template_urls:
+                        html: https://url.com/an_account_statement_template_token4321.html
+                    benefits_disclosure:
+                      asset_token: a_benefits_disclosure_asset_token4321
+                      asset_urls:
+                        html: https://url.com/a_benefits_disclosure_asset_token4321.html
+                        pdf: https://url.com/a_benefits_disclosure_asset_token4321.pdf
+                        png: https://url.com/a_benefits_disclosure_asset_token4321.png
+                    card_member_agreement:
+                      asset_token: a_card_member_agreement_asset_token4321
+                      asset_urls:
+                        html: https://url.com/a_card_member_agreement_asset_token4321.html
+                        pdf: https://url.com/a_card_member_agreement_asset_token4321.pdf
+                        png: https://url.com/a_card_member_agreement_asset_token4321.png
+                    created_time: 2025-04-01 23:41:58.802000+00:00
+                    e_disclosure:
+                      asset_token: a_e_disclosure_asset_token4321
+                      asset_urls:
+                        html: https://url.com/a_e_disclosure_asset_token4321.html
+                        pdf: https://url.com/a_e_disclosure_asset_token4321.pdf
+                        png: https://url.com/a_e_disclosure_asset_token4321.png
+                    name: My Document Policy
+                    notice_of_adverse_action:
+                      template_token: a_notice_of_adverse_action_template_token4321
+                      template_urls:
+                        html: https://url.com/a_notice_of_adverse_action_template_token4321.html
+                    privacy_policy:
+                      asset_token: a_privacy_policy_asset_token4321
+                      asset_urls:
+                        html: https://url.com/a_privacy_policy_asset_token4321.html
+                        pdf: https://url.com/a_privacy_policy_asset_token4321.pdf
+                        png: https://url.com/a_privacy_policy_asset_token4321.png
+                    rewards_disclosure:
+                      asset_token: a_rewards_disclosure_asset_token4321
+                      asset_urls:
+                        html: https://url.com/a_rewards_disclosure_asset_token4321.html
+                        pdf: https://url.com/a_rewards_disclosure_asset_token4321.pdf
+                        png: https://url.com/a_rewards_disclosure_asset_token4321.png
+                      template_token: a_rewards_disclosure_template_token4321
+                      template_urls:
+                        html: https://url.com/a_rewards_disclosure_template_token4321.html
+                    summary_of_credit_terms:
+                      asset_token: a_summary_of_credit_terms_asset_token4321
+                      asset_urls:
+                        html: https://url.com/a_summary_of_credit_terms_asset_token4321.html
+                        pdf: https://url.com/a_summary_of_credit_terms_asset_token4321.pdf
+                        png: https://url.com/a_summary_of_credit_terms_asset_token4321.png
+                      template_token: a_summary_of_credit_terms_template_token4321
+                      template_urls:
+                        html: https://url.com/a_summary_of_credit_terms_template_token4321.html
+                    terms_schedule:
+                      template_token: a_terms_schedule_template_token4321
+                      template_urls:
+                        html: https://url.com/a_terms_schedule_template_token4321.html
+                    token: my_document_policy_token_4321
+                    updated_time: 2025-04-05 16:04:48.643000+00:00
+                  document_policy_token: my_document_policy_token_4321
+                  fee_policy_detail:
+                    account:
+                      foreign_transaction_fee:
+                        default_method: PERCENTAGE
+                        default_value: 12.5
+                      late_payment:
+                        default_method: FLAT
+                        default_value: 10
+                      returned_payment:
+                        default_method: FLAT
+                        default_value: 10
+                    created_time: 2025-04-01 23:41:58.802000+00:00
+                    description: A silver fee policy
+                    name: Silver Fee Policy
+                    token: my_fee_policy_token_4321
+                    updated_time: 2025-04-05 16:04:48.643000+00:00
+                  fee_policy_token: my_fee_policy_token_4321
+                  name: Silver Credit Bundle
+                  offer_policy_detail:
+                    created_time: 2024-04-01 23:41:58.802000+00:00
+                    description: A silver offer policy
+                    name: Silver Offer Policy
+                    token: my_offer_policy_token_4321
+                    updated_time: 2024-04-05 16:04:48.643000+00:00
+                  offer_policy_token: my_offer_policy_token_4321
+                  parent_token: my_parent_token_4321
+                  reward_policy_detail:
+                    accrual_strategy: DEFAULT
+                    conversions:
+                    - conversion_increment: 10
+                      conversion_rate: 0.001
+                      currency: USD
+                      type: STATEMENT_CREDIT
+                    created_time: 2025-04-01 23:41:58.802000+00:00
+                    description: A gold reward policy
+                    exclusions:
+                      custom_exclusions:
+                      - 2000-2999
+                      - '4321'
+                      use_default_exclusions: false
+                    name: Gold Reward Policy
+                    redemption_strategy: MANUAL
+                    rounding_strategy: ROUND_HALF_EVEN
+                    rules:
+                    - amount: null
+                      attributes:
+                        mcc:
+                        - 0001-1499
+                        - '1500'
+                      calculation_type: PER_TRANSACTION
+                      description: Earn 3x on selected categories.
+                      multiplier: 3
+                      type: MULTIPLIER_PER_TRANSACTION
+                    settlement_strategy: STATEMENT
+                    token: my_reward_policy_token_4321
+                    updated_time: 2025-04-05 16:04:48.643000+00:00
+                  reward_policy_token: my_reward_policy_token_4321
+                  status: DRAFT
+                  token: my_bundle_token_4321
+                  updated_time: 2024-04-05 16:04:48.643000+00:00
+                end_index: 2
+                is_more: true
+                start_index: 0
+              schema:
+                $ref: '#/components/schemas/BundleResponsePage'
+          description: Expected response to a valid request.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: List bundles
+      tags:
+      - Bundles
+    post:
+      description: Create a bundle.
+      operationId: createBundle
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              apr_policy_token: my_apr_policy_token_1234
+              credit_product_policy_token: my_credit_product_policy_token_1234
+              description: A gold credit bundle policy
+              document_policy_token: my_document_policy_token_1234
+              fee_policy_token: my_fee_policy_token_1234
+              name: Gold Credit Bundle
+              offer_policy_token: my_offer_policy_token_1234
+              reward_policy_token: my_reward_policy_token_1234
+              status: DRAFT
+              token: my_bundle_token_1234
+            schema:
+              $ref: '#/components/schemas/BundleCreateReq'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              example:
+                apr_policy_detail:
+                  created_time: 2025-04-01 23:41:58.802000+00:00
+                  description: A gold APR policy
+                  effective_date: 2025-05-01
+                  name: Gold APR Policy
+                  purchases:
+                    external_token: my_external_purchase_token1234
+                    name: A purchase at a merchant
+                    tiers:
+                    - apr: 0
+                      margin_rate: 1
+                    - apr: 0
+                      margin_rate: 5
+                  token: my_apr_policy_token_1234
+                  updated_time: 2025-04-05 16:04:48.643000+00:00
+                apr_policy_token: my_apr_policy_token_1234
+                created_time: 2025-04-01 23:41:58.802000+00:00
+                credit_product_policy_detail:
+                  card_products:
+                  - level: TRADITIONAL
+                    network: VISA
+                    token: my_card_product_token1234
+                  classification: CONSUMER
+                  created_time: 2025-04-01 23:41:58.802000+00:00
+                  credit_line:
+                    max: 3500
+                    min: 50
+                  currency_code: USD
+                  description: A gold credit product policy
+                  interest_calculation:
+                    application_of_credits:
+                      cycle_type: END_REVOLVING
+                      day: 15
+                    day_count: ACTUAL
+                    exclude_tran_types:
+                    - ANNUAL_FEE
+                    - LATE_PAYMENT_FEE
+                    - CASH_BACK_STATEMENT_CREDIT
+                    grace_days_application: NEXT_CYCLE_DATE
+                    interest_application:
+                    - PRINCIPAL
+                    - FEES
+                    interest_on_grace_reactivation: ACCRUE_PAYMENT_DATE
+                    method: AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS
+                    minimum_interest: 1
+                  name: Gold Credit Product Policy
+                  payments:
+                    allocation_order:
+                    - INTEREST
+                    - FEES
+                    - PRINCIPAL
+                    billing_cycle_day: 1
+                    due_day: 31
+                    min_payment_calculation:
+                      include_overlimit_amount: true
+                      include_past_due_amount: false
+                      min_payment_flat_amount: 20
+                      min_payment_percentage:
+                        include_fees_charged:
+                        - LATE_PAYMENT_FEE
+                        include_interest_charged: false
+                        percentage_of_balance: 1
+                  product_sub_type: CREDIT_CARD
+                  product_type: REVOLVING
+                  token: my_credit_product_policy_token_1234
+                  updated_time: 2025-04-05 16:04:48.643000+00:00
+                  usage:
+                  - PURCHASE
+                credit_product_policy_token: my_credit_product_policy_token_1234
+                description: A gold credit bundle policy
+                document_policy_detail:
+                  account_statement:
+                    template_token: an_account_statement_template_token1234
+                    template_urls:
+                      html: https://url.com/an_account_statement_template_token1234.html
+                  benefits_disclosure:
+                    asset_token: a_benefits_disclosure_asset_token1234
+                    asset_urls:
+                      html: https://url.com/a_benefits_disclosure_asset_token1234.html
+                      pdf: https://url.com/a_benefits_disclosure_asset_token1234.pdf
+                      png: https://url.com/a_benefits_disclosure_asset_token1234.png
+                  card_member_agreement:
+                    asset_token: a_card_member_agreement_asset_token1234
+                    asset_urls:
+                      html: https://url.com/a_card_member_agreement_asset_token1234.html
+                      pdf: https://url.com/a_card_member_agreement_asset_token1234.pdf
+                      png: https://url.com/a_card_member_agreement_asset_token1234.png
+                  created_time: 2025-04-01 23:41:58.802000+00:00
+                  e_disclosure:
+                    asset_token: a_e_disclosure_asset_token1234
+                    asset_urls:
+                      html: https://url.com/a_e_disclosure_asset_token1234.html
+                      pdf: https://url.com/a_e_disclosure_asset_token1234.pdf
+                      png: https://url.com/a_e_disclosure_asset_token1234.png
+                  name: My Document Policy
+                  notice_of_adverse_action:
+                    template_token: a_notice_of_adverse_action_template_token1234
+                    template_urls:
+                      html: https://url.com/a_notice_of_adverse_action_template_token1234.html
+                  privacy_policy:
+                    asset_token: a_privacy_policy_asset_token1234
+                    asset_urls:
+                      html: https://url.com/a_privacy_policy_asset_token1234.html
+                      pdf: https://url.com/a_privacy_policy_asset_token1234.pdf
+                      png: https://url.com/a_privacy_policy_asset_token1234.png
+                  rewards_disclosure:
+                    asset_token: a_rewards_disclosure_asset_token1234
+                    asset_urls:
+                      html: https://url.com/a_rewards_disclosure_asset_token1234.html
+                      pdf: https://url.com/a_rewards_disclosure_asset_token1234.pdf
+                      png: https://url.com/a_rewards_disclosure_asset_token1234.png
+                    template_token: a_rewards_disclosure_template_token1234
+                    template_urls:
+                      html: https://url.com/a_rewards_disclosure_template_token1234.html
+                  summary_of_credit_terms:
+                    asset_token: a_summary_of_credit_terms_asset_token1234
+                    asset_urls:
+                      html: https://url.com/a_summary_of_credit_terms_asset_token1234.html
+                      pdf: https://url.com/a_summary_of_credit_terms_asset_token1234.pdf
+                      png: https://url.com/a_summary_of_credit_terms_asset_token1234.png
+                    template_token: a_summary_of_credit_terms_template_token1234
+                    template_urls:
+                      html: https://asset-bucket.s3.amazonaws.com/short_code/a_summary_of_credit_terms_template_token1234/a_summary_of_credit_terms_template_token1234.html
+                  terms_schedule:
+                    template_token: a_terms_schedule_template_token1234
+                    template_urls:
+                      html: https://url.com/a_terms_schedule_template_token1234.html
+                  token: my_document_policy_token_1234
+                  updated_time: 2025-04-05 16:04:48.643000+00:00
+                document_policy_token: my_document_policy_token_1234
+                fee_policy_detail:
+                  account:
+                    foreign_transaction_fee:
+                      default_method: PERCENTAGE
+                      default_value: 12.5
+                    late_payment:
+                      default_method: FLAT
+                      default_value: 10
+                    returned_payment:
+                      default_method: FLAT
+                      default_value: 10
+                  created_time: 2025-04-01 23:41:58.802000+00:00
+                  description: A gold fee policy
+                  name: Gold Fee Policy
+                  token: my_fee_policy_token_1234
+                  updated_time: 2025-04-05 16:04:48.643000+00:00
+                fee_policy_token: my_fee_policy_token_1234
+                name: Gold Credit Bundle
+                offer_policy_detail:
+                  created_time: 2025-04-01 23:41:58.802000+00:00
+                  description: A gold offer policy
+                  name: Gold Offer Policy
+                  token: my_offer_policy_token_1234
+                  updated_time: 2025-04-05 16:04:48.643000+00:00
+                offer_policy_token: my_offer_policy_token_1234
+                parent_token: my_parent_token_1234
+                reward_policy_detail:
+                  accrual_strategy: DEFAULT
+                  conversions:
+                  - conversion_increment: 10
+                    conversion_rate: 0.001
+                    currency: USD
+                    type: STATEMENT_CREDIT
+                  created_time: 2025-04-01 23:41:58.802000+00:00
+                  description: A gold reward policy
+                  exclusions:
+                    custom_exclusions:
+                    - 2000-2999
+                    - '4321'
+                    use_default_exclusions: false
+                  name: Gold Reward Policy
+                  redemption_strategy: MANUAL
+                  rounding_strategy: ROUND_HALF_EVEN
+                  rules:
+                  - amount: null
+                    attributes:
+                      mcc:
+                      - 0001-1499
+                      - '1500'
+                    calculation_type: PER_TRANSACTION
+                    description: Earn 3x on selected categories.
+                    multiplier: 3
+                    type: MULTIPLIER_PER_TRANSACTION
+                  settlement_strategy: STATEMENT
+                  token: my_reward_policy_token_1234
+                  updated_time: 2025-04-05 16:04:48.643000+00:00
+                reward_policy_token: my_reward_policy_token_1234
+                status: DRAFT
+                token: my_bundle_token_1234
+                updated_time: 2025-04-05 16:04:48.643000+00:00
+              schema:
+                $ref: '#/components/schemas/BundleResponse'
+          description: Expected response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Create bundle
+      tags:
+      - Bundles
+  /bundles/{token}:
+    get:
+      description: Retrieve a specific bundle.
+      operationId: retrieveBundle
+      parameters:
+      - description: 'Unique identifier of the bundle to retrieve.
+
+
+          Send a `GET` request to `/credit/bundles` to retrieve existing  tokens.'
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing bundle token
+        style: simple
+      - description: 'Embeds the associated object of the specified type into the response.
+
+          For more, see <</core-api/object-expansion, object expansion>>.'
+        explode: true
+        in: query
+        name: expand_objects
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/PolicyType'
+          maxItems: 5
+          type: array
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                apr_policy_detail:
+                  created_time: 2025-04-01 23:41:58.802000+00:00
+                  description: A gold APR policy
+                  effective_date: 2025-05-01
+                  name: Gold APR Policy
+                  purchases:
+                    external_token: my_external_purchase_token1234
+                    name: A purchase at a merchant
+                    tiers:
+                    - apr: 0
+                      margin_rate: 1
+                    - apr: 0
+                      margin_rate: 5
+                  token: my_apr_policy_token_1234
+                  updated_time: 2025-04-05 16:04:48.643000+00:00
+                apr_policy_token: my_apr_policy_token_1234
+                created_time: 2025-04-01 23:41:58.802000+00:00
+                credit_product_policy_detail:
+                  card_products:
+                  - level: TRADITIONAL
+                    network: VISA
+                    token: my_card_product_token1234
+                  classification: CONSUMER
+                  created_time: 2025-04-01 23:41:58.802000+00:00
+                  credit_line:
+                    max: 3500
+                    min: 50
+                  currency_code: USD
+                  description: A gold credit product policy
+                  interest_calculation:
+                    application_of_credits:
+                      cycle_type: END_REVOLVING
+                      day: 15
+                    day_count: ACTUAL
+                    exclude_tran_types:
+                    - ANNUAL_FEE
+                    - LATE_PAYMENT_FEE
+                    - CASH_BACK_STATEMENT_CREDIT
+                    grace_days_application: NEXT_CYCLE_DATE
+                    interest_application:
+                    - PRINCIPAL
+                    - FEES
+                    interest_on_grace_reactivation: ACCRUE_PAYMENT_DATE
+                    method: AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS
+                    minimum_interest: 1
+                  name: Gold Credit Product Policy
+                  payments:
+                    allocation_order:
+                    - INTEREST
+                    - FEES
+                    - PRINCIPAL
+                    billing_cycle_day: 1
+                    due_day: 31
+                    min_payment_calculation:
+                      include_overlimit_amount: true
+                      include_past_due_amount: false
+                      min_payment_flat_amount: 20
+                      min_payment_percentage:
+                        include_fees_charged:
+                        - LATE_PAYMENT_FEE
+                        include_interest_charged: false
+                        percentage_of_balance: 1
+                  product_sub_type: CREDIT_CARD
+                  product_type: REVOLVING
+                  token: my_credit_product_policy_token_1234
+                  updated_time: 2025-04-05 16:04:48.643000+00:00
+                  usage:
+                  - PURCHASE
+                credit_product_policy_token: my_credit_product_policy_token_1234
+                description: A gold credit bundle
+                document_policy_detail:
+                  account_statement:
+                    template_token: an_account_statement_template_token1234
+                    template_urls:
+                      html: https://url.com/an_account_statement_template_token1234.html
+                  benefits_disclosure:
+                    asset_token: a_benefits_disclosure_asset_token1234
+                    asset_urls:
+                      html: https://url.com/a_benefits_disclosure_asset_token1234.html
+                      pdf: https://url.com/a_benefits_disclosure_asset_token1234.pdf
+                      png: https://url.com/a_benefits_disclosure_asset_token1234.png
+                  card_member_agreement:
+                    asset_token: a_card_member_agreement_asset_token1234
+                    asset_urls:
+                      html: https://url.com/a_card_member_agreement_asset_token1234.html
+                      pdf: https://url.com/a_card_member_agreement_asset_token1234.pdf
+                      png: https://url.com/a_card_member_agreement_asset_token1234.png
+                  created_time: 2025-04-01 23:41:58.802000+00:00
+                  e_disclosure:
+                    asset_token: a_e_disclosure_asset_token1234
+                    asset_urls:
+                      html: https://url.com/a_e_disclosure_asset_token1234.html
+                      pdf: https://url.com/a_e_disclosure_asset_token1234.pdf
+                      png: https://url.com/a_e_disclosure_asset_token1234.png
+                  name: My Document Policy
+                  notice_of_adverse_action:
+                    template_token: a_notice_of_adverse_action_template_token1234
+                    template_urls:
+                      html: https://url.com/a_notice_of_adverse_action_template_token1234.html
+                  privacy_policy:
+                    asset_token: a_privacy_policy_asset_token1234
+                    asset_urls:
+                      html: https://url.com/a_privacy_policy_asset_token1234.html
+                      pdf: https://url.com/a_privacy_policy_asset_token1234.pdf
+                      png: https://url.com/a_privacy_policy_asset_token1234.png
+                  rewards_disclosure:
+                    asset_token: a_rewards_disclosure_asset_token1234
+                    asset_urls:
+                      html: https://url.com/a_rewards_disclosure_asset_token1234.html
+                      pdf: https://url.com/a_rewards_disclosure_asset_token1234.pdf
+                      png: https://url.com/a_rewards_disclosure_asset_token1234.png
+                    template_token: a_rewards_disclosure_template_token1234
+                    template_urls:
+                      html: https://url.com/a_rewards_disclosure_template_token1234.html
+                  summary_of_credit_terms:
+                    asset_token: a_summary_of_credit_terms_asset_token1234
+                    asset_urls:
+                      html: https://url.com/a_summary_of_credit_terms_asset_token1234.html
+                      pdf: https://url.com/a_summary_of_credit_terms_asset_token1234.pdf
+                      png: https://url.com/a_summary_of_credit_terms_asset_token1234.png
+                    template_token: a_summary_of_credit_terms_template_token1234
+                    template_urls:
+                      html: https://asset-bucket.s3.amazonaws.com/short_code/a_summary_of_credit_terms_template_token1234/a_summary_of_credit_terms_template_token1234.html
+                  terms_schedule:
+                    template_token: a_terms_schedule_template_token1234
+                    template_urls:
+                      html: https://url.com/a_terms_schedule_template_token1234.html
+                  token: my_document_policy_token_1234
+                  updated_time: 2025-04-05 16:04:48.643000+00:00
+                document_policy_token: my_document_policy_token_1234
+                fee_policy_detail:
+                  account:
+                    foreign_transaction_fee:
+                      default_method: PERCENTAGE
+                      default_value: 3
+                    late_payment:
+                      default_method: FLAT
+                      default_value: 10
+                    returned_payment:
+                      default_method: FLAT
+                      default_value: 10
+                  created_time: 2025-04-01 23:41:58.802000+00:00
+                  description: A gold fee policy
+                  name: Gold Fee Policy
+                  token: my_fee_policy_token_1234
+                  updated_time: 2025-04-05 16:04:48.643000+00:00
+                fee_policy_token: my_fee_policy_token_1234
+                name: Gold Credit Bundle
+                offer_policy_detail:
+                  created_time: 2025-04-01 23:41:58.802000+00:00
+                  description: A gold offer policy
+                  name: Gold Offer Policy
+                  token: my_offer_policy_token_1234
+                  updated_time: 2025-04-05 16:04:48.643000+00:00
+                offer_policy_token: my_offer_policy_token_1234
+                parent_token: my_parent_token_1234
+                reward_policy_detail:
+                  accrual_strategy: DEFAULT
+                  conversions:
+                  - conversion_increment: 10
+                    conversion_rate: 0.001
+                    currency: USD
+                    type: STATEMENT_CREDIT
+                  created_time: 2025-04-01 23:41:58.802000+00:00
+                  description: A gold reward policy
+                  exclusions:
+                    custom_exclusions:
+                    - 2000-2999
+                    - '4321'
+                    use_default_exclusions: false
+                  name: Gold Reward Policy
+                  redemption_strategy: MANUAL
+                  rounding_strategy: ROUND_HALF_EVEN
+                  rules:
+                  - amount: null
+                    attributes:
+                      mcc:
+                      - 0001-1499
+                      - '1500'
+                    calculation_type: PER_TRANSACTION
+                    description: Earn 3x on selected categories.
+                    multiplier: 3
+                    type: MULTIPLIER_PER_TRANSACTION
+                  settlement_strategy: STATEMENT
+                  token: my_reward_policy_token_1234
+                  updated_time: 2025-04-05 16:04:48.643000+00:00
+                reward_policy_token: my_reward_policy_token_1234
+                status: DRAFT
+                token: my_bundle_token_1234
+                updated_time: 2025-04-05 16:04:48.643000+00:00
+              schema:
+                $ref: '#/components/schemas/BundleResponse'
+          description: A JSON object containing bundle information
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Retrieve bundle
+      tags:
+      - Bundles
+    put:
+      description: 'Update a specific bundle that is not `ACTIVE` or `ARCHIVED`.
+
+        Bundles are created in a `DRAFT` state, and are still modifiable at this point.
+
+        Using the transitions endpoint, a bundle can be transitioned from `DRAFT`, to `ACTIVE`.
+
+        Once a bundle is active, it cannot be modified.'
+      operationId: updateBundle
+      parameters:
+      - description: 'Token of the bundle to update.
+
+
+          Send a `GET` request to `/credit/bundles` to retrieve existing  tokens.'
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing bundle token
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            example:
+              apr_policy_token: my_apr_policy_token_1234
+              credit_product_policy_token: my_credit_product_policy_token_1234
+              description: Description of the renamed bundle
+              document_policy_token: my_document_policy_token_1234
+              fee_policy_token: my_fee_policy_token_1234
+              name: Renamed Bundle
+              offer_policy_token: my_offer_policy_token_1234
+              reward_policy_token: my_reward_policy_token_1234
+              token: my_bundle_token_1234
+            schema:
+              $ref: '#/components/schemas/BundleUpdateReq'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                apr_policy_detail:
+                  created_time: 2025-04-01 23:41:58.802000+00:00
+                  description: A gold APR policy
+                  effective_date: 2025-05-01
+                  name: Gold APR Policy
+                  purchases:
+                    external_token: my_external_purchase_token1234
+                    name: A purchase at a merchant
+                    tiers:
+                    - apr: 0
+                      margin_rate: 1
+                    - apr: 0
+                      margin_rate: 5
+                  token: my_apr_policy_token_1234
+                  updated_time: 2025-04-05 16:04:48.643000+00:00
+                apr_policy_token: my_apr_policy_token_1234
+                created_time: 2025-04-01 23:41:58.802000+00:00
+                credit_product_policy_detail:
+                  card_products:
+                  - level: TRADITIONAL
+                    network: VISA
+                    token: my_card_product_token1234
+                  classification: CONSUMER
+                  created_time: 2025-04-01 23:41:58.802000+00:00
+                  credit_line:
+                    max: 3500
+                    min: 50
+                  currency_code: USD
+                  description: A gold credit product policy
+                  interest_calculation:
+                    application_of_credits:
+                      cycle_type: END_REVOLVING
+                      day: 15
+                    day_count: ACTUAL
+                    exclude_tran_types:
+                    - ANNUAL_FEE
+                    - LATE_PAYMENT_FEE
+                    - CASH_BACK_STATEMENT_CREDIT
+                    grace_days_application: NEXT_CYCLE_DATE
+                    interest_application:
+                    - PRINCIPAL
+                    - FEES
+                    interest_on_grace_reactivation: ACCRUE_PAYMENT_DATE
+                    method: AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS
+                    minimum_interest: 1
+                  name: Gold Credit Product Policy
+                  payments:
+                    allocation_order:
+                    - INTEREST
+                    - FEES
+                    - PRINCIPAL
+                    billing_cycle_day: 1
+                    due_day: 31
+                    min_payment_calculation:
+                      include_overlimit_amount: true
+                      include_past_due_amount: false
+                      min_payment_flat_amount: 20
+                      min_payment_percentage:
+                        include_fees_charged:
+                        - LATE_PAYMENT_FEE
+                        include_interest_charged: false
+                        percentage_of_balance: 1
+                  product_sub_type: CREDIT_CARD
+                  product_type: REVOLVING
+                  token: my_credit_product_policy_token_1234
+                  updated_time: 2025-04-05 16:04:48.643000+00:00
+                  usage:
+                  - PURCHASE
+                credit_product_policy_token: my_credit_product_policy_token_1234
+                description: Description of the renamed bundle
+                document_policy_detail:
+                  account_statement:
+                    template_token: an_account_statement_template_token1234
+                    template_urls:
+                      html: https://url.com/an_account_statement_template_token1234.html
+                  benefits_disclosure:
+                    asset_token: a_benefits_disclosure_asset_token1234
+                    asset_urls:
+                      html: https://url.com/a_benefits_disclosure_asset_token1234.html
+                      pdf: https://url.com/a_benefits_disclosure_asset_token1234.pdf
+                      png: https://url.com/a_benefits_disclosure_asset_token1234.png
+                  card_member_agreement:
+                    asset_token: a_card_member_agreement_asset_token1234
+                    asset_urls:
+                      html: https://url.com/a_card_member_agreement_asset_token1234.html
+                      pdf: https://url.com/a_card_member_agreement_asset_token1234.pdf
+                      png: https://url.com/a_card_member_agreement_asset_token1234.png
+                  created_time: 2025-04-01 23:41:58.802000+00:00
+                  e_disclosure:
+                    asset_token: a_e_disclosure_asset_token1234
+                    asset_urls:
+                      html: https://url.com/a_e_disclosure_asset_token1234.html
+                      pdf: https://url.com/a_e_disclosure_asset_token1234.pdf
+                      png: https://url.com/a_e_disclosure_asset_token1234.png
+                  name: My Document Policy
+                  notice_of_adverse_action:
+                    template_token: a_notice_of_adverse_action_template_token1234
+                    template_urls:
+                      html: https://url.com/a_notice_of_adverse_action_template_token1234.html
+                  privacy_policy:
+                    asset_token: a_privacy_policy_asset_token1234
+                    asset_urls:
+                      html: https://url.com/a_privacy_policy_asset_token1234.html
+                      pdf: https://url.com/a_privacy_policy_asset_token1234.pdf
+                      png: https://url.com/a_privacy_policy_asset_token1234.png
+                  rewards_disclosure:
+                    asset_token: a_rewards_disclosure_asset_token1234
+                    asset_urls:
+                      html: https://url.com/a_rewards_disclosure_asset_token1234.html
+                      pdf: https://url.com/a_rewards_disclosure_asset_token1234.pdf
+                      png: https://url.com/a_rewards_disclosure_asset_token1234.png
+                    template_token: a_rewards_disclosure_template_token1234
+                    template_urls:
+                      html: https://url.com/a_rewards_disclosure_template_token1234.html
+                  summary_of_credit_terms:
+                    asset_token: a_summary_of_credit_terms_asset_token1234
+                    asset_urls:
+                      html: https://url.com/a_summary_of_credit_terms_asset_token1234.html
+                      pdf: https://url.com/a_summary_of_credit_terms_asset_token1234.pdf
+                      png: https://url.com/a_summary_of_credit_terms_asset_token1234.png
+                    template_token: a_summary_of_credit_terms_template_token1234
+                    template_urls:
+                      html: https://asset-bucket.s3.amazonaws.com/short_code/a_summary_of_credit_terms_template_token1234/a_summary_of_credit_terms_template_token1234.html
+                  terms_schedule:
+                    template_token: a_terms_schedule_template_token1234
+                    template_urls:
+                      html: https://url.com/a_terms_schedule_template_token1234.html
+                  token: my_document_policy_token_1234
+                  updated_time: 2025-04-05 16:04:48.643000+00:00
+                document_policy_token: my_document_policy_token_1234
+                fee_policy_detail:
+                  account:
+                    foreign_transaction_fee:
+                      default_method: PERCENTAGE
+                      default_value: 3
+                    late_payment:
+                      default_method: FLAT
+                      default_value: 10
+                    returned_payment:
+                      default_method: FLAT
+                      default_value: 10
+                  created_time: 2025-04-01 23:41:58.802000+00:00
+                  description: A gold fee policy
+                  name: Gold Fee Policy
+                  token: my_fee_policy_token_1234
+                  updated_time: 2025-04-05 16:04:48.643000+00:00
+                fee_policy_token: my_fee_policy_token_1234
+                name: Renamed Bundle
+                offer_policy_detail:
+                  created_time: 2025-04-01 23:41:58.802000+00:00
+                  description: A gold offer policy
+                  name: Gold Offer Policy
+                  token: my_offer_policy_token_1234
+                  updated_time: 2025-04-05 16:04:48.643000+00:00
+                offer_policy_token: my_offer_policy_token_1234
+                parent_token: my_parent_token_1234
+                reward_policy_detail:
+                  accrual_strategy: DEFAULT
+                  conversions:
+                  - conversion_increment: 10
+                    conversion_rate: 0.001
+                    currency: USD
+                    type: STATEMENT_CREDIT
+                  created_time: 2025-04-01 23:41:58.802000+00:00
+                  description: A gold reward policy
+                  exclusions:
+                    custom_exclusions:
+                    - 2000-2999
+                    - '4321'
+                    use_default_exclusions: false
+                  name: Gold Reward Policy
+                  redemption_strategy: MANUAL
+                  rounding_strategy: ROUND_HALF_EVEN
+                  rules:
+                  - amount: null
+                    attributes:
+                      mcc:
+                      - 0001-1499
+                      - '1500'
+                    calculation_type: PER_TRANSACTION
+                    description: Earn 3x on selected categories.
+                    multiplier: 3
+                    type: MULTIPLIER_PER_TRANSACTION
+                  settlement_strategy: STATEMENT
+                  token: my_reward_policy_token_1234
+                  updated_time: 2025-04-05 16:04:48.643000+00:00
+                reward_policy_token: my_reward_policy_token_1234
+                status: DRAFT
+                token: my_bundle_token_1234
+                updated_time: 2025-04-05 16:04:48.643000+00:00
+              schema:
+                $ref: '#/components/schemas/BundleResponse'
+          description: A JSON object containing bundle information.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Update bundle
+      tags:
+      - Bundles
+  /bundles/{token}/clone:
+    post:
+      description: Create a new bundle based on an existing bundle.
+      operationId: cloneBundle
+      parameters:
+      - description: 'Unique identifier of the bundle to clone.
+
+
+          Send a `GET` request to `/bundles` to retrieve existing bundle tokens.'
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing bundle token
+        style: simple
+      responses:
+        '201':
+          content:
+            application/json:
+              example:
+                apr_policy_detail:
+                  created_time: 2025-05-01 23:41:58.802000+00:00
+                  description: A gold APR policy
+                  effective_date: 2025-05-01
+                  name: Gold APR Policy
+                  purchases:
+                    external_token: my_external_purchase_token1234
+                    name: A purchase at a merchant
+                    tiers:
+                    - apr: 0
+                      margin_rate: 1
+                    - apr: 0
+                      margin_rate: 5
+                  token: my_apr_policy_token_1234
+                  updated_time: 2025-05-05 16:04:48.643000+00:00
+                apr_policy_token: my_apr_policy_token_1234
+                created_time: 2025-04-01 23:41:58.802000+00:00
+                credit_product_policy_detail:
+                  card_products:
+                  - level: TRADITIONAL
+                    network: VISA
+                    token: my_card_product_token1234
+                  classification: CONSUMER
+                  created_time: 2025-04-01 23:41:58.802000+00:00
+                  credit_line:
+                    max: 3500
+                    min: 50
+                  currency_code: USD
+                  description: A gold credit product policy
+                  interest_calculation:
+                    application_of_credits:
+                      cycle_type: END_REVOLVING
+                      day: 15
+                    day_count: ACTUAL
+                    exclude_tran_types:
+                    - ANNUAL_FEE
+                    - LATE_PAYMENT_FEE
+                    - CASH_BACK_STATEMENT_CREDIT
+                    grace_days_application: NEXT_CYCLE_DATE
+                    interest_application:
+                    - PRINCIPAL
+                    - FEES
+                    interest_on_grace_reactivation: ACCRUE_PAYMENT_DATE
+                    method: AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS
+                    minimum_interest: 1
+                  name: Gold Credit Product Policy
+                  payments:
+                    allocation_order:
+                    - INTEREST
+                    - FEES
+                    - PRINCIPAL
+                    billing_cycle_day: 1
+                    due_day: 31
+                    min_payment_calculation:
+                      include_overlimit_amount: true
+                      include_past_due_amount: false
+                      min_payment_flat_amount: 20
+                      min_payment_percentage:
+                        include_fees_charged:
+                        - LATE_PAYMENT_FEE
+                        include_interest_charged: false
+                        percentage_of_balance: 1
+                  product_sub_type: CREDIT_CARD
+                  product_type: REVOLVING
+                  token: my_credit_product_policy_token_1234
+                  updated_time: 2025-04-05 16:04:48.643000+00:00
+                  usage:
+                  - PURCHASE
+                credit_product_policy_token: my_credit_product_policy_token_1234
+                description: A gold credit bundle
+                document_policy_detail:
+                  account_statement:
+                    template_token: an_account_statement_template_token1234
+                    template_urls:
+                      html: https://url.com/an_account_statement_template_token1234.html
+                  benefits_disclosure:
+                    asset_token: a_benefits_disclosure_asset_token1234
+                    asset_urls:
+                      html: https://url.com/a_benefits_disclosure_asset_token1234.html
+                      pdf: https://url.com/a_benefits_disclosure_asset_token1234.pdf
+                      png: https://url.com/a_benefits_disclosure_asset_token1234.png
+                  card_member_agreement:
+                    asset_token: a_card_member_agreement_asset_token1234
+                    asset_urls:
+                      html: https://url.com/a_card_member_agreement_asset_token1234.html
+                      pdf: https://url.com/a_card_member_agreement_asset_token1234.pdf
+                      png: https://url.com/a_card_member_agreement_asset_token1234.png
+                  created_time: 2025-04-01 23:41:58.802000+00:00
+                  e_disclosure:
+                    asset_token: a_e_disclosure_asset_token1234
+                    asset_urls:
+                      html: https://url.com/a_e_disclosure_asset_token1234.html
+                      pdf: https://url.com/a_e_disclosure_asset_token1234.pdf
+                      png: https://url.com/a_e_disclosure_asset_token1234.png
+                  name: My Document Policy
+                  notice_of_adverse_action:
+                    template_token: a_notice_of_adverse_action_template_token1234
+                    template_urls:
+                      html: https://url.com/a_notice_of_adverse_action_template_token1234.html
+                  privacy_policy:
+                    asset_token: a_privacy_policy_asset_token1234
+                    asset_urls:
+                      html: https://url.com/a_privacy_policy_asset_token1234.html
+                      pdf: https://url.com/a_privacy_policy_asset_token1234.pdf
+                      png: https://url.com/a_privacy_policy_asset_token1234.png
+                  rewards_disclosure:
+                    asset_token: a_rewards_disclosure_asset_token1234
+                    asset_urls:
+                      html: https://url.com/a_rewards_disclosure_asset_token1234.html
+                      pdf: https://url.com/a_rewards_disclosure_asset_token1234.pdf
+                      png: https://url.com/a_rewards_disclosure_asset_token1234.png
+                    template_token: a_rewards_disclosure_template_token1234
+                    template_urls:
+                      html: https://url.com/a_rewards_disclosure_template_token1234.html
+                  summary_of_credit_terms:
+                    asset_token: a_summary_of_credit_terms_asset_token1234
+                    asset_urls:
+                      html: https://url.com/a_summary_of_credit_terms_asset_token1234.html
+                      pdf: https://url.com/a_summary_of_credit_terms_asset_token1234.pdf
+                      png: https://url.com/a_summary_of_credit_terms_asset_token1234.png
+                    template_token: a_summary_of_credit_terms_template_token1234
+                    template_urls:
+                      html: https://asset-bucket.s3.amazonaws.com/short_code/a_summary_of_credit_terms_template_token1234/a_summary_of_credit_terms_template_token1234.html
+                  terms_schedule:
+                    template_token: a_terms_schedule_template_token1234
+                    template_urls:
+                      html: https://url.com/a_terms_schedule_template_token1234.html
+                  token: my_document_policy_token_1234
+                  updated_time: 2025-04-05 16:04:48.643000+00:00
+                document_policy_token: my_document_policy_token_1234
+                fee_policy_detail:
+                  account:
+                    foreign_transaction_fee:
+                      default_method: PERCENTAGE
+                      default_value: 12.5
+                    late_payment:
+                      default_method: FLAT
+                      default_value: 10
+                    returned_payment:
+                      default_method: FLAT
+                      default_value: 10
+                  created_time: 2025-04-01 23:41:58.802000+00:00
+                  description: A gold fee policy
+                  name: Gold Fee Policy
+                  token: my_fee_policy_token_1234
+                  updated_time: 2025-04-05 16:04:48.643000+00:00
+                fee_policy_token: my_fee_policy_token_1234
+                name: Gold Credit Bundle
+                offer_policy_detail:
+                  created_time: 2025-04-01 23:41:58.802000+00:00
+                  description: A gold offer policy
+                  name: Gold Offer Policy
+                  token: my_offer_policy_token_1234
+                  updated_time: 2025-04-05 16:04:48.643000+00:00
+                offer_policy_token: my_offer_policy_token_1234
+                parent_token: my_parent_token_1234
+                reward_policy_detail:
+                  accrual_strategy: DEFAULT
+                  created_time: 2025-04-01 23:41:58.802000+00:00
+                  description: A gold reward policy
+                  name: Gold Reward Policy
+                  redemption_strategy: MANUAL
+                  rounding_strategy: ROUND_HALF_EVEN
+                  rules:
+                  - amount: null
+                    attributes:
+                      mcc:
+                      - 0001-1499
+                      - '1500'
+                    calculation_type: PER_TRANSACTION
+                    description: Earn 3x on selected categories.
+                    multiplier: 3
+                    type: MULTIPLIER_PER_TRANSACTION
+                  settlement_strategy: STATEMENT
+                  token: my_reward_policy_token_1234
+                  updated_time: 2025-04-05 16:04:48.643000+00:00
+                reward_policy_token: my_reward_policy_token_1234
+                status: DRAFT
+                token: my_bundle_token_1234
+                updated_time: 2025-04-05 16:04:48.643000+00:00
+              schema:
+                $ref: '#/components/schemas/BundleResponse'
+          description: Expected response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Clone bundle
+      tags:
+      - Bundles
+  /bundles/{token}/lineage:
+    get:
+      description: 'Retrieve an array of related product bundles.
+
+
+        This endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>.'
+      operationId: listRelatedBundles
+      parameters:
+      - description: 'Unique identifier of the parent product bundle.
+
+
+          Send a `GET` request to `/bundles` to retrieve existing product bundles tokens.'
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing bundle token
+        style: simple
+      - description: Number of related bundle product resources to retrieve.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - description: Sort order index of the first resource in the returned array.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: 'Field on which to sort.
+
+          Prefix the field name with a hyphen (`-`) to sort in descending order.
+
+          Omit the hyphen to sort in ascending order.
+
+
+          *NOTE:*
+
+          You must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`.'
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -lastModifiedTime
+          enum:
+          - lastModifiedTime
+          - -lastModifiedTime
+          type: string
+        style: form
+      - description: Array of statuses by which to filter bundles.
+        explode: true
+        in: query
+        name: status
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/BundleResourceStatus'
+          type: array
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BundleResponsePage'
+          description: Expected response to a valid request
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: List related bundles
+      tags:
+      - Bundles
+  /bundles/{token}/promote:
+    put:
+      description: Promote a specific bundle that replaces the current active bundle and activates the promoted bundle.
+      operationId: promoteBundle
+      parameters:
+      - description: 'Unique identifier of the bundle to promote.
+
+
+          Send a `GET` request to `/bundles` to retrieve existing bundle tokens.'
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing bundle token
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                apr_policy_detail:
+                  created_time: 2025-04-01 23:41:58.802000+00:00
+                  description: A silver APR policy
+                  effective_date: 2025-06-01
+                  name: Silver APR Policy
+                  purchases:
+                    external_token: my_external_purchase_token4321
+                    name: A purchase at a merchant
+                    tiers:
+                    - apr: 0
+                      margin_rate: 3
+                    - apr: 0
+                      margin_rate: 6
+                  token: my_apr_policy_token_4321
+                  updated_time: 2025-04-05 16:04:48.643000+00:00
+                apr_policy_token: my_apr_policy_token_4321
+                created_time: 2025-04-01 23:41:58.802000+00:00
+                credit_product_policy_detail:
+                  card_products:
+                  - level: TRADITIONAL
+                    network: VISA
+                    token: my_card_product_token4321
+                  classification: CONSUMER
+                  created_time: 2025-04-01 23:41:58.802000+00:00
+                  credit_line:
+                    max: 3100
+                    min: 50
+                  currency_code: USD
+                  description: A silver credit product policy
+                  interest_calculation:
+                    application_of_credits:
+                      cycle_type: END_REVOLVING
+                      day: 15
+                    day_count: ACTUAL
+                    exclude_tran_types:
+                    - ANNUAL_FEE
+                    - LATE_PAYMENT_FEE
+                    - CASH_BACK_STATEMENT_CREDIT
+                    grace_days_application: NEXT_CYCLE_DATE
+                    interest_application:
+                    - PRINCIPAL
+                    - FEES
+                    interest_on_grace_reactivation: ACCRUE_PAYMENT_DATE
+                    method: AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS
+                    minimum_interest: 1
+                  name: Silver Credit Product Policy
+                  payments:
+                    allocation_order:
+                    - INTEREST
+                    - FEES
+                    - PRINCIPAL
+                    billing_cycle_day: 1
+                    due_day: 31
+                    min_payment_calculation:
+                      include_overlimit_amount: true
+                      include_past_due_amount: false
+                      min_payment_flat_amount: 20
+                      min_payment_percentage:
+                        include_fees_charged:
+                        - LATE_PAYMENT_FEE
+                        include_interest_charged: false
+                        percentage_of_balance: 1
+                  product_sub_type: CREDIT_CARD
+                  product_type: REVOLVING
+                  token: my_credit_product_policy_token_4321
+                  updated_time: 2025-04-05 16:04:48.643000+00:00
+                  usage:
+                  - PURCHASE
+                credit_product_policy_token: my_credit_product_policy_token_4321
+                description: A silver
+                document_policy_detail:
+                  account_statement:
+                    template_token: an_account_statement_template_token4321
+                    template_urls:
+                      html: https://url.com/an_account_statement_template_token4321.html
+                  benefits_disclosure:
+                    asset_token: a_benefits_disclosure_asset_token4321
+                    asset_urls:
+                      html: https://url.com/a_benefits_disclosure_asset_token4321.html
+                      pdf: https://url.com/a_benefits_disclosure_asset_token4321.pdf
+                      png: https://url.com/a_benefits_disclosure_asset_token4321.png
+                  card_member_agreement:
+                    asset_token: a_card_member_agreement_asset_token4321
+                    asset_urls:
+                      html: https://url.com/a_card_member_agreement_asset_token4321.html
+                      pdf: https://url.com/a_card_member_agreement_asset_token4321.pdf
+                      png: https://url.com/a_card_member_agreement_asset_token4321.png
+                  created_time: 2025-04-01 23:41:58.802000+00:00
+                  e_disclosure:
+                    asset_token: a_e_disclosure_asset_token4321
+                    asset_urls:
+                      html: https://url.com/a_e_disclosure_asset_token4321.html
+                      pdf: https://url.com/a_e_disclosure_asset_token4321.pdf
+                      png: https://url.com/a_e_disclosure_asset_token4321.png
+                  name: My Document Policy
+                  notice_of_adverse_action:
+                    template_token: a_notice_of_adverse_action_template_token4321
+                    template_urls:
+                      html: https://url.com/a_notice_of_adverse_action_template_token4321.html
+                  privacy_policy:
+                    asset_token: a_privacy_policy_asset_token4321
+                    asset_urls:
+                      html: https://url.com/a_privacy_policy_asset_token4321.html
+                      pdf: https://url.com/a_privacy_policy_asset_token4321.pdf
+                      png: https://url.com/a_privacy_policy_asset_token4321.png
+                  rewards_disclosure:
+                    asset_token: a_rewards_disclosure_asset_token4321
+                    asset_urls:
+                      html: https://url.com/a_rewards_disclosure_asset_token4321.html
+                      pdf: https://url.com/a_rewards_disclosure_asset_token4321.pdf
+                      png: https://url.com/a_rewards_disclosure_asset_token4321.png
+                    template_token: a_rewards_disclosure_template_token4321
+                    template_urls:
+                      html: https://url.com/a_rewards_disclosure_template_token4321.html
+                  summary_of_credit_terms:
+                    asset_token: a_summary_of_credit_terms_asset_token4321
+                    asset_urls:
+                      html: https://url.com/a_summary_of_credit_terms_asset_token4321.html
+                      pdf: https://url.com/a_summary_of_credit_terms_asset_token4321.pdf
+                      png: https://url.com/a_summary_of_credit_terms_asset_token4321.png
+                    template_token: a_summary_of_credit_terms_template_token4321
+                    template_urls:
+                      html: https://url.com/a_summary_of_credit_terms_template_token4321.html
+                  terms_schedule:
+                    template_token: a_terms_schedule_template_token4321
+                    template_urls:
+                      html: https://url.com/a_terms_schedule_template_token4321.html
+                  token: my_document_policy_token_4321
+                  updated_time: 2025-04-05 16:04:48.643000+00:00
+                document_policy_token: my_document_policy_token_4321
+                fee_policy_detail:
+                  account:
+                    foreign_transaction_fee:
+                      default_method: PERCENTAGE
+                      default_value: 12.5
+                    late_payment:
+                      default_method: FLAT
+                      default_value: 10
+                    returned_payment:
+                      default_method: FLAT
+                      default_value: 10
+                  created_time: 2025-04-01 23:41:58.802000+00:00
+                  description: A silver fee policy
+                  name: Silver Fee Policy
+                  token: my_fee_policy_token_4321
+                  updated_time: 2025-04-05 16:04:48.643000+00:00
+                fee_policy_token: my_fee_policy_token_4321
+                name: Silver Credit Bundle
+                offer_policy_detail:
+                  created_time: 2025-04-01 23:41:58.802000+00:00
+                  description: A silver offer policy
+                  name: Silver Offer Policy
+                  token: my_offer_policy_token_4321
+                  updated_time: 2025-04-05 16:04:48.643000+00:00
+                offer_policy_token: my_offer_policy_token_4321
+                parent_token: my_parent_token_4321
+                reward_policy_detail:
+                  accrual_strategy: DEFAULT
+                  created_time: 2025-04-01 23:41:58.802000+00:00
+                  description: A gold reward policy
+                  name: Gold Reward Policy
+                  redemption_strategy: MANUAL
+                  rounding_strategy: ROUND_HALF_EVEN
+                  rules:
+                  - amount: null
+                    attributes:
+                      mcc:
+                      - 0001-1499
+                      - '1500'
+                    calculation_type: PER_TRANSACTION
+                    description: Earn 3x on selected categories.
+                    multiplier: 3
+                    type: MULTIPLIER_PER_TRANSACTION
+                  settlement_strategy: STATEMENT
+                  token: my_reward_policy_token_4321
+                  updated_time: 2025-04-05 16:04:48.643000+00:00
+                reward_policy_token: my_reward_policy_token_4321
+                status: DRAFT
+                token: my_bundle_token_4321
+                updated_time: 2025-04-05 16:04:48.643000+00:00
+              schema:
+                $ref: '#/components/schemas/BundleResponse'
+          description: Expected response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Promote bundle
+      tags:
+      - Bundles
+  /bundles/{token}/transitions:
+    post:
+      description: Transition the status of a specific bundle.
+      operationId: transitionBundle
+      parameters:
+      - description: 'Token of the bundle whose status you want to transition.
+
+
+          Send a `GET` request to `/credit/bundles` to retrieve existing  tokens.'
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing bundle token
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            example:
+              status: PENDING_APPROVAL
+            schema:
+              $ref: '#/components/schemas/BundleTransitionReq'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              example:
+                bundle_token: my_bundle_token_1234
+                created_time: 2025-06-04 05:59:14.979000+00:00
+                original_status: DRAFT
+                status: PENDING_APPROVAL
+                token: my_transition_token_1234
+              schema:
+                $ref: '#/components/schemas/BundleTransitionResponse'
+          description: Expected response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Transition a bundle
+      tags:
+      - Bundles
+components:
+  schemas:
+    PolicyDocumentTemplateURLs:
+      description: Contains one or more URLs for a template.
+      properties:
+        html:
+          description: URL to the HTML version of the document template.
+          type: string
+      required:
+      - html
+      type: object
+    PolicyFeeResponse:
+      description: Contains information on a fee policy.
+      properties:
+        account:
+          $ref: '#/components/schemas/PolicyFeeAccount'
+        created_time:
+          description: Date and time when the fee policy was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        description:
+          description: Description of the fee policy.
+          type: string
+        name:
+          description: Name of the fee policy.
+          type: string
+        token:
+          description: Unique identifier of the fee policy.
+          pattern: (?!^ +$)^.+$
+          type: string
+        updated_time:
+          description: Date and time when the fee policy was last updated on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+      type: object
+    PolicyRewardSettlementType:
+      description: Reward settlement strategy for a credit program.
+      enum:
+      - STATEMENT
+      - LIVE
+      type: string
+    ProductSubType:
+      default: CREDIT_CARD
+      description: 'Subtype of the credit product type.
+
+
+        * `CREDIT_CARD` - Card that enables the cardholder to make purchases on credit.
+
+        * `SECURED_CARD` - Card backed by a user-funded deposit that enables the cardholder to make purchases on credit.'
+      enum:
+      - CREDIT_CARD
+      - SECURED_CARD
+      type: string
+    PolicyDocumentAssetURLs:
+      description: Contains one or more URLs for an asset.
+      properties:
+        html:
+          description: URL to the HTML version of the asset.
+          type: string
+        pdf:
+          description: URL to the PDF version of the asset.
+          type: string
+        png:
+          description: URL to the PNG version of the asset.
+          type: string
+      required:
+      - html
+      - pdf
+      - png
+      type: object
+    BundleResourceStatus:
+      description: 'Status of the bundle.
+
+
+        * `DRAFT` - The bundle is in the process of being created.
+
+        * `PENDING_APPROVAL` - The bundle has been created and is awaiting approval.
+
+        * `SENT_FOR_REVISION` - The bundle has been returned for revision.
+
+        * `ACTIVE` - The bundle is active.
+
+        * `REJECTED` - The bundle has been rejected; this status cannot be changed.
+
+        * `ARCHIVED` - The previously active bundle has been archived.
+
+        * `APPROVED` - The bundle has been approved (after having been sent for approval).'
+      enum:
+      - DRAFT
+      - PENDING_APPROVAL
+      - SENT_FOR_REVISION
+      - ACTIVE
+      - REJECTED
+      - ARCHIVED
+      - APPROVED
+      type: string
+    InterestOnGraceReactivationEnum:
+      description: Determines whether to charge or waive interest for the billing period when the balance is paid off.
+      enum:
+      - ACCRUE_FULL_CYCLE
+      - ACCRUE_PAYMENT_DATE
+      - WAIVE
+      type: string
+    PolicyDocumentTemplateResponse:
+      description: Response details for a template.
+      properties:
+        template_created_time:
+          description: Date and time when the template was created.
+          format: date-time
+          type: string
+        template_token:
+          description: Unique identifier of a template, which is a document that serves as an initial disclosure but does not contain finalized values.
+          type: string
+        template_urls:
+          $ref: '#/components/schemas/PolicyDocumentTemplateURLs'
+      type: object
+    BundleCreateReq:
+      description: Contains information on a bundle.
+      properties:
+        apr_policy_token:
+          description: Unique identifier of the APR policy.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+        credit_product_policy_token:
+          description: Unique identifier of the credit product policy.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+        description:
+          description: Description of the bundle.
+          maxLength: 255
+          type: string
+        document_policy_token:
+          description: Unique identifier of the document policy.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+        fee_policy_token:
+          description: Unique identifier of the fee policy.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+        name:
+          description: Name of the bundle.
+          maxLength: 255
+          type: string
+        offer_policy_token:
+          description: Unique identifier of the offer policy.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+        reward_policy_token:
+          description: Unique identifier of the reward policy.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+        status:
+          $ref: '#/components/schemas/BundleResourceStatus'
+        token:
+          description: Unique identifier of the bundle.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+      required:
+      - apr_policy_token
+      - credit_product_policy_token
+      - description
+      - document_policy_token
+      - fee_policy_token
+      - name
+      - status
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    ProductType:
+      default: REVOLVING
+      description: 'Type of credit product.
+
+
+        `REVOLVING` - Allows users to continuously borrow and pay debts up to the credit limit.'
+      enum:
+      - REVOLVING
+      type: string
+    PolicyFeeAccount:
+      description: Contains information on the fees in an account's fee policy.
+      properties:
+        annual_fee:
+          $ref: '#/components/schemas/PolicyFeePeriodic'
+        foreign_transaction_fee:
+          $ref: '#/components/schemas/PolicyFeeForeignTransaction'
+        late_payment:
+          $ref: '#/components/schemas/PolicyFeePayment'
+        monthly_fee:
+          $ref: '#/components/schemas/PolicyFeePeriodic'
+        returned_payment:
+          $ref: '#/components/schemas/PolicyFeePayment'
+      type: object
+    PolicyOfferResponse:
+      description: Contains information on an offer policy.
+      properties:
+        created_time:
+          description: Date and time when the offer policy was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        description:
+          description: Description of the offer policy.
+          type: string
+        name:
+          description: Name of the offer policy.
+          type: string
+        token:
+          description: Unique identifier of the offer policy.
+          pattern: (?!^ +$)^.+$
+          type: string
+        updated_time:
+          description: Date and time when the offer policy was last updated on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+      type: object
+    PolicyAprResponse:
+      description: Contains information on an APR policy.
+      properties:
+        created_time:
+          description: Date and time when the APR policy was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        description:
+          description: Description of the APR policy.
+          type: string
+        effective_date:
+          description: Date the APR goes into effect, in UTC.
+          format: date
+          type: string
+        name:
+          description: Name of the APR policy.
+          type: string
+        purchases:
+          $ref: '#/components/schemas/PolicyAprPurchaseResponse'
+        token:
+          description: Unique identifier of the APR policy.
+          pattern: (?!^ +$)^.+$
+          type: string
+        updated_time:
+          description: Date and time when the APR policy was last updated on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+      type: object
+    PolicyFeePeriodic:
+      description: Contains information on a specific periodic fee in a fee policy.
+      properties:
+        exclude_from_interest_calc:
+          description: Whether the periodic fee is excluded from interest calculation.
+          type: boolean
+        fee_amount:
+          description: Amount of the fee.
+          maximum: 5000
+          minimum: 1
+          type: number
+        number_of_days_post_activation:
+          description: 'Number of days after an account is activated that the initial fee is charged.
+
+            For example, if the value in this field is `30`, then the initial fee is charged 30 days after an account is activated.'
+          maximum: 1000
+          minimum: 1
+          type: number
+      type: object
+    BundleTransitionResponse:
+      description: Contains information on a bundle transition.
+      properties:
+        bundle_token:
+          description: Unique identifier of the bundle.
+          maxLength: 36
+          type: string
+        created_time:
+          description: Date and time when the bundle was changed the status on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        original_status:
+          $ref: '#/components/schemas/BundleResourceStatus'
+        status:
+          $ref: '#/components/schemas/BundleResourceStatus'
+        token:
+          description: Unique identifier of the bundle transition.
+          maxLength: 36
+          type: string
+      type: object
+    PolicyRewardPlatformRule:
+      description: Defines the rules intended for a reward policy.
+      properties:
+        amount:
+          description: The static amount to reward if the rule conditions are met.
+          nullable: true
+          type: number
+        attributes:
+          $ref: '#/components/schemas/PolicyRewardRuleAttributes'
+        calculation_type:
+          description: Type of calculation to use to evaluate if a rule has been satisfied.
+          enum:
+          - PER_TRANSACTION
+          - SPEND_BALANCE
+          type: string
+        description:
+          description: The description of the rule.
+          type: string
+        multiplier:
+          description: The reward multiplier to apply the transaction, where '1' means 1x transaction amount.
+          format: float
+          nullable: true
+          type: number
+        type:
+          description: Type of rule.
+          enum:
+          - MULTIPLIER_PER_TRANSACTION
+          - SIGNUP_BONUS
+          type: string
+      required:
+      - description
+      - type
+      type: object
+    ProductCreditLine:
+      description: Contains information on the credit line range.
+      properties:
+        max:
+          description: Maximum credit limit.
+          exclusiveMinimum: false
+          maximum: 9.9999999999999E11
+          minimum: 0
+          type: number
+        min:
+          description: Minimum credit limit.
+          exclusiveMinimum: false
+          maximum: 9.9999999999999E11
+          minimum: 0
+          type: number
+      required:
+      - max
+      - min
+      type: object
+    PolicyFeeForeignTransaction:
+      description: Contains information on a specific fee in a fee policy.
+      properties:
+        default_method:
+          description: Method used to calculate the fee value.
+          enum:
+          - PERCENTAGE
+          type: string
+        default_value:
+          description: Percentage value for the foreign transaction fee.
+          minimum: 0
+          type: number
+      type: object
+    PolicyProductResponse:
+      description: Contains information on the credit product policy.
+      properties:
+        card_products:
+          description: One or more card products associated with the credit product policy.
+          items:
+            $ref: '#/components/schemas/PolicyProductCardProductResponse'
+          minItems: 1
+          type: array
+        classification:
+          $ref: '#/components/schemas/ProductClassification'
+        created_time:
+          description: Date and time when the credit product policy was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        credit_line:
+          $ref: '#/components/schemas/ProductCreditLine'
+        currency_code:
+          $ref: '#/components/schemas/CurrencyCode'
+        description:
+          description: Description of the credit product policy.
+          type: string
+        interest_calculation:
+          $ref: '#/components/schemas/InterestCalculation'
+        name:
+          description: Name of the credit product policy.
+          minLength: 1
+          type: string
+        payments:
+          $ref: '#/components/schemas/PolicyProductPaymentConfiguration'
+        product_sub_type:
+          $ref: '#/components/schemas/ProductSubType'
+        product_type:
+          $ref: '#/components/schemas/ProductType'
+        token:
+          description: Unique identifier of the credit product policy.
+          pattern: (?!^ +$)^.+$
+          type: string
+        updated_time:
+          description: Date and time when the credit product policy was last updated on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        usage:
+          description: One or more usage types for the credit product policy.
+          items:
+            $ref: '#/components/schemas/BalanceType'
+          minItems: 1
+          type: array
+      type: object
+    PolicyFeePayment:
+      description: Contains information on a specific fee in a fee policy.
+      properties:
+        default_method:
+          description: Method used to calculate the fee value.
+          enum:
+          - FLAT
+          type: string
+        default_value:
+          description: Amount of the fee.
+          type: number
+      type: object
+    PolicyRewardResponse:
+      description: Contains information on a reward policy.
+      properties:
+        accrual_strategy:
+          $ref: '#/components/schemas/PolicyRewardAccrualType'
+        conversions:
+          description: List of one or more reward conversions.
+          items:
+            $ref: '#/components/schemas/PolicyRewardConversion'
+          minItems: 1
+          type: array
+        created_time:
+          description: Date and time when the reward policy was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        description:
+          description: Description of the reward policy.
+          type: string
+        exclusions:
+          $ref: '#/components/schemas/PolicyRewardExclusions'
+        name:
+          description: Name of the reward policy.
+          type: string
+        redemption_strategy:
+          $ref: '#/components/schemas/PolicyRewardRedemptionStrategy'
+        rounding_strategy:
+          $ref: '#/components/schemas/PolicyRewardRoundingStrategy'
+        rules:
+          description: A list of one or more reward rules.
+          items:
+            $ref: '#/components/schemas/PolicyRewardPlatformRule'
+          minItems: 1
+          type: array
+        settlement_strategy:
+          $ref: '#/components/schemas/PolicyRewardSettlementType'
+        token:
+          description: Unique identifier of the reward policy.
+          pattern: (?!^ +$)^.+$
+          type: string
+        updated_time:
+          description: Date and time when the reward policy was last updated on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+      type: object
+    BalanceType:
+      description: 'Type of balance.
+
+
+        * `PURCHASE` - The balance on purchases.'
+      enum:
+      - PURCHASE
+      type: string
+    PolicyRewardAccrualType:
+      default: DEFAULT
+      description: 'Reward accrual strategy for a credit program.
+
+        If no value for `accrual_strategy` is set, the default value of this field is `DEFAULT`.'
+      enum:
+      - DEFAULT
+      - PAYMENT
+      type: string
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
+      type: string
+    BundleTransitionReq:
+      description: Contains information on a bundle transition.
+      properties:
+        status:
+          $ref: '#/components/schemas/BundleResourceStatus'
+      required:
+      - status
+      type: object
+    PolicyProductCardProductResponse:
+      description: Contains information on the card products associated with the credit product policy.
+      properties:
+        level:
+          $ref: '#/components/schemas/PolicyProductCardProductLevel'
+        network:
+          description: Name of the card network.
+          enum:
+          - VISA
+          - MASTERCARD
+          - SANDBOX
+          type: string
+        token:
+          description: Unique identifier of the card product.
+          pattern: (?!^ +$)^.+$
+          type: string
+      type: object
+    PolicyProductMinPaymentPercentage:
+      description: Contains information used to calculate the minimum payment amount when expressed as a percentage.
+      properties:
+        include_all_fees_charged:
+          description: Whether to include all fees charged when calculating the minimum payment.
+          type: boolean
+        include_interest_charged:
+          description: Whether to include the amount of interest charged when calculating the minimum payment.
+          type: boolean
+        percentage_of_balance:
+          description: Minimum payment, expressed as a percentage of the total statement balance, due on the payment due day.
+          maximum: 100
+          minimum: 0.0001
+          type: number
+      required:
+      - include_interest_charged
+      - percentage_of_balance
+      type: object
+    PolicyDocumentAssetAndTemplateResponse:
+      description: Return details for a specific asset and the template on which it was based.
+      properties:
+        asset_created_time:
+          description: Date and time when the asset was created.
+          format: date-time
+          type: string
+        asset_token:
+          description: 'Unique identifier of the asset, which is the version of a document that is based on the template and contains finalized values.
+
+            The values are finalized when the bundle containing the document is created.'
+          type: string
+        asset_urls:
+          $ref: '#/components/schemas/PolicyDocumentAssetURLs'
+        template_created_time:
+          description: Date and time when the template was created.
+          format: date-time
+          type: string
+        template_token:
+          description: 'Unique identifier of the template, which is the version of a document that serves as an initial disclosure but does not contain finalized values.
+
+            Values are finalized in the asset version of the document.'
+          type: string
+        template_urls:
+          $ref: '#/components/schemas/PolicyDocumentTemplateURLs'
+      type: object
+    BundleResponsePage:
+      description: Returns paginated bundles.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: Contains one or more bundles.
+          items:
+            $ref: '#/components/schemas/BundleResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    PolicyType:
+      description: Type of policy.
+      enum:
+      - APR
+      - DOCUMENT
+      - FEE
+      - OFFER
+      - PRODUCT
+      - REWARD
+      - ALL
+      type: string
+    PaymentAllocationOrderEnum:
+      description: Ordered list of balance types to which payments are allocated, from first to last.
+      enum:
+      - INTEREST
+      - FEES
+      - PRINCIPAL
+      type: string
+    PolicyProductPaymentConfiguration:
+      description: Contains the configurations for billing cycle day, payment due day, and fees.
+      properties:
+        allocation_order:
+          default:
+          - INTEREST
+          - FEES
+          - PRINCIPAL
+          description: Ordered list of balance types to which payments are allocated, from first to last.
+          items:
+            $ref: '#/components/schemas/PaymentAllocationOrderEnum'
+          minItems: 1
+          type: array
+        billing_cycle_day:
+          description: Day of the month when the billing cycle starts.
+          maximum: 28
+          minimum: 1
+          type: integer
+        billing_cycle_day_strategy:
+          default: MANUAL
+          description: Determines if the billing cycle day is manually set or determined dynamically during account creation based on cycling logic.
+          enum:
+          - MANUAL
+          type: string
+        billing_cycle_frequency:
+          default: MONTHLY
+          description: Frequency at which the account is billed.
+          enum:
+          - MONTHLY
+          type: string
+        due_day:
+          deprecated: true
+          description: 'Day of month the payment for the previous billing cycle is due.
+
+
+            This field is being deprecated and replaced by `payment_due_interval` of a product policy.
+
+            To retrieve `payment_due_interval`, see <</core-api/credit-policies#retrieveProductPolicy, Retrieve credit product policy, payments.payment_due_interval>>.'
+          maximum: 31
+          minimum: 31
+          type: integer
+        min_payment_calculation:
+          $ref: '#/components/schemas/PolicyProductMinPaymentCalculation'
+        payment_due_interval:
+          default: -1
+          description: 'Specifies the payment due interval that is used to determine the payment due date for a billing cycle.
+
+            A value of -1 indicates one day prior to the next billing cycle date.
+
+
+            For consumer programs, a minimum gap of 21 days is required between when a statement is delivered and the payment due date.'
+          minimum: -1
+          type: integer
+      required:
+      - allocation_order
+      - billing_cycle_day
+      - min_payment_calculation
+      type: object
+    PolicyRewardRoundingStrategy:
+      default: ROUND_HALF_EVEN
+      description: 'Rounding strategy for reward accrual calculations.
+
+        If no value for `rounding_strategy` is set, then the default value of this field is `ROUND_HALF_EVEN`.
+
+
+        Available options:
+
+
+        * `ROUND_UP`: Always rounds away from zero to whole numbers.
+
+        * `ROUND_DOWN`: Always rounds towards zero to whole numbers.
+
+        * `ROUND_HALF_EVEN`: Rounds to two decimal places using half-even logic (default).
+
+        * `ROUND_HALF_EVEN_WHOLE`: Rounds to whole numbers using half-even logic.'
+      enum:
+      - ROUND_UP
+      - ROUND_DOWN
+      - ROUND_HALF_EVEN
+      - ROUND_HALF_EVEN_WHOLE
+      type: string
+    ProductClassification:
+      default: CONSUMER
+      description: 'Specifies for whom the credit product is intended.
+
+
+        * `CONSUMER` - The credit product is intended for individual consumers.
+
+        * `SMALL_AND_MEDIUM_BUSINESS` - The credit product is intended for small and medium business.'
+      enum:
+      - CONSUMER
+      - SMALL_AND_MEDIUM_BUSINESS
+      type: string
+    InterestCalculation:
+      description: Contains the configurations for interest calculation.
+      properties:
+        day_count:
+          description: Day-count convention.
+          enum:
+          - ACTUAL
+          type: string
+        exclude_tran_types:
+          default:
+          - ANNUAL_FEE
+          - MONTHLY_FEE
+          - LATE_PAYMENT_FEE
+          - CASH_BACK_STATEMENT_CREDIT
+          - FOREIGN_TRANSACTION_FEE
+          description: One or more transactions that are excluded from current billing period's interest charge, but included in next.
+          items:
+            enum:
+            - LATE_PAYMENT_FEE
+            - ANNUAL_FEE
+            - MONTHLY_FEE
+            - CASH_BACK_STATEMENT_CREDIT
+            - RETURNED_PAYMENT_FEE
+            - FOREIGN_TRANSACTION_FEE
+            type: string
+          type: array
+        grace_days_application:
+          description: Determines the last day of grace period based on which interest charges are calculated.
+          enum:
+          - NEXT_CYCLE_DATE
+          type: string
+        interest_application:
+          default:
+          - PRINCIPAL
+          - FEES
+          description: One or more balance types on which interest is applied.
+          items:
+            enum:
+            - PRINCIPAL
+            - FEES
+            - INTEREST
+            type: string
+          minItems: 1
+          type: array
+        interest_on_grace_reactivation:
+          $ref: '#/components/schemas/InterestOnGraceReactivationEnum'
+        method:
+          description: Method of interest calculation.
+          enum:
+          - AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS
+          type: string
+        minimum_interest:
+          description: When interest is applied, this value determines the minimum amount of interest that can be charged.
+          maximum: 9.9999999999999E11
+          minimum: 0
+          type: number
+      required:
+      - day_count
+      - grace_days_application
+      - interest_application
+      - interest_on_grace_reactivation
+      - method
+      - minimum_interest
+      type: object
+    PolicyAprPurchaseResponse:
+      description: Contains information on the pricing strategy for purchases.
+      properties:
+        external_token:
+          description: Unique identifier of the pricing strategy on a credit program.
+          pattern: (?!^ +$)^.+$
+          type: string
+        name:
+          description: Name of the pricing strategy.
+          type: string
+        tiers:
+          description: One or more risk tiers for a pricing strategy.
+          items:
+            $ref: '#/components/schemas/PolicyAprTierResponse'
+          type: array
+      type: object
+    PolicyRewardRuleAttributes:
+      description: Additional properties for which the rule can be used to determine reward accrual eligibility for a transaction.
+      properties:
+        max_spend:
+          description: Maximum spend amount.
+          type: number
+        mcc:
+          description: 'List of merchant category codes (MCCs).
+
+            MCCs must be a four-digit number, or a range of two four-digit numbers separated by a hyphen.'
+          items:
+            type: string
+          type: array
+        mid:
+          description: Comma-separated list of merchant IDs for the rule.
+          items:
+            type: string
+          type: array
+        min_spend:
+          description: Minimum spend amount.
+          type: number
+        spend_days:
+          description: 'Maximum number of days since account creation within which the minimum spend requirements must be met to qualify for the reward (used for signup bonus rules).
+
+
+            Positive integer values are allowed, with a minimum value of `1`.'
+          minimum: 1
+          type: integer
+        spend_total:
+          description: Total spend amount.
+          type: number
+      type: object
+    PolicyDocumentResponse:
+      description: Contains information on a document policy.
+      properties:
+        account_statement:
+          $ref: '#/components/schemas/PolicyDocumentTemplateResponse'
+        benefits_disclosure_premium:
+          $ref: '#/components/schemas/PolicyDocumentAssetResponse'
+        benefits_disclosure_traditional:
+          $ref: '#/components/schemas/PolicyDocumentAssetResponse'
+        card_member_agreement:
+          $ref: '#/components/schemas/PolicyDocumentAssetResponse'
+        created_time:
+          description: Date and time when the document policy was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        e_disclosure:
+          $ref: '#/components/schemas/PolicyDocumentAssetResponse'
+        name:
+          description: Name of the document policy.
+          pattern: (?!^ +$)^.+$
+          type: string
+        noaa_multiple_reason_with_dodd_frank:
+          $ref: '#/components/schemas/PolicyDocumentTemplateResponse'
+        noaa_single_reason:
+          $ref: '#/components/schemas/PolicyDocumentTemplateResponse'
+        noaa_single_reason_with_dodd_frank:
+          $ref: '#/components/schemas/PolicyDocumentTemplateResponse'
+        pre_qualification_disclosure:
+          $ref: '#/components/schemas/PolicyDocumentAssetAndTemplateResponse'
+        privacy_policy:
+          $ref: '#/components/schemas/PolicyDocumentAssetResponse'
+        rewards_disclosure:
+          $ref: '#/components/schemas/PolicyDocumentAssetAndTemplateResponse'
+        summary_of_credit_terms:
+          $ref: '#/components/schemas/PolicyDocumentAssetAndTemplateResponse'
+        terms_schedule:
+          $ref: '#/components/schemas/PolicyDocumentTemplateResponse'
+        token:
+          description: Unique identifier of the document policy.
+          pattern: (?!^ +$)^.+$
+          type: string
+        updated_time:
+          description: Date and time when the document policy was last updated on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+      type: object
+    BundleResponse:
+      description: Contains information on a bundle.
+      properties:
+        apr_policy_detail:
+          $ref: '#/components/schemas/PolicyAprResponse'
+        apr_policy_token:
+          description: Unique identifier of the bundle's APR policy.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+        created_time:
+          description: Date and time when the bundle was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        credit_product_policy_detail:
+          $ref: '#/components/schemas/PolicyProductResponse'
+        credit_product_policy_token:
+          description: Unique identifier of the bundle's credit product policy.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+        description:
+          description: Description of the bundle.
+          type: string
+        document_policy_detail:
+          $ref: '#/components/schemas/PolicyDocumentResponse'
+        document_policy_token:
+          description: Unique identifier of the bundle's document policy.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+        fee_policy_detail:
+          $ref: '#/components/schemas/PolicyFeeResponse'
+        fee_policy_token:
+          description: Unique identifier of the bundle's fee policy.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+        name:
+          description: Name of the bundle.
+          type: string
+        offer_policy_detail:
+          $ref: '#/components/schemas/PolicyOfferResponse'
+        offer_policy_token:
+          description: Unique identifier of the bundle's offer policy.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+        reward_policy_detail:
+          $ref: '#/components/schemas/PolicyRewardResponse'
+        reward_policy_token:
+          description: Unique identifier of the bundle's reward policy.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+        status:
+          $ref: '#/components/schemas/BundleResourceStatus'
+        token:
+          description: Unique identifier of the bundle.
+          maxLength: 36
+          type: string
+        updated_time:
+          description: Date and time when the bundle was last updated on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+      type: object
+    PolicyDocumentAssetResponse:
+      description: Return details for a specific asset.
+      properties:
+        asset_created_time:
+          description: Date and time when the asset was created.
+          format: date-time
+          type: string
+        asset_token:
+          description: 'Unique identifier of the asset, which is a type of document that contains finalized values.
+
+            The values are finalized when the bundle containing the document is created.'
+          pattern: (?!^ +$)^.+$
+          type: string
+        asset_urls:
+          $ref: '#/components/schemas/PolicyDocumentAssetURLs'
+      type: object
+    PolicyAprTierResponse:
+      description: Response details for the APR for a risk tier.
+      properties:
+        apr:
+          default: 0
+          description: Value of the APR.
+          type: number
+        margin_rate:
+          description: Margin rate for the risk tier for a pricing strategy.
+          type: number
+      type: object
+    BundleUpdateReq:
+      description: Specifies bundles for a credit program.
+      properties:
+        apr_policy_token:
+          description: Unique identifier of the bundle's APR policy.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+        credit_product_policy_token:
+          description: Unique identifier of the bundle's credit product policy.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+        description:
+          description: Description of the bundle.
+          maxLength: 255
+          type: string
+        document_policy_token:
+          description: Unique identifier of the bundle's document policy.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+        fee_policy_token:
+          description: Unique identifier of the bundle's fee policy.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+        name:
+          description: Name of the bundle.
+          maxLength: 255
+          type: string
+        offer_policy_token:
+          description: Unique identifier of the bundle's offer policy.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+        reward_policy_token:
+          description: Unique identifier of the bundle's reward policy.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+      required:
+      - apr_policy_token
+      - credit_product_policy_token
+      - description
+      - document_policy_token
+      - fee_policy_token
+      - name
+      type: object
+    PolicyProductMinPaymentCalculation:
+      description: Contains information used to calculate the minimum payment amount on a credit product policy.
+      properties:
+        include_overlimit_amount:
+          description: Whether to include the overlimit amount when calculating the minimum payment.
+          type: boolean
+        include_past_due_amount:
+          description: Whether to include the past due amount when calculating the minimum payment.
+          type: boolean
+        min_payment_flat_amount:
+          description: Minimum payment, expressed as a flat amount, due on the payment due day.
+          type: number
+        min_payment_percentage:
+          $ref: '#/components/schemas/PolicyProductMinPaymentPercentage'
+      required:
+      - include_overlimit_amount
+      - include_past_due_amount
+      type: object
+    PolicyRewardConversionType:
+      description: Type of conversion.
+      enum:
+      - STATEMENT_CREDIT
+      type: string
+    PolicyProductCardProductLevel:
+      description: Level of the card product.
+      enum:
+      - PREMIUM
+      - TRADITIONAL
+      type: string
+    PolicyRewardRedemptionStrategy:
+      default: MANUAL
+      description: 'Redemption strategy for reward redemption behavior.
+
+        If no value for `redemption_strategy` is set, then the default value of this field is `MANUAL`.
+
+
+        Available options:
+
+
+        * `AUTO`: Automatically redeem rewards when conditions are met.
+
+        * `MANUAL`: Require manual intervention for reward redemption (default).'
+      enum:
+      - AUTO
+      - MANUAL
+      type: string
+    PolicyRewardConversion:
+      description: Defines the conversion properties intended for a reward policy.
+      properties:
+        conversion_increment:
+          description: The static amount to reward if the rule conditions are met.
+          type: integer
+        conversion_rate:
+          description: The rate that points are worth with converting the REDEMPTION_TYPE indicated.
+          format: decimal
+          minimum: 0.001
+          type: number
+        currency:
+          description: Type of currency used with the conversion rate.
+          type: string
+        type:
+          $ref: '#/components/schemas/PolicyRewardConversionType'
+      required:
+      - conversion_increment
+      - conversion_rate
+      - type
+      type: object
+    PolicyRewardExclusions:
+      description: 'Defines what merchant category codes (MCCs) are excluded from earning rewards.
+
+        MCCs must be a four-digit number, or a range of two four-digit numbers separated by a hyphen.'
+      properties:
+        custom_exclusions:
+          description: 'List of merchant category codes (MCCs).
+
+            MCCs must be a four-digit number, or a range of two four-digit numbers separated by a hyphen.'
+          items:
+            type: string
+          type: array
+        use_default_exclusions:
+          description: 'Indicates whether to use the default exclusion list.
+
+
+            * If `true`, the default exclusion list is used.
+
+            * If `false`, the custom exclusion list is used, if custom exclusions are included.'
+          type: boolean
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

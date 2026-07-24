@@ -1,0 +1,381 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries Real-Time Fee Groups API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- description: 'Marqeta enables you to assess fees in real time through the use of real-time fee groups.
+
+    A real-time fee group is a collection of fees associated with an account holder group (and thereby associated with the users and businesses that are part of that account holder group).
+
+    Real-time fee assessment ensures that associated accounts have sufficient funds available to cover both the transaction amount and the fee before authorization of a transaction.
+
+
+    Before you create a real-time fee group, you must create the individual fees (using the `/fees` endpoint) and the account holder group with which you will associate the real-time fee group (using the `/accountholdergroups` endpoint).
+
+    Each fee in the group must be applicable to a different transaction type.
+
+    For example, one fee could assess $1 on authorization transactions while another assesses $2 on PIN-debit transactions.
+
+
+    Use of real-time fee groups requires prior approval by Marqeta.
+
+    If you are interested in using this feature for your card program, contact your Marqeta representative for more information.
+
+
+    [NOTE]
+
+    If your program uses Gateway JIT Funding, you cannot assess fees.'
+  name: Real-Time Fee Groups
+paths:
+  /realtimefeegroups:
+    get:
+      description: 'Use this endpoint to list existing real-time fee groups.
+
+
+        This endpoint supports <</core-api/field-filtering, field filtering>> and <</core-api/sorting-and-pagination, pagination>>.'
+      operationId: getRealtimefeegroups
+      parameters:
+      - description: Number of real-time fee groups to retrieve.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          format: int32
+          type: integer
+        style: form
+      - description: The sort order index of the first resource in the returned array.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: form
+      - description: 'Comma-delimited list of fields to return (`field_1,field_2`, and so on).
+
+
+          Leave blank to return all fields.'
+        explode: true
+        in: query
+        name: fields
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: 'Field on which to sort.
+
+          Use any field in the resource model, or one of the system fields `lastModifiedTime` or `createdTime`.
+
+          Prefix the field name with a hyphen (`-`) to sort in descending order.
+
+          Omit the hyphen to sort in ascending order.'
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -createdTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                count: 2
+                data[]:
+                  active: true
+                  created_time: 2022-11-28 00:36:11+00:00
+                  fee_tokens[]: my_fee_01 my_fee_05
+                  last_modified_time: 2022-11-28 00:36:11+00:00
+                  name: My Real-Time Fee Group 01
+                  token: my_rtfg_01
+                end_index: 1
+                is_more: false
+                start_index: 0
+              schema:
+                $ref: '#/components/schemas/RealTimeFeeGroupListResponse'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: List real-time fee groups
+      tags:
+      - Real-Time Fee Groups
+    post:
+      description: Use this endpoint to create a real-time fee group.
+      operationId: postRealtimefeegroups
+      requestBody:
+        content:
+          application/json:
+            example:
+              fee_tokens[]: my_fee_01 my_fee_05
+              name: My Real-Time Fee Group 01
+              token: my_rtfg_01
+            schema:
+              $ref: '#/components/schemas/real_time_fee_group_create_request'
+        required: false
+      responses:
+        '201':
+          content:
+            application/json:
+              example:
+                active: true
+                created_time: 2022-11-28 00:36:11+00:00
+                fee_tokens[]: my_fee_01 my_fee_05
+                last_modified_time: 2022-11-28 00:36:11+00:00
+                name: My Real-Time Fee Group 01
+                token: my_rtfg_01
+              schema:
+                $ref: '#/components/schemas/real_time_fee_group'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '409':
+          content: {}
+          description: Request already processed with a different payload
+        '500':
+          content: {}
+          description: Server error
+      summary: Create real-time fee group
+      tags:
+      - Real-Time Fee Groups
+  /realtimefeegroups/{token}:
+    get:
+      description: 'Use this endpoint to retrieve a specific real-time fee group.
+
+        Include the real-time fee group `token` path parameter to specify the real-time fee group to return.'
+      operationId: getRealtimefeegroupsToken
+      parameters:
+      - description: Unique identifier of the real-time fee group.
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                active: true
+                created_time: 2022-11-28 00:36:11+00:00
+                fee_tokens[]: my_fee_01 my_fee_05
+                last_modified_time: 2022-11-28 00:36:11+00:00
+                name: My Real-Time Fee Group 01
+                token: my_rtfg_01
+              schema:
+                $ref: '#/components/schemas/real_time_fee_group'
+          description: Success
+        '404':
+          content: {}
+          description: Real-time fee group not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Retrieve real-time fee group
+      tags:
+      - Real-Time Fee Groups
+    put:
+      description: 'Use this endpoint to update a real-time fee group.
+
+        Include the real-time fee group `token` path parameter to specify the real-time fee group to update.'
+      operationId: putRealtimefeegroupsToken
+      parameters:
+      - description: Unique identifier of the real-time fee group.
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            example:
+              active: false
+            schema:
+              $ref: '#/components/schemas/real_time_fee_group_request'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                active: false
+                created_time: 2022-11-28 00:36:11+00:00
+                fee_tokens[]: my_fee_01 my_fee_05
+                last_modified_time: 2022-11-28 00:45:11+00:00
+                name: My Real-Time Fee Group 01
+                token: my_rtfg_01
+              schema:
+                $ref: '#/components/schemas/real_time_fee_group'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Update real-time fee group
+      tags:
+      - Real-Time Fee Groups
+components:
+  schemas:
+    real_time_fee_group:
+      description: Contains information about a real-time fee group.
+      properties:
+        active:
+          default: false
+          description: Indicates whether the real-time fee group is active.
+          type: boolean
+        created_time:
+          description: Date and time when the real-time fee group was created, in UTC.
+          format: date-time
+          type: string
+        fee_tokens:
+          description: Specifies the fees in this real-time fee group.
+          items:
+            type: string
+          type: array
+          uniqueItems: true
+        last_modified_time:
+          description: Date and time when the real-time fee group was last modified, in UTC.
+          format: date-time
+          type: string
+        name:
+          description: Descriptive name for the real-time fee group.
+          type: string
+        token:
+          description: Unique identifier of the real-time fee group.
+          type: string
+      required:
+      - active
+      - name
+      - token
+      type: object
+    real_time_fee_group_request:
+      properties:
+        active:
+          default: true
+          description: Indicates whether the real-time fee group is active.
+          type: boolean
+        fee_tokens:
+          description: 'Specifies the fees in this real-time fee group.
+
+            Send a `GET` request to `/fees` to retrieve fee resources tokens.
+
+
+            No two fees in the group can be applicable to the same transaction type (in other words, each fee must have a different value for its `real_time_assessment.transaction_type` field).'
+          items:
+            type: string
+          type: array
+          uniqueItems: true
+        name:
+          description: Descriptive name for the real-time fee group.
+          maxLength: 50
+          minLength: 1
+          type: string
+      type: object
+    real_time_fee_group_create_request:
+      properties:
+        active:
+          default: true
+          description: Indicates whether the real-time fee group is active.
+          type: boolean
+        fee_tokens:
+          description: 'Unique identifiers of the fees in this real-time fee group.
+
+            Send a `GET` request to `/fees` to retrieve fee resource tokens.
+
+
+            No two fees in the group can be applicable to the same transaction type (in other words, each fee must have a different value for its `real_time_assessment.transaction_type` field).'
+          items:
+            type: string
+          type: array
+          uniqueItems: true
+        name:
+          description: Descriptive name for the real-time fee group.
+          maxLength: 50
+          minLength: 1
+          type: string
+        token:
+          description: 'Unique identifier of the real-time fee group.
+
+
+            If you do not include a token, the system will generate one automatically.
+
+            This token is necessary for use in other API calls, so we recommend that rather than let the system generate one, you use a simple string that is easy to remember.
+
+            This value cannot be updated.'
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - name
+      type: object
+    RealTimeFeeGroupListResponse:
+      properties:
+        count:
+          description: 'Number of resources to retrieve.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+        data:
+          description: 'Array of real time fee group objects.
+
+
+            Objects are returned as appropriate to your query.'
+          items:
+            $ref: '#/components/schemas/real_time_fee_group'
+          type: array
+        end_index:
+          description: 'Sort order index of the last resource in the returned array.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          description: 'A value of `true` indicates that more unreturned resources exist.
+
+            A value of `false` indicates that no more unreturned resources exist.
+
+
+            This field is returned if there are resources in your returned array.'
+          type: boolean
+        start_index:
+          description: 'Sort order index of the first resource in the returned array.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

@@ -1,0 +1,270 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries Account Bundle Transitions API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: Account Bundle Transitions
+paths:
+  /accounts/{account_token}/bundletransitions:
+    get:
+      description: 'Retrieve an array of bundle transitions on a credit account.
+
+
+        This endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>.'
+      operationId: listAccountBundleTransitions
+      parameters:
+      - description: 'Unique identifier of the credit account for which you want to retrieve bundle transitions.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: Number of account bundle transition resources to retrieve.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - description: Sort order index of the first resource in the returned array.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: 'Field on which to sort.
+
+          Prefix the field name with a hyphen (`-`) to sort in descending order.
+
+          Omit the hyphen to sort in ascending order.
+
+
+          *NOTE:*
+
+          You must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `updated_time`.'
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -lastModifiedTime
+          enum:
+          - lastModifiedTime
+          - -lastModifiedTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountBundleTransitionsPage'
+          description: A list of JSON objects containing paginated account bundle transitions.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: List account bundle transitions
+      tags:
+      - Account Bundle Transitions
+    post:
+      description: Transition a credit account to a new bundle.
+      operationId: transitionAccountBundle
+      parameters:
+      - description: Unique identifier of the credit account for which to transition a bundle.
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountBundleTransitionReq'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountBundleTransitionResponse'
+          description: A JSON object containing bundle transition information.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Transition account bundle
+      tags:
+      - Account Bundle Transitions
+  /accounts/{account_token}/bundletransitions/{token}:
+    get:
+      description: Retrieve a bundle transition for a credit account.
+      operationId: getAccountBundleTransition
+      parameters:
+      - description: 'Unique identifier of the credit account for which you want to retrieve a bundle transition.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: 'Unique identifier of the account bundle transition you want to retrieve.
+
+
+          Send a `GET` request to `/credit/accounts/{account_token}/bundletransitions` to retrieve existing account bundle transition tokens.'
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account bundle transition token
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountBundleTransitionResponse'
+          description: A JSON object containing account bundle transition record.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Retrieve account bundle transition
+      tags:
+      - Account Bundle Transitions
+components:
+  schemas:
+    AccountBundleTransitionsPage:
+      description: Return paginated account bundle transitions.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: Contains one or more account bundle transitions.
+          items:
+            $ref: '#/components/schemas/AccountBundleTransitionResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    AccountBundleTransitionResponse:
+      description: The credit account bundle transition.
+      properties:
+        account_token:
+          description: Unique identifier of the credit account for which to transition a bundle.
+          maxLength: 36
+          type: string
+        new_bundle_token:
+          description: Bundle token to which the credit account transitioned.
+          maxLength: 36
+          type: string
+        original_bundle_token:
+          description: Bundle token prior to transition.
+          maxLength: 36
+          type: string
+        token:
+          description: Unique identifier of the credit account bundle transition.
+          type: string
+        transition_state:
+          description: State of the bundle transition. COMPLETED is a terminal state (we have finished transitioning it to the new bundle), and REQUESTED/PROCESSING means the transition is pending.
+          enum:
+          - REQUESTED
+          - PROCESSING
+          - COMPLETED
+          type: string
+        updated_time:
+          description: Date and time when the transition record was last updated on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+      required:
+      - account_token
+      - new_bundle_token
+      - original_bundle_token
+      - token
+      - transition_state
+      - updated_time
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    AccountBundleTransitionReq:
+      description: Information on the credit account bundle transition request.
+      properties:
+        new_bundle_token:
+          description: Unique identifier of the new bundle to transition to.
+          maxLength: 36
+          type: string
+        token:
+          description: Unique identifier of the credit account bundle transition.
+          type: string
+      required:
+      - new_bundle_token
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

@@ -1,0 +1,1349 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries Ledger Entries API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- description: '// Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    [IMPORTANT]
+
+    ====
+
+    This feature is deprecated and replaced by journal entries.
+
+
+    &#160; +
+
+
+    For documentation on journal entries, see:
+
+
+    &#160; +
+
+
+    * <</developer-guides/about-credit-account-journal-entries, About Credit Account Journal Entries>> - Developer guide
+
+    * <</core-api/credit-account-journal-entries, Journal Entries>> - API reference
+
+    * <</core-api/event-types#_credit_journal_entry_events, Credit journal entry event types>> - Webhook notifications.
+
+    ====
+
+
+    Use the `/credit/accounts/{account_token}/ledgerentries` endpoint to retrieve ledger entries made on an <</core-api/credit-accounts, account>> on Marqeta''s credit platform.
+
+
+    A ledger entry is a record of an entry made on an account ledger, such as a purchase transaction, fee, adjustment, and more.
+
+    For more on the different types of ledger entries, see <</developer-guides/about-credit-account-ledger-entries, About Credit Account Ledger Entries>>.
+
+
+    Ledger entries originate when a ledger entry event occurs, such as a cardholder making a purchase or an account holder making a payment.
+
+    To receive webhook notifications when ledger entry events occur, see <</core-api/event-types#_credit_ledger_entry_events, Credit ledger entry events>> in Event Types.'
+  name: Ledger Entries
+paths:
+  /accounts/{account_token}/ledgerentries:
+    get:
+      deprecated: true
+      description: 'Retrieve an array of ledger entries on a credit account.
+
+
+        This endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>> and <</core-api/object-expansion, object expansion>>.'
+      operationId: ListAccountLedgerEntries
+      parameters:
+      - description: 'Unique identifier of the credit account for which you want to retrieve ledger entries.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: Number of ledger entry resources to retrieve.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - description: Sort order index of the first resource in the returned array.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: Starting date of the date range from which to return ledger entries.
+        explode: true
+        in: query
+        name: start_date
+        required: false
+        schema:
+          example: 2024-01-01
+          type: string
+          x-allowableValues: 'Format: yyyy-MM-dd or yyyy-MM-ddThh:mm:ssZ'
+        style: form
+      - description: Ending date of the date range from which to return ledger entries.
+        explode: true
+        in: query
+        name: end_date
+        required: false
+        schema:
+          example: 2024-01-01
+          type: string
+          x-allowableValues: 'Format: yyyy-MM-dd or yyyy-MM-ddThh:mm:ssZ'
+        style: form
+      - description: Array of statuses by which to filter ledger entries.
+        explode: true
+        in: query
+        name: statuses
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+          x-allowableValues: Valid ledger entry status
+        style: form
+      - description: Description of the ledger entries to return.
+        explode: true
+        in: query
+        name: description
+        required: false
+        schema:
+          type: string
+          x-allowableValues: 255 char max
+        style: form
+      - description: Detail token of the ledger entries to return.
+        explode: true
+        in: query
+        name: detail_token
+        required: false
+        schema:
+          type: string
+          x-allowableValues: 36 char max
+        style: form
+      - description: 'Array of groups by which to filter ledger entries.
+
+
+          To return all ledger entry groups, do not include this query parameter.'
+        explode: true
+        in: query
+        name: groups
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+          x-allowableValues: Valid ledger entry group
+        style: form
+      - description: Number of ledger entries to return.
+        explode: true
+        in: query
+        name: amount
+        required: false
+        schema:
+          type: number
+          x-allowableValues: Any integer
+        style: form
+      - description: Embeds the specified object into the response.
+        explode: true
+        in: query
+        name: expand
+        required: false
+        schema:
+          items:
+            enum:
+            - detailObject
+            - originalCurrency
+            type: string
+          type: array
+        style: form
+      - description: 'Field on which to sort.
+
+          Prefix the field name with a hyphen (`-`) to sort in descending order.
+
+          Omit the hyphen to sort in ascending order.
+
+
+          *NOTE:*
+
+          You must sort using system field names such as `createdTime`, and not by the field names appearing in response bodies such as `created_time`.'
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -createdTime
+          enum:
+          - createdTime
+          - -createdTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                count: 3
+                data:
+                - account_token: my_account_token_12
+                  amount: 2.31
+                  card_token: my_credit_card_token7794
+                  created_time: 2023-08-01 07:00:19.756000+00:00
+                  currency_code: USD
+                  detail_object:
+                    account_token: my_account_token_12
+                    average_daily_balance: 181.67
+                    created_date: 2023-08-01 07:00:19.755000+00:00
+                    currency_code: USD
+                    daily_periodic_rate: 0.00041068
+                    days_in_billing_cycle: 31
+                    goto_apr: 14.99
+                    interest_amount: 2.31
+                    statement_balance: 208.93
+                    statement_closing_date: 2023-08-01 03:59:59.999000+00:00
+                    statement_opening_date: 2023-07-01 04:00:00
+                    statement_token: statement_token_75b
+                    token: detail_token_96749
+                    updated_date: 2023-08-01 07:00:19.755000+00:00
+                  detail_token: detail_token_96749
+                  group: INTEREST
+                  id: '11112222'
+                  impact_time: 2023-08-01 03:59:59.999000+00:00
+                  memo: Interest charge on purchases
+                  metadata:
+                    failure_reason: insufficient balance
+                    failure_time: 2023-08-01 07:00:19.756000+00:00
+                  request_time: 2023-08-01 03:59:59.999000+00:00
+                  status: POSTED
+                  token: interest_ledger_entry_token1111
+                  type: account.interest
+                - account_token: my_account_token_12
+                  amount: 15
+                  card_token: my_credit_card_token7794
+                  created_time: 2023-07-01 07:00:24.240000+00:00
+                  currency_code: USD
+                  detail_object:
+                    account_token: my_account_token_12
+                    amount: 15
+                    created: 2023-07-01 07:00:24.239000+00:00
+                    currency_code: USD
+                    description: Late Payment Fee
+                    method: FLAT
+                    token: detail_token_11221
+                    type: LATE_PAYMENT_FEE
+                    value: 25
+                  detail_token: detail_token_11221
+                  group: FEE
+                  id: '44445678'
+                  impact_time: 2023-07-01 03:59:59.999000+00:00
+                  memo: Late payment fee
+                  metadata:
+                    network: mastercard
+                  request_time: 2023-07-01 03:59:59.999000+00:00
+                  status: POSTED
+                  token: fee_ledger_entry_token2121
+                  type: account.fee.latepayment
+                - account_token: my_account_token_12
+                  amount: 9.11
+                  card_token: my_credit_card_token7794
+                  created_time: 2023-09-26 11:53:48.228000+00:00
+                  currency_code: USD
+                  detail_object:
+                    acquirer:
+                      system_trace_audit_number: 0
+                    acquirer_fee_amount: 0
+                    acquirer_reference_data: 4.355106395860054E22
+                    acting_user_token: user_token4632
+                    amount: 9.11
+                    approval_code: 946791
+                    batch_number: 2021048291031352
+                    card:
+                      last_four: 4489
+                      metadata: {}
+                    card_acceptor:
+                      city: OAKLAND
+                      country_code: US
+                      mcc: 5814
+                      mid: 555600244811
+                      name: SWEET TREATS 0484
+                      postal_code: 94612
+                      state: CA
+                    card_token: my_credit_card_token7794
+                    clearing_record_sequence_number: 0
+                    created_time: 2023-09-26 11:53:46+00:00
+                    currency_code: USD
+                    currency_conversion:
+                      network:
+                        conversion_rate: 1
+                        original_amount: 9.11
+                        original_currency_code: 840
+                    duration: 378
+                    fees:
+                      amount: 0.19131
+                      credit_debit: C
+                      type: INTERCHANGE_FEE
+                    gpa:
+                      available_balance: 0
+                      balances:
+                        USD:
+                          available_balance: 0
+                          credit_balance: 0
+                          currency_code: USD
+                          impacted_amount: -9.11
+                          ledger_balance: 61.7
+                          pending_credits: 0
+                      credit_balance: 0
+                      currency_code: USD
+                      impacted_amount: -9.11
+                      ledger_balance: 61.7
+                      pending_credits: 0
+                    gpa_order:
+                      amount: 9.11
+                      created_time: 2023-09-25 20:59:43+00:00
+                      currency_code: USD
+                      funding:
+                        amount: 9.11
+                        source:
+                          active: true
+                          created_time: 2023-06-22 18:41:14+00:00
+                          is_default_account: false
+                          last_modified_time: 2023-06-22 18:41:14+00:00
+                          name: My Funding Source
+                          token: funding_source_token6789
+                          type: programgateway
+                      funding_source_token: funding_source_token6789
+                      jit_funding:
+                        acting_user_token: user_token4632
+                        amount: 9.11
+                        method: pgfs.authorization.capture
+                        original_jit_funding_token: jit_funding_token4be7
+                        token: jit_funding_token43a3
+                        user_token: user_token4632
+                      last_modified_time: 2023-09-26 11:53:47+00:00
+                      response:
+                        code: 0
+                        memo: Approved or completed successfully
+                      state: COMPLETION
+                      token: gpa_order_token2c2c5
+                      transaction_token: transaction_token42352a
+                      user_token: user_token4632
+                    identifier: 6457
+                    issuer_interchange_amount: 0.19131
+                    issuer_payment_node: 042f97a3458b59e3cce0269f66e864d8
+                    issuer_received_time: 2023-09-26 11:53:46.886000+00:00
+                    network: VISA
+                    network_metadata:
+                      product_id: VISA_TRADITIONAL
+                      program_id: ''
+                    network_reference_id: 218552461989029
+                    pos:
+                      is_installment: false
+                      is_recurring: false
+                      partial_approval_capable: false
+                      pin_present: false
+                      purchase_amount_only: false
+                      terminal_id: 101
+                    preceding_related_transaction_token: ledger_entry_token2460
+                    request_amount: 9.11
+                    response:
+                      code: 0
+                      memo: Approved or completed successfully
+                    settlement_date: 2023-09-26 00:00:00+00:00
+                    state: COMPLETION
+                    subnetwork: VISANET
+                    token: detail_token_645736
+                    transaction_metadata:
+                      payment_channel: OTHER
+                    type: authorization.clearing
+                    user:
+                      metadata:
+                        notification_email: hello@myemail.com
+                    user_token: user_token4632
+                    user_transaction_time: 2023-09-25 20:59:43+00:00
+                  detail_token: detail_token_645736
+                  group: PURCHASE
+                  id: '12345678'
+                  impact_time: 2023-09-26 11:53:48.228000+00:00
+                  memo: SWEET TREATS 0484
+                  metadata:
+                    network: visa
+                  original_currency:
+                    amount: 11.53
+                    code: CAD
+                  related_token: ledger_entry_token2460
+                  request_time: 2023-09-25 20:59:43
+                  root_token: ledger_entry_token2460
+                  status: POSTED
+                  token: purchase_ledger_entry_token6789
+                  type: authorization.clearing
+                end_index: 4
+                is_more: true
+                start_index: 0
+              schema:
+                $ref: '#/components/schemas/LedgerEntriesPage'
+          description: Expected response to a valid request.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: List account ledger entries
+      tags:
+      - Ledger Entries
+  /accounts/{account_token}/ledgerentries/{ledger_entry_token}:
+    get:
+      description: Retrieve a ledger entry for a credit account.
+      operationId: getAccountLedgerEntry
+      parameters:
+      - description: 'Unique identifier of the credit account for which you want to retrieve ledger entries.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: 'Unique identifier of the ledger entry you want to retrieve.
+
+
+          Send a `GET` request to `/credit/accounts/{account_token}/ledgerentries` to retrieve existing ledger entry tokens.'
+        explode: false
+        in: path
+        name: ledger_entry_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing ledger entry token
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                fee_example:
+                  summary: The following code block shows a sample fee ledger entry.
+                  value:
+                    account_token: my_account_token_12
+                    amount: 15
+                    card_token: my_credit_card_token7794
+                    created_time: 2023-07-01 07:00:24.240000+00:00
+                    currency_code: USD
+                    detail_object:
+                      account_token: my_account_token_12
+                      amount: 15
+                      created: 2023-07-01 07:00:24.239000+00:00
+                      currency_code: USD
+                      description: Late Payment Fee
+                      method: FLAT
+                      token: detail_token_11221
+                      type: LATE_PAYMENT_FEE
+                      value: 25
+                    detail_token: detail_token_11221
+                    group: FEE
+                    id: '44445678'
+                    impact_time: 2023-07-01 03:59:59.999000+00:00
+                    memo: Late payment fee
+                    metadata:
+                      network: visa
+                    request_time: 2023-07-01 03:59:59.999000+00:00
+                    status: POSTED
+                    token: fee_ledger_entry_token2121
+                    type: account.fee.latepayment
+                interest_example:
+                  summary: The following code block shows a sample interest ledger entry.
+                  value:
+                    account_token: my_account_token_12
+                    amount: 2.31
+                    card_token: my_credit_card_token7794
+                    created_time: 2023-08-01 07:00:19.756000+00:00
+                    currency_code: USD
+                    detail_object:
+                      account_token: my_account_token_12
+                      average_daily_balance: 181.67
+                      created_date: 2023-08-01 07:00:19.755000+00:00
+                      currency_code: USD
+                      daily_periodic_rate: 0.00041068
+                      days_in_billing_cycle: 31
+                      goto_apr: 14.99
+                      interest_amount: 2.31
+                      statement_balance: 208.93
+                      statement_closing_date: 2023-08-01 03:59:59.999000+00:00
+                      statement_opening_date: 2023-07-01 04:00:00
+                      statement_token: statement_token_75b
+                      token: detail_token_96749
+                      updated_date: 2023-08-01 07:00:19.755000+00:00
+                    detail_token: detail_token_96749
+                    group: INTEREST
+                    id: '11112222'
+                    impact_time: 2023-08-01 03:59:59.999000+00:00
+                    memo: Interest charge on purchases
+                    metadata:
+                      network: visa
+                    request_time: 2023-08-01 03:59:59.999000+00:00
+                    status: POSTED
+                    token: interest_ledger_entry_token1111
+                    type: account.interest
+                purchase_example:
+                  summary: The following code block shows a sample `PURCHASE` ledger entry.
+                  value:
+                    account_token: my_account_token_12
+                    amount: 9.11
+                    card_token: my_credit_card_token7794
+                    created_time: 2023-09-26 11:53:48.228000+00:00
+                    currency_code: USD
+                    detail_object:
+                      acquirer:
+                        system_trace_audit_number: 0
+                      acquirer_fee_amount: 0
+                      acquirer_reference_data: 4.355106395860054E22
+                      acting_user_token: user_token4632
+                      amount: 9.11
+                      approval_code: 946791
+                      batch_number: 2021048291031352
+                      card:
+                        last_four: 4489
+                        metadata: {}
+                      card_acceptor:
+                        city: OAKLAND
+                        country_code: US
+                        mcc: 5814
+                        mid: 555600244811
+                        name: SWEET TREATS 0484
+                        postal_code: 94612
+                        state: CA
+                      card_token: my_credit_card_token7794
+                      clearing_record_sequence_number: 0
+                      created_time: 2023-09-26 11:53:46+00:00
+                      currency_code: USD
+                      currency_conversion:
+                        network:
+                          conversion_rate: 1
+                          original_amount: 9.11
+                          original_currency_code: 840
+                      duration: 378
+                      fees:
+                        amount: 0.19131
+                        credit_debit: C
+                        type: INTERCHANGE_FEE
+                      gpa:
+                        available_balance: 0
+                        balances:
+                          USD:
+                            available_balance: 0
+                            credit_balance: 0
+                            currency_code: USD
+                            impacted_amount: -9.11
+                            ledger_balance: 61.7
+                            pending_credits: 0
+                        credit_balance: 0
+                        currency_code: USD
+                        impacted_amount: -9.11
+                        ledger_balance: 61.7
+                        pending_credits: 0
+                      gpa_order:
+                        amount: 9.11
+                        created_time: 2023-09-25 20:59:43+00:00
+                        currency_code: USD
+                        funding:
+                          amount: 9.11
+                          source:
+                            active: true
+                            created_time: 2023-06-22 18:41:14+00:00
+                            is_default_account: false
+                            last_modified_time: 2023-06-22 18:41:14+00:00
+                            name: My Funding Source
+                            token: funding_source_token6789
+                            type: programgateway
+                        funding_source_token: funding_source_token6789
+                        jit_funding:
+                          acting_user_token: user_token4632
+                          amount: 9.11
+                          method: pgfs.authorization.capture
+                          original_jit_funding_token: jit_funding_token4be7
+                          token: jit_funding_token43a3
+                          user_token: user_token4632
+                        last_modified_time: 2023-09-26 11:53:47+00:00
+                        response:
+                          code: 0
+                          memo: Approved or completed successfully
+                        state: COMPLETION
+                        token: gpa_order_token2c2c5
+                        transaction_token: transaction_token42352a
+                        user_token: user_token4632
+                      identifier: 6457
+                      issuer_interchange_amount: 0.19131
+                      issuer_payment_node: 042f97a3458b59e3cce0269f66e864d8
+                      issuer_received_time: 2023-09-26 11:53:46.886000+00:00
+                      network: VISA
+                      network_metadata:
+                        product_id: VISA_TRADITIONAL
+                        program_id: ''
+                      network_reference_id: 218552461989029
+                      pos:
+                        is_installment: false
+                        is_recurring: false
+                        partial_approval_capable: false
+                        pin_present: false
+                        purchase_amount_only: false
+                        terminal_id: 101
+                      preceding_related_transaction_token: ledger_entry_token2460
+                      request_amount: 9.11
+                      response:
+                        code: 0
+                        memo: Approved or completed successfully
+                      settlement_date: 2023-09-26 00:00:00+00:00
+                      state: COMPLETION
+                      subnetwork: VISANET
+                      token: detail_token_645736
+                      transaction_metadata:
+                        payment_channel: OTHER
+                      type: authorization.clearing
+                      user:
+                        metadata:
+                          notification_email: hello@myemail.com
+                      user_token: user_token4632
+                      user_transaction_time: 2023-09-25 20:59:43+00:00
+                    detail_token: detail_token_645736
+                    group: PURCHASE
+                    id: '12345678'
+                    impact_time: 2023-09-26 11:53:48.228000+00:00
+                    memo: SWEET TREATS 0484
+                    metadata:
+                      failure_reason: insufficient balance
+                      failure_time: 2023-08-01 07:00:19.756000+00:00
+                    original_currency:
+                      amount: 11.53
+                      code: CAD
+                    related_token: ledger_entry_token2460
+                    request_time: 2023-09-25 20:59:43
+                    root_token: ledger_entry_token2460
+                    status: POSTED
+                    token: ledger_entry_token6789
+                    type: authorization.clearing
+                    user_token: user_token4632
+              schema:
+                $ref: '#/components/schemas/LedgerEntry'
+          description: Expected response to a valid request.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Retrieve account ledger entry
+      tags:
+      - Ledger Entries
+  /webhooks/{event_type}/{resource_token}:
+    post:
+      description: 'Resends a credit event notification to your webhook endpoint.
+
+
+        Although you send this request as a `POST`, all parameters are passed in the URL and the body is empty.
+
+        The event notification is resent to your webhook endpoint and also returned in the response to this request.
+
+
+        For details on how to configure your webhook endpoint, see the About Webhooks <</developer-guides/about-webhooks#_tutorial, tutorial>>.
+
+        For the complete `/webhooks` endpoint reference, see <</core-api/webhooks, Webhooks>>.'
+      operationId: resendWebhookEvent
+      parameters:
+      - description: Specifies the type of event you want to resend.
+        explode: false
+        in: path
+        name: event_type
+        required: true
+        schema:
+          enum:
+          - ledgerentry
+          - journalentry
+          - accounttransition
+          - accountstatement
+          - paymenttransition
+          - delinquencytransition
+          - paymentreminders
+          - substatus
+          - accountsignupbonus
+          type: string
+        style: simple
+      - description: 'Unique identifier of the resource for which you want to resend a notification.
+
+
+          * Send a `GET` request to `/credit/accounts/{account_token}/journalentries` to retrieve existing journal entry tokens.
+
+          * Send a `GET` request to `/credit/accounts/{account_token}/ledgerentries` to retrieve existing ledger entry tokens.
+
+          * Send a `GET` request to `/accounts/{account_token}/accounttransitions` to retrieve existing account transition tokens.
+
+          * Send a `GET` request to `/credit/accounts/{account_token}/payments/{payment_token}` to retrieve existing payment transition tokens.
+
+          * Send a `GET` request to `/accounts/{account_token}/statements` to retrieve existing statement summary tokens.
+
+          * Send a `GET` request to `/accounts/{account_token}/delinquencystate/transitions` to retrieve existing delinquency state transition tokens.
+
+          * Send a `GET` request to `/accounts/{account_token}/statements/{statement_summary_token}/paymentreminders/{token}` to retrieve existing payment reminder tokens.
+
+          * Send a `GET` request to `/credit/substatuses` to retrieve existing substatus tokens.
+
+          * Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens and identify the specific account for the resend event.'
+        explode: false
+        in: path
+        name: resource_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing journal entry token, ledger entry token, account transition token, payment transition token, statement summary token, delinquency transition token, or substatus token
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                account_statement_sample:
+                  summary: The following code block shows a sample of a resent `creditaccountstatements` event.
+                  value:
+                    account_token: my_credit_account_token
+                    available_credit: 0
+                    closing_balance: 506.41
+                    closing_date: 2025-04-01 03:59:59.999000+00:00
+                    created_time: 2023-08-18 22:04:31.261000+00:00
+                    credit_limit: 500
+                    credits: 0
+                    cycle_type: REVOLVING
+                    days_in_billing_cycle: 31
+                    fees: 15
+                    interest: 4.96
+                    opening_balance: 496.45
+                    opening_date: 2025-03-01 05:00:00+00:00
+                    past_due_amount: 10
+                    payments: 10
+                    purchases: 0
+                    token: my_credit_account_statement_token
+                account_transition_sample:
+                  summary: The following code block shows a sample of a resent `creditaccounttransitions` event.
+                  value:
+                    account_token: my_credit_account_token1234
+                    created_time: 2024-08-18 20:25:10.408000+00:00
+                    original_status: UNACTIVATED
+                    status: ACTIVE
+                    token: my_credit_account_transition_token1234
+                accountsignupbonus_example:
+                  summary: The following code block shows a sample of a resent `accountsignupbonus` event.
+                  value:
+                    account_token: my_account_token
+                    accrual_start_time: 2024-04-02 11:23:23+00:00
+                    journal_entry_token: my_journal_entry_token
+                    maturity_time: 2024-04-02 11:23:23+00:00
+                    reward_token: my_reward_token
+                    spend_total: 10
+                    status: ISSUED
+                    token: my_accountsignupbonus_token
+                    type: STATEMENT_CREDIT
+                delinquency_transition_example:
+                  summary: The following code block shows a sample of a resent `creditdelinquencytransitions` event.
+                  value:
+                    account_token: my_credit_account_token1234
+                    bucket_count: 2
+                    created_time: 2024-03-01 04:59:59.999000
+                    current_due: 40
+                    impact_time: 2024-03-01 04:59:59.999000
+                    is_rolled_back: false
+                    oldest_payment_due_date: 2023-02-01 04:59:59.999000
+                    original_status: CURRENT
+                    status: DELINQUENT
+                    token: my_delinquency_transition_token1234
+                    total_due: 140
+                    total_past_due: 100
+                    transition_trigger_reason: STATEMENT_GENERATION
+                    transition_trigger_time: 2024-03-01 04:59:59.999000
+                    updated_time: 2024-03-01 04:59:59.999000
+                journal_entry_example:
+                  summary: The following code block shows a sample of a resent `creditjournalentries` event.
+                  value:
+                    account_token: my_credit_account_token1234
+                    amount: 10
+                    card_token: my_credit_card_token1234
+                    created_time: 2024-08-18 22:07:21.422000+00:00
+                    currency_code: USD
+                    detail_object:
+                      acquirer:
+                        system_trace_audit_number: '376582'
+                      acquirer_fee_amount: 0
+                      acting_user_token: my_user_token
+                      amount: 10
+                      approval_code: '974406'
+                      card:
+                        last_four: '9949'
+                        metadata: {}
+                      card_acceptor:
+                        city: San Francisco
+                        country_code: USA
+                        mcc: '6411'
+                        mid: '1234'
+                        name: Jane's Bakery
+                        postal_code: '94115'
+                        state: CA
+                        street_address: 1989 Fillmore St
+                      card_token: my_credit_card_token1234
+                      created_time: 2024-08-18 22:06:52+00:00
+                      currency_code: USD
+                      duration: 837
+                      gpa:
+                        available_balance: 0
+                        balances:
+                          USD:
+                            available_balance: 0
+                            credit_balance: 0
+                            currency_code: USD
+                            impacted_amount: -10
+                            ledger_balance: 510.87
+                            pending_credits: 0
+                        credit_balance: 0
+                        currency_code: USD
+                        impacted_amount: -10
+                        ledger_balance: 510.87
+                        pending_credits: 0
+                      gpa_order:
+                        amount: 10
+                        created_time: 2024-08-18 22:06:53+00:00
+                        currency_code: USD
+                        funding:
+                          amount: 10
+                          gateway_log:
+                            duration: 485
+                            message: Approved or completed successfully
+                            order_number: my_gateway_token12345
+                            response:
+                              code: '200'
+                              data:
+                                jit_funding:
+                                  acting_user_token: my_user_token
+                                  amount: 10
+                                  method: pgfs.authorization
+                                  token: my_jit_funding_token1234
+                                  user_token: my_user_token
+                            timed_out: false
+                            transaction_id: my_transaction_id1234
+                          source:
+                            active: true
+                            created_time: 2024-10-14 17:26:35+00:00
+                            is_default_account: false
+                            last_modified_time: 2024-10-14 17:26:35+00:00
+                            name: credit_backed_funding_source
+                            token: '**********1ab2'
+                            type: programgateway
+                        funding_source_token: '**********1ab2'
+                        jit_funding:
+                          acting_user_token: my_user_token
+                          amount: 10
+                          method: pgfs.authorization
+                          token: my_transaction_id1234
+                          user_token: my_user_token
+                        last_modified_time: 2024-08-18 22:06:53+00:00
+                        response:
+                          code: '0000'
+                          memo: Approved or completed successfully
+                        state: PENDING
+                        token: my_gpa_order_token1234
+                        transaction_token: my_transaction_token1234
+                        user_token: my_user_token
+                      identifier: '234'
+                      issuer_payment_node: f8205a67b12b90d695b15704a64c074b
+                      issuer_received_time: 2024-08-18 22:06:52.771000+00:00
+                      network: DISCOVER
+                      network_reference_id: '484311571095'
+                      pos:
+                        is_installment: false
+                        is_recurring: false
+                        partial_approval_capable: true
+                        pin_present: false
+                        purchase_amount_only: false
+                      request_amount: 10
+                      response:
+                        code: '0000'
+                        memo: Approved or completed successfully
+                      settlement_date: 2024-08-18 00:00:00+00:00
+                      state: PENDING
+                      token: my_detail_token1234
+                      type: authorization
+                      user:
+                        metadata:
+                          key1: value1
+                          key2: value2
+                          notification_email: user@domain.com
+                          notification_language: spa
+                      user_token: my_user_token
+                      user_transaction_time: 2024-08-18 22:06:52+00:00
+                    detail_token: my_detail_token1234
+                    dispute_token: null
+                    group: PURCHASE
+                    id: '12345678'
+                    impact_time: 2024-08-18 22:07:21.422000+00:00
+                    memo: Jane's Bakery
+                    related_token: null
+                    request_time: 2024-08-18 22:06:52+00:00
+                    root_token: null
+                    status: PENDING
+                    token: my_journal_entry_token1234
+                    type: authorization
+                ledger_entry_sample:
+                  summary: The following code block shows a sample of a resent `creditledgerentries` event.
+                  value:
+                    account_token: my_credit_account_token1234
+                    amount: 10
+                    card_token: my_credit_card_token1234
+                    created_time: 2024-08-18 22:07:21.422000+00:00
+                    currency_code: USD
+                    detail_object:
+                      acquirer:
+                        system_trace_audit_number: '376582'
+                      acquirer_fee_amount: 0
+                      acting_user_token: my_user_token
+                      amount: 10
+                      approval_code: '974406'
+                      card:
+                        last_four: '9949'
+                        metadata: {}
+                      card_acceptor:
+                        city: San Francisco
+                        country_code: USA
+                        mcc: '6411'
+                        mid: '1234'
+                        name: Jane's Bakery
+                        postal_code: '94115'
+                        state: CA
+                        street_address: 1989 Fillmore St
+                      card_token: my_credit_card_token1234
+                      created_time: 2024-08-18 22:06:52+00:00
+                      currency_code: USD
+                      duration: 837
+                      gpa:
+                        available_balance: 0
+                        balances:
+                          USD:
+                            available_balance: 0
+                            credit_balance: 0
+                            currency_code: USD
+                            impacted_amount: -10
+                            ledger_balance: 510.87
+                            pending_credits: 0
+                        credit_balance: 0
+                        currency_code: USD
+                        impacted_amount: -10
+                        ledger_balance: 510.87
+                        pending_credits: 0
+                      gpa_order:
+                        amount: 10
+                        created_time: 2024-08-18 22:06:53+00:00
+                        currency_code: USD
+                        funding:
+                          amount: 10
+                          gateway_log:
+                            duration: 485
+                            message: Approved or completed successfully
+                            order_number: my_gateway_token12345
+                            response:
+                              code: '200'
+                              data:
+                                jit_funding:
+                                  acting_user_token: my_user_token
+                                  amount: 10
+                                  method: pgfs.authorization
+                                  token: my_jit_funding_token1234
+                                  user_token: my_user_token
+                            timed_out: false
+                            transaction_id: my_transaction_id1234
+                          source:
+                            active: true
+                            created_time: 2024-10-14 17:26:35+00:00
+                            is_default_account: false
+                            last_modified_time: 2024-10-14 17:26:35+00:00
+                            name: credit_backed_funding_source
+                            token: '**********1ab2'
+                            type: programgateway
+                        funding_source_token: '**********1ab2'
+                        jit_funding:
+                          acting_user_token: my_user_token
+                          amount: 10
+                          method: pgfs.authorization
+                          token: my_transaction_id1234
+                          user_token: my_user_token
+                        last_modified_time: 2024-08-18 22:06:53+00:00
+                        response:
+                          code: '0000'
+                          memo: Approved or completed successfully
+                        state: PENDING
+                        token: my_gpa_order_token1234
+                        transaction_token: my_transaction_token1234
+                        user_token: my_user_token
+                      identifier: '234'
+                      issuer_payment_node: f8205a67b12b90d695b15704a64c074b
+                      issuer_received_time: 2024-08-18 22:06:52.771000+00:00
+                      network: DISCOVER
+                      network_reference_id: '484311571095'
+                      pos:
+                        is_installment: false
+                        is_recurring: false
+                        partial_approval_capable: true
+                        pin_present: false
+                        purchase_amount_only: false
+                      request_amount: 10
+                      response:
+                        code: '0000'
+                        memo: Approved or completed successfully
+                      settlement_date: 2024-08-18 00:00:00+00:00
+                      state: PENDING
+                      token: my_detail_token1234
+                      type: authorization
+                      user:
+                        metadata:
+                          key1: value1
+                          key2: value2
+                          notification_email: user@domain.com
+                          notification_language: spa
+                      user_token: my_user_token
+                      user_transaction_time: 2024-08-18 22:06:52+00:00
+                    detail_token: my_detail_token1234
+                    dispute_token: null
+                    group: PURCHASE
+                    id: '12345678'
+                    impact_time: 2024-08-18 22:07:21.422000+00:00
+                    memo: Jane's Bakery
+                    related_token: null
+                    request_time: 2024-08-18 22:06:52+00:00
+                    root_token: null
+                    status: PENDING
+                    token: my_ledger_entry_token1234
+                    type: authorization
+                payment_transition_example:
+                  summary: The following code block shows a sample of a resent `creditpaymenttransitions` event.
+                  value:
+                    account_token: my_credit_account_token1234
+                    created_time: 2024-08-17 18:26:47.591000+00:00
+                    payment_token: my_credit_account_payment_token1234
+                    refund_details: null
+                    status: COMPLETED
+                    token: my_payment_transition_token1234
+                substatus_example:
+                  summary: The following code block shows a sample of a resent `substatus` event.
+                  value:
+                    attributes: []
+                    created_time: 2024-04-02 11:23:23+00:00
+                    events:
+                    - channel: SYSTEM
+                      created_time: 2024-04-02 11:23:23+00:00
+                      effective_date: 2024-04-02 11:23:23+00:00
+                      reason: Fraud system detected suspicious activity
+                      state: ACTIVE
+                    - channel: ADMIN
+                      created_time: 2024-04-02 11:23:23+00:00
+                      effective_date: 2024-04-02 11:23:23+00:00
+                      reason: Verified non-fraud with cardholder
+                      state: INACTIVE
+                    is_active: false
+                    resource_token: my_account_token
+                    resource_type: ACCOUNT
+                    state: INACTIVE
+                    substatus: FRAUD
+                    token: substatus_token
+                    updated_time: 2024-04-02 11:23:23+00:00
+              schema:
+                $ref: '#/components/schemas/WebhookEventResendContainerResponse'
+          description: Event response for which the webhook event was resent
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Resend credit event notification
+      tags:
+      - Ledger Entries
+components:
+  schemas:
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
+      type: string
+    OriginalCurrency:
+      description: Original Currency
+      properties:
+        amount:
+          description: original amount
+          example: 2
+          type: number
+        code:
+          description: Currency code, such as EUR or USD.
+          type: string
+      type: object
+    LedgerEntry:
+      description: Contains information about a ledger entry.
+      properties:
+        account_token:
+          description: Unique identifier of the credit account associated with the credit card used to make the ledger entry.
+          format: string
+          type: string
+        amount:
+          description: Amount of the ledger entry.
+          type: number
+        card_token:
+          description: Unique identifier of the credit card used to make the ledger entry.
+          format: string
+          maxLength: 36
+          minLength: 8
+          type: string
+        created_time:
+          description: Date and time when the ledger entry was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        currency_code:
+          $ref: '#/components/schemas/CurrencyCode'
+        detail_object:
+          description: 'Contains the ledger entry''s full details.
+
+            The fields returned in this object vary based on the ledger entry group.
+
+
+            The following lists each ledger entry group and the specific fields returned for each group.
+
+
+            * Purchases and refunds: see the <</core-api/transactions#getTransactions, transactions>> response fields.
+
+
+            * Disputes: see the <</core-api/credit-account-disputes#retrieveDispute, account disputes response fields.>>
+
+
+            * Original credit transaction (OCT): see the <</core-api/push-to-card-payments#_create_push_to_card_disbursement, Push-to-Card disbursement>> fields.
+
+
+            * Rewards: see the <</core-api/credit-account-rewards#createReward, account reward>> response fields.
+
+
+            * Payments: see the <</core-api/credit-account-payments#retrievePayment, account payment>> response fields.
+
+
+            * Balance refunds: see the <</core-api/credit-account-balance-refunds#createBalanceRefund, balance refund>> response fields.
+
+
+            * Adjustments: see the <</core-api/credit-account-adjustments#retrieveAdjustment, account adjustment>> response fields.
+
+
+            * Interest and fees: see fields below.'
+          type: object
+        detail_token:
+          description: Unique identifier of the ledger entry's full details.
+          type: string
+        group:
+          description: Group to which the ledger entry belongs.
+          enum:
+          - PURCHASE
+          - INTERNAL
+          - FEE
+          - REWARD
+          - INTEREST
+          - PAYMENT
+          - ADJUSTMENT
+          - BALANCE_TRANSFER
+          - CASH_ADVANCE
+          - BALANCE_REFUND
+          - ORIGINAL_CREDIT
+          type: string
+        id:
+          description: Eight-digit numeric identifier of the ledger entry, an alternate identifier to the UUID that is useful for remembering and referencing.
+          maxLength: 8
+          minLength: 8
+          type: string
+        impact_time:
+          description: 'Date and time when the ledger entry impacts the account balance.
+
+
+            For purchases, this is the time of the authorization.
+
+
+            For purchase authorization clearings, this is the time when the transaction is settled.'
+          format: date-time
+          type: string
+        memo:
+          description: Merchant name or description for the ledger entry.
+          example: Whole Foods Market
+          type: string
+        metadata:
+          additionalProperties:
+            type: string
+          description: 'Contains key-value pairs with additional information about the ledger entry.
+
+
+            For `DECLINED` and `ERROR` status ledger entries, this field contains diagnostic information extracted from the transaction gateway response:
+
+
+            * `funding.gatewayLog.message` - Gateway decline or error message
+
+            * `funding.gatewayLog.timedOut` - Whether the gateway request timed out ("true" or "false")
+
+            * `funding.gateway.response.code` - Gateway HTTP response code
+
+            * `funding.gateway.response.data.jitFunding.memo` - Additional context from JIT funding
+
+            * `funding.gateway.response.data.jitFunding.declineReason` - Specific decline reason (e.g., "INSUFFICIENT_FUNDS", "CARD_EXPIRED")
+
+
+            This field is `null` for successful transactions with `PENDING` or `POSTED` status.'
+          nullable: true
+          type: object
+        original_currency:
+          $ref: '#/components/schemas/OriginalCurrency'
+        related_token:
+          description: 'Unique identifier of the original ledger entry.
+
+            If the current ledger entry is the original, this field is returned empty.'
+          type: string
+        request_time:
+          description: 'For purchases, the date and time of the authorization, which is when the user initiates the ledger entry.
+
+
+            For other ledger entry groups, equivalent to `impact_time`.'
+          format: date-time
+          type: string
+        root_token:
+          description: 'Unique identifier of the root ledger entry.
+
+            If the current ledger entry is the root, this field is returned empty.'
+          type: string
+        status:
+          description: 'Status of the ledger entry when it was initially recorded and had an impact on the balance, either `PENDING` or `POSTED`.
+
+            This field is immutable and may not represent the current status.
+
+
+            To view the current status of purchases, refunds, OCTs, and payments, see the `detail_object.state` field.
+
+            These journal entries start in `PENDING` and can transition to `CLEARED`, `DECLINED`, or `ERROR`.
+
+            This transition of status is only sent through webhook event notifications.
+
+
+            Ledger entries that are final transactions, such as clearings, start and remain in a `POSTED` state.
+
+
+            *NOTE*:
+
+            `CLEARED` status does not have an impact on the account balance and is only sent through webhook event notifications.
+
+            For `CLEARED` status, `impact_time`, `request_time`, `created_time`, `token`, and `id` are returned blank.
+
+
+            `DECLINED` and `ERROR` statuses do not impact the account balance but ARE recorded in the ledger with full details including metadata about the failure reason.'
+          enum:
+          - PENDING
+          - POSTED
+          - DECLINED
+          - ERROR
+          - CLEARED
+          type: string
+        token:
+          description: Unique identifier of the ledger entry.
+          type: string
+        type:
+          description: Ledger entry event type.
+          example: '`authorization.clearing`'
+          type: string
+      required:
+      - account_token
+      - amount
+      - card_token
+      - created_time
+      - currency_code
+      - detail_token
+      - group
+      - id
+      - impact_time
+      - memo
+      - request_time
+      - status
+      - token
+      - type
+      type: object
+    LedgerEntriesPage:
+      description: Return filtered transactions.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: Contains one or more ledger entries on a credit account.
+          items:
+            $ref: '#/components/schemas/LedgerEntry'
+          minItems: 1
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    WebhookEventResendContainerResponse:
+      description: Contains information about a webhook event.
+      properties:
+        unused:
+          description: Event notification that was resent to your webhook endpoint.
+          type: string
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

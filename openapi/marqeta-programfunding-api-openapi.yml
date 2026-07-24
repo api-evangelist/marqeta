@@ -1,0 +1,280 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries ProgramFunding API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: ProgramFunding
+paths:
+  /admin/programs/funding:
+    get:
+      description: Retrieve an array of program funding entries.
+      operationId: getProgramFundings
+      parameters:
+      - description: Number of program funding resources to retrieve.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - description: Sort order index of the first resource in the returned array.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: Start date for filtering program funding entries.
+        explode: true
+        in: query
+        name: start_date
+        required: false
+        schema:
+          example: 2014-01-01
+          type: string
+        style: form
+      - description: End date for filtering program funding entries.
+        explode: true
+        in: query
+        name: end_date
+        required: false
+        schema:
+          example: 2014-04-01
+          type: string
+        style: form
+      - description: Short code for filtering program funding entries.
+        explode: true
+        in: query
+        name: short_code
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                count: 2
+                data:
+                - amount: 1000
+                  created_time: 2025-04-01 23:41:58.802000+00:00
+                  currency_code: USD
+                  memo: This is a test memo
+                  post_time: 2025-04-01 23:41:58+00:00
+                  short_code: my_program_short_code_12
+                  token: my_program_funding_token1234
+                  updated_time: 2025-04-01 23:41:58.802000+00:00
+                - amount: 500
+                  created_time: 2025-04-02 23:41:58.802000+00:00
+                  currency_code: USD
+                  memo: This is a test memo
+                  post_time: 2025-04-01 23:41:58+00:00
+                  short_code: my_program_short_code_34
+                  token: my_program_funding_token5678
+                  updated_time: 2025-04-02 23:41:58.802000+00:00
+                end_index: 1
+                is_more: false
+                start_index: 0
+              schema:
+                $ref: '#/components/schemas/ProgramFundingPage'
+          description: Expected response to a valid request.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - nileToken: []
+      summary: List program fundings
+      tags:
+      - ProgramFunding
+  /programs/funding:
+    get:
+      description: Retrieve an array of program funding entries.
+      operationId: getProgramFundingsByShortCode
+      parameters:
+      - description: Number of program funding resources to retrieve.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - description: Sort order index of the first resource in the returned array.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: Start date for filtering program funding entries.
+        explode: true
+        in: query
+        name: start_date
+        required: false
+        schema:
+          example: 2014-01-01
+          type: string
+        style: form
+      - description: End date for filtering program funding entries.
+        explode: true
+        in: query
+        name: end_date
+        required: false
+        schema:
+          example: 2014-04-01
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                count: 2
+                data:
+                - amount: 1000
+                  created_time: 2025-04-01 23:41:58.802000+00:00
+                  currency_code: USD
+                  memo: This is a test memo
+                  post_time: 2025-04-01 23:41:58.802000+00:00
+                  short_code: my_program_short_code_12
+                  token: my_program_funding_token1234
+                  updated_time: 2025-04-01 23:41:58.802000+00:00
+                - amount: 500
+                  created_time: 2025-04-02 23:41:58.802000+00:00
+                  currency_code: USD
+                  memo: Another test memo
+                  post_time: 2025-04-02 23:41:58.802000+00:00
+                  short_code: my_program_short_code_34
+                  token: my_program_funding_token5678
+                  updated_time: 2025-04-02 23:41:58.802000+00:00
+                end_index: 1
+                is_more: false
+                start_index: 0
+              schema:
+                $ref: '#/components/schemas/ProgramFundingPage'
+          description: Expected response to a valid request.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: List program fundings
+      tags:
+      - ProgramFunding
+components:
+  schemas:
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    ProgramFundingResponse:
+      description: Returns details of a program funding entry.
+      properties:
+        amount:
+          description: Amount of the funding.
+          minimum: 0
+          type: number
+        created_time:
+          description: Timestamp when the funding entry was created.
+          format: date-time
+          type: string
+        currency_code:
+          $ref: '#/components/schemas/CurrencyCode'
+        memo:
+          description: Additional notes for the funding entry.
+          maxLength: 255
+          type: string
+        post_time:
+          description: Timestamp when the funding entry was posted.
+          format: date-time
+          type: string
+        short_code:
+          description: Unique identifier of the program.
+          type: string
+        token:
+          description: Unique identifier of the funding entry.
+          maxLength: 36
+          type: string
+        updated_time:
+          description: Timestamp when the funding entry was last updated.
+          format: date-time
+          type: string
+      required:
+      - amount
+      - created_time
+      - currency_code
+      - memo
+      - post_time
+      - short_code
+      - token
+      - updated_time
+      type: object
+    ProgramFundingPage:
+      description: Returns paginated program fundings.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: Contains one or more program fundings.
+          items:
+            $ref: '#/components/schemas/ProgramFundingResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
+      type: string
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

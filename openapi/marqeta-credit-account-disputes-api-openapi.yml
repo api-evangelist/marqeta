@@ -1,0 +1,555 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries Credit Account Disputes API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- description: '// Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    Use the credit account disputes endpoints to create and manage disputes on a <</core-api/credit-accounts, credit account>>.
+
+
+    For more on disputes, see <</developer-guides/about-credit-account-disputes, About Credit Account Disputes>>.
+
+
+    Creating a dispute triggers the creation of a <</core-api/credit-account-journal-entries, journal entry>> belonging to the `DISPUTE` group.
+
+    For more on dispute journal entries, see <</developer-guides/about-credit-account-journal-entries#_disputes, Disputes>> in the About Credit Account Journal Entries guide.'
+  name: Credit Account Disputes
+paths:
+  /accounts/{account_token}/disputes:
+    get:
+      description: 'Retrieve an array of disputes on a credit account.
+
+
+        This endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>.'
+      operationId: getDisputesByAccount
+      parameters:
+      - description: 'Unique identifier of the credit account for which to retrieve the disputes.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: Number of disputes resources to retrieve.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - description: Sort order index of the first resource in the returned array.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: 'Field on which to sort.
+
+          Prefix the field name with a hyphen (`-`) to sort in descending order.
+
+          Omit the hyphen to sort in ascending order.
+
+
+          *NOTE:*
+
+          You must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`.'
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -lastModifiedTime
+          enum:
+          - lastModifiedTime
+          - -lastModifiedTime
+          type: string
+        style: form
+      - description: 'Unique identifier of the journal entry in dispute.
+
+          This type of identifier can only be used for `authorization.clearing`-type journal entries.'
+        explode: true
+        in: query
+        name: ledger_entry_tokens
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+          x-allowableValues: Existing `authorization.clearing`-type journal entry token
+        style: form
+      - description: Status of the dispute.
+        explode: true
+        in: query
+        name: statuses
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/DisputeStatus'
+          type: array
+          x-allowableValues: Valid dispute status
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                count: 1
+                data:
+                - account_token: account_token_12
+                  amount: 500
+                  category: FRAUD
+                  created_time: 2021-07-01 00:27:09+00:00
+                  ledger_entry_token: journal_entry_token1222
+                  notes: fraudulent purchase
+                  resolved_at: 2021-07-01 00:27:09+00:00
+                  status: ACTIVE
+                  token: dispute_token_1234
+                  updated_time: 2021-07-01 00:27:09+00:00
+                end_index: 0
+                is_more: true
+                start_index: 0
+              schema:
+                $ref: '#/components/schemas/DisputeResponsePage'
+          description: Expected response to a valid request
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: List account disputes
+      tags:
+      - Credit Account Disputes
+    post:
+      description: Create a dispute of a journal entry on a credit account.
+      operationId: createDisputeForAccount
+      parameters:
+      - description: 'Unique identifier of the credit account for which to create a dispute.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            example:
+              amount: 500
+              category: FRAUD
+              ledger_entry_token: journal_entry_token1222
+              token: dispute_token_1234
+            schema:
+              $ref: '#/components/schemas/DisputeCreateReq'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              example:
+                account_token: account_token_12
+                amount: 500
+                category: FRAUD
+                created_time: 2023-07-01 00:27:09+00:00
+                ledger_entry_token: journal_entry_token1222
+                notes: fraudulent purchase
+                resolved_at: 2023-07-01 00:27:09+00:00
+                status: ACTIVE
+                token: dispute_token_1234
+                updated_time: 2023-07-01 00:27:09+00:00
+              schema:
+                $ref: '#/components/schemas/DisputeResponse'
+          description: Expected response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      summary: Create account dispute
+      tags:
+      - Credit Account Disputes
+  /accounts/{account_token}/disputes/{dispute_token}:
+    get:
+      description: Retrieve a dispute from a credit account.
+      operationId: retrieveDispute
+      parameters:
+      - description: 'Unique identifier of the credit account from which to retrieve a dispute.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: 'Unique identifier of the dispute to retrieve.
+
+
+          Send a `GET` request to `/credit/accounts/{account_token}/disputes` to retrieve existing dispute tokens.'
+        explode: false
+        in: path
+        name: dispute_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing dispute token
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                account_token: account_token_12
+                amount: 500
+                category: FRAUD
+                created_time: 2023-07-01 00:27:09+00:00
+                ledger_entry_token: journal_entry_token1222
+                notes: string
+                resolved_at: 2023-07-01 00:27:09+00:00
+                status: ACTIVE
+                token: dispute_token_1234
+                updated_time: 2023-07-01 00:27:09+00:00
+              schema:
+                $ref: '#/components/schemas/DisputeResponse'
+          description: Transaction Dispute object
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Retrieve account dispute
+      tags:
+      - Credit Account Disputes
+  /accounts/{account_token}/disputes/{dispute_token}/transitions:
+    post:
+      description: Update the amount or status of a dispute on a credit account.
+      operationId: transitionDispute
+      parameters:
+      - description: 'Unique identifier of the credit account from which to update a dispute.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: 'Unique identifier of the dispute to update.
+
+
+          Send a `GET` request to `/credit/accounts/{account_token}/disputes` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: dispute_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing dispute token
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            example:
+              amount: 500
+              status: AH_WON
+            schema:
+              $ref: '#/components/schemas/DisputeTransitionReq'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              example:
+                account_token: my_account_token_12
+                amount: 500
+                created_time: 2023-07-01 00:27:09+00:00
+                notes: account holder evidence accepted
+                status: AH_WON
+                token: dispute_update_token1234
+              schema:
+                $ref: '#/components/schemas/DisputeTransitionResponse'
+          description: Transitioned transaction dispute object.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Update account dispute
+      tags:
+      - Credit Account Disputes
+components:
+  schemas:
+    DisputeResponsePage:
+      description: Return paginated disputes.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: Contains one or more disputes on a credit account.
+          items:
+            $ref: '#/components/schemas/DisputeResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    DisputeStatus:
+      description: 'Status of the dispute.
+
+
+        * `ACTIVE` - The dispute is active and awaiting resolution.
+
+        * `REVERSED` - The dispute has been reversed and is no longer active.
+
+        * `AH_WON` - The account holder won the dispute.
+
+        * `AH_LOST` - The account holder lost the dispute.'
+      enum:
+      - ACTIVE
+      - REVERSED
+      - AH_WON
+      - AH_LOST
+      - REFUNDED
+      type: string
+    DisputeTransitionResponse:
+      description: Information about a transaction dispute update request.
+      properties:
+        account_token:
+          description: Unique identifier of the credit account on which the dispute was updated.
+          type: string
+        amount:
+          description: Amount of the updated dispute, based on the resolution.
+          type: number
+        created_time:
+          description: Date and time when the dispute update was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        notes:
+          description: Additional information on the dispute update (for example, a reason for the dispute update).
+          format: string
+          maxLength: 750
+          type: string
+        status:
+          $ref: '#/components/schemas/DisputeStatus'
+        token:
+          description: Unique identifier of the dispute update.
+          type: string
+      required:
+      - account_token
+      - amount
+      - created_time
+      - status
+      - token
+      type: object
+    DisputeTransitionReq:
+      description: Information about a transaction dispute update request.
+      properties:
+        amount:
+          description: Updated amount of the dispute, based on the resolution.
+          type: number
+        interest_adjustments:
+          description: 'List of interest adjustments and their effective times, if applicable.
+
+            Note that this typically only applies for a cross-cycle activity, such as a dispute or payment.'
+          items:
+            $ref: '#/components/schemas/MigrateDisputeInterestAdjustment'
+          type: array
+        notes:
+          description: Additional information on the dispute update (for example, a reason for the dispute update).
+          format: string
+          maxLength: 750
+          type: string
+        source_created_time:
+          description: Date and time when the dispute occurred.
+          format: date-time
+          type: string
+        status:
+          $ref: '#/components/schemas/DisputeStatus'
+        token:
+          description: Unique identifier of the dispute update.
+          maxLength: 36
+          type: string
+      required:
+      - amount
+      - status
+      type: object
+    MigrateDisputeInterestAdjustment:
+      description: Represents an interest charge associated with (as of this writing) either a payment or dispute
+      properties:
+        amount:
+          description: The fee amount.
+          type: number
+        currency_code:
+          default: USD
+          description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+          enum:
+          - USD
+          type: string
+        effective_date:
+          description: Date and time when the dispute interest charge originally happened, in UTC.
+          format: date-time
+          type: string
+      required:
+      - amount
+      - currency_code
+      - effective_date
+      type: object
+    DisputeCategory:
+      description: Category to which the dispute belongs.
+      enum:
+      - FRAUD
+      - AUTH
+      - PROCESSING_ERROR
+      - CONSUMER_DISPUTE
+      type: string
+    DisputeCreateReq:
+      description: Information about a transaction dispute creation request.
+      properties:
+        amount:
+          description: 'Amount of the dispute.
+
+            Max value is equal to the value of the original transaction.'
+          minimum: 0.01
+          type: number
+        category:
+          $ref: '#/components/schemas/DisputeCategory'
+        ledger_entry_token:
+          description: Unique identifier of the journal entry (`authorization.clearing` type only) in dispute.
+          format: string
+          maxLength: 36
+          type: string
+        notes:
+          description: Additional information on the dispute (for example, a reason for the dispute).
+          format: string
+          maxLength: 750
+          type: string
+        token:
+          description: Unique identifier of the dispute.
+          format: string
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+      required:
+      - amount
+      - category
+      - ledger_entry_token
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    DisputeResponse:
+      description: Information about a transaction dispute response.
+      properties:
+        account_token:
+          description: Unique identifier of the credit account on which the dispute was created.
+          format: string
+          maxLength: 36
+          type: string
+        amount:
+          description: Amount of the dispute.
+          type: number
+        category:
+          $ref: '#/components/schemas/DisputeCategory'
+        created_time:
+          description: Date and time when the dispute was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        ledger_entry_token:
+          description: Unique identifier of the journal entry (`authorization.clearing` type only) in dispute.
+          format: string
+          type: string
+        notes:
+          description: Additional information on the dispute (for example, a reason for the dispute).
+          format: string
+          type: string
+        resolved_at:
+          description: Date and time when the dispute was resolved and no longer in `ACTIVE` status.
+          format: date-time
+          type: string
+        status:
+          $ref: '#/components/schemas/DisputeStatus'
+        token:
+          description: Unique identifier of the dispute.
+          format: string
+          type: string
+        updated_time:
+          description: Date and time when the dispute was last updated on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+      required:
+      - account_token
+      - amount
+      - category
+      - created_time
+      - ledger_entry_token
+      - status
+      - token
+      - updated_time
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

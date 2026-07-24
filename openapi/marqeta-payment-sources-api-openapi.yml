@@ -1,0 +1,498 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries Payment Sources API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- description: '// Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    Use the payment sources endpoint to link an external payment source to an <</core-api/credit-accounts, account>> on Marqeta''s credit platform.
+
+    This enables account holders to use the linked payment source to make payments toward their account balance.'
+  name: Payment Sources
+paths:
+  /paymentsources:
+    get:
+      description: 'Retrieve an array of payment sources.
+
+
+        This endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>.'
+      operationId: listPaymentSources
+      parameters:
+      - description: Unique identifier of the credit account associated with the payment source.
+        explode: true
+        in: query
+        name: account_token
+        required: false
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: form
+      - description: Unique identifier of the user associated with the payment source.
+        explode: true
+        in: query
+        name: user_token
+        required: false
+        schema:
+          type: string
+          x-allowableValues: Existing user token
+        style: form
+      - description: Unique identifier of the business associated with the payment source.
+        explode: true
+        in: query
+        name: business_token
+        required: false
+        schema:
+          type: string
+          x-allowableValues: Existing business token
+        style: form
+      - description: Number of payment source resources to retrieve.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - description: Sort order index of the first resource in the returned array.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: 'Field on which to sort.
+
+          Prefix the field name with a hyphen (`-`) to sort in descending order.
+
+          Omit the hyphen to sort in ascending order.
+
+
+          *NOTE:*
+
+          You must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`.'
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -lastModifiedTime
+          enum:
+          - lastModifiedTime
+          - -lastModifiedTime
+          type: string
+        style: form
+      - description: Array of statuses to use for filtering payment sources.
+        explode: true
+        in: query
+        name: statuses
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/PaymentSourceStatusEnum'
+          type: array
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                count: 1
+                data:
+                - account_suffix: '5678'
+                  account_token: my_account_token_12
+                  created_time: 2025-05-19 19:19:24+00:00
+                  last_modified_time: 2025-05-19 19:19:24+00:00
+                  name: John Jacob
+                  owner: INDIVIDUAL
+                  routing_number: payment_source_routing_number
+                  source_type: CHECKING
+                  status: ACTIVE
+                  token: my_payment_source_token_6789
+                  user_token: user5678
+                  verification_status: ACH_VERIFIED
+                end_index: 0
+                is_more: true
+                start_index: 0
+              schema:
+                $ref: '#/components/schemas/PaymentSourcePage'
+          description: Response containing a list of all payment sources for a provided account
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: List payment sources
+      tags:
+      - Payment Sources
+    post:
+      description: Create a payment source from which to make payments.
+      operationId: createPaymentSource
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              account_number: 4567_payment_source_account_number
+              account_token: my_account_token_12
+              name: John Jacob
+              owner: INDIVIDUAL
+              routing_number: 56789_payment_source_routing_number
+              source_type: CHECKING
+              token: my_payment_source_token_6789
+              user_token: user5678
+              verification_override: true
+            schema:
+              $ref: '#/components/schemas/PaymentSourceCreateReq'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              example:
+                account_suffix: '5678'
+                account_token: my_account_token_12
+                created_time: 2025-05-19 19:19:24+00:00
+                last_modified_time: 2025-05-19 19:19:24+00:00
+                name: John Jacob
+                owner: INDIVIDUAL
+                routing_number: payment_source_routing_number
+                source_type: CHECKING
+                status: ACTIVE
+                token: my_payment_source_token_6789
+                user_token: user5678
+                verification_status: ACH_VERIFIED
+              schema:
+                $ref: '#/components/schemas/PaymentSourceResponse'
+          description: Response containing the created payment source
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Create payment source
+      tags:
+      - Payment Sources
+  /paymentsources/{token}:
+    get:
+      description: Retrieve a payment source.
+      operationId: retrievePaymentSource
+      parameters:
+      - description: 'Unique identifier of the payment source to retrieve.
+
+
+          Send a `GET` request to `/credit/paymentsources` to retrieve existing payment source tokens.'
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing payment source token
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                account_suffix: '5678'
+                account_token: my_account_token_12
+                created_time: 2025-05-19 19:19:24+00:00
+                last_modified_time: 2025-05-19 19:19:24+00:00
+                name: John Jacob
+                owner: INDIVIDUAL
+                routing_number: payment_source_routing_number
+                source_type: CHECKING
+                status: ACTIVE
+                token: my_payment_source_token_6789
+                user_token: user5678
+                verification_status: ACH_VERIFIED
+              schema:
+                $ref: '#/components/schemas/PaymentSourceResponse'
+          description: Response containing details for the requested payment source
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Retrieve payment source
+      tags:
+      - Payment Sources
+    put:
+      description: Update details of a payment source.
+      operationId: updatePaymentSource
+      parameters:
+      - description: 'Unique identifier of the payment source to retrieve.
+
+
+          Send a `GET` request to `/credit/paymentsources` to retrieve existing payment source tokens.'
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing payment source token
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            example:
+              status: ACTIVE
+            schema:
+              $ref: '#/components/schemas/PaymentSourceUpdateReq'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                account_suffix: '5678'
+                account_token: my_account_token_12
+                created_time: 2025-05-19 19:19:24+00:00
+                last_modified_time: 2025-05-19 19:19:24+00:00
+                name: John Jacob
+                owner: INDIVIDUAL
+                routing_number: payment_source_routing_number
+                source_type: CHECKING
+                status: ACTIVE
+                token: my_payment_source_token_6789
+                user_token: user5678
+                verification_status: ACH_VERIFIED
+              schema:
+                $ref: '#/components/schemas/PaymentSourceResponse'
+          description: Response containing updated payment source
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Update payment source
+      tags:
+      - Payment Sources
+components:
+  schemas:
+    PaymentSourceResponse:
+      description: Contains information about a payment source.
+      properties:
+        account_suffix:
+          description: Last four digits of the payment source account number.
+          maxLength: 4
+          type: string
+        account_token:
+          description: Unique identifier of the credit account receiving the payment.
+          maxLength: 36
+          type: string
+        bank_name:
+          description: Name of the bank associated with the routing number.
+          nullable: true
+          type: string
+        business_token:
+          description: Unique identifier of the business making the payment.
+          type: string
+        created_time:
+          description: Date and time when the payment source was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        last_modified_time:
+          description: Date and time when the payment source was last updated on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        metadata:
+          additionalProperties:
+            type: string
+          description: Optional key-value pairs for storing additional information about the payment source.
+          type: object
+        name:
+          description: Name of the individual or business who owns the payment source.
+          type: string
+        owner:
+          description: Type of payment source owner.
+          enum:
+          - INDIVIDUAL
+          - BUSINESS
+          type: string
+        routing_number:
+          description: Routing number of the payment source.
+          type: string
+        source_type:
+          description: Type of payment source.
+          enum:
+          - CHECKING
+          - SAVINGS
+          - SECURED_ACCOUNT_FUND
+          - OTHER
+          - EXTERNAL
+          type: string
+        status:
+          $ref: '#/components/schemas/PaymentSourceStatusEnum'
+        token:
+          description: Unique identifier of the payment source.
+          type: string
+        user_token:
+          description: Unique identifier of the user making the payment.
+          type: string
+        verification_notes:
+          description: Additional information on the verification (for example, an external verification identifier that's outside Marqeta's credit platform).
+          type: string
+        verification_status:
+          description: Status of the verification for the payment source.
+          enum:
+          - ACH_VERIFIED
+          - PENDING
+          type: string
+      type: object
+    PaymentSourcePage:
+      description: Returns paginated information for multiple payment sources.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: List of payment sources.
+          items:
+            $ref: '#/components/schemas/PaymentSourceResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    PaymentSourceCreateReq:
+      description: Contains information about a payment source.
+      properties:
+        account_number:
+          description: Account number of the payment source. For Secured Card, this is the secured card account number.
+          maxLength: 255
+          type: string
+        account_token:
+          description: Unique identifier of the credit account receiving the payment.
+          maxLength: 36
+          type: string
+        bank_name:
+          description: Name of the bank associated with the routing number.
+          maxLength: 255
+          nullable: true
+          type: string
+        business_token:
+          description: Unique identifier of the business making the payment.
+          maxLength: 36
+          type: string
+        metadata:
+          additionalProperties:
+            type: string
+          description: Optional key-value pairs for storing additional information about the payment source.
+          type: object
+        name:
+          description: Name of the individual or business who owns the payment source.
+          maxLength: 255
+          type: string
+        owner:
+          description: Type of payment source owner.
+          enum:
+          - INDIVIDUAL
+          - BUSINESS
+          type: string
+        routing_number:
+          description: 'Routing number of the payment source.
+
+            This field is only optional when the value for `source_type` is `SECURED_ACCOUNT_FUND`.'
+          maxLength: 255
+          type: string
+        source_type:
+          description: Type of payment source.
+          enum:
+          - CHECKING
+          - SAVINGS
+          - SECURED_ACCOUNT_FUND
+          - OTHER
+          - EXTERNAL
+          type: string
+        token:
+          description: Unique identifier of the payment source.
+          pattern: (?!^ +$)^.+$
+          type: string
+        user_token:
+          description: Unique identifier of the user making the payment.
+          maxLength: 36
+          type: string
+        verification_notes:
+          description: Additional information on the verification.
+          maxLength: 255
+          type: string
+        verification_override:
+          description: Whether to override the verification process.
+          type: boolean
+      required:
+      - account_number
+      - account_token
+      - name
+      - source_type
+      - verification_override
+      type: object
+    PaymentSourceUpdateReq:
+      description: Request used to update the status of a payment source.
+      properties:
+        status:
+          $ref: '#/components/schemas/PaymentSourceStatusEnum'
+      required:
+      - status
+      type: object
+    PaymentSourceStatusEnum:
+      description: Current status of the payment source.
+      enum:
+      - ACTIVE
+      - PENDING
+      - INACTIVE
+      type: string
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

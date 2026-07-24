@@ -1,0 +1,978 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries Delinquency API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- description: '// Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    Use the delinquency endpoints to retrieve details on a credit account''s delinquency state and transitions.
+
+
+    An account''s delinquency state reflects whether an account is delinquent and past due on its payments or current and up to date on its payments.
+
+
+    To receive webhook notifications when an account transitions between delinquent and current, see <</core-api/event-types#_credit_account_delinquency_state_transition_events, Credit account delinquency state transition events>> in Event Types.'
+  name: Delinquency
+paths:
+  /accounts/{account_token}/delinquencystate:
+    get:
+      description: 'Retrieve details of the current delinquency state of a credit account.
+
+
+        An account is delinquent when it is past due on payments and current when it is up to date on payments.'
+      operationId: retrieveDelinquencyState
+      parameters:
+      - description: 'Unique identifier of the credit account for which you want to retrieve delinquency state details.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                current_example:
+                  summary: The following code block shows details of a current account.
+                  value:
+                    account_token: account_token_111
+                    buckets: []
+                    current_due: 100
+                    date_account_current: 2024-01-01 04:59:59.999000+00:00
+                    date_account_delinquent: null
+                    is_delinquent: false
+                    total_days_past_due: 0
+                    total_due: 100
+                    total_past_due: 0
+                delinquent_example:
+                  summary: The following code block shows details of a delinquent account.
+                  value:
+                    account_token: account_token_123
+                    buckets:
+                    - bucket_number: 1
+                      current_due: 40
+                      days_past_due: 30
+                      past_due_carried_forward: 60
+                      payment_due_date: 2023-05-01 03:59:59.999000+00:00
+                      total_due: 100
+                    - bucket_number: 2
+                      current_due: 40
+                      days_past_due: 60
+                      past_due_carried_forward: 20
+                      payment_due_date: 2024-04-01 03:59:59.999000+00:00
+                      total_due: 60
+                    - bucket_number: 3
+                      current_due: 20
+                      days_past_due: 91
+                      past_due_carried_forward: 0
+                      payment_due_date: 2024-03-01 04:59:59.999000+00:00
+                      total_due: 20
+                    current_due: 40
+                    date_account_current: null
+                    date_account_delinquent: 2024-03-01 04:59:59.999000+00:00
+                    is_delinquent: true
+                    total_days_past_due: 91
+                    total_due: 140
+                    total_past_due: 100
+              schema:
+                $ref: '#/components/schemas/DelinquencyStateResponse'
+          description: Expected response to a valid request
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Retrieve delinquency state
+      tags:
+      - Delinquency
+  /accounts/{account_token}/delinquencystate/transitions:
+    get:
+      description: 'Retrieve an array of delinquency state transitions for a credit account.
+
+
+        A delinquency state transition occurs when an account''s delinquency state transitions between delinquent and current.
+
+        An account becomes delinquent when it falls behind on payments and becomes current when payments are made up to date.'
+      operationId: retrieveDelinquencyTransitions
+      parameters:
+      - description: 'Unique identifier of the credit account whose delinquency state transitions you want to retrieve.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: Number of resources to retrieve.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          minimum: 1
+          type: integer
+        style: form
+      - description: Sort order index of the first resource in the returned array.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: 'Field on which to sort.
+
+          Prefix the field name with a hyphen (`-`) to sort in descending order.
+
+          Omit the hyphen to sort in ascending order.
+
+
+          *NOTE:*
+
+          You must sort using system field names such as `impactTime`, and not by the field names appearing in response bodies such as `impact_time`.'
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -impactTime
+          enum:
+          - impactTime
+          - -impactTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                count: 2
+                data:
+                - account_token: account_token_1
+                  bucket_count: 0
+                  created_time: 2023-03-28 00:52:17.566000+00:00
+                  current_due: 221.53
+                  impact_time: 2023-12-02 23:13:48.281000+00:00
+                  is_rolled_back: false
+                  oldest_payment_due_date: 2024-01-01 04:59:59.999000+00:00
+                  original_status: DELINQUENT
+                  status: CURRENT
+                  token: delinquency_transition_token_2
+                  total_due: 221.53
+                  total_past_due: 0
+                  transition_trigger_reason: PAYMENT
+                  transition_trigger_time: 2023-12-02 23:13:48.284000+00:00
+                  updated_time: 2023-03-28 00:52:17.566000+00:00
+                - account_token: account_token_1
+                  bucket_count: 1
+                  created_time: 2024-03-28 00:52:17.398000+00:00
+                  current_due: 231.35
+                  impact_time: 2023-12-01 04:59:59.999000+00:00
+                  is_rolled_back: false
+                  oldest_payment_due_date: 2023-12-01 04:59:59.999000+00:00
+                  original_status: CURRENT
+                  status: DELINQUENT
+                  token: delinquency_transition_token_1
+                  total_due: 271.53
+                  total_past_due: 40.18
+                  transition_trigger_reason: STATEMENT_GENERATION
+                  transition_trigger_time: 2022-12-01 08:01:29.201000+00:00
+                  updated_time: 2024-03-28 00:52:17.398000+00:00
+                end_index: 1
+                is_more: false
+                start_index: 0
+              schema:
+                $ref: '#/components/schemas/DelinquencyTransitionsResponsePage'
+          description: Expected response to a valid request.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: List delinquency state transitions
+      tags:
+      - Delinquency
+  /accounts/{account_token}/delinquencystate/transitions/{delinquency_transition_token}:
+    get:
+      description: 'Retrieve a specific delinquency state transition on a credit account.
+
+
+        A delinquency state transition occurs when an account''s delinquency state transitions between delinquent and current.
+
+        An account becomes delinquent when it falls behind on payments and becomes current when payments are made up to date.'
+      operationId: retrieveDelinquencyTransition
+      parameters:
+      - description: 'Unique identifier of the credit account whose delinquency state transition you want to retrieve.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: Unique identifier of the delinquency state transition.
+        explode: false
+        in: path
+        name: delinquency_transition_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing delinquency transition token
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                account_token: account_token_1
+                bucket_count: 4
+                created_time: 2023-05-01 09:23:36.910000+00:00
+                current_due: 41.58
+                impact_time: 2023-05-01 03:59:59.999000+00:00
+                is_rolled_back: false
+                oldest_payment_due_date: 2023-02-01 04:59:59.999000+00:00
+                original_status: DELINQUENT
+                status: DELINQUENT
+                token: delinquency_transition_token_1
+                total_due: 201.58
+                total_past_due: 160
+                transition_trigger_reason: STATEMENT_GENERATION
+                transition_trigger_time: 2023-05-01 09:23:36.046000+00:00
+                updated_time: 2023-05-01 09:23:36.910000+00:00
+              schema:
+                $ref: '#/components/schemas/DelinquencyTransitionResponse'
+          description: Expected response to a valid request
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Retrieve delinquency state transition
+      tags:
+      - Delinquency
+  /webhooks/{event_type}/{resource_token}:
+    post:
+      description: 'Resends a credit event notification to your webhook endpoint.
+
+
+        Although you send this request as a `POST`, all parameters are passed in the URL and the body is empty.
+
+        The event notification is resent to your webhook endpoint and also returned in the response to this request.
+
+
+        For details on how to configure your webhook endpoint, see the About Webhooks <</developer-guides/about-webhooks#_tutorial, tutorial>>.
+
+        For the complete `/webhooks` endpoint reference, see <</core-api/webhooks, Webhooks>>.'
+      operationId: resendWebhookEvent
+      parameters:
+      - description: Specifies the type of event you want to resend.
+        explode: false
+        in: path
+        name: event_type
+        required: true
+        schema:
+          enum:
+          - ledgerentry
+          - journalentry
+          - accounttransition
+          - accountstatement
+          - paymenttransition
+          - delinquencytransition
+          - paymentreminders
+          - substatus
+          - accountsignupbonus
+          type: string
+        style: simple
+      - description: 'Unique identifier of the resource for which you want to resend a notification.
+
+
+          * Send a `GET` request to `/credit/accounts/{account_token}/journalentries` to retrieve existing journal entry tokens.
+
+          * Send a `GET` request to `/credit/accounts/{account_token}/ledgerentries` to retrieve existing ledger entry tokens.
+
+          * Send a `GET` request to `/accounts/{account_token}/accounttransitions` to retrieve existing account transition tokens.
+
+          * Send a `GET` request to `/credit/accounts/{account_token}/payments/{payment_token}` to retrieve existing payment transition tokens.
+
+          * Send a `GET` request to `/accounts/{account_token}/statements` to retrieve existing statement summary tokens.
+
+          * Send a `GET` request to `/accounts/{account_token}/delinquencystate/transitions` to retrieve existing delinquency state transition tokens.
+
+          * Send a `GET` request to `/accounts/{account_token}/statements/{statement_summary_token}/paymentreminders/{token}` to retrieve existing payment reminder tokens.
+
+          * Send a `GET` request to `/credit/substatuses` to retrieve existing substatus tokens.
+
+          * Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens and identify the specific account for the resend event.'
+        explode: false
+        in: path
+        name: resource_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing journal entry token, ledger entry token, account transition token, payment transition token, statement summary token, delinquency transition token, or substatus token
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                account_statement_sample:
+                  summary: The following code block shows a sample of a resent `creditaccountstatements` event.
+                  value:
+                    account_token: my_credit_account_token
+                    available_credit: 0
+                    closing_balance: 506.41
+                    closing_date: 2025-04-01 03:59:59.999000+00:00
+                    created_time: 2023-08-18 22:04:31.261000+00:00
+                    credit_limit: 500
+                    credits: 0
+                    cycle_type: REVOLVING
+                    days_in_billing_cycle: 31
+                    fees: 15
+                    interest: 4.96
+                    opening_balance: 496.45
+                    opening_date: 2025-03-01 05:00:00+00:00
+                    past_due_amount: 10
+                    payments: 10
+                    purchases: 0
+                    token: my_credit_account_statement_token
+                account_transition_sample:
+                  summary: The following code block shows a sample of a resent `creditaccounttransitions` event.
+                  value:
+                    account_token: my_credit_account_token1234
+                    created_time: 2024-08-18 20:25:10.408000+00:00
+                    original_status: UNACTIVATED
+                    status: ACTIVE
+                    token: my_credit_account_transition_token1234
+                accountsignupbonus_example:
+                  summary: The following code block shows a sample of a resent `accountsignupbonus` event.
+                  value:
+                    account_token: my_account_token
+                    accrual_start_time: 2024-04-02 11:23:23+00:00
+                    journal_entry_token: my_journal_entry_token
+                    maturity_time: 2024-04-02 11:23:23+00:00
+                    reward_token: my_reward_token
+                    spend_total: 10
+                    status: ISSUED
+                    token: my_accountsignupbonus_token
+                    type: STATEMENT_CREDIT
+                delinquency_transition_example:
+                  summary: The following code block shows a sample of a resent `creditdelinquencytransitions` event.
+                  value:
+                    account_token: my_credit_account_token1234
+                    bucket_count: 2
+                    created_time: 2024-03-01 04:59:59.999000
+                    current_due: 40
+                    impact_time: 2024-03-01 04:59:59.999000
+                    is_rolled_back: false
+                    oldest_payment_due_date: 2023-02-01 04:59:59.999000
+                    original_status: CURRENT
+                    status: DELINQUENT
+                    token: my_delinquency_transition_token1234
+                    total_due: 140
+                    total_past_due: 100
+                    transition_trigger_reason: STATEMENT_GENERATION
+                    transition_trigger_time: 2024-03-01 04:59:59.999000
+                    updated_time: 2024-03-01 04:59:59.999000
+                journal_entry_example:
+                  summary: The following code block shows a sample of a resent `creditjournalentries` event.
+                  value:
+                    account_token: my_credit_account_token1234
+                    amount: 10
+                    card_token: my_credit_card_token1234
+                    created_time: 2024-08-18 22:07:21.422000+00:00
+                    currency_code: USD
+                    detail_object:
+                      acquirer:
+                        system_trace_audit_number: '376582'
+                      acquirer_fee_amount: 0
+                      acting_user_token: my_user_token
+                      amount: 10
+                      approval_code: '974406'
+                      card:
+                        last_four: '9949'
+                        metadata: {}
+                      card_acceptor:
+                        city: San Francisco
+                        country_code: USA
+                        mcc: '6411'
+                        mid: '1234'
+                        name: Jane's Bakery
+                        postal_code: '94115'
+                        state: CA
+                        street_address: 1989 Fillmore St
+                      card_token: my_credit_card_token1234
+                      created_time: 2024-08-18 22:06:52+00:00
+                      currency_code: USD
+                      duration: 837
+                      gpa:
+                        available_balance: 0
+                        balances:
+                          USD:
+                            available_balance: 0
+                            credit_balance: 0
+                            currency_code: USD
+                            impacted_amount: -10
+                            ledger_balance: 510.87
+                            pending_credits: 0
+                        credit_balance: 0
+                        currency_code: USD
+                        impacted_amount: -10
+                        ledger_balance: 510.87
+                        pending_credits: 0
+                      gpa_order:
+                        amount: 10
+                        created_time: 2024-08-18 22:06:53+00:00
+                        currency_code: USD
+                        funding:
+                          amount: 10
+                          gateway_log:
+                            duration: 485
+                            message: Approved or completed successfully
+                            order_number: my_gateway_token12345
+                            response:
+                              code: '200'
+                              data:
+                                jit_funding:
+                                  acting_user_token: my_user_token
+                                  amount: 10
+                                  method: pgfs.authorization
+                                  token: my_jit_funding_token1234
+                                  user_token: my_user_token
+                            timed_out: false
+                            transaction_id: my_transaction_id1234
+                          source:
+                            active: true
+                            created_time: 2024-10-14 17:26:35+00:00
+                            is_default_account: false
+                            last_modified_time: 2024-10-14 17:26:35+00:00
+                            name: credit_backed_funding_source
+                            token: '**********1ab2'
+                            type: programgateway
+                        funding_source_token: '**********1ab2'
+                        jit_funding:
+                          acting_user_token: my_user_token
+                          amount: 10
+                          method: pgfs.authorization
+                          token: my_transaction_id1234
+                          user_token: my_user_token
+                        last_modified_time: 2024-08-18 22:06:53+00:00
+                        response:
+                          code: '0000'
+                          memo: Approved or completed successfully
+                        state: PENDING
+                        token: my_gpa_order_token1234
+                        transaction_token: my_transaction_token1234
+                        user_token: my_user_token
+                      identifier: '234'
+                      issuer_payment_node: f8205a67b12b90d695b15704a64c074b
+                      issuer_received_time: 2024-08-18 22:06:52.771000+00:00
+                      network: DISCOVER
+                      network_reference_id: '484311571095'
+                      pos:
+                        is_installment: false
+                        is_recurring: false
+                        partial_approval_capable: true
+                        pin_present: false
+                        purchase_amount_only: false
+                      request_amount: 10
+                      response:
+                        code: '0000'
+                        memo: Approved or completed successfully
+                      settlement_date: 2024-08-18 00:00:00+00:00
+                      state: PENDING
+                      token: my_detail_token1234
+                      type: authorization
+                      user:
+                        metadata:
+                          key1: value1
+                          key2: value2
+                          notification_email: user@domain.com
+                          notification_language: spa
+                      user_token: my_user_token
+                      user_transaction_time: 2024-08-18 22:06:52+00:00
+                    detail_token: my_detail_token1234
+                    dispute_token: null
+                    group: PURCHASE
+                    id: '12345678'
+                    impact_time: 2024-08-18 22:07:21.422000+00:00
+                    memo: Jane's Bakery
+                    related_token: null
+                    request_time: 2024-08-18 22:06:52+00:00
+                    root_token: null
+                    status: PENDING
+                    token: my_journal_entry_token1234
+                    type: authorization
+                ledger_entry_sample:
+                  summary: The following code block shows a sample of a resent `creditledgerentries` event.
+                  value:
+                    account_token: my_credit_account_token1234
+                    amount: 10
+                    card_token: my_credit_card_token1234
+                    created_time: 2024-08-18 22:07:21.422000+00:00
+                    currency_code: USD
+                    detail_object:
+                      acquirer:
+                        system_trace_audit_number: '376582'
+                      acquirer_fee_amount: 0
+                      acting_user_token: my_user_token
+                      amount: 10
+                      approval_code: '974406'
+                      card:
+                        last_four: '9949'
+                        metadata: {}
+                      card_acceptor:
+                        city: San Francisco
+                        country_code: USA
+                        mcc: '6411'
+                        mid: '1234'
+                        name: Jane's Bakery
+                        postal_code: '94115'
+                        state: CA
+                        street_address: 1989 Fillmore St
+                      card_token: my_credit_card_token1234
+                      created_time: 2024-08-18 22:06:52+00:00
+                      currency_code: USD
+                      duration: 837
+                      gpa:
+                        available_balance: 0
+                        balances:
+                          USD:
+                            available_balance: 0
+                            credit_balance: 0
+                            currency_code: USD
+                            impacted_amount: -10
+                            ledger_balance: 510.87
+                            pending_credits: 0
+                        credit_balance: 0
+                        currency_code: USD
+                        impacted_amount: -10
+                        ledger_balance: 510.87
+                        pending_credits: 0
+                      gpa_order:
+                        amount: 10
+                        created_time: 2024-08-18 22:06:53+00:00
+                        currency_code: USD
+                        funding:
+                          amount: 10
+                          gateway_log:
+                            duration: 485
+                            message: Approved or completed successfully
+                            order_number: my_gateway_token12345
+                            response:
+                              code: '200'
+                              data:
+                                jit_funding:
+                                  acting_user_token: my_user_token
+                                  amount: 10
+                                  method: pgfs.authorization
+                                  token: my_jit_funding_token1234
+                                  user_token: my_user_token
+                            timed_out: false
+                            transaction_id: my_transaction_id1234
+                          source:
+                            active: true
+                            created_time: 2024-10-14 17:26:35+00:00
+                            is_default_account: false
+                            last_modified_time: 2024-10-14 17:26:35+00:00
+                            name: credit_backed_funding_source
+                            token: '**********1ab2'
+                            type: programgateway
+                        funding_source_token: '**********1ab2'
+                        jit_funding:
+                          acting_user_token: my_user_token
+                          amount: 10
+                          method: pgfs.authorization
+                          token: my_transaction_id1234
+                          user_token: my_user_token
+                        last_modified_time: 2024-08-18 22:06:53+00:00
+                        response:
+                          code: '0000'
+                          memo: Approved or completed successfully
+                        state: PENDING
+                        token: my_gpa_order_token1234
+                        transaction_token: my_transaction_token1234
+                        user_token: my_user_token
+                      identifier: '234'
+                      issuer_payment_node: f8205a67b12b90d695b15704a64c074b
+                      issuer_received_time: 2024-08-18 22:06:52.771000+00:00
+                      network: DISCOVER
+                      network_reference_id: '484311571095'
+                      pos:
+                        is_installment: false
+                        is_recurring: false
+                        partial_approval_capable: true
+                        pin_present: false
+                        purchase_amount_only: false
+                      request_amount: 10
+                      response:
+                        code: '0000'
+                        memo: Approved or completed successfully
+                      settlement_date: 2024-08-18 00:00:00+00:00
+                      state: PENDING
+                      token: my_detail_token1234
+                      type: authorization
+                      user:
+                        metadata:
+                          key1: value1
+                          key2: value2
+                          notification_email: user@domain.com
+                          notification_language: spa
+                      user_token: my_user_token
+                      user_transaction_time: 2024-08-18 22:06:52+00:00
+                    detail_token: my_detail_token1234
+                    dispute_token: null
+                    group: PURCHASE
+                    id: '12345678'
+                    impact_time: 2024-08-18 22:07:21.422000+00:00
+                    memo: Jane's Bakery
+                    related_token: null
+                    request_time: 2024-08-18 22:06:52+00:00
+                    root_token: null
+                    status: PENDING
+                    token: my_ledger_entry_token1234
+                    type: authorization
+                payment_transition_example:
+                  summary: The following code block shows a sample of a resent `creditpaymenttransitions` event.
+                  value:
+                    account_token: my_credit_account_token1234
+                    created_time: 2024-08-17 18:26:47.591000+00:00
+                    payment_token: my_credit_account_payment_token1234
+                    refund_details: null
+                    status: COMPLETED
+                    token: my_payment_transition_token1234
+                substatus_example:
+                  summary: The following code block shows a sample of a resent `substatus` event.
+                  value:
+                    attributes: []
+                    created_time: 2024-04-02 11:23:23+00:00
+                    events:
+                    - channel: SYSTEM
+                      created_time: 2024-04-02 11:23:23+00:00
+                      effective_date: 2024-04-02 11:23:23+00:00
+                      reason: Fraud system detected suspicious activity
+                      state: ACTIVE
+                    - channel: ADMIN
+                      created_time: 2024-04-02 11:23:23+00:00
+                      effective_date: 2024-04-02 11:23:23+00:00
+                      reason: Verified non-fraud with cardholder
+                      state: INACTIVE
+                    is_active: false
+                    resource_token: my_account_token
+                    resource_type: ACCOUNT
+                    state: INACTIVE
+                    substatus: FRAUD
+                    token: substatus_token
+                    updated_time: 2024-04-02 11:23:23+00:00
+              schema:
+                $ref: '#/components/schemas/WebhookEventResendContainerResponse'
+          description: Event response for which the webhook event was resent
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Resend credit event notification
+      tags:
+      - Delinquency
+components:
+  schemas:
+    DelinquencyTransitionTriggerReason:
+      description: Event that triggered an update to the account's delinquency state.
+      enum:
+      - PAYMENT
+      - PAYMENT_VOID
+      - CREDIT
+      - MINIMUM_PAYMENT_OVERRIDE
+      - STATEMENT_GENERATION
+      - STATEMENT_AMENDMENT
+      - REAGE
+      - PAST_MIN_PAYMENT_DUE
+      type: string
+    DelinquencyTransitionResponse:
+      description: Contains details of the account's delinquency state transition.
+      properties:
+        account_token:
+          description: Unique identifier of the credit account.
+          format: string
+          type: string
+        bucket_count:
+          description: Number of buckets for the account after the triggering event occurred.
+          type: number
+        created_time:
+          description: Date and time when the delinquency state transition was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        current_due:
+          description: 'Current amount that is due after the triggering event occurred.
+
+
+            Equivalent to `current_due` for the account''s most recent delinquency bucket.
+
+            To retrieve delinquency buckets for an account, send a `GET` request to `/credit/accounts/{account_token}/delinquencystate`.'
+          type: number
+        impact_time:
+          description: Date and time when the triggering event impacted the account, in UTC.
+          format: date-time
+          type: string
+        is_rolled_back:
+          description: 'A value of `true` indicates that the system invalidated and rolled back the delinquency transition.
+
+
+            This is a temporary field that allows Marqeta to handle occasional cases of out-of-order processing.
+
+            This can occur when two delinquency state transition webhooks are sent near-simultaneously.
+
+
+            For example, if a credit and a payment that bring an account current are made around the same time, two delinquency state transitions are sent very close together.
+
+            In these cases, one of the transitions is rolled back and invalidated.
+
+            For the transition that is rolled back, `is_rolled_back` is `true` and the transition should be ignored.
+
+
+            This field is temporary and to be deprecated when out-of-order processing is addressed in a future release.'
+          type: boolean
+        oldest_payment_due_date:
+          description: 'Payment due date of the account''s oldest delinquency bucket, in UTC.
+
+
+            Useful when used with the delinquency state transition''s `created_time` to determine the total number of days a payment is past due.'
+          format: date-time
+          type: string
+        original_status:
+          $ref: '#/components/schemas/DelinquencyStatus'
+        status:
+          $ref: '#/components/schemas/DelinquencyStatus'
+        token:
+          description: Unique identifier of the delinquency state transition.
+          format: string
+          type: string
+        total_due:
+          description: 'Total amount that is due after the triggering event occurred; the sum of `total_past_due` and `current_due`.
+
+
+            Equivalent to `total_due` for the account''s most recent delinquency bucket.
+
+            To retrieve delinquency buckets for an account, send a `GET` request to `/credit/accounts/{account_token}/delinquencystate`.'
+          type: number
+        total_past_due:
+          description: 'Total amount that is past due after the triggering event occurred.
+
+
+            Equivalent to `past_due_carried_forward` for the account''s most recent delinquency bucket.
+
+            To retrieve delinquency buckets for an account, send a `GET` request to `/credit/accounts/{account_token}/delinquencystate`.'
+          type: number
+        transition_trigger_reason:
+          $ref: '#/components/schemas/DelinquencyTransitionTriggerReason'
+        transition_trigger_time:
+          description: 'Date and time when the triggering event caused the account''s delinquency state to transition, in UTC.
+
+
+            For <</core-api/credit-account-journal-entries, journal entries>>, equivalent to `request_time`.
+
+            For <</core-api/credit-account-statements#listStatementJournalEntries, statement journal entries>>, equivalent to `impact_time`,'
+          format: date-time
+          type: string
+        updated_time:
+          description: Date and time when the delinquency state transition was last updated on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+      required:
+      - account_token
+      - created_time
+      - impact_time
+      - is_rolled_back
+      - original_status
+      - status
+      - token
+      - transition_trigger_reason
+      - transition_trigger_time
+      type: object
+    DelinquencyStatus:
+      description: Delinquency status of an account.
+      enum:
+      - CURRENT
+      - DELINQUENT
+      type: string
+    DelinquencyTransitionsResponsePage:
+      description: Returns paginated information for multiple delinquency state transitions.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: List of delinquency state transitions.
+          items:
+            $ref: '#/components/schemas/DelinquencyTransitionResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    WebhookEventResendContainerResponse:
+      description: Contains information about a webhook event.
+      properties:
+        unused:
+          description: Event notification that was resent to your webhook endpoint.
+          type: string
+      type: object
+    DelinquencyBucketResponse:
+      description: 'One or more delinquency buckets for an account.
+
+        Each delinquency bucket represents a billing cycle during which the account was delinquent.'
+      properties:
+        bucket_number:
+          description: 'Delinquency bucket number in the returned array.
+
+            Delinquency buckets are returned from most recent to least; the most recent delinquency bucket is `1`.'
+          type: integer
+        current_due:
+          description: Current amount that is due for this delinquency bucket.
+          type: number
+        days_past_due:
+          description: Total number of days that the payment is past due for this delinquency bucket.
+          type: integer
+        past_due_carried_forward:
+          description: Amount that is past due and carried forward from previous delinquency buckets.
+          type: number
+        payment_due_date:
+          description: Date that the payment was due for this delinquency bucket.
+          format: date-time
+          type: string
+        total_due:
+          description: Total amount that is due for this delinquency bucket; the sum of `past_due_carried_forward` and `current_due`.
+          type: number
+      required:
+      - bucket_number
+      - current_due
+      - days_past_due
+      - past_due_carried_forward
+      - payment_due_date
+      - total_due
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    DelinquencyStateResponse:
+      description: Contains details of the delinquency state of an account.
+      properties:
+        account_token:
+          description: Unique identifier of the credit account.
+          format: string
+          type: string
+        buckets:
+          description: 'One or more delinquency buckets for an account.
+
+            Each delinquency bucket represents a billing cycle during which the account was delinquent.'
+          items:
+            $ref: '#/components/schemas/DelinquencyBucketResponse'
+          type: array
+        current_due:
+          description: Amount that is due for the current billing cycle.
+          type: number
+        date_account_current:
+          description: 'Date and time when the account was last made current on the Marqeta platform, in UTC.
+
+
+            If the account was never delinquent, this field returns the date and time the account was created on the Marqeta platform, in UTC.
+
+
+            If `is_delinquent` is `true`, a null value is returned.'
+          format: date-time
+          nullable: true
+          type: string
+        date_account_delinquent:
+          description: 'Date and time when the account last fell delinquent on the Marqeta platform, in UTC.
+
+
+            If `is_delinquent` is `false`, a null value is returned.'
+          format: date-time
+          nullable: true
+          type: string
+        delinquent_days_past_statement_end_date:
+          description: Total number of days that the account is past the oldest bucket's statement end date.
+          type: integer
+        is_delinquent:
+          description: A value of `true` indicates that the account is currently delinquent.
+          type: boolean
+        total_days_past_due:
+          description: Total number of days that the account is past due.
+          type: integer
+        total_due:
+          description: Total amount that is due for the current billing cycle; the sum of `total_past_due_amount` and `current_due_amount`.
+          type: number
+        total_past_due:
+          description: Total amount that is past due.
+          type: number
+      required:
+      - account_token
+      - current_due
+      - is_delinquent
+      - total_days_past_due
+      - total_due
+      - total_past_due
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

@@ -1,0 +1,315 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries Account Cards API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- description: '// Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    Use the account cards endpoints to create and retrieve credit cards that can access the credit line on a <</core-api/credit-accounts, credit account>>.
+
+
+    Once a credit card is created, you can use the `/cards` endpoint to <</core-api/cards#putCardsToken, update the card>> or <</developer-guides/managing-lost-stolen-or-damaged-cards, manage lost, stolen, or damaged cards>>.
+
+
+    To receive webhook notifications when card transition or card action events occur, see <</core-api/event-types#_card_transition_events, Card transition events>> and <</core-api/event-types#_card_action_events, Card action events>> in Event Types.'
+  name: Account Cards
+paths:
+  /accounts/{account_token}/cards:
+    get:
+      description: 'Retrieve an array of cards for a credit account.
+
+
+        This endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>.'
+      operationId: getCardsByAccount
+      parameters:
+      - description: 'Unique identifier of the credit account for which to retrieve credit cards.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: Status of the credit cards to retrieve.
+        explode: true
+        in: query
+        name: status
+        required: false
+        schema:
+          type: string
+          x-allowableValues: Valid credit card status
+        style: form
+      - description: Number of credit card resources to retrieve.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - description: Sort order index of the first resource in the returned array.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: 'Field on which to sort.
+
+          Prefix the field name with a hyphen (`-`) to sort in descending order.
+
+          Omit the hyphen to sort in ascending order.
+
+
+          *NOTE:*
+
+          You must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`.'
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -lastModifiedTime
+          enum:
+          - lastModifiedTime
+          - -lastModifiedTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                count: 2
+                data:
+                - account_token: my_account_token_12
+                  created_time: 2024-09-03 19:39:53.719000+00:00
+                  token: credit_card_token1234
+                  updated_time: 2024-09-03 19:39:53.719000+00:00
+                  user_token: user1234
+                - account_token: my_account_token_13
+                  created_time: 2024-09-13 19:19:51.412000+00:00
+                  token: credit_card_token5678
+                  updated_time: 2024-09-13 19:19:51.421000+00:00
+                  user_token: user5678
+                end_index: 0
+                is_more: false
+                start_index: 0
+              schema:
+                $ref: '#/components/schemas/AccountCardsPage'
+          description: Expected response to a valid request.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error.
+      security:
+      - zionToken: []
+      summary: List account cards
+      tags:
+      - Account Cards
+    post:
+      description: 'Create a credit card for an existing credit account.
+
+
+        [NOTE]
+
+        You can ship cards to an address different from the <</core-api/users, user>> address.
+
+        After creating a card, send a `PUT` request to the `/cards` endpoint with the new address in the `fulfillment.shipping` object.
+
+        For more, see <</core-api/cards#putCardsToken, Update card>>.'
+      operationId: createCardForAccount
+      parameters:
+      - description: 'Unique identifier of the credit account for which to create a credit card.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            example:
+              card_product_token: my-card-product1234
+              user_token: user1234
+            schema:
+              type: object
+        description: 'Expected request body to create a credit card for an existing credit account.
+
+          Refer to <</core-api/cards/#postCards,Create card>> for the complete list of fields.'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              example:
+                account_token: my_account_token_12
+                created_time: 2024-09-03 19:39:53.719000+00:00
+                token: my_credit_card_token1234
+                updated_time: 2024-09-03 19:39:53.719000+00:00
+                user_token: user1234
+              schema:
+                $ref: '#/components/schemas/CardResponse'
+          description: Expected response to a valid request.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Create account card
+      tags:
+      - Account Cards
+  /accounts/{account_token}/cards/{card_token}:
+    get:
+      description: Retrieve a credit card for a credit account.
+      operationId: getCardByAccount
+      parameters:
+      - description: 'Unique identifier of the credit account for which to retrieve a credit card.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing account token
+        style: simple
+      - description: 'Unique identifier of the credit card to retrieve.
+
+
+          Send a `GET` request to `/credit/accounts/{account_token}/cards` to retrieve existing credit card tokens.'
+        explode: false
+        in: path
+        name: card_token
+        required: true
+        schema:
+          type: string
+          x-allowableValues: Existing card token
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                account_token: my_account_token_12
+                created_time: 2024-09-03 19:39:53.719000+00:00
+                token: my_credit_card_token1234
+                updated_time: 2024-09-03 19:39:53.719000+00:00
+                user_token: user1234
+              schema:
+                $ref: '#/components/schemas/CardResponse'
+          description: Expected response to a valid request.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Retrieve account card
+      tags:
+      - Account Cards
+components:
+  schemas:
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    AccountCardsPage:
+      description: Returns paginated account cards.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: Contains one or more credit cards.
+          items:
+            $ref: '#/components/schemas/CardResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    CardResponse:
+      description: Information about a credit card.
+      properties:
+        account_token:
+          description: Unique identifier of the associated credit account.
+          maxLength: 36
+          type: string
+        created_time:
+          description: Date and time when the card was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        token:
+          description: Unique identifier of the credit card.
+          type: string
+        updated_time:
+          description: Date and time when the card was last modified on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        user_token:
+          description: Unique identifier of the credit cardholder.
+          type: string
+      required:
+      - account_token
+      - created_time
+      - token
+      - updated_time
+      - user_token
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

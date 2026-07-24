@@ -1,0 +1,595 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries bulk issuances API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: bulk issuances
+paths:
+  /bulkissuances:
+    get:
+      operationId: getBulkissuances
+      parameters:
+      - description: Number of requests to retrieve
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          format: int32
+          type: integer
+        style: form
+      - description: Start index
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: form
+      - description: Sort order
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -createdTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkCardOrderListResponse'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Lists all bulk issuance requests
+      tags:
+      - bulk issuances
+    post:
+      operationId: postBulkissuances
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/bulk_issuance_request'
+        required: false
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/bulk_issuance_response'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '409':
+          content: {}
+          description: Token already associated with a different payload
+        '500':
+          content: {}
+          description: Server error
+      summary: Creates a bulk issuance request for cards
+      tags:
+      - bulk issuances
+  /bulkissuances/{token}:
+    get:
+      operationId: getBulkissuancesToken
+      parameters:
+      - description: Bulk issuance token
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/bulk_issuance_response'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '404':
+          content: {}
+          description: Bulk issuance request not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns a bulk issuance request
+      tags:
+      - bulk issuances
+components:
+  schemas:
+    ShippingInformationResponse:
+      description: 'Specifies shipping details for the order.
+
+
+        This object is returned if it exists in the resource.'
+      properties:
+        care_of_line:
+          description: 'Specifies the value of the care of (C/O) line on the mailing carrier.
+
+
+            This field is returned if it exists in the resource.'
+          type: string
+        method:
+          description: 'Specifies the shipping service.
+
+
+            This field is returned if it exists in the resource.'
+          enum:
+          - LOCAL_MAIL
+          - LOCAL_MAIL_PACKAGE
+          - GROUND
+          - TWO_DAY
+          - OVERNIGHT
+          - INTERNATIONAL
+          - INTERNATIONAL_PRIORITY
+          - LOCAL_PRIORITY
+          - FEDEX_EXPEDITED
+          - FEDEX_REGULAR
+          - UPS_EXPEDITED
+          - UPS_REGULAR
+          - USPS_EXPEDITED
+          - USPS_REGULAR
+          type: string
+        recipient_address:
+          $ref: '#/components/schemas/FulfillmentAddressResponse'
+        return_address:
+          $ref: '#/components/schemas/FulfillmentAddressResponse'
+      type: object
+    text:
+      description: Specifies personalized text that appears on the card.
+      properties:
+        name_line_1:
+          $ref: '#/components/schemas/text_value'
+        name_line_2:
+          $ref: '#/components/schemas/text_value'
+        name_line_3:
+          $ref: '#/components/schemas/text_value'
+      required:
+      - name_line_1
+      type: object
+    expiration_offset:
+      properties:
+        unit:
+          description: specify if a value is provided; default is card product expiration offset unit
+          enum:
+          - YEARS
+          - MONTHS
+          - DAYS
+          - HOURS
+          - MINUTES
+          - SECONDS
+          type: string
+        value:
+          description: specify if unit is provided; default is card product expiration offset value
+          format: int32
+          type: integer
+      type: object
+    card_personalization:
+      description: Specifies personalized attributes to be added to the card.
+      properties:
+        carrier:
+          $ref: '#/components/schemas/carrier'
+        images:
+          $ref: '#/components/schemas/images'
+        perso_type:
+          description: Specifies the type of card personalization.
+          enum:
+          - EMBOSS
+          - LASER
+          - FLAT
+          type: string
+        text:
+          $ref: '#/components/schemas/text'
+      required:
+      - text
+      type: object
+    FulfillmentResponse:
+      properties:
+        card_personalization:
+          $ref: '#/components/schemas/card_personalization'
+        shipping:
+          $ref: '#/components/schemas/ShippingInformationResponse'
+      required:
+      - card_personalization
+      type: object
+    bulk_issuance_request:
+      properties:
+        card_allocation:
+          format: int32
+          maximum: 50000
+          type: integer
+        card_product_token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        expedite:
+          default: false
+          type: boolean
+        expiration_offset:
+          $ref: '#/components/schemas/expiration_offset'
+        fulfillment:
+          $ref: '#/components/schemas/FulfillmentRequest'
+        name_line_1_numeric_postfix:
+          default: false
+          type: boolean
+        name_line_1_random_postfix:
+          default: false
+          type: boolean
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        user_association:
+          $ref: '#/components/schemas/user_association'
+      required:
+      - card_allocation
+      - card_product_token
+      - fulfillment
+      - token
+      type: object
+    text_value:
+      properties:
+        value:
+          description: Line of personalized text printed on the card.
+          type: string
+      type: object
+    carrier:
+      description: Specifies attributes of the card carrier.
+      properties:
+        logo_file:
+          description: Specifies an image to display on the card carrier.
+          type: string
+        logo_thumbnail_file:
+          description: Specifies a thumbnail-sized rendering of the image specified in the `logo_file` field.
+          type: string
+        message_file:
+          description: Specifies a text file containing a custom message to print on the card carrier.
+          type: string
+        message_line:
+          description: Specifies a custom message that appears on the card carrier.
+          type: string
+        message_line_2:
+          description: Specifies the second line of a custom message that appears on the card carrier.
+          type: string
+        template_id:
+          description: Specifies the card carrier template to use.
+          type: string
+      type: object
+    images:
+      description: Specifies personalized images that appear on the card.
+      properties:
+        card:
+          $ref: '#/components/schemas/images_card'
+        carrier:
+          $ref: '#/components/schemas/ImagesCarrier'
+        carrier_return_window:
+          $ref: '#/components/schemas/images_carrier_return_window'
+        signature:
+          $ref: '#/components/schemas/images_signature'
+      type: object
+    shipping:
+      properties:
+        care_of_line:
+          description: 255 char max
+          type: string
+        method:
+          enum:
+          - LOCAL_MAIL
+          - LOCAL_MAIL_PACKAGE
+          - GROUND
+          - TWO_DAY
+          - OVERNIGHT
+          - INTERNATIONAL
+          - INTERNATIONAL_PRIORITY
+          - LOCAL_PRIORITY
+          - FEDEX_EXPEDITED
+          - FEDEX_REGULAR
+          - UPS_EXPEDITED
+          - UPS_REGULAR
+          - USPS_EXPEDITED
+          - USPS_REGULAR
+          type: string
+        recipient_address:
+          $ref: '#/components/schemas/fulfillment_address_request'
+        return_address:
+          $ref: '#/components/schemas/fulfillment_address_request'
+      type: object
+    user_association:
+      properties:
+        single_inventory_user:
+          default: false
+          type: boolean
+        single_inventory_user_token:
+          default: 'false'
+          maxLength: 36
+          minLength: 1
+          type: string
+      type: object
+    ImagesCarrier:
+      description: Specifies personalized images that appear on the card carrier.
+      properties:
+        message_1:
+          description: Specifies a custom message that appears on the card carrier.
+          type: string
+        name:
+          description: Specifies a PNG image to display on the card carrier.
+          type: string
+      type: object
+    images_signature:
+      description: Specifies an image of the cardholder's signature.
+      properties:
+        name:
+          description: Specifies a PNG image of the cardholder's signature.
+          type: string
+      type: object
+    images_card:
+      description: Specifies personalized images that appear on the card.
+      properties:
+        name:
+          description: Specifies a PNG image to display on the card.
+          type: string
+        thermal_color:
+          description: Specifies the color of the image displayed on the card.
+          type: string
+      type: object
+    bulk_issuance_response:
+      properties:
+        card_allocation:
+          format: int32
+          maximum: 50000
+          type: integer
+        card_fulfillment_time:
+          format: date-time
+          type: string
+        card_product_token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        cards_processed:
+          format: int32
+          type: integer
+        created_time:
+          format: date-time
+          type: string
+        expedite:
+          default: false
+          type: boolean
+        expiration_offset:
+          $ref: '#/components/schemas/expiration_offset'
+        fulfillment:
+          $ref: '#/components/schemas/FulfillmentResponse'
+        name_line1_end_index:
+          format: int32
+          type: integer
+        name_line1_start_index:
+          format: int32
+          type: integer
+        name_line_1_numeric_postfix:
+          default: false
+          type: boolean
+        name_line_1_random_postfix:
+          default: false
+          type: boolean
+        provider_ship_date:
+          format: date-time
+          type: string
+        provider_shipping_method:
+          type: string
+        provider_tracking_number:
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        user_association:
+          $ref: '#/components/schemas/user_association'
+      required:
+      - card_allocation
+      - card_product_token
+      - fulfillment
+      - token
+      type: object
+    BulkCardOrderListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/bulk_issuance_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    FulfillmentRequest:
+      properties:
+        card_personalization:
+          $ref: '#/components/schemas/card_personalization'
+        shipping:
+          $ref: '#/components/schemas/shipping'
+      required:
+      - card_personalization
+      type: object
+    images_carrier_return_window:
+      description: Specifies a custom image to display in the return address window of the card carrier envelope.
+      properties:
+        name:
+          description: Specifies a PNG image to display in the return address window of envelopes used for sending cards to cardholders.
+          type: string
+      type: object
+    fulfillment_address_request:
+      properties:
+        address1:
+          maxLength: 255
+          minLength: 0
+          type: string
+        address2:
+          maxLength: 255
+          minLength: 0
+          type: string
+        city:
+          maxLength: 40
+          minLength: 0
+          type: string
+        country:
+          maxLength: 40
+          minLength: 0
+          type: string
+        first_name:
+          maxLength: 40
+          minLength: 0
+          type: string
+        last_name:
+          maxLength: 40
+          minLength: 0
+          type: string
+        middle_name:
+          maxLength: 40
+          minLength: 0
+          type: string
+        phone:
+          maxLength: 20
+          minLength: 0
+          type: string
+        postal_code:
+          maxLength: 10
+          minLength: 0
+          type: string
+        state:
+          maxLength: 32
+          minLength: 0
+          type: string
+        zip:
+          maxLength: 10
+          minLength: 0
+          type: string
+      type: object
+    FulfillmentAddressResponse:
+      description: Specifies a fulfillment shipping or return address.
+      properties:
+        address1:
+          description: 'Number and street of the address.
+
+
+            This field is returned if it exists in the resource.'
+          maxLength: 255
+          minLength: 0
+          type: string
+        address2:
+          description: 'Additional address information.
+
+
+            This field is returned if it exists in the resource.'
+          maxLength: 255
+          minLength: 0
+          type: string
+        city:
+          description: 'City of the address.
+
+
+            This field is returned if it exists in the resource.'
+          maxLength: 40
+          minLength: 0
+          type: string
+        country:
+          description: 'Country of the address.
+
+
+            This field is returned if it exists in the resource.'
+          maxLength: 40
+          minLength: 0
+          type: string
+        first_name:
+          description: 'First name of the addressee.
+
+
+            This field is returned if it exists in the resource.'
+          maxLength: 40
+          minLength: 0
+          type: string
+        last_name:
+          description: 'Last name of the addressee.
+
+
+            This field is returned if it exists in the resource.'
+          maxLength: 40
+          minLength: 0
+          type: string
+        middle_name:
+          description: 'Middle name of the addressee.
+
+
+            This field is returned if it exists in the resource.'
+          maxLength: 40
+          minLength: 0
+          type: string
+        phone:
+          description: 'Telephone number of the addressee.
+
+
+            This field is returned if it exists in the resource.'
+          maxLength: 20
+          minLength: 0
+          type: string
+        postal_code:
+          description: 'Postal code of the address.
+
+
+            This field is returned if it exists in the resource.'
+          maxLength: 10
+          minLength: 0
+          type: string
+        state:
+          description: 'State or province of the address.
+
+
+            This field is returned if it exists in the resource.'
+          maxLength: 32
+          minLength: 0
+          type: string
+        zip:
+          description: 'United States ZIP code of the address.
+
+
+            This field is returned if it exists in the resource.'
+          maxLength: 10
+          minLength: 0
+          type: string
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

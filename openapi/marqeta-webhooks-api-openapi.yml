@@ -1,0 +1,777 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries Webhooks API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- description: '// Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    Webhooks are notifications about API events, sent as they occur.
+
+    The Marqeta platform sends these notifications to an endpoint that is hosted in your environment and configured to receive and process them.
+
+
+    Create a webhook object to represent your webhook endpoint.
+
+    Configure it with the URL of your webhook endpoint and a set of credentials for accessing that endpoint.
+
+    You can configure it to send notifications for a single event, a group of events by type, or all event types.
+
+    To set up multiple webhook endpoints and route different types of event notifications to each, create multiple webhook objects and configure each to send a specific type of event notification to a specific endpoint.
+
+
+    See <</developer-guides/about-webhooks, About Webhooks>> for information on notifications and a tutorial that walks you through the configuration of your webhook endpoint.
+
+
+    See <</core-api/event-types, Event Types>> for reference documentation on the types of events that the Marqeta platform supports.
+
+
+    [NOTE]
+
+    Webhooks URLs are cached.
+
+    Changes made on your webhook endpoint can take up to one hour to be applied.'
+  name: Webhooks
+paths:
+  /webhooks:
+    get:
+      description: 'Returns an array of all webhooks.
+
+
+        This endpoint supports <</core-api/field-filtering, field filtering>>, <</core-api/sorting-and-pagination, sorting>>, and <</core-api/sorting-and-pagination, pagination>>.
+
+
+        [NOTE]
+
+        As shown in the example, `config.secret`, `config.basic_auth_username`, and `config.basic_auth_password` are masked in responses to this and all other requests.
+
+        To ensure you can access these values as needed, update them on your endpoint, store them securely, and then <</core-api/webhooks#put, update the webhook subscription>>.'
+      operationId: getWebhooks
+      parameters:
+      - description: Set to `true` to return only active webhook configurations, otherwise all webhook configurations will be returned.
+        explode: true
+        in: query
+        name: active
+        required: false
+        schema:
+          default: false
+          type: boolean
+        style: form
+      - description: Number of resources to retrieve.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          format: int32
+          type: integer
+        style: form
+      - description: Sort order index of the first resource in the returned array.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: form
+      - description: 'Comma-delimited list of fields to return (`field_1,field_2`, and so on).
+
+          Leave blank to return all fields.'
+        explode: true
+        in: query
+        name: fields
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: 'Field on which to sort.
+
+          Use any field in the resource model, or one of the system fields `lastModifiedTime` or `createdTime`.
+
+          Prefix the field name with a hyphen (`-`) to sort in descending order.
+
+          Omit the hyphen to sort in ascending order.'
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -createdTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                count: 1
+                data:
+                - active: true
+                  config:
+                    basic_auth_password: m**********d
+                    basic_auth_username: m**********e
+                    custom_header:
+                      my_header_name_1: my_value_1
+                      my_header_name_2: my_value_2
+                      my_header_name_3: my_value_3
+                    secret: m**********t
+                    signature_algorithm: HMAC_SHA_256
+                    url: https://my_secure_domain.com/webhook
+                  created_time: 2023-02-24 23:20:28+00:00
+                  events:
+                  - '*'
+                  last_modified_time: 2023-02-24 23:20:28+00:00
+                  name: my_webhook_name
+                  token: my_webhook_token
+                end_index: 0
+                is_more: true
+                start_index: 0
+              schema:
+                $ref: '#/components/schemas/WebhookResponseModelListResponse'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: List webhooks
+      tags:
+      - Webhooks
+    post:
+      description: 'Creates a webhook.
+
+
+        [NOTE]
+
+        As shown in the example, `config.secret`, `config.basic_auth_username`, and `config.basic_auth_password` are masked in responses to this and all other requests.
+
+        To access these values later, store them securely before making the request.'
+      operationId: postWebhooks
+      requestBody:
+        content:
+          application/json:
+            example:
+              active: true
+              config:
+                basic_auth_password: my_20-to-50-character_password
+                basic_auth_username: my_username
+                custom_header:
+                  my_header_name_1: my_value_1
+                  my_header_name_2: my_value_2
+                secret: my_20-character-min_secret
+                signature_algorithm: HMAC_SHA_256
+                url: https://my_secure_domain.com/webhook
+              events:
+              - '*'
+              name: my_webhook_name
+              token: my_webhook_token
+            schema:
+              $ref: '#/components/schemas/webhook_request_model'
+        required: false
+      responses:
+        '201':
+          content:
+            application/json:
+              example:
+                active: true
+                config:
+                  basic_auth_password: m**********d
+                  basic_auth_username: m**********e
+                  custom_header:
+                    my_header_name_1: my_value_1
+                    my_header_name_2: my_value_2
+                  secret: m**********t
+                  signature_algorithm: HMAC_SHA_256
+                  url: https://my_secure_domain.com/webhook
+                created_time: 2023-02-24 23:20:28+00:00
+                events:
+                - '*'
+                last_modified_time: 2023-02-24 23:20:28+00:00
+                name: my_webhook_name
+                token: my_webhook_token
+              schema:
+                $ref: '#/components/schemas/webhook_response_model'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '409':
+          content: {}
+          description: Request already processed with a different payload
+        '500':
+          content: {}
+          description: Server error
+      summary: Create webhook
+      tags:
+      - Webhooks
+  /webhooks/customheaders/{token}:
+    put:
+      description: Adds or updates a webhook's custom HTTP headers.
+      operationId: putWebhooksCustomHeadersToken
+      parameters:
+      - description: Unique identifier of the webhook.
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            example:
+              custom_header:
+                my_header_name_1: my_value_1
+                my_header_name_2: my_value_2
+                my_header_name_3: my_value_3
+            schema:
+              $ref: '#/components/schemas/WebhookUpdateCustomHeaderRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                active: true
+                config:
+                  basic_auth_password: m**********d
+                  basic_auth_username: m**********e
+                  custom_header:
+                    my_header_name_1: my_value_1
+                    my_header_name_2: my_value_2
+                    my_header_name_3: my_value_3
+                  secret: m**********t
+                  signature_algorithm: HMAC_SHA_256
+                  url: https://my_secure_domain.com/webhook
+                created_time: 2023-02-06 08:12:32+00:00
+                events:
+                - transaction.*
+                last_modified_time: 2023-02-26 22:07:23+00:00
+                name: my_webhook_name
+                token: my_webhook_01
+              schema:
+                $ref: '#/components/schemas/webhook_response_model'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '404':
+          content: {}
+          description: Resource not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Update webhook custom headers
+      tags:
+      - Webhooks
+  /webhooks/{token}:
+    get:
+      description: 'Retrieves a webhook.
+
+
+        [NOTE]
+
+        As shown in the example, `config.secret`, `config.basic_auth_username`, and `config.basic_auth_password` are masked in responses to this and all other requests.
+
+        To ensure you can access these values as needed, update them on your endpoint, store them securely, and then <</core-api/webhooks#put, update the webhook subscription>>.'
+      operationId: getWebhooksToken
+      parameters:
+      - description: Unique identifier of the webhook.
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/webhook_response_model'
+          description: Success
+        '404':
+          content: {}
+          description: Resource not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Retrieve webhook
+      tags:
+      - Webhooks
+    put:
+      description: 'Updates a webhook.
+
+
+        You can also use this endpoint to disable webhooks you no longer want to receive—there is no `DELETE` method available to remove unneeded webhooks.
+
+        To disable a webhook, use this endpoint to set its `active` field to `false`.
+
+
+        [NOTE]
+
+        As shown in the example, `config.secret`, `config.basic_auth_username`, and `config.basic_auth_password` are masked in responses to this and all other requests.
+
+        To access these values later, store them securely before making the request.
+
+        When modifying authentication credentials, update the endpoint configuration before updating your webhook subscription to avoid missing any important event notifications.
+
+
+        For instructions on managing your webhooks via the Developer Dashboard, see the <</developer-guides/developer-tools/#_to_disable_a_webhook, Developer Tools>> guide.'
+      operationId: putWebhooksToken
+      parameters:
+      - description: Unique identifier of the webhook.
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/webhook_base_model'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/webhook_response_model'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '404':
+          content: {}
+          description: Resource not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Update webhook
+      tags:
+      - Webhooks
+  /webhooks/{token}/ping:
+    post:
+      description: "Pings your webhook endpoint.\n\nSend a ping request to your webhook endpoint to validate credentials and connectivity.\nYour webhook endpoint must be configured to respond.\n\n=== Configuring your webhook endpoint\n\nWhen the Marqeta platform receives the ping request, it sends a `POST` request containing the following body to the URL of your webhook endpoint:\n\n[#ping-webhook-sample]\n[source,json]\n----\n{\n  \"pings\": [\n    {\n      \"token\": \"marqeta\",\n      \"payload\": \"healthcheck\"\n    }\n  ]\n}\n----\n\nTo indicate that it is functioning properly, your webhook endpoint must respond with a status code of `200` (see <</developer-guides/signature-verification, Signature Verification>> for a code example that identifies a ping request).\nThe response can optionally include a link:http://www.json.org/[JSON, window=\"_blank\"]-formatted body, for example:\n\n[#ping-webhook-sample-2]\n[source,json]\n----\n{\"my_endpoint_status\": \"alive\"}\n----\n\nThe Marqeta platform then responds to its requestor by echoing, as-is, the response code and body received from your webhook endpoint.\n\n=== Using the ping facility\n\nTo ping a webhook endpoint, send a `POST` request to `/webhooks/{token}/ping` and use the `token` path parameter to specify which webhook you want to reach.\nInclude an empty, link:http://www.json.org/[JSON, window=\"_blank\"]-formatted body in the request, that is:\n\n[#ping-webhook-sample-3]\n[source,json]\n----\n{}\n----\n\nThe following chain of actions occurs during the successful execution of a ping operation:\n\n. The Marqeta platform receives the ping request (`POST` to `/webhooks/{token}/ping`).\n. The Marqeta platform sends a request to your webhook endpoint.\n. Your webhook endpoint responds with a status code of \"200\" and an optional body.\n. The Marqeta platform responds to its requestor by echoing, as-is, the response code and body it received from your webhook endpoint.\n\n[NOTE]\nIf the customer-hosted endpoint fails to respond within five seconds, the Marqeta platform times out the request and responds with the following message body (where `<optional message>` represents additional details you can choose to include in the response):\n\n[#ping-webhook-sample-4]\n[source,json]\n----\n{\n  \"error_message\": \"Webhook operation failed \" + <optional message>,\n  \"error_code\": \"422600\"\n}\n----\n\nFailed pings are not automatically retried."
+      operationId: postWebhooksTokenPing
+      parameters:
+      - description: Unique identifier of the webhook.
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                pings:
+                - my_endpoint_status: alive
+              schema:
+                $ref: '#/components/schemas/webhook_ping_model'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '404':
+          content: {}
+          description: Resource not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Ping webhook
+      tags:
+      - Webhooks
+  /webhooks/{token}/{event_type}/{event_token}:
+    post:
+      description: 'Resends an event notification to your webhook endpoint.
+
+
+        Although you send this request as a `POST`, all parameters are passed in the URL and the body is empty.
+
+        The event notification is resent to your webhook endpoint and is also returned in the response to this request.'
+      operationId: postWebhooksTokenEventtypeEventtoken
+      parameters:
+      - description: Unique identifier of the webhook.
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Specifies the type of event you want to resend.
+        explode: false
+        in: path
+        name: event_type
+        required: true
+        schema:
+          enum:
+          - chargebacktransition
+          - digitalwallettokentransition
+          - cardtransition
+          - usertransition
+          - businesstransition
+          - transaction
+          - threedstransition
+          type: string
+        style: simple
+      - description: Unique identifier of the event for which you want to resend a notification.
+        explode: false
+        in: path
+        name: event_token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content: {}
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '404':
+          content: {}
+          description: Resource not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Resend event notification
+      tags:
+      - Webhooks
+components:
+  schemas:
+    echo_ping_request:
+      properties:
+        payload:
+          description: Payload of the ping request.
+          type: string
+        token:
+          description: Unique identifier of the ping request.
+          type: string
+      type: object
+    webhook_config_request_model:
+      description: Contains the configuration information for the webhook.
+      properties:
+        basic_auth_password:
+          description: Password for accessing your webhook endpoint.
+          maxLength: 50
+          minLength: 20
+          type: string
+        basic_auth_username:
+          description: Username for accessing your webhook endpoint.
+          maxLength: 50
+          minLength: 1
+          type: string
+        custom_header:
+          additionalProperties:
+            type: string
+          description: Custom headers to be passed along with the request.
+          type: object
+        secret:
+          description: 'Randomly chosen string used for implementing HMAC-SHA1 or HMAC-SHA256 depending on value in `signature_algorithm`.
+
+            A signature provides an added layer of security by authenticating the message and validating message integrity.
+
+            Using this functionality requires that your webhook endpoint verify the message signature.
+
+            For information about implementing this functionality, see <</developer-guides/signature-verification, Signature Verification>>.'
+          maxLength: 50
+          minLength: 20
+          type: string
+        signature_algorithm:
+          description: 'The algorithm used for signature verification.
+
+            A signature provides an added layer of security by authenticating the message and validating message integrity.
+
+            Using this functionality requires that your webhook endpoint verify the message signature.
+
+            For information about implementing this functionality, see <</developer-guides/signature-verification, Signature Verification>>.'
+          maxLength: 20
+          minLength: 1
+          type: string
+        url:
+          description: URL of your webhook endpoint.
+          maxLength: 255
+          minLength: 1
+          type: string
+        use_mtls:
+          default: false
+          description: 'Set to `true` to use use mutual transport layer security (mTLS) authentication for the webhook.
+
+            mTLS authentication is in the beta testing phase, and is not yet generally available.
+
+            Contact your Marqeta representative for more information about using mTLS authentication.'
+          type: boolean
+      required:
+      - basic_auth_password
+      - basic_auth_username
+      - url
+      type: object
+    webhook_response_model:
+      properties:
+        active:
+          default: true
+          description: 'Indicates whether the webhook is active.
+
+            This field is returned if you included it in your webhook.'
+          type: boolean
+        config:
+          $ref: '#/components/schemas/webhook_config_response_model'
+        created_time:
+          description: Date and time when the webhook event was created, in UTC.
+          format: date-time
+          type: string
+        events:
+          description: 'Specifies the types of events for which notifications are sent.
+
+
+            The wildcard character `\*` indicates that you receive all webhook notifications, or all notifications of a specified category.
+
+            For example, `*` indicates that you receive all webhook notifications; `transaction.*` indicates that you receive all `transaction` webhook notifications.
+
+
+            *NOTE:* You can only use the wildcard character with the _base_ type events, not subcategories.
+
+            For example, you cannot subscribe to `cardtransition.fulfillment.\*` events, but you can subscribe to `cardtransition.*`.'
+          items:
+            type: string
+          type: array
+        last_modified_time:
+          description: Date and time when the associated object was last modified, in UTC.
+          format: date-time
+          type: string
+        name:
+          description: Descriptive name of the webhook.
+          maxLength: 64
+          minLength: 1
+          type: string
+        token:
+          description: Unique identifier of the webhook.
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - config
+      - events
+      - name
+      type: object
+    webhook_base_model:
+      properties:
+        active:
+          default: true
+          description: Indicates whether the webhook is active.
+          type: boolean
+        config:
+          $ref: '#/components/schemas/webhook_config_request_model'
+        events:
+          description: 'Specifies the types of events for which notifications are sent.
+
+
+            The wildcard character `\*` indicates that you receive all webhook notifications, or all notifications of a specified category.
+
+            For example, `*` indicates that you receive all webhook notifications; `transaction.*` indicates that you receive all `transaction` webhook notifications.
+
+
+            *NOTE:* You can only use the wildcard character with the _base_ type events, not subcategories.
+
+            For example, you cannot subscribe to `cardtransition.fulfillment.\*` events, but you can subscribe to `cardtransition.*`.'
+          items:
+            type: string
+          type: array
+        name:
+          description: Descriptive name of the webhook.
+          maxLength: 64
+          minLength: 1
+          type: string
+      required:
+      - config
+      - events
+      - name
+      type: object
+    webhook_request_model:
+      properties:
+        active:
+          default: true
+          description: Indicates whether the webhook is active.
+          type: boolean
+        config:
+          $ref: '#/components/schemas/webhook_config_request_model'
+        events:
+          description: 'Specifies the types of events for which notifications are sent.
+
+
+            The wildcard character `\*` indicates that you receive all webhook notifications, or all notifications of a specified category.
+
+            For example, `*` indicates that you receive all webhook notifications; `transaction.*` indicates that you receive all `transaction` webhook notifications.
+
+
+            *NOTE:* You can only use the wildcard character with the _base_ type events, not subcategories.
+
+            For example, you cannot subscribe to `cardtransition.fulfillment.\*` events, but you can subscribe to `cardtransition.*`.'
+          items:
+            type: string
+          type: array
+        name:
+          description: Descriptive name of the webhook.
+          maxLength: 64
+          minLength: 1
+          type: string
+        token:
+          description: Unique identifier of the webhook.
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - config
+      - events
+      - name
+      type: object
+    WebhookUpdateCustomHeaderRequest:
+      properties:
+        custom_header:
+          additionalProperties:
+            type: string
+          description: 'Additional custom information included in the HTTP header.
+
+            For example, this might contain security information, along with Basic Authentication, when making a JIT Funding request.'
+          type: object
+      type: object
+    webhook_ping_model:
+      properties:
+        pings:
+          description: Array of ping requests to your webhook endpoint.
+          items:
+            $ref: '#/components/schemas/echo_ping_request'
+          type: array
+      required:
+      - pings
+      type: object
+    webhook_config_response_model:
+      description: Contains the configuration information for the webhook.
+      properties:
+        basic_auth_password:
+          description: Password for accessing your webhook endpoint.
+          maxLength: 12
+          minLength: 12
+          type: string
+        basic_auth_username:
+          description: Username for accessing your webhook endpoint.
+          maxLength: 12
+          minLength: 12
+          type: string
+        custom_header:
+          additionalProperties:
+            type: string
+          description: Custom headers to be passed along with the request.
+          type: object
+        secret:
+          description: 'Randomly chosen string used for implementing HMAC-SHA1 or HMAC-SHA256 depending on value in signature_algorithm.
+
+            A signature provides an added layer of security by authenticating the message and validating message integrity.
+
+            Using this functionality requires that your webhook endpoint verify the message signature.
+
+            For information about implementing this functionality, see <</developer-guides/signature-verification, Signature Verification>>.'
+          maxLength: 12
+          minLength: 12
+          type: string
+        signature_algorithm:
+          description: 'The algorithm used for signature verification.
+
+            A signature provides an added layer of security by authenticating the message and validating message integrity.
+
+            Using this functionality requires that your webhook endpoint verify the message signature.
+
+            For information about implementing this functionality, see <</developer-guides/signature-verification, Signature Verification>>.'
+          maxLength: 20
+          minLength: 1
+          type: string
+        url:
+          description: URL of your webhook endpoint.
+          maxLength: 255
+          minLength: 1
+          type: string
+        use_mtls:
+          default: false
+          description: 'Set to `true` to use use mutual transport layer security (mTLS) authentication for the webhook.
+
+
+            mTLS authentication is in the beta testing phase, and is not yet generally available.
+
+            Contact your Marqeta representative for more information about using mTLS authentication.'
+          type: boolean
+      required:
+      - basic_auth_password
+      - basic_auth_username
+      - url
+      type: object
+    WebhookResponseModelListResponse:
+      properties:
+        count:
+          description: 'Number of resources to retrieve.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+        data:
+          description: 'Array of webhooks resources.
+
+
+            Resources are returned as appropriate to your query.'
+          items:
+            $ref: '#/components/schemas/webhook_response_model'
+          type: array
+        end_index:
+          description: 'Sort order index of the last resource in the returned array.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          description: 'A value of `true` indicates that more unreturned resources exist.
+
+            A value of `false` indicates that no more unreturned resources exist.
+
+
+            This field is returned if there are resources in your returned array.'
+          type: boolean
+        start_index:
+          description: 'Sort order index of the first resource in the returned array.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

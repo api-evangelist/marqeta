@@ -1,0 +1,274 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries PINs API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- description: '// Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    Use the `/pins` endpoint to create, update, or reveal a personal identification number (PIN) for a card.'
+  name: PINs
+paths:
+  /pins:
+    put:
+      description: 'Creates or updates a personal identification number (PIN) for an existing card.
+
+        Although cardholders might choose a four-, five-, or six-digit PIN if they set their PIN at an automated teller machine, they can only set a four-digit PIN using Marqeta''s Set PIN widget or the create or update PIN endpoint (`PUT /pins`).
+
+        Cardholders can update their PIN through the API regardless of its length, but the new PIN value they choose must contain four digits.
+
+
+        If you want to manage a card''s PIN, first create a new control token for the card by sending a `POST` request to `/pins/controltoken`, and then use that token to update the PIN.
+
+        You must create a card before you can manage a PIN.
+
+
+        Unless PIN reveal functionality has been enabled for your program, you cannot retrieve a PIN that has previously been created.
+
+        If the PIN has been forgotten, you must either update the card''s PIN or create a new card and PIN.
+
+
+        If you have enabled PIN reveal functionality for your program, you can send a `POST` request to the `/pins/reveal` endpoint to retrieve an existing PIN.
+
+        See <</core-api/pins#revealPins, Reveal PIN>> on this page for details.
+
+
+        [WARNING]
+
+        Sending a request to this endpoint requires PCI DSS compliance.
+
+        You must comply with PCI DSS data security requirements if you want to store, transmit, or process sensitive card data such as the cardholder''s primary account number (PAN), personal identification number (PIN), and card expiration date.'
+      operationId: putPins
+      requestBody:
+        content:
+          application/json:
+            example:
+              control_token: b4647c9a-d4b8-4091-a5ff-dd67a7bb9ffc
+              pin: '5678'
+            schema:
+              $ref: '#/components/schemas/pin_request'
+        required: false
+      responses:
+        '204':
+          content: {}
+          description: PIN was successfully set
+        '400':
+          content: {}
+          description: Bad request
+        '412':
+          content: {}
+          description: Weak PIN
+        '500':
+          content: {}
+          description: Server error
+      summary: Create or update PIN
+      tags:
+      - PINs
+  /pins/controltoken:
+    post:
+      description: 'Creates a control token necessary when creating or updating a card''s personal identification number (PIN).
+
+
+        Creating, updating, or revealing a card''s PIN is a two-step process.
+
+        You must first create the control token that is required to create the PIN, and then you create, update, or reveal the PIN itself.
+
+
+        The lifespan of the control token in a production environment is either five minutes or one hour from creation, depending on the token type.
+
+        If multiple tokens are requested for a single card, only the most recent one is valid.
+
+        Once redeemed, a token cannot be reused.'
+      operationId: postPinsControltoken
+      requestBody:
+        content:
+          application/json:
+            example:
+              card_token: my_card_01
+              controltoken_type: SET_PIN
+            schema:
+              $ref: '#/components/schemas/control_token_request'
+        required: false
+      responses:
+        '201':
+          content:
+            application/json:
+              example:
+                control_token: b4647c9a-d4b8-4091-a5ff-dd67a7bb9ffc
+              schema:
+                $ref: '#/components/schemas/control_token_response'
+          description: Control token created
+        '400':
+          content: {}
+          description: Bad request
+        '403':
+          content: {}
+          description: Forbidden
+        '500':
+          content: {}
+          description: Server error
+      summary: Create PIN control token
+      tags:
+      - PINs
+  /pins/reveal:
+    post:
+      description: 'Reveals the personal identification number (PIN) of an existing, active card.
+
+        Be aware that while a cardholder can only set a four-digit PIN using the Marqeta Set PIN widget or `PUT /pins` API, you may see a four-, five-, or six-digit PIN in cases where your cardholders have set a new PIN at an automated teller machine.
+
+
+        [WARNING]
+
+        Only use this endpoint to access a PIN in order to reveal it to its cardholder.
+
+        Do not use this endpoint for the purpose of storing a PIN at any location.
+
+
+        Sending a request to this endpoint requires PCI DSS compliance.
+
+        You must comply with PCI DSS data security requirements if you want to store, transmit, or process sensitive card data such as the cardholder''s primary account number (PAN), personal identification number (PIN), and card expiration date.
+
+
+        If you want to update a card''s PIN instead, send a `PUT` request to the `/pins` endpoint.
+
+        See <</core-api/pins#putPins, Create or Update PIN>> on this page for details.
+
+
+        Revealing a card''s PIN is a two-step process.
+
+        You must first create a new control token for the card by sending a `POST` request to `/pins/controltoken`, and then use that token to reveal the PIN.'
+      operationId: revealPins
+      requestBody:
+        content:
+          application/json:
+            example:
+              cardholder_verification_method: BIOMETRIC_FINGERPRINT
+              control_token: b4647c9a-d4b8-4091-a5ff-dd67a7bb9ffc
+            schema:
+              $ref: '#/components/schemas/pin_reveal_request'
+        required: false
+      responses:
+        '204':
+          content: {}
+          description: PIN was successfully revealed
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Reveal PIN
+      tags:
+      - PINs
+components:
+  schemas:
+    pin_request:
+      properties:
+        control_token:
+          description: 'Unique value generated as a result of issuing a `POST` request to the `/pins/controltoken` endpoint.
+
+            This value cannot be updated.'
+          maxLength: 36
+          minLength: 1
+          type: string
+        pin:
+          description: Four-digit number to associate with the card.
+          type: string
+      required:
+      - control_token
+      - pin
+      type: object
+    pin_reveal_request:
+      properties:
+        cardholder_verification_method:
+          description: 'The supplemental method used to verify the cardholder''s identity before revealing the card''s personal identification number (PIN).
+
+
+            The possible cardholder verification methods are:
+
+
+            * *BIOMETRIC_FACE:* In-app authentication via facial recognition
+
+            * *BIOMETRIC_FINGERPRINT:* In-app authentication via biometric fingerprint
+
+            * *EXP_CVV:* In-app authentication by entering the card''s expiration date and card verification value (CVV)
+
+            * *LOGIN:* In-app authentication by re-entering the app password
+
+            * *OTP:* Two-factor authentication involving a one-time password (OTP)
+
+            * *OTP_CVV:* Two-factor authentication involving the card''s CVV and an OTP
+
+            * *OTHER:* Authentication that relies on other secure methods'
+          enum:
+          - BIOMETRIC_FACE
+          - BIOMETRIC_FINGERPRINT
+          - LOGIN
+          - EXP_CVV
+          - OTP_CVV
+          - OTP
+          - OTHER
+          type: string
+        control_token:
+          description: 'Unique value generated as a result of issuing a `POST` request to the `/pins/controltoken` endpoint.
+
+            This value cannot be updated.'
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - cardholder_verification_method
+      - control_token
+      type: object
+    control_token_request:
+      properties:
+        card_token:
+          description: The unique identifier of the card for which you want to generate a control token.
+          maxLength: 36
+          minLength: 1
+          type: string
+        controltoken_type:
+          description: 'Specifies the type of action completed by this request.
+
+
+            *WARNING:* Sending a request to this endpoint with a `REVEAL_PIN` control token requires PCI DSS compliance.
+
+
+            The lifespan of the control token depends on the token type:
+
+
+            * *SET_PIN:* 60 minutes
+
+            * *REVEAL_PIN:* 5 minutes'
+          enum:
+          - SET_PIN
+          - REVEAL_PIN
+          type: string
+      required:
+      - card_token
+      type: object
+    control_token_response:
+      properties:
+        control_token:
+          description: 'Unique value generated as a result of issuing a `POST` request to the `/pins/controltoken` endpoint.
+
+            This value cannot be updated.'
+          type: string
+      required:
+      - control_token
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

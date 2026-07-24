@@ -1,0 +1,442 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries auto reloads API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: auto reloads
+paths:
+  /autoreloads:
+    get:
+      operationId: getAutoreloads
+      parameters:
+      - description: Card product token
+        explode: true
+        in: query
+        name: card_product
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: User token
+        explode: true
+        in: query
+        name: user_token
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Business token
+        explode: true
+        in: query
+        name: business_token
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Number of items to retrieve. Count can be between 1 - 10 items.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 10
+          format: int32
+          type: integer
+        style: form
+      - description: Indicates from what row to start returning data.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: form
+      - description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+        explode: true
+        in: query
+        name: fields
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Field by which to sort the returned items. Use any field in the model, or system fields lastModifiedTime or createdTime.
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -lastModifiedTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AutoReloadListResponse'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Lists all auto reloads for the program
+      tags:
+      - auto reloads
+    post:
+      operationId: postAutoreloads
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/auto_reload_model'
+        description: Auto reload object
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/auto_reload_response_model'
+          description: Created
+        '400':
+          content: {}
+          description: Bad request
+        '409':
+          content: {}
+          description: Token already associated with a different payload
+        '500':
+          content: {}
+          description: Server error
+      summary: Creates an auto reload object
+      tags:
+      - auto reloads
+  /autoreloads/{token}:
+    get:
+      operationId: getAutoreloadsToken
+      parameters:
+      - description: Auto reload token
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+        explode: true
+        in: query
+        name: fields
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/auto_reload_response_model'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '404':
+          content: {}
+          description: Auto reload not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns a specific auto reload object
+      tags:
+      - auto reloads
+    put:
+      operationId: putAutoreloadsToken
+      parameters:
+      - explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/auto_reload_update_model'
+        description: Auto reload object
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/auto_reload_response_model'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Updates a specific auto reload object
+      tags:
+      - auto reloads
+components:
+  schemas:
+    auto_reload_model:
+      description: 'Contains information about an auto reload.
+
+        See <</core-api/auto-reload, Auto Reloads>> for more information.
+
+
+        Returned if an auto reload was executed.'
+      properties:
+        active:
+          default: true
+          description: 'Specifies whether the auto reload is active.
+
+
+            Only one auto reload per level, per object, can be active.'
+          type: boolean
+        association:
+          $ref: '#/components/schemas/auto_reload_association'
+        currency_code:
+          description: Three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+          type: string
+        funding_source_address_token:
+          description: 'Unique identifier of the funding source address to use for this auto reload.
+
+
+            If your funding source is an ACH account, then a `funding_source_address_token` is not required.
+
+            If your funding source is a payment card, you must have at least one funding source address in order to create a GPA order.
+
+
+            Send a `GET` request to `/fundingsources/addresses/user/{user_token}` to retrieve address tokens for a user.
+
+
+            Send a `GET` request to `/fundingsources/addresses/business/{business_token}` to retrieve address tokens for a business.'
+          maxLength: 36
+          minLength: 1
+          type: string
+        funding_source_token:
+          description: 'Unique identifier of the funding source to use for this auto reload.
+
+
+            Send a `GET` request to `/fundingsources/user/{user_token}` to retrieve funding source tokens for a user.
+
+
+            Send a `GET` request to `/fundingsources/business/{business_token}` to retrieve funding source tokens for a business.'
+          maxLength: 36
+          minLength: 1
+          type: string
+        order_scope:
+          $ref: '#/components/schemas/order_scope'
+        token:
+          description: 'Unique identifier of the auto reload.
+
+
+            If you do not include a token, the system will generate one automatically.
+
+            This token is necessary for use in other API calls, so we recommend that rather than let the system generate one, you use a simple string that is easy to remember.
+
+            This value cannot be updated.'
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - currency_code
+      - order_scope
+      type: object
+    OrderScope:
+      description: Defines the scope of the AutoReload, either GPA or MSA
+      properties:
+        gpa:
+          $ref: '#/components/schemas/gpa'
+        msa:
+          $ref: '#/components/schemas/msa'
+      type: object
+    auto_reload_response_model:
+      properties:
+        active:
+          default: true
+          type: boolean
+        association:
+          $ref: '#/components/schemas/auto_reload_association'
+        created_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        currency_code:
+          type: string
+        funding_source_address_token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        funding_source_token:
+          description: Required when order scope is GPA
+          maxLength: 36
+          minLength: 1
+          type: string
+        last_modified_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        order_scope:
+          $ref: '#/components/schemas/OrderScope'
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - created_time
+      - currency_code
+      - last_modified_time
+      - order_scope
+      type: object
+    auto_reload_update_model:
+      properties:
+        active:
+          default: true
+          type: boolean
+        association:
+          $ref: '#/components/schemas/auto_reload_association'
+        currency_code:
+          type: string
+        funding_source_address_token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        funding_source_token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        order_scope:
+          $ref: '#/components/schemas/OrderScope'
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      type: object
+    auto_reload_association:
+      description: 'Specifies the scope of the auto reload.
+
+
+        Input no more than one field.
+
+        If no value is supplied, the auto reload applies at the program level.'
+      properties:
+        account_template_token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        business_token:
+          description: 'Unique identifier of the business for which the auto reload is configured.
+
+
+            Send a `GET` request to `/businesses` to retrieve business tokens.'
+          maxLength: 36
+          minLength: 1
+          type: string
+        card_product_token:
+          description: 'Unique identifier of the card product for which the auto reload is configured.
+
+
+            Send a `GET` request to `/cardproducts` to retrieve card product tokens.'
+          maxLength: 36
+          minLength: 1
+          type: string
+        user_token:
+          description: 'Unique identifier of the user for which the auto reload is configured.
+
+
+            Send a `GET` request to `/users` to retrieve user tokens.'
+          maxLength: 36
+          minLength: 1
+          type: string
+      type: object
+    msa:
+      properties:
+        campaign_token:
+          type: string
+        reload_amount:
+          exclusiveMinimum: false
+          minimum: 0.01
+          type: number
+        trigger_amount:
+          exclusiveMinimum: false
+          minimum: 0.01
+          type: number
+      required:
+      - campaign_token
+      - reload_amount
+      - trigger_amount
+      type: object
+    AutoReloadListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/auto_reload_response_model'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    gpa:
+      description: Defines the type of order.
+      properties:
+        reload_amount:
+          description: 'Available balance on the card after the reload has completed.
+
+
+            This value must be greater than or equal to the value of `trigger_amount`.
+
+            Note that this is not the same as the amount added to the card, which will vary from reload to reload.'
+          exclusiveMinimum: false
+          minimum: 0.01
+          type: number
+        trigger_amount:
+          description: 'Threshold that determines when the reload happens.
+
+
+            The reload is triggered when the card balance falls below this amount.'
+          exclusiveMinimum: false
+          minimum: 0.01
+          type: number
+      required:
+      - reload_amount
+      - trigger_amount
+      type: object
+    order_scope:
+      description: Defines the balance threshold and reload amounts.
+      properties:
+        gpa:
+          $ref: '#/components/schemas/gpa'
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

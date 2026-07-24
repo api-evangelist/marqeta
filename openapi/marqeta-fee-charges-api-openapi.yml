@@ -1,0 +1,285 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries fee charges API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: fee charges
+paths:
+  /feecharges:
+    post:
+      operationId: postFeeCharge
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/fee_transfer_request'
+        required: false
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/fee_transfer_response'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '409':
+          content: {}
+          description: Request already processed with a different payload
+        '422':
+          content: {}
+          description: Rule violations
+        '500':
+          content: {}
+          description: Server error
+      summary: Creates a fee charge
+      tags:
+      - fee charges
+  /feecharges/realtime:
+    post:
+      operationId: postRealTimeFeeCharge
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/realtime_fee_transfer_request'
+        required: false
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/fee_transfer_response'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '409':
+          content: {}
+          description: Request already processed with a different payload
+        '422':
+          content: {}
+          description: Rule violations
+        '500':
+          content: {}
+          description: Server error
+      summary: Creates a realTime fee charge
+      tags:
+      - fee charges
+  /feecharges/{token}:
+    get:
+      operationId: getFeeChargeToken
+      parameters:
+      - explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/fee_transfer_response'
+          description: Success
+        '404':
+          content: {}
+          description: Fee charge not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns a fee charge
+      tags:
+      - fee charges
+components:
+  schemas:
+    fee:
+      description: Contains details about the fee.
+      properties:
+        amount:
+          description: Amount of the fee.
+          type: number
+        created_time:
+          description: Date and time when the `fees` object was created, in UTC.
+          format: date-time
+          type: string
+        currency_code:
+          description: Three-digit ISO 4217 currency code.
+          type: string
+        last_modified_time:
+          description: Date and time when the `fees` object was last modified, in UTC.
+          format: date-time
+          type: string
+        memo:
+          description: Optional property to be used as Dispaly field when the fee is applied 255 char max
+          type: string
+        name:
+          description: Name of the fee.
+          type: string
+        tags:
+          description: Descriptive metadata about the fee.
+          type: string
+        token:
+          description: Unique identifier of the `fees` object.
+          type: string
+      required:
+      - amount
+      - created_time
+      - currency_code
+      - last_modified_time
+      - name
+      - token
+      type: object
+    fee_transfer_response:
+      description: Contains information about a fee charge, including the amount, currency code, and user or business token.
+      properties:
+        business_token:
+          description: Specifies the business account holder to which the fee applies.
+          maxLength: 36
+          minLength: 1
+          type: string
+        created_time:
+          description: Date and time when the `fee_charge` object was created, in UTC.
+          format: date-time
+          type: string
+        fees:
+          description: Contains attributes that define characteristics of one or more fees.
+          items:
+            $ref: '#/components/schemas/fee_detail'
+          type: array
+        tags:
+          description: 'Metadata about the fee charge.
+
+
+            This field is returned if it exists in the resource.'
+          maxLength: 255
+          minLength: 0
+          type: string
+        token:
+          description: Unique identifier of the fee transfer.
+          maxLength: 36
+          minLength: 1
+          type: string
+        user_token:
+          description: Specifies the user account holder to which the fee applies.
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - business_token
+      - created_time
+      - fees
+      - token
+      - user_token
+      type: object
+    fee_model:
+      description: 'Contains attributes that define characteristics of one or more fees.
+
+        This array is returned in the response when it is included in the request.'
+      properties:
+        memo:
+          description: Additional text describing the fee.
+          maxLength: 99
+          minLength: 1
+          type: string
+        overrideAmount:
+          description: Dynamic fee amount that overrides the `fee.amount` field value.
+          type: number
+        tags:
+          description: Descriptive metadata about the fee.
+          maxLength: 255
+          minLength: 0
+          type: string
+        token:
+          description: Unique identifier of the fee.
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - token
+      type: object
+    fee_transfer_request:
+      properties:
+        business_token:
+          description: Required if 'user_token' is null
+          maxLength: 36
+          minLength: 1
+          type: string
+        fees:
+          items:
+            $ref: '#/components/schemas/fee_model'
+          type: array
+        tags:
+          maxLength: 255
+          minLength: 0
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        user_token:
+          description: Required if 'business_token' is null
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - business_token
+      - fees
+      - user_token
+      type: object
+    fee_detail:
+      description: Contains details about a fee.
+      properties:
+        fee:
+          $ref: '#/components/schemas/fee'
+        memo:
+          description: Additional text describing the fee.
+          maxLength: 99
+          minLength: 1
+          type: string
+        overrideAmount:
+          description: Dynamic fee amount that overrides the `fee.amount` field value.
+          type: number
+        tags:
+          description: Descriptive metadata about the fee.
+          maxLength: 255
+          minLength: 0
+          type: string
+        token:
+          description: Unique identifier of the fee.
+          maxLength: 36
+          minLength: 1
+          type: string
+        transaction_token:
+          description: Unique identifier of the fee transaction.
+          type: string
+      required:
+      - fee
+      - token
+      - transaction_token
+      type: object
+    realtime_fee_transfer_request:
+      properties:
+        fee:
+          $ref: '#/components/schemas/fee_model'
+        original_transaction_token:
+          type: string
+        token:
+          type: string
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

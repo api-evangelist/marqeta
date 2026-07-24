@@ -1,0 +1,969 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries chargebacks API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: chargebacks
+paths:
+  /chargebacks:
+    get:
+      operationId: getChargebacks
+      parameters:
+      - description: Number of chargebacks to retrieve
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          format: int32
+          type: integer
+        style: form
+      - description: Start index
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: form
+      - description: Network reference ID
+        explode: true
+        in: query
+        name: network_reference_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Transaction token
+        explode: true
+        in: query
+        name: transaction_token
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Amount
+        explode: true
+        in: query
+        name: amount
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Comma-delimited list of chargeback states to display e.g. INITIATED | REPRESENTMENT | PREARBITRATION | ARBITRATION | CASE_WON | CASE_LOST | NETWORK_REJECTED | WITHDRAWN | WRITTEN_OFF_ISSUER | WRITTEN_OFF_PROGRAM
+        explode: true
+        in: query
+        name: states
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Sort order
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -lastModifiedTime
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: network_case_id
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargebackListResponse'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: List all chargebacks
+      tags:
+      - chargebacks
+    post:
+      operationId: postChargebacks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/chargeback_request'
+        required: false
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/chargeback_response'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '409':
+          content: {}
+          description: Token already associated with a different payload
+        '412':
+          content: {}
+          description: Pre-condition failed. Chargeback amount is greater than user GPA balance
+        '422':
+          content: {}
+          description: Unable to return funds back to cardholder
+        '500':
+          content: {}
+          description: Server error
+      summary: Creates a chargeback
+      tags:
+      - chargebacks
+  /chargebacks/allocationacknowledgement:
+    post:
+      operationId: postChargebackAllocationAcknowledgment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/chargeback_allocation_ack_request'
+        required: false
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/chargeback_response'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '409':
+          content: {}
+          description: Token already associated with a different payload
+        '500':
+          content: {}
+          description: Server error
+      summary: Creates a chargeback allocation acknowledgement
+      tags:
+      - chargebacks
+  /chargebacks/transitions:
+    post:
+      operationId: postChargebacksTransitions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/chargeback_transition_request'
+        required: false
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/chargeback_transition_response'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '409':
+          content: {}
+          description: Token already associated with a different payload
+        '422':
+          content: {}
+          description: Unable to perform chargeback transition
+        '500':
+          content: {}
+          description: Server error
+      summary: Creates a chargeback transition
+      tags:
+      - chargebacks
+  /chargebacks/transitions/{token}:
+    get:
+      operationId: getChargebacksTransitionsToken
+      parameters:
+      - description: Chargeback transition token
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/chargeback_transition_response'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '404':
+          content: {}
+          description: Transition not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns a specific chargeback transition
+      tags:
+      - chargebacks
+  /chargebacks/{chargeback_token}/transitions:
+    get:
+      operationId: getChargebacksChargebacktokenTransitions
+      parameters:
+      - description: Number of transitions to retrieve
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          format: int32
+          type: integer
+        style: form
+      - description: Start index
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: form
+      - description: Sort order
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -lastModifiedTime
+          type: string
+        style: form
+      - description: Chargeback token
+        explode: false
+        in: path
+        name: chargeback_token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargebackTransitionListResponse'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Lists all chargeback transitions that are related to a chargeback
+      tags:
+      - chargebacks
+  /chargebacks/{token}:
+    get:
+      operationId: getChargebacksToken
+      parameters:
+      - explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/chargeback_response'
+          description: Success
+        '404':
+          content: {}
+          description: Chargeback not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns a specific chargeback
+      tags:
+      - chargebacks
+    put:
+      operationId: putChargebacksToken
+      parameters:
+      - explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChargebackUpdateRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/chargeback_response'
+          description: Success
+        '400':
+          content: {}
+          description: Chargeback not found
+        '422':
+          content: {}
+          description: Unable to update chargeback
+        '500':
+          content: {}
+          description: Server error
+      summary: Updates chargeback data
+      tags:
+      - chargebacks
+  /chargebacks/{token}/grantprovisionalcredit:
+    put:
+      operationId: putChargebacksTokenGrantprovisionalcredit
+      parameters:
+      - explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/chargeback_response'
+          description: Success
+        '400':
+          content: {}
+          description: Chargeback not found
+        '422':
+          content: {}
+          description: Unable to grant provisional credit
+        '500':
+          content: {}
+          description: Server error
+      summary: Grants provisional credit
+      tags:
+      - chargebacks
+  /chargebacks/{token}/reverseprovisionalcredit:
+    put:
+      operationId: putChargebacksTokenReverseprovisionalcredit
+      parameters:
+      - explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/chargeback_response'
+          description: Success
+        '400':
+          content: {}
+          description: Chargeback not found; chargeback at terminal state
+        '422':
+          content: {}
+          description: Unable to reverse provisional credit
+        '500':
+          content: {}
+          description: Server error
+      summary: Reverses provisional credit
+      tags:
+      - chargebacks
+  /views/chargebacks/{time_agg}:
+    get:
+      operationId: getChargebacks
+      summary: Retrieve chargeback data
+      description: Returns chargeback data aggregated by transaction or time period. Includes dispute status, amounts, reason codes, and resolution details for tracking chargeback activity and financial exposure.
+      tags:
+      - chargebacks
+      parameters:
+      - $ref: '#/components/parameters/time_agg'
+      - $ref: '#/components/parameters/program'
+      - $ref: '#/components/parameters/fields'
+      - $ref: '#/components/parameters/start_date'
+      - $ref: '#/components/parameters/end_date'
+      - $ref: '#/components/parameters/format'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/offset'
+      responses:
+        '200':
+          description: Chargeback data for the specified time period.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargebacksResponse'
+            text/csv:
+              schema:
+                type: string
+                description: CSV-formatted chargeback data.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    chargeback_response:
+      description: Contains the chargeback object associated with this transaction if a chargeback has been initiated.
+      properties:
+        amount:
+          description: Amount of the chargeback.
+          exclusiveMinimum: false
+          minimum: 0.01
+          type: number
+        channel:
+          description: Channel the chargeback came through.
+          enum:
+          - GATEWAY
+          - GATEWAY_AUTOMATED
+          - ISSUER
+          - ISSUER_AUTOMATED
+          type: string
+        created_time:
+          description: 'Date and time when the chargeback was created.
+
+            Not returned for transactions when the associated chargeback is in the `INITIATED` state.'
+          format: date-time
+          type: string
+        credit_user:
+          default: false
+          description: Whether to credit the user for the chargeback amount.
+          type: boolean
+        currency_code:
+          maxLength: 3
+          minLength: 3
+          type: string
+        last_modified_time:
+          description: 'Date and time when the chargeback was last modified.
+
+            Not returned for transactions when the associated chargeback is in the `INITIATED` state.'
+          format: date-time
+          type: string
+        memo:
+          description: Additional comments about the chargeback.
+          maxLength: 1024
+          minLength: 1
+          type: string
+        network:
+          description: Network handling the chargeback.
+          enum:
+          - MARQETA
+          - DISCOVER
+          - MASTERCARD
+          - PULSE
+          - VISA
+          - AMERICANEXPRESS
+          type: string
+        network_case_id:
+          description: Network-assigned identifier of the chargeback.
+          maxLength: 50
+          minLength: 0
+          type: string
+        reason_code:
+          description: Identifies the standardized reason for the chargeback.
+          type: string
+        state:
+          description: State of the case.
+          enum:
+          - INITIATED
+          - REPRESENTMENT
+          - PREARBITRATION
+          - ARBITRATION
+          - CASE_WON
+          - CASE_LOST
+          - NETWORK_REJECTED
+          - WITHDRAWN
+          - RETRIEVAL_REQUEST
+          - RETRIEVAL_RESPONSE
+          type: string
+        token:
+          description: Unique identifier of the chargeback.
+          maxLength: 36
+          minLength: 1
+          type: string
+        transaction_token:
+          description: Unique identifier of the transaction being charged back.
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - amount
+      - channel
+      - created_time
+      - credit_user
+      - last_modified_time
+      - network
+      - state
+      - token
+      - transaction_token
+      type: object
+    chargeback_request:
+      properties:
+        amount:
+          exclusiveMinimum: false
+          minimum: 0.01
+          type: number
+        channel:
+          enum:
+          - GATEWAY
+          - GATEWAY_AUTOMATED
+          - ISSUER
+          - ISSUER_AUTOMATED
+          type: string
+        credit_user:
+          default: true
+          type: boolean
+        currency_code:
+          type: string
+        memo:
+          maxLength: 1024
+          minLength: 1
+          type: string
+        pre_initiated:
+          type: boolean
+        reason_code:
+          description: Either 'reason_code' or 'reason_description' is required
+          type: string
+        reason_description:
+          description: Either 'reason_description' or 'reason_code' is required
+          enum:
+          - SERVICE_NOT_PROVIDED_MERCHANDISE_NOT_RECEIVED
+          - CANCELLED_RECURRING_TRANSACTION
+          - NOT_AS_DESCRIBED_OR_DEFECTIVE_MERCHANDISE
+          - FRAUD_MULTIPLE_TRANSACTIONS
+          - FRAUD_TRANSACTION
+          - NO_AUTHORIZATION
+          - LATE_PRESENTMENT
+          - TRANSACTION_NOT_RECOGNIZED
+          - INCORRECT_CURRENCY
+          - INCORRECT_TRANSACTION_CODE
+          - INCORRECT_CURRENCY_OR_TRANSACTION_CODE
+          - INCORRECT_TRANSACTION_AMOUNT
+          - INCORRECT_ACCOUNT_NUMBER
+          - INCORRECT_TRANSACTION_AMOUNT_OR_ACCOUNT_NUMBER
+          - NOT_AUTHORIZED_CARD_PRESENT
+          - NOT_AUTHORIZED_CARD_ABSENT
+          - CREDIT_NOT_PROCESSED
+          - NON_RECEIPT_OF_CASH_OR_LOAD_TRANSACTION_VALUE_AT_ATM
+          - DUPLICATE_PROCESSING_OR_PAID_BY_OTHER_MEANS
+          type: string
+        regulation_type:
+          type: string
+        status:
+          enum:
+          - ARBITRATION
+          - CASE_LOST
+          - CASE_WON
+          - INITIATED
+          - NETWORK_REJECTED
+          - PREARBITRATION
+          - PRE_INITIATED
+          - REPRESENTMENT
+          - WITHDRAWN
+          - WRITTEN_OFF_ISSUER
+          - WRITTEN_OFF_PROGRAM
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        transaction_token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - amount
+      - channel
+      - transaction_token
+      type: object
+    ErrorResponse:
+      type: object
+      description: Standard error response returned by the Marqeta DiVA API.
+      properties:
+        error_code:
+          type: string
+          description: Machine-readable error code.
+        error_message:
+          type: string
+          description: Human-readable error description.
+    ChargebackUpdateRequest:
+      properties:
+        reason_code:
+          description: Either 'reason_code' or 'reason_description' is required
+          type: string
+        reason_description:
+          description: Either 'reason_description' or 'reason_code' is required
+          enum:
+          - SERVICE_NOT_PROVIDED_MERCHANDISE_NOT_RECEIVED
+          - CANCELLED_RECURRING_TRANSACTION
+          - NOT_AS_DESCRIBED_OR_DEFECTIVE_MERCHANDISE
+          - FRAUD_MULTIPLE_TRANSACTIONS
+          - FRAUD_TRANSACTION
+          - NO_AUTHORIZATION
+          - LATE_PRESENTMENT
+          - TRANSACTION_NOT_RECOGNIZED
+          - INCORRECT_CURRENCY
+          - INCORRECT_TRANSACTION_CODE
+          - INCORRECT_CURRENCY_OR_TRANSACTION_CODE
+          - INCORRECT_TRANSACTION_AMOUNT
+          - INCORRECT_ACCOUNT_NUMBER
+          - INCORRECT_TRANSACTION_AMOUNT_OR_ACCOUNT_NUMBER
+          - NOT_AUTHORIZED_CARD_PRESENT
+          - NOT_AUTHORIZED_CARD_ABSENT
+          - CREDIT_NOT_PROCESSED
+          - NON_RECEIPT_OF_CASH_OR_LOAD_TRANSACTION_VALUE_AT_ATM
+          - DUPLICATE_PROCESSING_OR_PAID_BY_OTHER_MEANS
+          type: string
+        status:
+          enum:
+          - ARBITRATION
+          - CASE_LOST
+          - CASE_WON
+          - INITIATED
+          - NETWORK_REJECTED
+          - PREARBITRATION
+          - PRE_INITIATED
+          - REPRESENTMENT
+          - WITHDRAWN
+          - WRITTEN_OFF_ISSUER
+          - WRITTEN_OFF_PROGRAM
+          type: string
+      type: object
+    ChargebackListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/chargeback_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    ChargebacksResponse:
+      type: object
+      description: Chargeback data response.
+      properties:
+        meta:
+          $ref: '#/components/schemas/DivaResponseMeta'
+        data:
+          type: array
+          description: Array of chargeback records.
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                description: Chargeback date or aggregation period.
+              program:
+                type: string
+                description: Program identifier.
+              chargeback_count:
+                type: integer
+                description: Number of chargebacks in the period.
+              total_chargeback_amount:
+                type: number
+                description: Total chargeback amount.
+              reason_code:
+                type: string
+                description: Chargeback reason code from the card network.
+              status:
+                type: string
+                description: Current status of the chargeback.
+    ChargebackTransitionListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/chargeback_transition_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    chargeback_transition_response:
+      properties:
+        amount:
+          type: number
+        channel:
+          enum:
+          - GATEWAY
+          - GATEWAY_AUTOMATED
+          - ISSUER
+          - ISSUER_AUTOMATED
+          type: string
+        chargeback_token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        created_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        last_modified_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        previous_state:
+          enum:
+          - INITIATED
+          - REPRESENTMENT
+          - PREARBITRATION
+          - ARBITRATION
+          - CASE_WON
+          - CASE_LOST
+          - NETWORK_REJECTED
+          - WITHDRAWN
+          - ARBITRATION_RESPONSE
+          - ARBITRATION_DECISION
+          type: string
+        reason:
+          maxLength: 1024
+          minLength: 0
+          type: string
+        state:
+          enum:
+          - INITIATED
+          - REPRESENTMENT
+          - PREARBITRATION
+          - ARBITRATION
+          - CASE_WON
+          - CASE_LOST
+          - NETWORK_REJECTED
+          - WITHDRAWN
+          - WRITTEN_OFF_ISSUER
+          - WRITTEN_OFF_PROGRAM
+          - ARBITRATION_RESPONSE
+          - ARBITRATION_DECISION
+          type: string
+        token:
+          maxLength: 36
+          minLength: 0
+          type: string
+        transaction_token:
+          maxLength: 36
+          minLength: 0
+          type: string
+        type:
+          enum:
+          - initiated
+          - representment
+          - prearbitration
+          - arbitration
+          - case.won
+          - case.lost
+          - network.rejected
+          - written.off.issuer
+          - written.off.program
+          type: string
+      required:
+      - channel
+      - chargeback_token
+      - created_time
+      - last_modified_time
+      - previous_state
+      - state
+      - token
+      - type
+      type: object
+    chargeback_transition_request:
+      properties:
+        amount:
+          description: Representment or prearbitration amount; this is for transitioning to Representment or Prearbitration only
+          exclusiveMinimum: false
+          minimum: 0.01
+          type: number
+        chargeback_token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        reason:
+          maxLength: 3000
+          minLength: 1
+          type: string
+        regulation_type:
+          type: string
+        state:
+          enum:
+          - REPRESENTMENT
+          - PREARBITRATION
+          - PREARB_RESPONDED
+          - ARBITRATION
+          - CASE_WON
+          - CASE_LOST
+          - WRITTEN_OFF_ISSUER
+          - WRITTEN_OFF_PROGRAM
+          - ARBITRATION_RESPONSE
+          - ARBITRATION_DECISION
+          - RETRIEVAL_REQUEST
+          - RETRIEVAL_RESPONSE
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        type:
+          type: string
+      required:
+      - chargeback_token
+      - state
+      type: object
+    chargeback_allocation_ack_request:
+      properties:
+        chargeback_token:
+          type: string
+        token:
+          type: string
+      required:
+      - chargeback_token
+      type: object
+    DivaResponseMeta:
+      type: object
+      description: Metadata included in DiVA API paginated responses.
+      properties:
+        total_count:
+          type: integer
+          description: Total number of records matching the query.
+        limit:
+          type: integer
+          description: Maximum records returned per page.
+        offset:
+          type: integer
+          description: Current page offset.
+        has_more:
+          type: boolean
+          description: Whether additional pages of data are available.
+  parameters:
+    offset:
+      name: offset
+      in: query
+      description: Zero-based offset for pagination.
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+    time_agg:
+      name: time_agg
+      in: path
+      required: true
+      description: Aggregation time level for the data. Use 'day' for daily rollups, 'week' for weekly rollups, 'month' for monthly rollups, or 'detail' for individual record-level data.
+      schema:
+        type: string
+        enum:
+        - day
+        - week
+        - month
+        - detail
+    format:
+      name: format
+      in: query
+      description: Response format. Use 'json' for JSON responses or 'csv' for comma-separated bulk file format. Defaults to json.
+      schema:
+        type: string
+        enum:
+        - json
+        - csv
+        default: json
+    start_date:
+      name: start_date
+      in: query
+      description: Start date for filtering data (format YYYY-MM-DD). Returns records on or after this date.
+      schema:
+        type: string
+        format: date
+    limit:
+      name: limit
+      in: query
+      description: Maximum number of records to return per request.
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 10000
+        default: 1000
+    program:
+      name: program
+      in: query
+      required: true
+      description: The name of your Marqeta card program. This parameter is required for most DiVA API endpoints to scope the data to your program.
+      schema:
+        type: string
+    fields:
+      name: fields
+      in: query
+      description: Comma-delimited list of fields to include in the response. If not specified, all available fields are returned.
+      schema:
+        type: string
+    end_date:
+      name: end_date
+      in: query
+      description: End date for filtering data (format YYYY-MM-DD). Returns records on or before this date.
+      schema:
+        type: string
+        format: date
+  responses:
+    Unauthorized:
+      description: Unauthorized. The provided application token and access token credentials are invalid or missing.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Bad request. One or more required query parameters are missing or contain invalid values.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

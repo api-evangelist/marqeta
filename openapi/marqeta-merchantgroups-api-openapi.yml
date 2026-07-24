@@ -1,0 +1,247 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries merchantgroups API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: merchantgroups
+paths:
+  /merchantgroups:
+    get:
+      operationId: getMerchantGroups
+      parameters:
+      - description: mid
+        explode: true
+        in: query
+        name: mid
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Number of items to retrieve. Count can be between 1 - 10 items.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 10
+          format: int32
+          type: integer
+        style: form
+      - description: Indicates from what row to start returning data.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: form
+      - description: Field by which to sort the returned items. Use any field in the model, or system fields lastModifiedTime or createdTime.
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -lastModifiedTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MerchantGroupListResponse'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Lists all Merchant Groups
+      tags:
+      - merchantgroups
+    post:
+      operationId: postMerchantGroup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/merchant_group_request'
+        required: false
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/merchant_group_response'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '409':
+          content: {}
+          description: Token already associated with a different payload
+        '500':
+          content: {}
+          description: Server error
+      summary: Creates a merchant group
+      tags:
+      - merchantgroups
+  /merchantgroups/{token}:
+    get:
+      operationId: getMerchantGroup
+      parameters:
+      - description: Merchant Group token
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/merchant_group_response'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '404':
+          content: {}
+          description: Merchant Group not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns a Merchant Group
+      tags:
+      - merchantgroups
+    put:
+      operationId: putMerchantGroupsToken
+      parameters:
+      - explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/merchant_group_update_request'
+        description: Merchant Group
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/merchant_group_response'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Updates an Merchant Group
+      tags:
+      - merchantgroups
+components:
+  schemas:
+    merchant_group_update_request:
+      properties:
+        active:
+          default: false
+          type: boolean
+        mids:
+          items:
+            type: string
+          maxItems: 4000
+          minItems: 1
+          type: array
+        name:
+          maxLength: 40
+          minLength: 1
+          type: string
+      type: object
+    merchant_group_response:
+      properties:
+        active:
+          default: false
+          type: boolean
+        created_time:
+          format: date-time
+          type: string
+        last_modified_time:
+          format: date-time
+          type: string
+        mids:
+          items:
+            type: string
+          type: array
+        name:
+          type: string
+        token:
+          type: string
+      type: object
+    merchant_group_request:
+      properties:
+        active:
+          default: false
+          type: boolean
+        mids:
+          items:
+            type: string
+          maxItems: 4000
+          minItems: 1
+          type: array
+        name:
+          maxLength: 40
+          minLength: 1
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - name
+      type: object
+    MerchantGroupListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/merchant_group_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

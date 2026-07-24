@@ -1,0 +1,1822 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries funding sources API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: funding sources
+paths:
+  /fundingsources/ach:
+    post:
+      operationId: postFundingsourcesAch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ach_model'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ach_response_model'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '409':
+          content: {}
+          description: Token already associated with a different payload
+        '500':
+          content: {}
+          description: Server error
+      summary: Registers an ACH funding source
+      tags:
+      - funding sources
+  /fundingsources/ach/partner:
+    post:
+      operationId: postFundingsourcesAchPartner
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ach_partner_request_model'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ach_response_model'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '409':
+          content: {}
+          description: Token already associated with a different payload
+        '500':
+          content: {}
+          description: Server error
+      summary: Registers an ACH funding source through a partner
+      tags:
+      - funding sources
+  /fundingsources/ach/partner/{funding_source_token}/balance:
+    get:
+      operationId: getAchPartnerLinkedFundingSourceBalance
+      parameters:
+      - description: Funding source token
+        explode: false
+        in: path
+        name: funding_source_token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinkedAccountBalanceResponse'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '404':
+          content: {}
+          description: Not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Retrieves a linked funding source balance from a partner
+      tags:
+      - funding sources
+  /fundingsources/ach/{funding_source_token}:
+    get:
+      operationId: getFundingsourcesAchFundingsourcetoken
+      parameters:
+      - description: Funding account token
+        explode: false
+        in: path
+        name: funding_source_token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ach_response_model'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '404':
+          content: {}
+          description: Not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns a user ACH account
+      tags:
+      - funding sources
+    put:
+      operationId: putFundingsourcesAchFundingsourcetoken
+      parameters:
+      - explode: false
+        in: path
+        name: funding_source_token
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ach_verification_model'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ach_response_model'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Verifies a bank account as a funding source
+      tags:
+      - funding sources
+  /fundingsources/ach/{funding_source_token}/verificationamounts:
+    get:
+      operationId: getFundingsourcesAchFundingsourcetokenVerificationamounts
+      parameters:
+      - description: Funding account token
+        explode: false
+        in: path
+        name: funding_source_token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ach_verification_model'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns the dollar amounts used to verify the ACH account
+      tags:
+      - funding sources
+  /fundingsources/addresses:
+    post:
+      operationId: postFundingsourcesAddresses
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/card_holder_address_model'
+        required: false
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardholderAddressResponse'
+          description: Created
+        '400':
+          content: {}
+          description: Bad request
+        '409':
+          content: {}
+          description: Token already associated with a different payload
+        '500':
+          content: {}
+          description: Server error
+      summary: Creates an account holder address for a funding source
+      tags:
+      - funding sources
+  /fundingsources/addresses/business/{business_token}:
+    get:
+      operationId: getFundingsourcesAddressesBusinessBusinesstoken
+      parameters:
+      - description: Business token
+        explode: false
+        in: path
+        name: business_token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+        explode: true
+        in: query
+        name: fields
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardholderAddressListResponse'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '404':
+          content: {}
+          description: Not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Lists all addresses for a business
+      tags:
+      - funding sources
+  /fundingsources/addresses/user/{user_token}:
+    get:
+      operationId: getFundingsourcesAddressesUserUsertoken
+      parameters:
+      - description: User token
+        explode: false
+        in: path
+        name: user_token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+        explode: true
+        in: query
+        name: fields
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardholderAddressListResponse'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '404':
+          content: {}
+          description: Not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Lists all addresses for a user
+      tags:
+      - funding sources
+  /fundingsources/addresses/{funding_source_address_token}:
+    get:
+      operationId: getFundingsourcesAddressesFundingsourceaddresstoken
+      parameters:
+      - description: Funding source address token
+        explode: false
+        in: path
+        name: funding_source_address_token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardholderAddressResponse'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '404':
+          content: {}
+          description: Not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns a user address for a funding source
+      tags:
+      - funding sources
+    put:
+      operationId: putFundingsourcesAddressesFundingsourceaddresstoken
+      parameters:
+      - description: Funding source address token
+        explode: false
+        in: path
+        name: funding_source_address_token
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/card_holder_address_update_model'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardholderAddressResponse'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Updates the account holder address for a funding source
+      tags:
+      - funding sources
+  /fundingsources/business/{business_token}:
+    get:
+      operationId: getFundingsourcesBusinessBusinesstoken
+      parameters:
+      - description: Business token
+        explode: false
+        in: path
+        name: business_token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Type, such as a payment card or ACH
+        explode: true
+        in: query
+        name: type
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+        explode: true
+        in: query
+        name: fields
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FundingAccountListResponse'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '404':
+          content: {}
+          description: No funding accounts found
+        '500':
+          content: {}
+          description: Server error
+      summary: Lists all funding sources for a business
+      tags:
+      - funding sources
+  /fundingsources/paymentcard:
+    post:
+      operationId: postFundingsourcesPaymentcard
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/token_request'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/payment_card_response_model'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '409':
+          content: {}
+          description: Token already associated with a different payload
+        '500':
+          content: {}
+          description: Server error
+      summary: Registers a payment card funding source
+      tags:
+      - funding sources
+  /fundingsources/paymentcard/{funding_source_token}:
+    get:
+      operationId: getFundingsourcesPaymentcardFundingsourcetoken
+      parameters:
+      - description: Funding token
+        explode: false
+        in: path
+        name: funding_source_token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/payment_card_response_model'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '404':
+          content: {}
+          description: Not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns a specific payment card
+      tags:
+      - funding sources
+    put:
+      operationId: putFundingsourcesFundingsourcetoken
+      parameters:
+      - description: Funding account token
+        explode: false
+        in: path
+        name: funding_source_token
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/token_update_request'
+        description: Payment card
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/payment_card_response_model'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: 'Updates a specific payment card '
+      tags:
+      - funding sources
+  /fundingsources/program:
+    post:
+      operationId: postFundingsourcesProgram
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/program_funding_source_request'
+        required: false
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/program_funding_source_response'
+          description: Success
+        '400':
+          content: {}
+          description: Invalid fields detected
+        '409':
+          content: {}
+          description: Request already processed with a different payload
+        '500':
+          content: {}
+          description: Server error
+      summary: Creates a program funding source
+      tags:
+      - funding sources
+  /fundingsources/program/ach:
+    get:
+      operationId: getAllACHFundingSources
+      parameters:
+      - description: Number of items to retrieve. Count can be between 1 - 10 items.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          format: int32
+          type: integer
+        style: form
+      - description: Indicates from what row to start returning data.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: form
+      - description: Comma delimited list of fields to return (e.g. field_1,field_2,..)
+        explode: true
+        in: query
+        name: fields
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Sort order
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -lastModifiedTime
+          type: string
+        style: form
+      - description: Returns programs with this active state
+        explode: true
+        in: query
+        name: active
+        required: false
+        schema:
+          type: boolean
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ACHListResponse'
+          description: Success
+        '400':
+          content: {}
+          description: Bad Request
+        '404':
+          content: {}
+          description: Not Found
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns a list of Program ACH funding sources
+      tags:
+      - funding sources
+    post:
+      operationId: postFundingsourcesProgramAch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/base_ach_request_model'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/base_ach_response_model'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '409':
+          content: {}
+          description: Token already associated with a different payload
+        '500':
+          content: {}
+          description: Server error
+      summary: Registers an ACH funding source for a program
+      tags:
+      - funding sources
+  /fundingsources/program/{token}:
+    get:
+      operationId: getFundingsourcesProgramToken
+      parameters:
+      - description: Program funding source token
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/program_funding_source_response'
+          description: Success
+        '404':
+          content: {}
+          description: Program funding source not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns a specific program funding source
+      tags:
+      - funding sources
+    put:
+      operationId: putFundingsourcesProgramToken
+      parameters:
+      - description: Program funding source token
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/program_funding_source_update_request'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/program_funding_source_response'
+          description: Success
+        '400':
+          content: {}
+          description: Invalid fields detected
+        '500':
+          content: {}
+          description: Server error
+      summary: Updates a specific program funding source
+      tags:
+      - funding sources
+  /fundingsources/programgateway:
+    post:
+      operationId: postFundingsourcesProgramgateway
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/gateway_program_funding_source_request'
+        required: false
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/gateway_program_funding_source_response'
+          description: Success
+        '400':
+          content: {}
+          description: Invalid fields detected
+        '409':
+          content: {}
+          description: Request already processed with a different payload
+        '500':
+          content: {}
+          description: Server error
+      summary: Creates a gateway program funding source
+      tags:
+      - funding sources
+  /fundingsources/programgateway/customheaders/{token}:
+    put:
+      operationId: putFundingsourcesProgramgatewayCustomHeaderToken
+      parameters:
+      - description: Gateway program funding source token
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/gateway_program_custom_header_update_request'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/gateway_program_funding_source_response'
+          description: Success
+        '400':
+          content: {}
+          description: Invalid fields detected
+        '500':
+          content: {}
+          description: Server error
+      summary: Updates a specific gateway program funding source Custom headers
+      tags:
+      - funding sources
+  /fundingsources/programgateway/{token}:
+    get:
+      operationId: getFundingsourcesProgramgatewayToken
+      parameters:
+      - description: Gateway program funding source token
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/gateway_program_funding_source_response'
+          description: Success
+        '404':
+          content: {}
+          description: Gateway program funding source not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns a gateway program funding source
+      tags:
+      - funding sources
+    put:
+      operationId: putFundingsourcesProgramgatewayToken
+      parameters:
+      - description: Gateway program funding source token
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/gateway_program_funding_source_update_request'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/gateway_program_funding_source_response'
+          description: Success
+        '400':
+          content: {}
+          description: Invalid fields detected
+        '500':
+          content: {}
+          description: Server error
+      summary: Updates a specific gateway program funding source
+      tags:
+      - funding sources
+  /fundingsources/user/{user_token}:
+    get:
+      operationId: getFundingsourcesUserUsertoken
+      parameters:
+      - description: User token
+        explode: false
+        in: path
+        name: user_token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Type, such as a payment card or ACH
+        explode: true
+        in: query
+        name: type
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+        explode: true
+        in: query
+        name: fields
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FundingAccountListResponse'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '404':
+          content: {}
+          description: No funding accounts found
+        '500':
+          content: {}
+          description: Server error
+      summary: Lists all funding sources for a user
+      tags:
+      - funding sources
+  /fundingsources/{funding_source_token}/default:
+    put:
+      operationId: putFundingsourcesFundingsourcetokenDefault
+      parameters:
+      - description: Funding account
+        explode: false
+        in: path
+        name: funding_source_token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/payment_card_response_model'
+          description: Success
+        '400':
+          content: {}
+          description: Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Configures a default funding source
+      tags:
+      - funding sources
+components:
+  schemas:
+    token_update_request:
+      properties:
+        active:
+          default: true
+          type: boolean
+        exp_date:
+          type: string
+        is_default_account:
+          default: false
+          type: boolean
+      required:
+      - exp_date
+      type: object
+    card_holder_address_model:
+      properties:
+        active:
+          default: true
+          type: boolean
+        address_1:
+          maxLength: 255
+          minLength: 0
+          type: string
+        address_2:
+          maxLength: 255
+          minLength: 0
+          type: string
+        business_token:
+          description: Required if 'user_token' is not specified
+          maxLength: 36
+          minLength: 1
+          type: string
+        city:
+          maxLength: 40
+          minLength: 0
+          type: string
+        country:
+          maxLength: 40
+          minLength: 1
+          type: string
+        first_name:
+          maxLength: 40
+          minLength: 0
+          type: string
+        is_default_address:
+          default: false
+          type: boolean
+        last_name:
+          maxLength: 40
+          minLength: 0
+          type: string
+        phone:
+          maxLength: 255
+          minLength: 0
+          type: string
+        postal_code:
+          description: Required if 'zip' is not specified
+          maxLength: 10
+          minLength: 0
+          type: string
+        state:
+          maxLength: 2
+          minLength: 0
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        user_token:
+          description: Required if 'business_token' is not specified
+          maxLength: 36
+          minLength: 1
+          type: string
+        zip:
+          description: Required if 'postal_code' is not specified
+          maxLength: 10
+          minLength: 0
+          type: string
+      required:
+      - address_1
+      - city
+      - country
+      - first_name
+      - last_name
+      - state
+      type: object
+    CardholderAddressResponse:
+      description: Contains information about the billing address of the funding source.
+      properties:
+        active:
+          default: false
+          description: Whether the address is active.
+          type: boolean
+        address_1:
+          description: Street address of the funding source.
+          maxLength: 255
+          minLength: 0
+          type: string
+        address_2:
+          description: 'Additional address information for the funding source.
+
+
+            This field is returned if it exists in the resource.'
+          maxLength: 255
+          minLength: 0
+          type: string
+        business_token:
+          description: 'Unique identifier of the business account holder associated with the address.
+
+
+            This field is returned if it exists in the resource.'
+          maxLength: 36
+          minLength: 1
+          type: string
+        city:
+          description: City of the funding source.
+          maxLength: 40
+          minLength: 0
+          type: string
+        country:
+          description: Country of the funding source.
+          maxLength: 40
+          minLength: 1
+          type: string
+        created_time:
+          description: Date and time when the address was created, in UTC.
+          format: date-time
+          type: string
+        first_name:
+          description: First name of the account holder associated with the funding source.
+          maxLength: 40
+          minLength: 0
+          type: string
+        is_default_address:
+          default: false
+          description: Whether this address is the default address used by the funding source.
+          type: boolean
+        last_modified_time:
+          description: 'Date and time when the address was last modified, in UTC.
+
+
+            This field is returned if it exists in the resource.'
+          format: date-time
+          type: string
+        last_name:
+          description: Last name of the account holder associated with the funding source.
+          maxLength: 40
+          minLength: 0
+          type: string
+        phone:
+          description: 'Phone number of the funding source.
+
+
+            This field is returned if it exists in the resource.'
+          maxLength: 255
+          minLength: 0
+          type: string
+        postal_code:
+          description: Postal code of the funding source.
+          maxLength: 10
+          minLength: 0
+          type: string
+        state:
+          description: 'Two-character state, provincial, or territorial abbreviation.
+
+
+            For the complete list, see <</core-api/kyc-verification#_valid_state_provincial_territorial_and_federal_abbreviations, Valid state, provincial, territorial, and federal abbreviations>>.'
+          maxLength: 2
+          minLength: 0
+          type: string
+        token:
+          description: Unique identifier of the `funding_source_address` object.
+          maxLength: 36
+          minLength: 1
+          type: string
+        user_token:
+          description: 'Unique identifier of the user account holder associated with the address.
+
+
+            This field is returned if it exists in the resource.'
+          maxLength: 36
+          minLength: 1
+          type: string
+        zip:
+          description: United States ZIP code of the funding source.
+          maxLength: 10
+          minLength: 0
+          type: string
+      required:
+      - address_1
+      - city
+      - country
+      - created_time
+      - first_name
+      - last_modified_time
+      - last_name
+      - postal_code
+      - state
+      - token
+      - zip
+      type: object
+    base_ach_response_model:
+      properties:
+        account_suffix:
+          type: string
+        account_type:
+          type: string
+        active:
+          default: false
+          type: boolean
+        bank_name:
+          type: string
+        created_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        date_sent_for_verification:
+          format: date-time
+          type: string
+        date_verified:
+          format: date-time
+          type: string
+        is_default_account:
+          default: false
+          type: boolean
+        last_modified_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        name_on_account:
+          type: string
+        partner:
+          type: string
+        partner_account_link_reference_token:
+          type: string
+        token:
+          type: string
+        verification_notes:
+          type: string
+        verification_override:
+          default: false
+          type: boolean
+        verification_status:
+          type: string
+      required:
+      - account_suffix
+      - account_type
+      - active
+      - created_time
+      - last_modified_time
+      - name_on_account
+      - token
+      type: object
+    program_funding_source_response:
+      properties:
+        account:
+          type: string
+        active:
+          type: boolean
+        created_time:
+          format: date-time
+          type: string
+        last_modified_time:
+          format: date-time
+          type: string
+        name:
+          maxLength: 50
+          minLength: 1
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - account
+      - created_time
+      - last_modified_time
+      - name
+      - token
+      type: object
+    ach_partner_request_model:
+      properties:
+        business_token:
+          description: Required if 'user_token' is null
+          maxLength: 36
+          minLength: 1
+          type: string
+        idempotentHash:
+          type: string
+        is_default_account:
+          default: false
+          type: boolean
+        partner:
+          enum:
+          - PLAID
+          type: string
+        partner_account_link_reference_token:
+          type: string
+        token:
+          type: string
+        user_token:
+          description: Required if 'business_token' is null
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - partner
+      - partner_account_link_reference_token
+      type: object
+    ach_model:
+      properties:
+        account_number:
+          type: string
+        account_type:
+          enum:
+          - checking
+          - savings
+          - corporate
+          - loan
+          type: string
+        bank_name:
+          type: string
+        business_token:
+          description: Required if 'user_token' is null
+          maxLength: 36
+          minLength: 1
+          type: string
+        is_default_account:
+          default: false
+          type: boolean
+        name_on_account:
+          maxLength: 50
+          minLength: 1
+          type: string
+        routing_number:
+          readOnly: true
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        user_token:
+          description: Required if 'business_token' is null
+          maxLength: 36
+          minLength: 1
+          type: string
+        verification_notes:
+          type: string
+        verification_override:
+          default: false
+          type: boolean
+      required:
+      - account_number
+      - account_type
+      - name_on_account
+      - routing_number
+      type: object
+    LinkedAccountBalanceResponse:
+      properties:
+        account_balance:
+          type: number
+        available_balance:
+          type: number
+        balance_iso_currency_code:
+          type: string
+        created_time:
+          format: date-time
+          type: string
+        last_modified_time:
+          format: date-time
+          type: string
+        processor_token:
+          type: string
+      type: object
+    program_funding_source_update_request:
+      properties:
+        active:
+          type: boolean
+        name:
+          maxLength: 50
+          minLength: 1
+          type: string
+      type: object
+    gateway_program_custom_header_update_request:
+      properties:
+        custom_header:
+          additionalProperties:
+            type: string
+          description: Custom headers
+          type: object
+      type: object
+    ach_verification_model:
+      properties:
+        active:
+          default: false
+          type: boolean
+        verify_amount1:
+          type: number
+        verify_amount2:
+          type: number
+      type: object
+    CardholderAddressListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/CardholderAddressResponse'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    FundingAccountListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/funding_account_response_model'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    gateway_program_funding_source_request:
+      properties:
+        active:
+          type: boolean
+        basic_auth_password:
+          maxLength: 100
+          minLength: 20
+          type: string
+        basic_auth_username:
+          maxLength: 50
+          minLength: 1
+          type: string
+        custom_header:
+          additionalProperties:
+            type: string
+          description: Custom headers
+          type: object
+        name:
+          maxLength: 50
+          minLength: 1
+          type: string
+        oauth_token_provider:
+          $ref: '#/components/schemas/oauth_token_provider'
+        timeout_millis:
+          description: Total timeout in milliseconds for gateway processing
+          format: int64
+          maximum: 7000
+          minimum: 1000
+          type: integer
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        url:
+          maxLength: 250
+          minLength: 0
+          type: string
+        use_mtls:
+          default: false
+          description: Use MTLS for funding request
+          type: boolean
+      required:
+      - basic_auth_password
+      - basic_auth_username
+      - name
+      - url
+      type: object
+    ACHListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/base_ach_response_model'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    token_request:
+      properties:
+        account_number:
+          type: string
+        business_token:
+          description: required if 'user_token' is null
+          maxLength: 36
+          minLength: 1
+          type: string
+        cvv_number:
+          maxLength: 4
+          minLength: 3
+          type: string
+        exp_date:
+          type: string
+        is_default_account:
+          default: false
+          type: boolean
+        postal_code:
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        user_token:
+          description: required if 'business_token' is null
+          maxLength: 36
+          minLength: 1
+          type: string
+        zip:
+          type: string
+      required:
+      - account_number
+      - cvv_number
+      - exp_date
+      type: object
+    funding_account_response_model:
+      properties:
+        account_suffix:
+          type: string
+        account_type:
+          type: string
+        active:
+          default: false
+          type: boolean
+        business_token:
+          type: string
+        created_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        date_sent_for_verification:
+          format: date-time
+          type: string
+        date_verified:
+          format: date-time
+          type: string
+        exp_date:
+          type: string
+        is_default_account:
+          default: false
+          type: boolean
+        last_modified_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        link_partner_account_reference_token:
+          type: string
+        name_on_account:
+          type: string
+        partner:
+          type: string
+        token:
+          type: string
+        type:
+          type: string
+        user_token:
+          type: string
+        verification_notes:
+          type: string
+        verification_override:
+          default: false
+          type: boolean
+        verification_status:
+          type: string
+      required:
+      - created_time
+      - last_modified_time
+      type: object
+    base_ach_request_model:
+      properties:
+        account_number:
+          type: string
+        account_type:
+          enum:
+          - checking
+          - savings
+          - corporate
+          - loan
+          type: string
+        bank_name:
+          type: string
+        is_default_account:
+          default: false
+          type: boolean
+        name_on_account:
+          maxLength: 50
+          minLength: 1
+          type: string
+        routing_number:
+          readOnly: true
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        verification_notes:
+          type: string
+        verification_override:
+          default: false
+          type: boolean
+      required:
+      - account_number
+      - account_type
+      - name_on_account
+      - routing_number
+      type: object
+    program_funding_source_request:
+      properties:
+        active:
+          type: boolean
+        name:
+          maxLength: 50
+          minLength: 1
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - name
+      type: object
+    oauth_token_provider:
+      properties:
+        audience:
+          description: OAuth audience claim sent in the client-credentials token request
+          type: string
+        authentication_method:
+          description: authentication_method
+          enum:
+          - CLIENT_SECRET_POST
+          type: string
+        client_id:
+          description: OAuth client ID – write-only, persisted to Secrets Manager
+          type: string
+        client_secret:
+          description: OAuth client secret – write-only, never returned in GET responses
+          type: string
+        scope:
+          description: OAuth scope(s) to request from the token endpoint
+          type: string
+        token_max_life_minutes:
+          description: Maximum lifetime in minutes for cached access tokens; uses service default when omitted
+          format: int32
+          type: integer
+        url:
+          description: Token endpoint URL for the OAuth provider
+          type: string
+      required:
+      - authentication_method
+      - client_id
+      - url
+      type: object
+    gateway_program_funding_source_response:
+      properties:
+        account:
+          type: string
+        active:
+          type: boolean
+        basic_auth_password:
+          description: 50 char max. Required if URL is present. Minimum 20 chars with upper and lowercase letters, numbers, and symbols
+          type: string
+        basic_auth_username:
+          description: 50 char max. Required if URL is present
+          type: string
+        created_time:
+          format: date-time
+          type: string
+        custom_header:
+          additionalProperties:
+            type: string
+          description: Custom headers to be passed along with request
+          type: object
+        last_modified_time:
+          format: date-time
+          type: string
+        name:
+          maxLength: 50
+          minLength: 1
+          type: string
+        oauth_token_provider:
+          $ref: '#/components/schemas/oauth_token_provider'
+        timeout_millis:
+          description: Total timeout in milliseconds for gateway processing
+          format: int64
+          type: integer
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        url:
+          description: 250 char max. Empty string (disabled). Must be HTTPS.
+          type: string
+        use_mtls:
+          default: false
+          description: Use MTLS for funding request
+          type: boolean
+        version:
+          type: string
+      required:
+      - account
+      - basic_auth_password
+      - basic_auth_username
+      - created_time
+      - custom_header
+      - last_modified_time
+      - name
+      - timeout_millis
+      - token
+      - url
+      - use_mtls
+      - version
+      type: object
+    gateway_program_funding_source_update_request:
+      properties:
+        active:
+          type: boolean
+        basic_auth_password:
+          description: Required if URL is present; must contain upper and lowercase letters, numbers, and symbols
+          maxLength: 100
+          minLength: 20
+          type: string
+        basic_auth_username:
+          description: Required if URL is present
+          maxLength: 50
+          minLength: 1
+          type: string
+        custom_header:
+          additionalProperties:
+            type: string
+          description: Custom headers
+          type: object
+        name:
+          maxLength: 50
+          minLength: 1
+          type: string
+        oauth_token_provider:
+          $ref: '#/components/schemas/oauth_token_provider'
+        timeout_millis:
+          description: Total timeout in milliseconds for gateway processing
+          format: int64
+          maximum: 7000
+          minimum: 1000
+          type: integer
+        url:
+          description: Empty string (disabled); must be HTTPS
+          maxLength: 250
+          minLength: 0
+          type: string
+        use_mtls:
+          default: false
+          description: Use MTLS for funding request
+          type: boolean
+      required:
+      - basic_auth_password
+      - basic_auth_username
+      - url
+      type: object
+    ach_response_model:
+      properties:
+        account_suffix:
+          type: string
+        account_type:
+          type: string
+        active:
+          default: false
+          type: boolean
+        bank_name:
+          type: string
+        business_token:
+          type: string
+        created_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        date_sent_for_verification:
+          format: date-time
+          type: string
+        date_verified:
+          format: date-time
+          type: string
+        is_default_account:
+          default: false
+          type: boolean
+        last_modified_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        name_on_account:
+          type: string
+        partner:
+          type: string
+        partner_account_link_reference_token:
+          type: string
+        token:
+          type: string
+        user_token:
+          type: string
+        verification_notes:
+          type: string
+        verification_override:
+          default: false
+          type: boolean
+        verification_status:
+          type: string
+      required:
+      - account_suffix
+      - account_type
+      - active
+      - created_time
+      - last_modified_time
+      - name_on_account
+      - token
+      type: object
+    payment_card_response_model:
+      properties:
+        account_suffix:
+          type: string
+        account_type:
+          type: string
+        active:
+          default: false
+          type: boolean
+        business_token:
+          description: Required if 'user_token' is not present
+          type: string
+        created_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        exp_date:
+          type: string
+        is_default_account:
+          default: false
+          type: boolean
+        last_modified_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        token:
+          type: string
+        type:
+          type: string
+        user_token:
+          description: Required if 'business_token' is not present
+          type: string
+      required:
+      - account_suffix
+      - account_type
+      - active
+      - created_time
+      - exp_date
+      - is_default_account
+      - last_modified_time
+      - token
+      - type
+      type: object
+    card_holder_address_update_model:
+      properties:
+        active:
+          default: true
+          type: boolean
+        address_1:
+          maxLength: 255
+          minLength: 0
+          type: string
+        address_2:
+          maxLength: 255
+          minLength: 0
+          type: string
+        city:
+          maxLength: 40
+          minLength: 0
+          type: string
+        country:
+          maxLength: 40
+          minLength: 0
+          type: string
+        first_name:
+          maxLength: 40
+          minLength: 0
+          type: string
+        is_default_address:
+          default: false
+          type: boolean
+        last_name:
+          maxLength: 40
+          minLength: 0
+          type: string
+        phone:
+          maxLength: 255
+          minLength: 0
+          type: string
+        postal_code:
+          maxLength: 10
+          minLength: 0
+          type: string
+        state:
+          maxLength: 2
+          minLength: 0
+          type: string
+        zip:
+          maxLength: 10
+          minLength: 0
+          type: string
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

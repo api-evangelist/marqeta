@@ -1,0 +1,305 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries kyc API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: kyc
+paths:
+  /kyc:
+    post:
+      operationId: postKyc
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/kyc_request'
+        required: false
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/kyc_response'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '409':
+          content: {}
+          description: Request already processed with a different payload
+        '500':
+          content: {}
+          description: Server error
+      summary: Performs a KYC
+      tags:
+      - kyc
+  /kyc/business/{business_token}:
+    get:
+      operationId: getKycBusinessBusinesstoken
+      parameters:
+      - description: Business token
+        explode: false
+        in: path
+        name: business_token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Number of items to retrieve
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          format: int32
+          type: integer
+        style: form
+      - description: Start index
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: form
+      - description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+        explode: true
+        in: query
+        name: fields
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Sort order
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -createdTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KYCListResponse'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Lists all KYC results for a business
+      tags:
+      - kyc
+  /kyc/user/{user_token}:
+    get:
+      operationId: getKycUserUsertoken
+      parameters:
+      - description: User token
+        explode: false
+        in: path
+        name: user_token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Number of items to retrieve
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          format: int32
+          type: integer
+        style: form
+      - description: Start index
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: form
+      - description: Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields.
+        explode: true
+        in: query
+        name: fields
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Sort order
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -createdTime
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KYCListResponse'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '500':
+          content: {}
+          description: Server error
+      summary: Lists all KYC results for a user
+      tags:
+      - kyc
+  /kyc/{token}:
+    get:
+      operationId: getKycToken
+      parameters:
+      - description: KYC token
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/kyc_response'
+          description: Success
+        '400':
+          content: {}
+          description: User input error/Bad request
+        '404':
+          content: {}
+          description: KYC not found
+        '500':
+          content: {}
+          description: Server error
+      summary: Returns a specific KYC result
+      tags:
+      - kyc
+components:
+  schemas:
+    result_code:
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      type: object
+    kyc_response:
+      properties:
+        business_token:
+          type: string
+        created_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        last_modified_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        manual_override:
+          default: false
+          readOnly: true
+          type: boolean
+        notes:
+          readOnly: true
+          type: string
+        reference_id:
+          type: string
+        result:
+          $ref: '#/components/schemas/result'
+        token:
+          type: string
+        user_token:
+          type: string
+      required:
+      - created_time
+      - last_modified_time
+      type: object
+    result:
+      properties:
+        codes:
+          items:
+            $ref: '#/components/schemas/result_code'
+          type: array
+        status:
+          type: string
+      type: object
+    KYCListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/kyc_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    kyc_request:
+      properties:
+        business_token:
+          description: Required if 'user_token' is null
+          maxLength: 36
+          minLength: 1
+          type: string
+        manual_override:
+          default: false
+          type: boolean
+        notes:
+          maxLength: 255
+          minLength: 0
+          type: string
+        reference_id:
+          maxLength: 32
+          minLength: 0
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        user_token:
+          description: Required if 'business_token' is null
+          maxLength: 36
+          minLength: 1
+          type: string
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

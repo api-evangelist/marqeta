@@ -1,0 +1,220 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries Velocity Controls Card Group Balance API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: Velocity Controls Card Group Balance
+paths:
+  /velocitycontrols/cardgroup/{card_group_token}/available:
+    get:
+      description: Get a list of all Velocity Controls Card Group Balances in the program
+      operationId: listVelocityControlsCardGroupBalances
+      parameters:
+      - description: Unique identifier of the card group for which to retrieve balances.
+        explode: false
+        in: path
+        name: card_group_token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VelocityControlBalancePage'
+          description: Expected response to a valid request.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      summary: List Velocity Controls Card Group Balances
+      tags:
+      - Velocity Controls Card Group Balance
+components:
+  schemas:
+    VelocityControlBalance:
+      allOf:
+      - $ref: '#/components/schemas/VelocityControlResponse'
+      - properties:
+          available:
+            properties:
+              amount:
+                description: 'Amount of money remaining for the user.
+
+                  This value is returned only if the user has a limit on the amount of money.'
+                type: number
+              days_remaining:
+                description: 'Number of days remaining for the user.
+
+                  This value is returned only if the user has a limit on the number of days.'
+                type: integer
+              uses:
+                description: 'Number of uses remaining for the user.
+
+                  This value is returned only if the user has a limit on the number of uses.'
+                type: integer
+            type: object
+        type: object
+    Association:
+      description: Defines to which the velocity control applies.
+      properties:
+        card_group_token:
+          description: Unique identifier of the card group.
+          maxLength: 36
+          minLength: 1
+          type: string
+      type: object
+    MerchantScope:
+      description: 'Defines the group of merchants to which the velocity control applies.
+
+
+        If no fields are populated, the velocity control applies to all merchants.'
+      properties:
+        attribute:
+          description: 'Attribute value corresponding to the chosen scope.
+
+            If ''mcc'' is chosen, provide the Merchant Category Code (MCC).
+
+            If ''mcc_group'' is chosen, provide the token identifying a group of MCCs.'
+          type: string
+        decline_other_merchants:
+          default: false
+          description: 'Indicates whether to decline transactions at merchants not included in the scope.
+
+            If `true`, transactions at merchants not included in the scope will be declined.
+
+            If `false`, transactions at merchants not included in the scope will not be declined.
+
+            *Default value:* `false`'
+          type: boolean
+        scope:
+          description: 'Scope of the merchant category.
+
+            Can be either ''mcc'' or ''mcc_group''.'
+          enum:
+          - mcc
+          - mcc_group
+          type: string
+      type: object
+    VelocityWindow:
+      description: 'Defines the time period to which the `amount_limit` and `usage_limit` fields apply:
+
+        * *MONTH* – one month; months begin on the first day of month at 00:00:00 ET.'
+      enum:
+      - MONTH
+      type: string
+    VelocityControlBalancePage:
+      properties:
+        count:
+          description: 'Number of resources retrieved.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+        data:
+          description: 'Array of Card Group objects.
+
+
+            Objects are returned as appropriate to your query.'
+          items:
+            $ref: '#/components/schemas/VelocityControlBalance'
+          type: array
+        end_index:
+          description: 'Sort order index of the last resource in the returned array.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          description: 'A value of `true` indicates that more unreturned resources exist.
+
+            A value of `false` indicates that no more unreturned resources exist.
+
+
+            This field is returned if there are resources in your returned array.'
+          type: boolean
+        start_index:
+          description: 'Sort order index of the first resource in the returned array.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    VelocityControlResponse:
+      properties:
+        active:
+          default: false
+          description: Indicates whether the velocity control is active.
+          type: boolean
+        amount_limit:
+          description: Maximum monetary sum that can be cleared within the time period defined by velocity period.
+          minimum: 0
+          type: number
+        association:
+          $ref: '#/components/schemas/Association'
+        currency_code:
+          description: Three-character ISO 4217 currency code.
+          type: string
+        merchant_scope:
+          $ref: '#/components/schemas/MerchantScope'
+        name:
+          description: 'Description of how the velocity control restricts spending.
+
+            For example, "Max spend of $500 per day" or "Max spend of $5000 per month for non-exempt employees".'
+          maxLength: 255
+          minLength: 0
+          type: string
+        token:
+          description: Unique identifier of the velocity control.
+          maxLength: 36
+          minLength: 1
+          type: string
+        usage_limit:
+          description: 'Maximum number of times a card can be used within the time period defined by the `velocity_window` field.
+
+
+            Leave `null` to indicate that the card can be used an unlimited number of times.'
+          format: int32
+          minimum: 1
+          type: integer
+        velocity_window:
+          $ref: '#/components/schemas/VelocityWindow'
+        velocity_window_start_day:
+          description: 'Start day of the velocity window defined by the `velocity_window` field.
+
+            Default value is `1`'
+          format: int32
+          minimum: 1
+          type: integer
+      required:
+      - amount_limit
+      - currency_code
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http

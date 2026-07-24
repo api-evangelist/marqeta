@@ -1,0 +1,280 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@marqeta.com
+    name: Marqeta
+  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  termsOfService: https://www.marqeta.com/api-terms
+  title: Core accepted countries Account Documents API
+  version: 3.0.39
+servers:
+- url: /v3
+security:
+- mqAppAndAccessToken: []
+tags:
+- name: Account Documents
+paths:
+  /accounts/{account_token}/documents:
+    get:
+      description: Retrieve an array of documents on a credit account.
+      operationId: getAccountDocuments
+      parameters:
+      - description: 'Unique identifier of the credit account for which you want to get documents.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountDocumentsResponse'
+          description: Account documents
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: List documents
+      tags:
+      - Account Documents
+  /accounts/{account_token}/documents/{document_type}:
+    get:
+      description: Retrieve a specific type of document on a credit account.
+      operationId: getDocumentByAccountAndType
+      parameters:
+      - description: 'Unique identifier of the credit account for which to retrieve a specific type of document.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: document_type
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountAndDocumentAssetType'
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountDocumentResponse'
+          description: Expected response to a valid request.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Retrieve document
+      tags:
+      - Account Documents
+  /accounts/{account_token}/documents/{document_type}/history:
+    get:
+      description: Retrieve the history of a specific type of document on a credit account.
+      operationId: getDocumentHistoryByAccountAndType
+      parameters:
+      - description: 'Unique identifier of the credit account for which to get document history.
+
+
+          Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+        explode: false
+        in: path
+        name: account_token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: document_type
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountAndDocumentAssetType'
+        style: simple
+      - description: Number of account document resources to retrieve.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 5
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - description: Sort order index of the first resource in the returned array.
+        explode: true
+        in: query
+        name: start_index
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: 'Field on which to sort.
+
+          Prefix the field name with a hyphen (`-`) to sort in descending order.
+
+          Omit the hyphen to sort in ascending order.
+
+
+          *NOTE:*
+
+          You must sort using system field names such as `effectiveDate`, and not by the field names appearing in response bodies such as `effective_date`.'
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: -effectiveDate
+          enum:
+          - effectiveDate
+          - -effectiveDate
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountDocumentsPage'
+          description: Expected response to a valid request.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      security:
+      - zionToken: []
+      summary: Retrieve document history
+      tags:
+      - Account Documents
+components:
+  schemas:
+    AccountDocumentsResponse:
+      description: Account documents response.
+      properties:
+        account_statement:
+          $ref: '#/components/schemas/AccountDocumentResponse'
+        benefits_disclosure:
+          $ref: '#/components/schemas/AccountDocumentResponse'
+        card_member_agreement:
+          $ref: '#/components/schemas/AccountDocumentResponse'
+        e_disclosure:
+          $ref: '#/components/schemas/AccountDocumentResponse'
+        privacy_policy:
+          $ref: '#/components/schemas/AccountDocumentResponse'
+        rewards_disclosure:
+          $ref: '#/components/schemas/AccountDocumentResponse'
+        summary_of_credit_terms:
+          $ref: '#/components/schemas/AccountDocumentResponse'
+        terms_schedule:
+          $ref: '#/components/schemas/AccountDocumentResponse'
+      type: object
+    AccountAndDocumentAssetType:
+      description: Type of document.
+      enum:
+      - TERMS_SCHEDULE
+      - ACCOUNT_STATEMENT
+      - SUMMARY_OF_CREDIT_TERMS
+      - REWARDS_DISCLOSURE
+      - PRIVACY_POLICY
+      - E_DISCLOSURE
+      - BENEFITS_DISCLOSURE
+      - CARD_MEMBER_AGREEMENT
+      type: string
+    PolicyDocumentAssetURLs:
+      description: Contains one or more URLs for an asset.
+      properties:
+        html:
+          description: URL to the HTML version of the asset.
+          type: string
+        pdf:
+          description: URL to the PDF version of the asset.
+          type: string
+        png:
+          description: URL to the PNG version of the asset.
+          type: string
+      required:
+      - html
+      - pdf
+      - png
+      type: object
+    AccountDocumentResponse:
+      description: Account document response.
+      properties:
+        accepted_at:
+          description: Date and time when the user accepted the document on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        asset_token:
+          description: Unique identifier of the document on a credit account.
+          type: string
+        asset_urls:
+          $ref: '#/components/schemas/PolicyDocumentAssetURLs'
+        effective_from:
+          description: Date and time when the document goes into effect on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+      type: object
+    AccountDocumentsPage:
+      description: Account document response.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: Array of documents on the credit account.
+          items:
+            $ref: '#/components/schemas/AccountDocumentResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+  securitySchemes:
+    mqAppAndAccessToken:
+      scheme: basic
+      type: http
