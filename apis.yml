@@ -6,7 +6,20 @@ description: Marqeta is a modern card-issuing and embedded-finance platform. The
   API is a large RESTful surface covering cards, users, businesses, GPA orders, KYC/KYB,
   fee transfer, transactions, real-time decisioning, MCC groups, programs, and webhooks.
   The Diva (Digital Wallets, Tokenization, 3DS) API extends the Core API.
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/marqeta.png
 tags:
 - FinTech
 - BaaS
@@ -17,44 +30,11 @@ created: '2026-05-08'
 modified: '2026-05-08'
 specificationVersion: '0.19'
 apis:
-- aid: marqeta:core-api
-  name: Marqeta Core API
-  description: REST API for card issuing, user/business management, GPA funding, transactions,
-    authorizations, real-time decisioning, KYC/KYB, MCC controls, programs, and webhooks.
-    Customers operate within an isolated 'program' environment.
-  humanURL: https://www.marqeta.com/docs/core-api
-  baseURL: https://sandbox-api.marqeta.com/v3
-  tags:
-  - REST
-  - Card Issuing
-  - Payments
-  properties:
-  - type: Documentation
-    url: https://www.marqeta.com/docs/core-api
-  - type: OpenAPI
-    url: openapi/marqeta-core-api-openapi.yml
-  - url: graphql/marqeta-graphql.md
-    type: GraphQL
-- aid: marqeta:diva-api
-  name: Marqeta Diva API
-  description: REST API supplement for Digital Wallets (Apple Pay, Google Pay, Samsung
-    Pay) tokenization, push provisioning, and 3-D Secure flows.
-  humanURL: https://www.marqeta.com/docs/diva-api
-  baseURL: https://sandbox-api.marqeta.com/v3
-  tags:
-  - REST
-  - Digital Wallet
-  - Tokenization
-  - 3DS
-  properties:
-  - type: Documentation
-    url: https://www.marqeta.com/docs/diva-api
-  - type: OpenAPI
-    url: openapi/marqeta-diva-api-openapi.yml
 - aid: marqeta:webhooks
   name: Marqeta Webhooks
-  description: Outbound HTTP webhook delivery for card events, authorization requests,
-    advice messages, transactions, and account events.
+  description: >-
+    Outbound HTTP webhook delivery for card events, authorization requests, advice messages, transactions,
+    and account events.
   humanURL: https://www.marqeta.com/docs/core-api/event-types
   baseURL: https://sandbox-api.marqeta.com/v3/webhooks
   tags:
@@ -64,8 +44,9 @@ apis:
     url: https://www.marqeta.com/docs/core-api/event-types
 - aid: marqeta:risk-controller
   name: Marqeta Risk Controller / Real-Time Decisioning
-  description: Synchronous webhook-style HTTP endpoint customers expose for Marqeta
-    to call during card authorization for approve/decline decisions.
+  description: >-
+    Synchronous webhook-style HTTP endpoint customers expose for Marqeta to call during card authorization
+    for approve/decline decisions.
   humanURL: https://www.marqeta.com/docs/core-api/real-time-decisioning
   baseURL: customer-hosted
   tags:
@@ -74,6 +55,2030 @@ apis:
   properties:
   - type: Documentation
     url: https://www.marqeta.com/docs/core-api/real-time-decisioning
+- aid: marqeta:marqeta-accepted-countries-api
+  name: Marqeta accepted countries API
+  description: The accepted countries API from Marqeta — 2 operation(s) for accepted countries.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - accepted countries
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-accepted-countries-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-account-api
+  name: Marqeta Account API
+  description: The Account API from Marqeta — 2 operation(s) for account.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Account
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-account-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-account-bundle-transitions-api
+  name: Marqeta Account Bundle Transitions API
+  description: >-
+    The Account Bundle Transitions API from Marqeta — 2 operation(s) for account bundle transitions.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Account Bundle Transitions
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-account-bundle-transitions-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-account-cards-api
+  name: Marqeta Account Cards API
+  description: >-
+    // Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    Use the account cards endpoints to create and retrieve credit cards that can access the credit line
+    on a <</core-api/credit-accounts, credit account>>.
+
+
+    Once a credit card is created, you can use the `/cards` endpoint to <</core-api/cards#putCardsToken,
+    update the card>> or <</developer-guides/managing-lost-stolen-or-damaged-cards, manage lost, stolen,
+    or damaged cards>>.
+
+
+    To receive webhook notifications when card transition or card action events occur, see <</core-api/event-types#_card_transition_events,
+    Card transition events>> and <</core-api/event-types#_card_action_events, Card action events>> in
+    Event Types.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Account Cards
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-account-cards-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-account-documents-api
+  name: Marqeta Account Documents API
+  description: The Account Documents API from Marqeta — 3 operation(s) for account documents.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Account Documents
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-account-documents-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-account-holder-groups-api
+  name: Marqeta account holder groups API
+  description: The account holder groups API from Marqeta — 2 operation(s) for account holder groups.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - account holder groups
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-account-holder-groups-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-account-refunds-api
+  name: Marqeta Account Refunds API
+  description: >-
+    // Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    Use the account refunds endpoints to create and retrieve account refunds on Marqeta's credit platform.
+
+
+    You can issue account refunds to your cardholders with negative account balances.
+
+    The maximum refund amount is the amount that brings the account balance to $0.
+
+    For example, $4000 is the maximum refund amount for a -$4000 account balance.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Account Refunds
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-account-refunds-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-account-rewards-api
+  name: Marqeta Account Rewards API
+  description: >-
+    // Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    Use the `/credit/accounts/{account_token}/rewards` endpoint to create a one-time reward on a <</core-api/credit-accounts,
+    credit account>>.
+
+
+    Creating a reward triggers the creation of a <</core-api/credit-account-journal-entries, journal entry>>
+    belonging to the `REWARD` group.
+
+    For more on reward journal entries, see <</developer-guides/about-credit-account-journal-entries#_rewards,
+    Rewards>> in the About Credit Account Journal Entries guide.
+
+
+    For the reward programs that are associated with a reward policy on a bundle, see <</developer-guides/about-credit-reward-accounts/,
+    About Credit Reward Accounts>> and <</core-api/credit-reward-global-configurations/, Reward Global
+    Configurations>>.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Account Rewards
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-account-rewards-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-account-signup-bonus-api
+  name: Marqeta Account Signup Bonus API
+  description: The Account Signup Bonus API from Marqeta — 1 operation(s) for account signup bonus.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Account Signup Bonus
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-account-signup-bonus-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-account-transitions-api
+  name: Marqeta Account Transitions API
+  description: >-
+    // Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    Use the account transitions endpoints to create and retrieve account transitions on Marqeta's credit
+    platform.
+
+    An account transition occurs when a <</core-api/credit-accounts, credit account>> transitions to a
+    new status.
+
+
+    To receive webhook notifications when account transition events occur, see <</core-api/event-types#_credit_account_transition_events,
+    Credit account transition events>> in Event Types.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Account Transitions
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-account-transitions-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-accounts-api
+  name: Marqeta Accounts API
+  description: The Accounts API from Marqeta — 1 operation(s) for accounts.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-accounts-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-accountusers-api
+  name: Marqeta AccountUsers API
+  description: The AccountUsers API from Marqeta — 1 operation(s) for accountusers.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - AccountUsers
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-accountusers-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-adjustments-api
+  name: Marqeta Adjustments API
+  description: >-
+    // Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    Use the adjustments endpoints to create and retrieve account adjustments on Marqeta's credit platform.
+
+    An account adjustment adjusts the amount of a <</core-api/credit-account-journal-entries, journal
+    entry>> or account balance.
+
+
+    Creating an adjustment triggers the creation of a <</core-api/credit-account-journal-entries, journal
+    entry>> belonging to the `ADJUSTMENT` group.
+
+    For more on adjustment journal entries, see <</developer-guides/about-credit-account-journal-entries#_adjustments,
+    Adjustments>> in the About Credit Account Journal Entries guide.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Adjustments
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-adjustments-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-admin-api
+  name: Marqeta Admin API
+  description: The Admin API from Marqeta — 5 operation(s) for admin.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Admin
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-admin-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-auth-controls-api
+  name: Marqeta auth controls API
+  description: The auth controls API from Marqeta — 4 operation(s) for auth controls.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - auth controls
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-auth-controls-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-auto-reloads-api
+  name: Marqeta auto reloads API
+  description: The auto reloads API from Marqeta — 2 operation(s) for auto reloads.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - auto reloads
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-auto-reloads-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-balance-refunds-api
+  name: Marqeta Balance Refunds API
+  description: >-
+    // Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    Use the credit balance refunds endpoint to issue a credit balance refund on <</core-api/credit-accounts,
+    credit account>>.
+
+    When an account balance is negative, a balance refund can be issued to bring the balance closer to
+    0.
+
+
+    Creating a balance refund triggers the creation of a <</core-api/credit-account-journal-entries, journal
+    entry>> belonging to the `BALANCE_REFUND` group.
+
+    For more on balance refund journal entries, see <</developer-guides/about-credit-account-journal-entries#_credit_balance_refunds,
+    Balance refunds>> in the <</developer-guides/about-credit-account-journal-entries,About Credit Account
+    Journal Entries>> guide.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Balance Refunds
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-balance-refunds-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-bank-transfers-api
+  name: Marqeta bank transfers API
+  description: The bank transfers API from Marqeta — 4 operation(s) for bank transfers.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - bank transfers
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-bank-transfers-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-bulk-issuances-api
+  name: Marqeta bulk issuances API
+  description: The bulk issuances API from Marqeta — 2 operation(s) for bulk issuances.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - bulk issuances
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-bulk-issuances-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-bundles-api
+  name: Marqeta Bundles API
+  description: >-
+    // Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    The bundles feature on Marqeta's credit platform enables you to create and manage bundles by choosing
+    the specific policies that make up a bundle.
+
+    A bundle must contain one document policy, credit product policy, fee policy, APR policy, and an optional
+    reward policy.
+
+    The configurations of each policy in a bundle determine the characteristics and attributes of the
+    bundle's associated credit accounts, reward programs, disclosures, and more.
+
+    For more on how to configure a policy, see <</core-api/credit-policies, Policies>>.
+
+
+    [IMPORTANT]
+
+    ====
+
+    To create and manage bundles, you must use the link:https://app.marqeta.com/[Marqeta Dashboard, window="_blank"].
+
+    For more on bundles in the dashboard, see <</developer-guides/credit-programs-dashboard, Managing
+    Credit Programs in the Marqeta Dashboard>>.
+
+
+    &#160; +
+
+
+    The following endpoints are displayed for reference purposes only.
+
+    ====
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Bundles
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-bundles-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-business-transitions-api
+  name: Marqeta business transitions API
+  description: The business transitions API from Marqeta — 3 operation(s) for business transitions.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - business transitions
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-business-transitions-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-businesses-api
+  name: Marqeta businesses API
+  description: The businesses API from Marqeta — 10 operation(s) for businesses.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - businesses
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-businesses-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-card-group-api
+  name: Marqeta Card Group API
+  description: The Card Group API from Marqeta — 2 operation(s) for card group.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Card Group
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-card-group-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-card-products-api
+  name: Marqeta card products API
+  description: The card products API from Marqeta — 2 operation(s) for card products.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - card products
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-card-products-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-card-transitions-api
+  name: Marqeta card transitions API
+  description: The card transitions API from Marqeta — 3 operation(s) for card transitions.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - card transitions
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-card-transitions-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-cardholder-balances-api
+  name: Marqeta cardholder balances API
+  description: The cardholder balances API from Marqeta — 3 operation(s) for cardholder balances.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - cardholder balances
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-cardholder-balances-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-cards-api
+  name: Marqeta cards API
+  description: The cards API from Marqeta — 11 operation(s) for cards.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - cards
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-cards-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-chargebacks-api
+  name: Marqeta chargebacks API
+  description: The chargebacks API from Marqeta — 9 operation(s) for chargebacks.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - chargebacks
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-chargebacks-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-commando-modes-api
+  name: Marqeta commando modes API
+  description: The commando modes API from Marqeta — 4 operation(s) for commando modes.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - commando modes
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-commando-modes-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-credit-account-disputes-api
+  name: Marqeta Credit Account Disputes API
+  description: >-
+    // Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    Use the credit account disputes endpoints to create and manage disputes on a <</core-api/credit-accounts,
+    credit account>>.
+
+
+    For more on disputes, see <</developer-guides/about-credit-account-disputes, About Credit Account
+    Disputes>>.
+
+
+    Creating a dispute triggers the creation of a <</core-api/credit-account-journal-entries, journal
+    entry>> belonging to the `DISPUTE` group.
+
+    For more on dispute journal entries, see <</developer-guides/about-credit-account-journal-entries#_disputes,
+    Disputes>> in the About Credit Account Journal Entries guide.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Credit Account Disputes
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-credit-account-disputes-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-credit-accounts-api
+  name: Marqeta Credit Accounts API
+  description: >-
+    // Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    Use the credit accounts endpoints to create and manage accounts on Marqeta's credit platform.
+
+    A credit account centers around a single line of credit that can be accessed by one or more <</core-api/credit-account-cards,
+    cards>>.
+
+    An account's attributes, such as the credit limit, APR, and fees, are inherited from the <</core-api/credit-policies,
+    policies>> on its associated bundle.
+
+
+    For more on accounts, see <</developer-guides/about-credit-accounts, About Credit Accounts>>.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Credit Accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-credit-accounts-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-credit-products-api
+  name: Marqeta Credit Products API
+  description: >-
+    // Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    [IMPORTANT]
+
+    This feature is deprecated and replaced by credit product policies, which is part of the bundles feature.
+
+    For more on policies and bundles in a credit program, see <</developer-guides/credit-programs-dashboard,
+    Managing Credit Programs in the Marqeta Dashboard>>.
+
+
+    The credit products feature on Marqeta's credit platform enables you to create and manage a credit
+    product and customize its characteristics, such as the credit line range and required fees or APRs.
+
+    Credit product characteristics determine the behaviors and attributes of associated credit accounts.
+
+    For more on credit products, see <</developer-guides/about-credit-products, About Credit Products>>.
+
+
+    To receive webhook notifications when product transition events occur, see <</core-api/event-types#_credit_product_transition_events,
+    Credit product transition events>> in Event Types.
+
+
+    [IMPORTANT]
+
+    ====
+
+    To create and manage credit products, you must use the link:https://app.marqeta.com/[Marqeta Dashboard,
+    window="_blank"].
+
+    For more, see <</developer-guides/credit-products-dashboard, Managing Credit Products in the Marqeta
+    Dashboard>>.
+
+
+    &#160; +
+
+
+    The following endpoints are displayed for reference purposes only.
+
+    ====
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Credit Products
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-credit-products-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-credit-substatuses-api
+  name: Marqeta Credit Substatuses API
+  description: >-
+    // Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    Credit substatuses can be applied to credit accounts or credit account holders.
+
+    Substatuses should be applied only after verification with Customer Support and after the cardholder
+    request for the substatus designation has been accepted.
+
+    Substatuses define specific circumstances, such as bankruptcy, hardship or fraud.
+
+    They also affect account behavior or activity, including interest accrual, authorization requests,
+    and account termination.
+
+    Substatus downstream account actions are not always reversible for the cardholder, which means that
+    substatuses should be applied with caution.
+
+
+    Use the substatus endpoints to apply or remove a substatus for a credit account or user.
+
+    Applying a substatus causes immediate downstream changes to the account.
+
+    For additional information about substatuses, see <</developer-guides/about-credit-accounts#_account-substatuses,Account
+    substatuses>> or <</developer-guides/about-credit-accounts#_account-holder-substatuses,Account holder
+    substatuses>> in the <</developer-guides/about-credit-accounts,About Credit Accounts>> guide.
+
+
+    [NOTE]
+
+    ====
+
+    The substatus `SCRA` stands for "Servicemembers Civilian Relief Act."
+
+    The substatus `MLA` stands for "Military Lending Act."
+
+    ====
+
+
+    For more information about receiving webhook notifications when account transition events occur, see
+    <</core-api/event-types#_credit-substatus-events,Credit substatus events>> on the <</core-api/event-types,Event
+    Types>> page.
+
+
+    [IMPORTANT]
+
+    ====
+
+    If you are a Managed by Marqeta customer, a Marqeta customer service representative will apply the
+    appropriate substatuses.
+
+    ====
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Credit Substatuses
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-credit-substatuses-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-delinquency-api
+  name: Marqeta Delinquency API
+  description: >-
+    // Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    Use the delinquency endpoints to retrieve details on a credit account's delinquency state and transitions.
+
+
+    An account's delinquency state reflects whether an account is delinquent and past due on its payments
+    or current and up to date on its payments.
+
+
+    To receive webhook notifications when an account transitions between delinquent and current, see <</core-api/event-types#_credit_account_delinquency_state_transition_events,
+    Credit account delinquency state transition events>> in Event Types.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Delinquency
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-delinquency-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-depositaccounts-api
+  name: Marqeta Depositaccounts API
+  description: The Depositaccounts API from Marqeta — 1 operation(s) for depositaccounts.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Depositaccounts
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-depositaccounts-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-digital-wallets-management-api
+  name: Marqeta Digital Wallets Management API
+  description: >-
+    // Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    The Marqeta platform facilitates the use of digital wallets for storing tokenized cards and making
+    payments.
+
+    The API provides endpoints that enable mobile applications to provision tokens into a digital wallet.
+
+    It also provides endpoints for retrieving digital wallet tokens and for managing their lifecycle through
+    state transitions.
+
+
+    For an overview of digital wallet tokens, see <</developer-guides/digital-wallets-and-tokenization,
+    Digital Wallets and Tokenization>>.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Digital Wallets Management
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-digital-wallets-management-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-direct-deposit-accounts-api
+  name: Marqeta direct deposit accounts API
+  description: >-
+    The direct deposit accounts API from Marqeta — 9 operation(s) for direct deposit accounts.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - direct deposit accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-direct-deposit-accounts-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-direct-deposits-api
+  name: Marqeta direct deposits API
+  description: The direct deposits API from Marqeta — 5 operation(s) for direct deposits.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - direct deposits
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-direct-deposits-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-fee-charges-api
+  name: Marqeta fee charges API
+  description: The fee charges API from Marqeta — 3 operation(s) for fee charges.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - fee charges
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-fee-charges-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-fee-refunds-api
+  name: Marqeta fee refunds API
+  description: The fee refunds API from Marqeta — 1 operation(s) for fee refunds.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - fee refunds
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-fee-refunds-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-feedback-api
+  name: Marqeta Feedback API
+  description: The Feedback API from Marqeta — 1 operation(s) for feedback.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Feedback
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-feedback-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-fees-api
+  name: Marqeta Fees API
+  description: >-
+    // Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    // This source file is used by InfoDev to generate API reference documentation. File location in GitHub
+    is:
+
+    // File location in GitHub is: openapi/fees/openapi.yaml
+
+
+    A `fees` resource represents a monetary assessment against an account holder's general purpose account
+    (GPA).
+
+    Assessing a fee transfers funds from the account holder's GPA account to your program's fee account.
+
+    By default, every account has a GPA account used for the funding of transfers.
+
+
+    You can assess fees either post-transaction or in real time.
+
+    Real-time fee assessment ensures the account has sufficient funds available to cover both the transaction
+    amount and the fee before authorization of the transaction.
+
+    To assess fees in real time, you must create a real-time fee group using the `/realtimefeegroups`
+    endpoint.
+
+
+    When assessing a post-transaction fee, you can either debit existing GPA funds, or pull in new funds
+    from a funding source.
+
+    To use existing GPA funds, use the `/feetransfers` endpoint.
+
+    To pull in new funds, use the fees array in `/gpaorders`.
+
+
+    [NOTE]
+
+    If your program uses Gateway JIT Funding, you cannot assess fees.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Fees
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-fees-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-funding-sources-api
+  name: Marqeta funding sources API
+  description: The funding sources API from Marqeta — 20 operation(s) for funding sources.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - funding sources
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-funding-sources-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-gpa-orders-api
+  name: Marqeta gpa orders API
+  description: The gpa orders API from Marqeta — 4 operation(s) for gpa orders.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - gpa orders
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-gpa-orders-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-internal-bin-pools-api
+  name: Marqeta Internal - BIN Pools API
+  description: The Internal - BIN Pools API from Marqeta — 2 operation(s) for internal - bin pools.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Internal - BIN Pools
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-internal-bin-pools-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-journal-entries-api
+  name: Marqeta Journal Entries API
+  description: >-
+    // Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    Use the journal entries endpoints to retrieve journal entries made on an <</core-api/credit-accounts,
+    account>> on Marqeta's credit platform.
+
+
+    A journal entry is a record of an entry made on an account journal, such as a purchase transaction,
+    fee, adjustment, and more.
+
+    For more on the different types of journal entries, see <</developer-guides/about-credit-account-journal-entries,
+    About Credit Account Journal Entries>>.
+
+
+    Journal entries originate when a journal entry event occurs, such as a cardholder making a purchase
+    or an account holder making a payment.
+
+    To receive webhook notifications when journal entry events occur, see <</core-api/event-types#_credit_journal_entry_events,
+    Credit journal entry events>> in Event Types.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Journal Entries
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-journal-entries-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-kyc-api
+  name: Marqeta kyc API
+  description: The kyc API from Marqeta — 4 operation(s) for kyc.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - kyc
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-kyc-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-ledger-entries-api
+  name: Marqeta Ledger Entries API
+  description: >-
+    // Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    [IMPORTANT]
+
+    ====
+
+    This feature is deprecated and replaced by journal entries.
+
+
+    &#160; +
+
+
+    For documentation on journal entries, see:
+
+
+    &#160; +
+
+
+    * <</developer-guides/about-credit-account-journal-entries, About Credit Account Journal Entries>>
+    - Developer guide
+
+    * <</core-api/credit-account-journal-entries, Journal Entries>> - API reference
+
+    * <</core-api/event-types#_credit_journal_entry_events, Credit journal entry event types>> - Webhook
+    notifications.
+
+    ====
+
+
+    Use the `/credit/accounts/{account_token}/ledgerentries` endpoint to retrieve ledger entries made
+    on an <</core-api/credit-accounts, account>> on Marqeta's credit platform.
+
+
+    A ledger entry is a record of an entry made on an account ledger, such as a purchase transaction,
+    fee, adjustment, and more.
+
+    For more on the different types of ledger entries, see <</developer-guides/about-credit-account-ledger-entries,
+    About Credit Account Ledger Entries>>.
+
+
+    Ledger entries originate when a ledger entry event occurs, such as a cardholder making a purchase
+    or an account holder making a payment.
+
+    To receive webhook notifications when ledger entry events occur, see <</core-api/event-types#_credit_ledger_entry_events,
+    Credit ledger entry events>> in Event Types.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Ledger Entries
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-ledger-entries-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-loads-api
+  name: Marqeta Loads API
+  description: >-
+    Retrieve funding load transaction data at a specified aggregation level. Covers all load types including
+    ACH, push-to-card, and program transfers.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Loads
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-loads-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-mcc-groups-api
+  name: Marqeta mcc groups API
+  description: The mcc groups API from Marqeta — 2 operation(s) for mcc groups.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - mcc groups
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-mcc-groups-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-merchantgroups-api
+  name: Marqeta merchantgroups API
+  description: The merchantgroups API from Marqeta — 2 operation(s) for merchantgroups.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - merchantgroups
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-merchantgroups-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-migrations-api
+  name: Marqeta Migrations API
+  description: The Migrations API from Marqeta — 3 operation(s) for migrations.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Migrations
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-migrations-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-payment-schedules-api
+  name: Marqeta Payment Schedules API
+  description: >-
+    // Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    Use the payment schedule endpoints to create and retrieve payment schedules and payment schedule transitions
+    on a <</core-api/credit-accounts, credit account>>.
+
+
+    A payment schedule allows you to schedule a one-time or recurring payment on a credit account.
+
+    For more on payments, see <</developer-guides/about-credit-account-payments, About Credit Account
+    Payments>>.
+
+
+    To receive webhook notifications when ACH payment transition events occur, see <</core-api/event-types#_credit_account_payment_transition_events,
+    Credit account payment transition events>> in Event Types.
+
+
+    Making a payment on a payment schedule triggers the creation of a <</core-api/credit-account-journal-entries,
+    journal entry>> belonging to the `PAYMENT` group.
+
+    For more on payment journal entries, see <</developer-guides/about-credit-account-journal-entries#_payments,
+    Payments>> in the About Credit Account Journal Entries guide.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Payment Schedules
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-payment-schedules-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-payment-sources-api
+  name: Marqeta Payment Sources API
+  description: >-
+    // Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    Use the payment sources endpoint to link an external payment source to an <</core-api/credit-accounts,
+    account>> on Marqeta's credit platform.
+
+    This enables account holders to use the linked payment source to make payments toward their account
+    balance.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Payment Sources
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-payment-sources-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-payments-api
+  name: Marqeta Payments API
+  description: >-
+    // Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    Use the payments endpoints to create and retrieve payments made on a <</core-api/credit-accounts,
+    credit account>>, release payment holds, or transition payment statuses.
+
+
+    A payment is an amount paid toward an account balance to reduce the total amount owed on the account.
+
+    For more on payments, see <</developer-guides/about-credit-account-payments, About Credit Account
+    Payments>>.
+
+
+    To receive webhook notifications when ACH payment transition events occur, see <</core-api/event-types#_credit_account_payment_transition_events,
+    Credit account payment transition events>> in Event Types.
+
+
+    Creating a payment triggers the creation of a <</core-api/credit-account-journal-entries, journal
+    entry>> belonging to the `PAYMENT` group.
+
+    For more on payment journal entries, see <</developer-guides/about-credit-account-journal-entries#_payments,
+    Payments>> in the About Credit Account Journal Entries guide.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Payments
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-payments-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-peer-transfers-api
+  name: Marqeta peer transfers API
+  description: The peer transfers API from Marqeta — 5 operation(s) for peer transfers.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - peer transfers
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-peer-transfers-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-ping-api
+  name: Marqeta ping API
+  description: The ping API from Marqeta — 1 operation(s) for ping.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - ping
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-ping-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-pins-api
+  name: Marqeta PINs API
+  description: >-
+    // Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    Use the `/pins` endpoint to create, update, or reveal a personal identification number (PIN) for a
+    card.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - PINs
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-pins-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-policies-api
+  name: Marqeta Policies API
+  description: >-
+    // Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    The Marqeta credit platform's policies feature enables you to customize the configurations of policies
+    for documents (such as disclosures), credit products, fees, APRs, and rewards.
+
+    You can choose the specific policies to add to a bundle that contain the exact configurations needed
+    to launch a new credit program or help manage an existing one.
+
+    The configurations of each policy in a bundle determine the characteristics and attributes of the
+    bundle's associated credit accounts, reward programs, disclosures, and more.
+
+    For more on how to create a bundle, see <</core-api/credit-bundles, Bundles>>.
+
+
+    [IMPORTANT]
+
+    ====
+
+    To create and manage policies, you must use the link:https://app.marqeta.com/[Marqeta Dashboard, window="_blank"].
+
+    For more on policies in the dashboard, see <</developer-guides/credit-programs-dashboard, Managing
+    Credit Programs in the Marqeta Dashboard>>.
+
+
+    &#160; +
+
+
+    The following endpoints are displayed for reference purposes only.
+
+    ====
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Policies
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-policies-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-program-balances-api
+  name: Marqeta Program Balances API
+  description: >-
+    Retrieve program funding balance data for financial reconciliation. Includes beginning and ending
+    bank balances, amounts to send, and settlement details aggregated over configurable time periods.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Program Balances
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-program-balances-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-program-gateways-api
+  name: Marqeta Program Gateways API
+  description: >-
+    // Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    Use the Credit Program Gateways endpoints to create, retrieve, and update Program Gateways for your
+    credit program.
+
+    A Program Gateway allows you to exchange messages with Marqeta's credit platform regarding decisions
+    on transaction authorizations.
+
+
+    For more on Program Gateways, see <</developer-guides/about-credit-program-gateways, About Credit
+    Program Gateways>>.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Program Gateways
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-program-gateways-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-program-reserve-api
+  name: Marqeta Program Reserve API
+  description: >-
+    // Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    Use the Program Reserve API to retrieve program reserve account balances and transactions.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Program Reserve
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-program-reserve-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-program-transfers-api
+  name: Marqeta Program Transfers API
+  description: >-
+    // Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    A program transfer moves funds from an account holder's general purpose account (GPA) to a program
+    funding source.
+
+    In contrast to a fee transfer, the program transfer amount is specified by the transfer itself and
+    can therefore be set dynamically.
+
+    An auto reload is triggered if the GPA has insufficient funds to cover the transfer amount and auto
+    reload is enabled.
+
+
+    [NOTE]
+
+    The `/programtransfers` endpoint is only available for specific, pre-approved use cases.
+
+    For more information about this endpoint, contact your Marqeta representative.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Program Transfers
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-program-transfers-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-programfunding-api
+  name: Marqeta ProgramFunding API
+  description: The ProgramFunding API from Marqeta — 2 operation(s) for programfunding.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - ProgramFunding
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-programfunding-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-push-to-card-api
+  name: Marqeta push to card API
+  description: The push to card API from Marqeta — 4 operation(s) for push to card.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - push to card
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-push-to-card-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-real-time-fee-groups-api
+  name: Marqeta Real-Time Fee Groups API
+  description: >-
+    Marqeta enables you to assess fees in real time through the use of real-time fee groups.
+
+    A real-time fee group is a collection of fees associated with an account holder group (and thereby
+    associated with the users and businesses that are part of that account holder group).
+
+    Real-time fee assessment ensures that associated accounts have sufficient funds available to cover
+    both the transaction amount and the fee before authorization of a transaction.
+
+
+    Before you create a real-time fee group, you must create the individual fees (using the `/fees` endpoint)
+    and the account holder group with which you will associate the real-time fee group (using the `/accountholdergroups`
+    endpoint).
+
+    Each fee in the group must be applicable to a different transaction type.
+
+    For example, one fee could assess $1 on authorization transactions while another assesses $2 on PIN-debit
+    transactions.
+
+
+    Use of real-time fee groups requires prior approval by Marqeta.
+
+    If you are interested in using this feature for your card program, contact your Marqeta representative
+    for more information.
+
+
+    [NOTE]
+
+    If your program uses Gateway JIT Funding, you cannot assess fees.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Real-Time Fee Groups
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-real-time-fee-groups-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-refunds-api
+  name: Marqeta Refunds API
+  description: The Refunds API from Marqeta — 1 operation(s) for refunds.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Refunds
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-refunds-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-rewards-api
+  name: Marqeta Rewards API
+  description: The Rewards API from Marqeta — 1 operation(s) for rewards.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Rewards
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-rewards-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-simulate-api
+  name: Marqeta simulate API
+  description: The simulate API from Marqeta — 10 operation(s) for simulate.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - simulate
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-simulate-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-spaces-api
+  name: Marqeta Spaces API
+  description: The Spaces API from Marqeta — 3 operation(s) for spaces.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Spaces
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-spaces-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-statements-api
+  name: Marqeta Statements API
+  description: >-
+    // Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    Use the statements endpoints to retrieve statement information or statement files for a <</core-api/credit-accounts,
+    credit account>>.
+
+
+    An account statement contains a summary of account activity that occurred during a billing cycle.
+
+    For more on statements, see <</developer-guides/about-credit-account-statements, About Credit Account
+    Statements>>.
+
+
+    To receive a webhook notification when a statement is created, see <</core-api/event-types#_credit_account_statement_event,
+    Credit account statement event>> in Event Types.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Statements
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-statements-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-transactions-api
+  name: Marqeta Transactions API
+  description: >-
+    // Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    // This source file is used by InfoDev to generate API reference documentation.
+
+    // File location in GitHub is:
+
+    // https://github.marqeta.com/openapi/coreapi/blob/main/openapi/transactions/openapi.yaml
+
+
+    The `/transactions` resource represents the electronic messages that carry information used for payment
+    processing.
+
+    A transaction usually originates when a cardholder attempts to make a payment, either online or at
+    a physical point of sale.
+
+
+    You can receive information about transactions as they occur by configuring webhooks.
+
+    Learn about configuring webhooks in the <</developer-guides/about-webhooks, About Webhooks>> guide.
+
+    See the transaction events for which you can set up webhooks in the <</core-api/event-types, Event
+    Types>> API reference page.
+
+
+    You can also retrieve transactions associated with specific cards, merchants, and account holders
+    using the endpoints described here.
+
+
+    For an overview of transactions and the `transaction` object, including the complete list of <</developer-guides/about-transactions#_transaction_response_codes,
+    transaction response codes>>, see <</developer-guides/about-transactions, About Transactions>>.
+
+
+    [TIP]
+
+    Use the `/transactions` endpoint to retrieve smaller datasets (up to one page).
+
+    For best performance when requesting larger datasets, use the <</diva-api/introduction, DiVA API>>.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Transactions
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-transactions-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-user-transitions-api
+  name: Marqeta User Transitions API
+  description: >-
+    // Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    // This source file is used by InfoDev to generate API reference documentation.
+
+    // File location in GitHub is:
+
+    // https://github.marqeta.com/openapi/coreapi/blob/main/openapi/usertransitions/openapi.yaml
+
+
+    Use the `/usertransitions` endpoints to transition user resources between statuses, as well as to
+    retrieve and list status changes for a user resource.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - User Transitions
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-user-transitions-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-users-api
+  name: Marqeta Users API
+  description: >-
+    // Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    // This source file is used by InfoDev to generate API reference documentation.
+
+    // File location in GitHub is:
+
+    // https://github.marqeta.com/openapi/coreapi/blob/main/openapi/users/openapi.yaml
+
+
+    The `users` resource represents a person who accesses Marqeta-administered funds via a Marqeta card
+    (whether physical or virtual).
+
+    This endpoint enables you to create and manage users on the Marqeta platform.
+
+
+    This resource stores user attributes such as name, address, and date of birth, as well as financial
+    information such as balances.
+
+    By default, every user automatically has a general purpose account (GPA) that is used for the funding
+    of transfers and is therefore an `account holder`.
+
+    Note that account balances reside at the account holder level — there are no separate `account` or
+    `balance` objects.
+
+
+    You can use the `/users` endpoint to create parent-child relationships between two users (where one
+    user is the parent and the other is the child) or between a business and a user (where the business
+    is the parent and the user is the child).
+
+    This relationship provides reporting to the parent about how cards of children are used and enables
+    the parent to monitor and even restrict card usage.
+
+
+    [NOTE]
+
+    A user can simultaneously be a child of a business and a parent of other users if the user is not
+    configured to use a parent's account balances and the user's child is configured to use a parent's
+    account balances.
+
+    For more information on account holders, see <</developer-guides/about-account-holders, About Account
+    Holders>>.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-users-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-velocity-controls-api
+  name: Marqeta Velocity Controls API
+  description: >-
+    // Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    A velocity control limits how much users can spend.
+
+    You can configure velocity controls to limit how much users can spend and the number of transactions
+    they can make in a given span of time.
+
+    You can apply velocity controls to a single user, to all users associated with a particular card product,
+    or to all users in your program.
+
+
+    Only Program Managers can create or modify program-wide velocity controls.
+
+    A `POST` or `PUT` call from a role that does not have Program Manager permissions will receive a 403
+    error if its `association` field is null, or if it includes all of the fields in the request body.
+
+    Avoid this by passing a valid `user_token` or `card_product_token` in the velocity control's `association`
+    object, indicating that the request is specific to a user or card product, and not program-wide.
+
+    You should also only include the specific fields you want to update, because a `PUT` or `POST` with
+    values for all fields is interpreted as a change that requires Program Manager permissions.
+
+
+    See <</developer-guides/controlling-spending, Controlling Spending>> for a tutorial that walks you
+    through the creation of a spend control.
+
+
+    [NOTE]
+
+    Each program supports a maximum of 90 spend controls (velocity controls and <</core-api/authorization-controls,
+    authorization controls>> combined).
+
+    The limit of 90 spend controls applies at the program level only; it does not affect the number of
+    user-level spend controls you can use.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Velocity Controls
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-velocity-controls-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-velocity-controls-card-group-balance-api
+  name: Marqeta Velocity Controls Card Group Balance API
+  description: >-
+    The Velocity Controls Card Group Balance API from Marqeta — 1 operation(s) for velocity controls card
+    group balance.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Velocity Controls Card Group Balance
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-velocity-controls-card-group-balance-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-views-api
+  name: Marqeta Views API
+  description: >-
+    View endpoints provide programmatic access to aggregated platform data derived from card program activity.
+    Each view represents a specific dataset such as transactions, balances, or card states, aggregated
+    at a configurable time level.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Views
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-views-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-web-push-provisioning-api
+  name: Marqeta web push provisioning API
+  description: The web push provisioning API from Marqeta — 1 operation(s) for web push provisioning.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - web push provisioning
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-web-push-provisioning-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
+- aid: marqeta:marqeta-webhooks-api
+  name: Marqeta Webhooks API
+  description: >-
+    // Conditional snippet for beta or internal content
+
+    include::../../maturity-admonition-banner.adoc[]
+
+
+    Webhooks are notifications about API events, sent as they occur.
+
+    The Marqeta platform sends these notifications to an endpoint that is hosted in your environment and
+    configured to receive and process them.
+
+
+    Create a webhook object to represent your webhook endpoint.
+
+    Configure it with the URL of your webhook endpoint and a set of credentials for accessing that endpoint.
+
+    You can configure it to send notifications for a single event, a group of events by type, or all event
+    types.
+
+    To set up multiple webhook endpoints and route different types of event notifications to each, create
+    multiple webhook objects and configure each to send a specific type of event notification to a specific
+    endpoint.
+
+
+    See <</developer-guides/about-webhooks, About Webhooks>> for information on notifications and a tutorial
+    that walks you through the configuration of your webhook endpoint.
+
+
+    See <</core-api/event-types, Event Types>> for reference documentation on the types of events that
+    the Marqeta platform supports.
+
+
+    [NOTE]
+
+    Webhooks URLs are cached.
+
+    Changes made on your webhook endpoint can take up to one hour to be applied.
+  humanURL: https://www.marqeta.com/docs/core-api
+  baseURL: https://sandbox-api.marqeta.com/v3
+  tags:
+  - Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/marqeta-webhooks-api-openapi.yml
+  - type: Documentation
+    url: https://www.marqeta.com/docs/core-api
+  - type: GraphQL
+    url: graphql/marqeta-graphql.md
+  - type: Documentation
+    url: https://www.marqeta.com/docs/diva-api
 common:
 - type: AgenticAccess
   url: agentic-access/marqeta-agentic-access.yml
