@@ -1,0 +1,157 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries Account Refunds API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Account Refunds",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List account refunds",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token/refunds",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which to retrieve refunds.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "Beginning of the date range of the refunds to return."
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "End of the date range of the refunds to return."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of account refund resources to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\nOnly supports `lastModifiedTime` and `-lastModifiedTime`.\n\n*NOTE:*\nYou must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `updated_time`."
+              },
+              {
+                "name": "statuses",
+                "value": "",
+                "type": "query",
+                "description": "Array of statuses by which to filter refunds."
+              }
+            ]
+          },
+          "docs": "Use the `/credit/accounts/{account_token}/refunds` endpoint to retrieve an array of refunds on a credit account.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>."
+        },
+        {
+          "info": {
+            "name": "Create refund",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/accounts/:account_token/refunds",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which you want to create a balance refund.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new refund, which you can issue to the account holder if their credit account balance is negative."
+        },
+        {
+          "info": {
+            "name": "Retrieve account refund",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token/refunds/:refund_token",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which to retrieve a refund.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "refund_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the refund to retrieve.\n\nSend a `GET` request to `/credit/accounts/{account_token}/refunds/{refund_token}` to retrieve existing refunds."
+              }
+            ]
+          },
+          "docs": "Use the `/accounts/{account_token}/refunds/{refund_token}` endpoint to retrieve a refund."
+        },
+        {
+          "info": {
+            "name": "Transition account refund status",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/accounts/:account_token/refunds/:refund_token/transitions",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which you want to transition a refund status.\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "refund_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the refund whose status you want to transition.\nSend a `GET` request to `/credit/accounts/{account_token}/refunds` endpoint to retrieve existing refund tokens for a given account."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use the `/accounts/{account_token}/refunds/{refund_token}/transitions` endpoint to transition a credit account refund's status to a new status."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

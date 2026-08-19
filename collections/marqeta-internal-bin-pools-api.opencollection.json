@@ -1,0 +1,112 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries Internal - BIN Pools API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Internal - BIN Pools",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all BIN pools",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/internal/binpools"
+          },
+          "docs": "Returns a list of all BIN pools"
+        },
+        {
+          "info": {
+            "name": "Create BIN pool",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/internal/binpools",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new BIN pool"
+        },
+        {
+          "info": {
+            "name": "Get BIN pool by token",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/internal/binpools/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Pool token"
+              }
+            ]
+          },
+          "docs": "Returns details of a specific BIN pool"
+        },
+        {
+          "info": {
+            "name": "Update BIN pool",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/internal/binpools/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Pool token"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates an existing BIN pool"
+        },
+        {
+          "info": {
+            "name": "Delete BIN pool",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/v3/internal/binpools/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Pool token"
+              }
+            ]
+          },
+          "docs": "Soft deletes a BIN pool by setting active=false"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,90 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries bulk issuances API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "bulk issuances",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Lists all bulk issuance requests",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/bulkissuances",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of requests to retrieve"
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Start index"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              }
+            ]
+          },
+          "docs": "Lists all bulk issuance requests"
+        },
+        {
+          "info": {
+            "name": "Creates a bulk issuance request for cards",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/bulkissuances",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a bulk issuance request for cards"
+        },
+        {
+          "info": {
+            "name": "Returns a bulk issuance request",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/bulkissuances/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Bulk issuance token"
+              }
+            ]
+          },
+          "docs": "Returns a bulk issuance request"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

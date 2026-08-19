@@ -1,0 +1,207 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries Payments API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Payments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List account payments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token/payments",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which to retrieve payments.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "Beginning of the date range of the payments to return."
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "End of the date range of the payments to return."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of account payments resources to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`."
+              },
+              {
+                "name": "statuses",
+                "value": "",
+                "type": "query",
+                "description": "Array of statuses by which to filter payments."
+              }
+            ]
+          },
+          "docs": "Retrieve an array of payments on a credit account.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>."
+        },
+        {
+          "info": {
+            "name": "Create account payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/accounts/:account_token/payments",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which to create a payment.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new payment to apply toward a credit account's balance."
+        },
+        {
+          "info": {
+            "name": "Retrieve account payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token/payments/:payment_token",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which to retrieve a payment.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "payment_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the payment to retrieve.\n\nSend a `GET` request to `/credit/accounts/{token}/payments` to retrieve existing payment tokens."
+              }
+            ]
+          },
+          "docs": "Retrieve a payment for a credit account."
+        },
+        {
+          "info": {
+            "name": "Release payment hold",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/accounts/:account_token/payments/:payment_token/releasehold",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account on which a payment hold is being released.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "payment_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the payment currently on hold.\n\nSend a `GET` request to `/credit/accounts/{account_token}/payments` to retrieve existing payment tokens."
+              }
+            ]
+          },
+          "docs": "Manually release a payment hold on a credit account."
+        },
+        {
+          "info": {
+            "name": "Transition account payment status",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/accounts/:account_token/payments/:payment_token/transitions",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which you want to transition a payment status.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "payment_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the payment whose status you want to transition.\n\nSend a `GET` request to `/credit/accounts/{account_token}/payments` endpoint to retrieve existing payment tokens for a given account."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Transition a credit account payment's status to a new status."
+        },
+        {
+          "info": {
+            "name": "Resend credit event notification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/webhooks/:event_type/:resource_token",
+            "params": [
+              {
+                "name": "event_type",
+                "value": "",
+                "type": "path",
+                "description": "Specifies the type of event you want to resend."
+              },
+              {
+                "name": "resource_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the resource for which you want to resend a notification.\n\n* Send a `GET` request to `/credit/accounts/{account_token}/journalentries` to retrieve existing journal entry tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/ledgerentries` to retrieve existing ledger entry tokens.\n* Send a `GET` request to `/accounts/{account_token}/accounttransitions` to retrieve existing account transition tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/payments/{payment_token}` to retrieve existing payment transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements` to retrieve existing statement summary tokens.\n* Send a `GET` request to `/accounts/{account_token}/delinquencystate/transitions` to retrieve existing delinquency state transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements/{statement_summary_token}/paymentreminders/{token}` to retrieve existing payment reminder tokens.\n* Send a `GET` request to `/credit/substatuses` to retrieve existing substatus tokens.\n* Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens and identify the specific account for the resend event."
+              }
+            ]
+          },
+          "docs": "Resends a credit event notification to your webhook endpoint.\n\nAlthough you send this request as a `POST`, all parameters are passed in the URL and the body is empty.\nThe event notification is resent to your webhook endpoint and also returned in the response to this request.\n\nFor details on how to configure your webhook endpoint, see the About Webhooks <</developer-guides/about-webhooks#_tutorial, tutorial>>.\nFor the complete `/webhooks` endpoint reference, see <</core-api/webhooks, Webhooks>>."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

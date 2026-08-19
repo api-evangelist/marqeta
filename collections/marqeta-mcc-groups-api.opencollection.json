@@ -1,0 +1,118 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries mcc groups API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "mcc groups",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Lists all MCC groups",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/mccgroups",
+            "params": [
+              {
+                "name": "mcc",
+                "value": "",
+                "type": "query",
+                "description": "MCC"
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of items to retrieve. Count can be between 1 - 10 items."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Indicates from what row to start returning data."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field by which to sort the returned items. Use any field in the model, or system fields lastModifiedTime or createdTime."
+              }
+            ]
+          },
+          "docs": "Lists all MCC groups"
+        },
+        {
+          "info": {
+            "name": "Creates an MCC group",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/mccgroups",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates an MCC group"
+        },
+        {
+          "info": {
+            "name": "Returns a specific MCC group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/mccgroups/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "MCC group token"
+              }
+            ]
+          },
+          "docs": "Returns a specific MCC group"
+        },
+        {
+          "info": {
+            "name": "Updates an MCC group",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/mccgroups/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates an MCC group"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

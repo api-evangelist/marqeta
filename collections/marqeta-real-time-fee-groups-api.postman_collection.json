@@ -1,0 +1,938 @@
+{
+  "item": [
+    {
+      "id": "af74d72b-1086-4129-a086-441e7f5b90e8",
+      "name": "Real-Time Fee Groups",
+      "description": {
+        "content": "Marqeta enables you to assess fees in real time through the use of real-time fee groups.\nA real-time fee group is a collection of fees associated with an account holder group (and thereby associated with the users and businesses that are part of that account holder group).\nReal-time fee assessment ensures that associated accounts have sufficient funds available to cover both the transaction amount and the fee before authorization of a transaction.\n\nBefore you create a real-time fee group, you must create the individual fees (using the `/fees` endpoint) and the account holder group with which you will associate the real-time fee group (using the `/accountholdergroups` endpoint).\nEach fee in the group must be applicable to a different transaction type.\nFor example, one fee could assess $1 on authorization transactions while another assesses $2 on PIN-debit transactions.\n\nUse of real-time fee groups requires prior approval by Marqeta.\nIf you are interested in using this feature for your card program, contact your Marqeta representative for more information.\n\n[NOTE]\nIf your program uses Gateway JIT Funding, you cannot assess fees.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f1599b97-e39c-4ea5-9fe8-fd7ceebf4ca6",
+          "name": "List real-time fee groups",
+          "request": {
+            "name": "List real-time fee groups",
+            "description": {
+              "content": "Use this endpoint to list existing real-time fee groups.\n\nThis endpoint supports <</core-api/field-filtering, field filtering>> and <</core-api/sorting-and-pagination, pagination>>.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "realtimefeegroups"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "5",
+                  "description": "Number of real-time fee groups to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "The sort order index of the first resource in the returned array."
+                },
+                {
+                  "disabled": false,
+                  "key": "fields",
+                  "value": "<string>",
+                  "description": "Comma-delimited list of fields to return (`field_1,field_2`, and so on).\n\nLeave blank to return all fields."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "-createdTime",
+                  "description": "Field on which to sort.\nUse any field in the resource model, or one of the system fields `lastModifiedTime` or `createdTime`.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "acf135dd-dc08-4f67-9455-bde05f57bf6f",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "realtimefeegroups"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-createdTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 2,\n  \"data[]\": {\n    \"active\": true,\n    \"created_time\": \"2022-11-28 00:36:11+00:00\",\n    \"fee_tokens[]\": \"my_fee_01 my_fee_05\",\n    \"last_modified_time\": \"2022-11-28 00:36:11+00:00\",\n    \"name\": \"My Real-Time Fee Group 01\",\n    \"token\": \"my_rtfg_01\"\n  },\n  \"end_index\": 1,\n  \"is_more\": false,\n  \"start_index\": 0\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b3d44f40-5370-4da5-a124-76b253e7b67a",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "realtimefeegroups"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-createdTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "43cb8543-8840-4527-a5c6-5900f7b3da59",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "realtimefeegroups"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-createdTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ec29287d-2b8e-4665-81aa-be0349d4144b",
+          "name": "Create real-time fee group",
+          "request": {
+            "name": "Create real-time fee group",
+            "description": {
+              "content": "Use this endpoint to create a real-time fee group.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "realtimefeegroups"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"active\": true,\n  \"fee_tokens\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"token\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "845f11fc-c9f1-490f-866d-cda4a5e9a135",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "realtimefeegroups"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fee_tokens[]\": \"my_fee_01 my_fee_05\",\n  \"name\": \"My Real-Time Fee Group 01\",\n  \"token\": \"my_rtfg_01\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"active\": true,\n  \"created_time\": \"2022-11-28 00:36:11+00:00\",\n  \"fee_tokens[]\": \"my_fee_01 my_fee_05\",\n  \"last_modified_time\": \"2022-11-28 00:36:11+00:00\",\n  \"name\": \"My Real-Time Fee Group 01\",\n  \"token\": \"my_rtfg_01\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "60c44880-4b0c-4d72-a7da-e3f5d171d197",
+              "name": "User input error/Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "realtimefeegroups"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fee_tokens[]\": \"my_fee_01 my_fee_05\",\n  \"name\": \"My Real-Time Fee Group 01\",\n  \"token\": \"my_rtfg_01\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d5d7fff2-3b41-41bb-ab3d-fb5f4cda58d1",
+              "name": "Request already processed with a different payload",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "realtimefeegroups"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fee_tokens[]\": \"my_fee_01 my_fee_05\",\n  \"name\": \"My Real-Time Fee Group 01\",\n  \"token\": \"my_rtfg_01\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0312314d-7b93-46fb-ade3-112b203a2560",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "realtimefeegroups"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fee_tokens[]\": \"my_fee_01 my_fee_05\",\n  \"name\": \"My Real-Time Fee Group 01\",\n  \"token\": \"my_rtfg_01\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "43584424-6bdb-4455-9136-69ecbff8b67a",
+          "name": "Retrieve real-time fee group",
+          "request": {
+            "name": "Retrieve real-time fee group",
+            "description": {
+              "content": "Use this endpoint to retrieve a specific real-time fee group.\nInclude the real-time fee group `token` path parameter to specify the real-time fee group to return.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "realtimefeegroups",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Unique identifier of the real-time fee group."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d639c3fe-4524-4da5-a4c9-87cc9b98e886",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "realtimefeegroups",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the real-time fee group."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"active\": true,\n  \"created_time\": \"2022-11-28 00:36:11+00:00\",\n  \"fee_tokens[]\": \"my_fee_01 my_fee_05\",\n  \"last_modified_time\": \"2022-11-28 00:36:11+00:00\",\n  \"name\": \"My Real-Time Fee Group 01\",\n  \"token\": \"my_rtfg_01\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8c85916e-1d87-4f7a-a336-4c631305371d",
+              "name": "Real-time fee group not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "realtimefeegroups",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the real-time fee group."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6f442fa7-d3b0-4e59-9de3-84dff95f88fd",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "realtimefeegroups",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the real-time fee group."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0fb9f64c-2499-40cf-b75f-95e1f8daa992",
+          "name": "Update real-time fee group",
+          "request": {
+            "name": "Update real-time fee group",
+            "description": {
+              "content": "Use this endpoint to update a real-time fee group.\nInclude the real-time fee group `token` path parameter to specify the real-time fee group to update.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "realtimefeegroups",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Unique identifier of the real-time fee group."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"active\": true,\n  \"fee_tokens\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"name\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f5275e38-e539-4177-9088-51f4dd48515c",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "realtimefeegroups",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the real-time fee group."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"active\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"active\": false,\n  \"created_time\": \"2022-11-28 00:36:11+00:00\",\n  \"fee_tokens[]\": \"my_fee_01 my_fee_05\",\n  \"last_modified_time\": \"2022-11-28 00:45:11+00:00\",\n  \"name\": \"My Real-Time Fee Group 01\",\n  \"token\": \"my_rtfg_01\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "652f23f5-5902-4f69-bcee-4771b017398e",
+              "name": "User input error/Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "realtimefeegroups",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the real-time fee group."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"active\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f5a82460-efab-49ee-901c-af3f1ee13cec",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "realtimefeegroups",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the real-time fee group."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"active\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "3f231267-bf16-4311-aebc-e07bf832b22b",
+    "name": "Core accepted countries Real-Time Fee Groups API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.\n\nContact Support:\n Name: Marqeta\n Email: support@marqeta.com",
+      "type": "text/plain"
+    }
+  }
+}

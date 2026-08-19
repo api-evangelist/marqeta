@@ -1,0 +1,260 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries direct deposit accounts API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "direct deposit accounts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Creates new direct deposit account for cardholder.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/depositaccounts",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates new direct deposit account for cardholder."
+        },
+        {
+          "info": {
+            "name": "Get User for Plain Text Account Number",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/depositaccounts/account/:account_number/user",
+            "params": [
+              {
+                "name": "account_number",
+                "value": "",
+                "type": "path",
+                "description": "Get user associated with direct deposit account number"
+              }
+            ]
+          },
+          "docs": "Get User for Plain Text Account Number"
+        },
+        {
+          "info": {
+            "name": "Creates new transition for a direct deposit account.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/depositaccounts/transitions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates new transition for a direct deposit account."
+        },
+        {
+          "info": {
+            "name": "Get direct deposit account transition.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/depositaccounts/transitions/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Get specific direct deposit account transition"
+              }
+            ]
+          },
+          "docs": "Get direct deposit account transition."
+        },
+        {
+          "info": {
+            "name": "List all specific direct deposit accounts.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/depositaccounts/user/:token",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of users to retrieve"
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Start index"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              },
+              {
+                "name": "state",
+                "value": "",
+                "type": "query",
+                "description": "Direct deposit account status"
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Get specific direct deposit account"
+              }
+            ]
+          },
+          "docs": "List all specific direct deposit accounts."
+        },
+        {
+          "info": {
+            "name": "Get direct deposit account.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/depositaccounts/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Get specific direct deposit account"
+              }
+            ]
+          },
+          "docs": "Get direct deposit account."
+        },
+        {
+          "info": {
+            "name": "Update direct deposit account.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/depositaccounts/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update direct deposit account."
+        },
+        {
+          "info": {
+            "name": "Get direct deposit account transition list for card holder.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/depositaccounts/:token/cdd",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Get CDD info for a specific DDA token"
+              }
+            ]
+          },
+          "docs": "Get direct deposit account transition list for card holder."
+        },
+        {
+          "info": {
+            "name": "Update CDD answers for Direct Deposit Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/depositaccounts/:token/cdd/:cddtoken",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "cddtoken",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update CDD answers for Direct Deposit Account"
+        },
+        {
+          "info": {
+            "name": "Get direct deposit account transition list for card holder.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/depositaccounts/:user_token/transitions",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of users to retrieve"
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Start index"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              },
+              {
+                "name": "user_token",
+                "value": "",
+                "type": "path",
+                "description": "Get direct deposit account transition list for user"
+              }
+            ]
+          },
+          "docs": "Get direct deposit account transition list for card holder."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

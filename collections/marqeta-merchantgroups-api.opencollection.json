@@ -1,0 +1,118 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries merchantgroups API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "merchantgroups",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Lists all Merchant Groups",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/merchantgroups",
+            "params": [
+              {
+                "name": "mid",
+                "value": "",
+                "type": "query",
+                "description": "mid"
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of items to retrieve. Count can be between 1 - 10 items."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Indicates from what row to start returning data."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field by which to sort the returned items. Use any field in the model, or system fields lastModifiedTime or createdTime."
+              }
+            ]
+          },
+          "docs": "Lists all Merchant Groups"
+        },
+        {
+          "info": {
+            "name": "Creates a merchant group",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/merchantgroups",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a merchant group"
+        },
+        {
+          "info": {
+            "name": "Returns a Merchant Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/merchantgroups/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Merchant Group token"
+              }
+            ]
+          },
+          "docs": "Returns a Merchant Group"
+        },
+        {
+          "info": {
+            "name": "Updates an Merchant Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/merchantgroups/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates an Merchant Group"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,457 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries businesses API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "businesses",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Lists all businesses",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/businesses",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of users to retrieve"
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Start index"
+              },
+              {
+                "name": "business_name_dba",
+                "value": "",
+                "type": "query",
+                "description": "Business name DBA"
+              },
+              {
+                "name": "business_name_legal",
+                "value": "",
+                "type": "query",
+                "description": "Business name legal"
+              },
+              {
+                "name": "search_type",
+                "value": "",
+                "type": "query",
+                "description": "Search type"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              }
+            ]
+          },
+          "docs": "Lists all businesses"
+        },
+        {
+          "info": {
+            "name": "Creates a business",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/businesses",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a business"
+        },
+        {
+          "info": {
+            "name": "Returns a specific business",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/businesses/lookup",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns a specific business"
+        },
+        {
+          "info": {
+            "name": "Creates a BusinessDirector for a business",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/businesses/:business_token/directors",
+            "params": [
+              {
+                "name": "business_token",
+                "value": "",
+                "type": "path",
+                "description": "Business token"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a BusinessDirector for a business"
+        },
+        {
+          "info": {
+            "name": "Returns a specific business director",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/businesses/:business_token/directors/:token",
+            "params": [
+              {
+                "name": "business_token",
+                "value": "",
+                "type": "path",
+                "description": "Business token"
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Business Director token"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+              }
+            ]
+          },
+          "docs": "Returns a specific business director"
+        },
+        {
+          "info": {
+            "name": "Updates a specific business director for a business",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/businesses/:business_token/directors/:token",
+            "params": [
+              {
+                "name": "business_token",
+                "value": "",
+                "type": "path",
+                "description": "Business token"
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Business Director token"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a specific business director for a business"
+        },
+        {
+          "info": {
+            "name": "Returns a specific business director's SSN",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/businesses/:business_token/directors/:token/identifications",
+            "params": [
+              {
+                "name": "business_token",
+                "value": "",
+                "type": "path",
+                "description": "Business token"
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Business Director token"
+              },
+              {
+                "name": "full_ssn",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns a specific business director's SSN"
+        },
+        {
+          "info": {
+            "name": "Lists all children of a parent business",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/businesses/:parent_token/children",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of users to retrieve"
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Start index"
+              },
+              {
+                "name": "parent_token",
+                "value": "",
+                "type": "path",
+                "description": "Token of parent business"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              }
+            ]
+          },
+          "docs": "Lists all children of a parent business"
+        },
+        {
+          "info": {
+            "name": "Returns a specific business",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/businesses/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Business token"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+              }
+            ]
+          },
+          "docs": "Returns a specific business"
+        },
+        {
+          "info": {
+            "name": "Updates a specific business",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/businesses/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Business token"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a specific business"
+        },
+        {
+          "info": {
+            "name": "Lists business notes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/businesses/:token/notes",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Business token"
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Start index"
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of notes to retrieve"
+              },
+              {
+                "name": "created_by",
+                "value": "",
+                "type": "query",
+                "description": "Created by"
+              },
+              {
+                "name": "created_by_user_role",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of created by user roles"
+              },
+              {
+                "name": "include_private",
+                "value": "",
+                "type": "query",
+                "description": "Include private notes and private fields in note response"
+              },
+              {
+                "name": "search_type",
+                "value": "",
+                "type": "query",
+                "description": "Search type"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              }
+            ]
+          },
+          "docs": "Lists business notes"
+        },
+        {
+          "info": {
+            "name": "Creates a note for a business",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/businesses/:token/notes",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Business token"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a note for a business"
+        },
+        {
+          "info": {
+            "name": "Updates a specific note for a business",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/businesses/:token/notes/:notes_token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Business token"
+              },
+              {
+                "name": "notes_token",
+                "value": "",
+                "type": "path",
+                "description": "Notes token"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a specific note for a business"
+        },
+        {
+          "info": {
+            "name": "Returns a specific business proprietor's SSN",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/businesses/:token/ssn",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Business token"
+              },
+              {
+                "name": "full_ssn",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns a specific business proprietor's SSN"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

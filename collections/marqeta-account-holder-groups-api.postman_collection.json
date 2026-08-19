@@ -1,0 +1,956 @@
+{
+  "item": [
+    {
+      "id": "27b06dda-c6fa-4cd0-bba8-3af5f8788952",
+      "name": "account holder groups",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "56b2170c-33fc-4115-b814-875cc1807e57",
+          "name": "Lists account holder groups",
+          "request": {
+            "name": "Lists account holder groups",
+            "description": {},
+            "url": {
+              "path": [
+                "accountholdergroups"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "10",
+                  "description": "Number of items to retrieve. Count can be between 1 - 10 items."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "Indicates from what row to start returning data."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "-lastModifiedTime",
+                  "description": "Field by which to sort the returned items. Use any field in the model, or system fields lastModifiedTime or createdTime."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9dc6bd22-c675-4d0c-80c8-d75f158c0442",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accountholdergroups"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "10"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 532,\n  \"data\": [\n    {\n      \"config\": {\n        \"is_reloadable\": false,\n        \"kyc_required\": \"NEVER\",\n        \"pre_kyc_controls\": {\n          \"balance_max\": 9357.616725272093,\n          \"cash_access_enabled\": false,\n          \"enable_non_program_loads\": false,\n          \"international_enabled\": false,\n          \"is_reloadable_pre_kyc\": false\n        },\n        \"real_time_fee_group_token\": \"string\"\n      },\n      \"name\": \"string\",\n      \"token\": \"string\"\n    },\n    {\n      \"config\": {\n        \"is_reloadable\": false,\n        \"kyc_required\": \"CONDITIONAL\",\n        \"pre_kyc_controls\": {\n          \"balance_max\": 3801.9872706473675,\n          \"cash_access_enabled\": false,\n          \"enable_non_program_loads\": false,\n          \"international_enabled\": false,\n          \"is_reloadable_pre_kyc\": false\n        },\n        \"real_time_fee_group_token\": \"st\"\n      },\n      \"name\": \"string\",\n      \"token\": \"string\"\n    }\n  ],\n  \"end_index\": 615,\n  \"is_more\": false,\n  \"start_index\": 4323\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "810b3aef-b045-4b6f-8764-1a69e86110aa",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accountholdergroups"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "10"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6879d532-7279-45e2-823b-fa469f990a55",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accountholdergroups"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "10"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cbf2dd5e-bb5f-4d95-84dd-67bcdf30ff29",
+          "name": "Creates an account holder group object",
+          "request": {
+            "name": "Creates an account holder group object",
+            "description": {},
+            "url": {
+              "path": [
+                "accountholdergroups"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"config\": {\n    \"is_reloadable\": false,\n    \"kyc_required\": \"<string>\",\n    \"pre_kyc_controls\": {\n      \"balance_max\": \"<number>\",\n      \"cash_access_enabled\": false,\n      \"enable_non_program_loads\": false,\n      \"international_enabled\": false,\n      \"is_reloadable_pre_kyc\": false\n    },\n    \"real_time_fee_group_token\": \"<string>\"\n  },\n  \"name\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "820e2666-f388-4490-b2f3-a181288e5313",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accountholdergroups"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"config\": {\n    \"is_reloadable\": false,\n    \"kyc_required\": \"<string>\",\n    \"pre_kyc_controls\": {\n      \"balance_max\": \"<number>\",\n      \"cash_access_enabled\": false,\n      \"enable_non_program_loads\": false,\n      \"international_enabled\": false,\n      \"is_reloadable_pre_kyc\": false\n    },\n    \"real_time_fee_group_token\": \"<string>\"\n  },\n  \"name\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"config\": {\n    \"is_reloadable\": false,\n    \"kyc_required\": \"<string>\",\n    \"pre_kyc_controls\": {\n      \"balance_max\": \"<number>\",\n      \"cash_access_enabled\": false,\n      \"enable_non_program_loads\": false,\n      \"international_enabled\": false,\n      \"is_reloadable_pre_kyc\": false\n    },\n    \"real_time_fee_group_token\": \"<string>\"\n  },\n  \"name\": \"string\",\n  \"token\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "eab3a606-88b0-42d1-8d3a-5b40f926e7cc",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accountholdergroups"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"config\": {\n    \"is_reloadable\": false,\n    \"kyc_required\": \"<string>\",\n    \"pre_kyc_controls\": {\n      \"balance_max\": \"<number>\",\n      \"cash_access_enabled\": false,\n      \"enable_non_program_loads\": false,\n      \"international_enabled\": false,\n      \"is_reloadable_pre_kyc\": false\n    },\n    \"real_time_fee_group_token\": \"<string>\"\n  },\n  \"name\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "29e69b21-93db-4f8d-bc7c-6b52bc1c5796",
+              "name": "Token already associated with a different payload",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accountholdergroups"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"config\": {\n    \"is_reloadable\": false,\n    \"kyc_required\": \"<string>\",\n    \"pre_kyc_controls\": {\n      \"balance_max\": \"<number>\",\n      \"cash_access_enabled\": false,\n      \"enable_non_program_loads\": false,\n      \"international_enabled\": false,\n      \"is_reloadable_pre_kyc\": false\n    },\n    \"real_time_fee_group_token\": \"<string>\"\n  },\n  \"name\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3ad624c6-0595-4307-ba28-9d8339c57975",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accountholdergroups"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"config\": {\n    \"is_reloadable\": false,\n    \"kyc_required\": \"<string>\",\n    \"pre_kyc_controls\": {\n      \"balance_max\": \"<number>\",\n      \"cash_access_enabled\": false,\n      \"enable_non_program_loads\": false,\n      \"international_enabled\": false,\n      \"is_reloadable_pre_kyc\": false\n    },\n    \"real_time_fee_group_token\": \"<string>\"\n  },\n  \"name\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1c86292f-3074-4d50-a527-9dde39200b5a",
+          "name": "Returns a specific account holder group object",
+          "request": {
+            "name": "Returns a specific account holder group object",
+            "description": {},
+            "url": {
+              "path": [
+                "accountholdergroups",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Account holder group token"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5574ca66-7b63-43b3-9847-246d16d7ed49",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accountholdergroups",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Account holder group token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"config\": {\n    \"is_reloadable\": false,\n    \"kyc_required\": \"<string>\",\n    \"pre_kyc_controls\": {\n      \"balance_max\": \"<number>\",\n      \"cash_access_enabled\": false,\n      \"enable_non_program_loads\": false,\n      \"international_enabled\": false,\n      \"is_reloadable_pre_kyc\": false\n    },\n    \"real_time_fee_group_token\": \"<string>\"\n  },\n  \"name\": \"string\",\n  \"token\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e8d39482-ecad-43a0-9c39-ca0b70174cbe",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accountholdergroups",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Account holder group token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a85ef9be-0c92-475c-bfc0-12f258004238",
+              "name": "Auto reload not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accountholdergroups",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Account holder group token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f4576f87-d120-4b5b-85ac-4aaca6115ebe",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accountholdergroups",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Account holder group token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "632e673e-5aff-4c86-968b-8e56f7f2caa5",
+          "name": "Updates an account holder group object",
+          "request": {
+            "name": "Updates an account holder group object",
+            "description": {},
+            "url": {
+              "path": [
+                "accountholdergroups",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"config\": {\n    \"is_reloadable\": false,\n    \"kyc_required\": \"<string>\",\n    \"pre_kyc_controls\": {\n      \"balance_max\": \"<number>\",\n      \"cash_access_enabled\": false,\n      \"enable_non_program_loads\": false,\n      \"international_enabled\": false,\n      \"is_reloadable_pre_kyc\": false\n    },\n    \"real_time_fee_group_token\": \"<string>\"\n  },\n  \"name\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a968f58c-84e4-4edc-8505-0255b88bb61d",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accountholdergroups",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"config\": {\n    \"is_reloadable\": false,\n    \"kyc_required\": \"<string>\",\n    \"pre_kyc_controls\": {\n      \"balance_max\": \"<number>\",\n      \"cash_access_enabled\": false,\n      \"enable_non_program_loads\": false,\n      \"international_enabled\": false,\n      \"is_reloadable_pre_kyc\": false\n    },\n    \"real_time_fee_group_token\": \"<string>\"\n  },\n  \"name\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"config\": {\n    \"is_reloadable\": false,\n    \"kyc_required\": \"<string>\",\n    \"pre_kyc_controls\": {\n      \"balance_max\": \"<number>\",\n      \"cash_access_enabled\": false,\n      \"enable_non_program_loads\": false,\n      \"international_enabled\": false,\n      \"is_reloadable_pre_kyc\": false\n    },\n    \"real_time_fee_group_token\": \"<string>\"\n  },\n  \"name\": \"string\",\n  \"token\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cd5594d7-e869-43be-9fc4-cd5bab15c08a",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accountholdergroups",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"config\": {\n    \"is_reloadable\": false,\n    \"kyc_required\": \"<string>\",\n    \"pre_kyc_controls\": {\n      \"balance_max\": \"<number>\",\n      \"cash_access_enabled\": false,\n      \"enable_non_program_loads\": false,\n      \"international_enabled\": false,\n      \"is_reloadable_pre_kyc\": false\n    },\n    \"real_time_fee_group_token\": \"<string>\"\n  },\n  \"name\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c1a7862c-6404-47b7-8503-4df11950d22c",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accountholdergroups",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"config\": {\n    \"is_reloadable\": false,\n    \"kyc_required\": \"<string>\",\n    \"pre_kyc_controls\": {\n      \"balance_max\": \"<number>\",\n      \"cash_access_enabled\": false,\n      \"enable_non_program_loads\": false,\n      \"international_enabled\": false,\n      \"is_reloadable_pre_kyc\": false\n    },\n    \"real_time_fee_group_token\": \"<string>\"\n  },\n  \"name\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "c436e103-89a0-435f-82a5-d47a817828df",
+    "name": "Core accepted countries account holder groups API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.\n\nContact Support:\n Name: Marqeta\n Email: support@marqeta.com",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,208 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries Program Transfers API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Program Transfers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List program transfers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/programtransfers",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of program transfers to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (`field_1,field_2`, and so on).\nLeave blank to return all fields."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nUse any field in the resource model, or one of the system fields `lastModifiedTime` or `createdTime`.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order."
+              },
+              {
+                "name": "user_token",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of the user account holder whose program transfers you want to retrieve.\n\nSend a `GET` request to `/users` to retrieve user tokens."
+              },
+              {
+                "name": "business_token",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of the business account holder whose program transfers you want to retrieve.\n\nSend a `GET` request to `/businesses` to retrieve business tokens."
+              },
+              {
+                "name": "type_token",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of the program transfer type to retrieve."
+              }
+            ]
+          },
+          "docs": "Use this endpoint to list all program transfers.\n\nTo narrow your result set to program transfers of a particular type or that are associated with a particular account holder, include the appropriate parameters from the following URL Query Parameters table.\nThis endpoint also supports <</core-api/field-filtering, field filtering>>, <</core-api/sorting-and-pagination, pagination>>, and <</core-api/sorting-and-pagination, sorting>>."
+        },
+        {
+          "info": {
+            "name": "Create program transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/programtransfers",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this endpoint to create a program transfer.\nAdd the program transfer details to the body of the request in link:http://www.json.org/[JSON, window=\"_blank\"] format.\n\nInclude either `user_token` or `business_token` in the message body to specify the account holder whose general purpose account (GPA) will be debited by the program transfer.\nThe user or business must already exist.\n\n[NOTE]\nIf the GPA has insufficient funds to cover both the amount of the program transfer and all attached fees, t"
+        },
+        {
+          "info": {
+            "name": "List program transfer types",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/programtransfers/types",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of program transfer types to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (`field_1,field_2`, and so on).\nLeave blank to return all fields."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nUse any field in the resource model, or one of the system fields `lastModifiedTime` or `createdTime`.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order."
+              }
+            ]
+          },
+          "docs": "Use this endpoint to list all program transfer types.\n\nThis endpoint supports <</core-api/field-filtering, field filtering>>, <</core-api/sorting-and-pagination, pagination>>, and <</core-api/sorting-and-pagination, sorting>>."
+        },
+        {
+          "info": {
+            "name": "Create program transfer type",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/programtransfers/types",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this endpoint to create a program transfer type.\nAdd the program transfer details to the body of the request in link:http://www.json.org/[JSON, window=\"_blank\"] format.\n\nYou are required to pass in a `program_funding_source_token` to associate a program funding source with the program transfer type.\nYou must therefore create a program funding source before creating a program transfer type."
+        },
+        {
+          "info": {
+            "name": "Retrieve program transfer type",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/programtransfers/types/:type_token",
+            "params": [
+              {
+                "name": "type_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the program transfer type."
+              }
+            ]
+          },
+          "docs": "Use this endpoint to retrieve a specific program transfer.\nInclude the `type_token` path parameter to indicate the program transfer type to return."
+        },
+        {
+          "info": {
+            "name": "Update program transfer type",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/programtransfers/types/:type_token",
+            "params": [
+              {
+                "name": "type_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the program transfer type."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this endpoint to update a program transfer type.\nInclude the `type_token` path parameter to indicate the program transfer type to update.\nAdd the modified detail parameters to the body of the request in link:http://www.json.org/[JSON, window=\"_blank\"] format.\nOnly values of parameters in the request are modified; all others are left unchanged."
+        },
+        {
+          "info": {
+            "name": "Retrieve program transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/programtransfers/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the program transfer."
+              }
+            ]
+          },
+          "docs": "Use this endpoint to retrieve a specific program transfer.\nInclude the program transfer `token` path parameter to specify the program transfer to retrieve."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

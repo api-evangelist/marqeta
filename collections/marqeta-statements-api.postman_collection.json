@@ -1,0 +1,2653 @@
+{
+  "item": [
+    {
+      "id": "9163e237-1bcc-4d20-954d-dcc3f509f9cf",
+      "name": "Statements",
+      "description": {
+        "content": "// Conditional snippet for beta or internal content\ninclude::../../maturity-admonition-banner.adoc[]\n\nUse the statements endpoints to retrieve statement information or statement files for a <</core-api/credit-accounts, credit account>>.\n\nAn account statement contains a summary of account activity that occurred during a billing cycle.\nFor more on statements, see <</developer-guides/about-credit-account-statements, About Credit Account Statements>>.\n\nTo receive a webhook notification when a statement is created, see <</core-api/event-types#_credit_account_statement_event, Credit account statement event>> in Event Types.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "31db6c8f-cd5d-43bb-a3aa-c61ad30b1e17",
+          "name": "List account statement summaries",
+          "request": {
+            "name": "List account statement summaries",
+            "description": {
+              "content": "Retrieve an array of statement summaries tied to a cardholder's account.\n\nThe statement summary, which is a summary of account activity on a statement, provides account holders with a synopsis of activity that occurred on the account during a specified billing cycle.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>.\nYou can use optional query parameters to return a statement based on its exact opening or closing date, or a statement whose closing date falls within a range of dates.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token",
+                "statements"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "start_date",
+                  "value": "<dateTime>",
+                  "description": "Returns statements with a matching opening date.\n\nIf both `start_date` and `end_date` are specified, statements whose closing date falls between the start and end dates are returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "end_date",
+                  "value": "<dateTime>",
+                  "description": "Returns statements with a matching closing date.\n\nIf both `start_date` and `end_date` are specified, statements whose closing date falls between the start and end dates are returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "5",
+                  "description": "Number of account statement resources to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "Sort order index of the first resource in the returned array."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "-createdTime",
+                  "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `createdTime`, and not by the field names appearing in response bodies such as `created_time`."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account for which you want to retrieve statement summaries.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "bbf17823-9492-4a69-b5aa-8b1256c0a91a",
+              "name": "A JSON object containing a list of Statement Summaries",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "statements"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-createdTime"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to retrieve statement summaries.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 1,\n  \"data\": [\n    {\n      \"account_token\": \"my_account_token_12\",\n      \"available_credit\": 800,\n      \"closing_balance\": 2000,\n      \"closing_date\": \"2023-07-01 00:27:09+00:00\",\n      \"created_time\": \"2023-07-01 00:27:09+00:00\",\n      \"credit_limit\": 10000,\n      \"credits\": 0,\n      \"cycle_type\": \"BEGINNING_REVOLVING\",\n      \"days_in_billing_cycle\": 31,\n      \"fees\": 0,\n      \"interest\": 0,\n      \"opening_balance\": 1000,\n      \"opening_date\": \"2023-07-01 00:27:09+00:00\",\n      \"past_due_amount\": 0,\n      \"payments\": 0,\n      \"purchases\": 200,\n      \"token\": \"acc0544e-4075-fe67-93dd-6b5cd443adb1\"\n    }\n  ],\n  \"end_index\": 0,\n  \"is_more\": true,\n  \"start_index\": 0\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6786bbfd-21dd-4d14-9101-a806e2d580f9",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "statements"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-createdTime"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to retrieve statement summaries.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 8972,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c6c0156a-46a6-4e72-b1c7-cde91ccb2999",
+          "name": "List files for an account",
+          "request": {
+            "name": "List files for an account",
+            "description": {
+              "content": "Retrieve an array of statement files for a specific credit account.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token",
+                "statements",
+                "files"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "start_date",
+                  "value": "<dateTime>",
+                  "description": "Start date of the date range for which to return statement files."
+                },
+                {
+                  "disabled": false,
+                  "key": "end_date",
+                  "value": "<dateTime>",
+                  "description": "End date of the date range for which to return statement files."
+                },
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "5",
+                  "description": "Number of statement file resources to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "Sort order index of the first resource in the returned array."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "-createdTime",
+                  "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `createdTime`, and not by the field names appearing in response bodies such as `created_time`."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account for which to retrieve statement files.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "f440bd56-d330-45ba-a24b-db4112b73805",
+              "name": "A JSON object containing a list of statement files.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "statements",
+                    "files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "2024-01-01 00:00:00+00:00"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2024-03-01 03:59:59+00:00"
+                    },
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-createdTime"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which to retrieve statement files.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 1,\n  \"data\": [\n    {\n      \"account_token\": \"credit_account_token1234\",\n      \"closing_date\": \"2023-07-31 00:27:09\",\n      \"opening_date\": \"2023-07-01 00:27:09\",\n      \"signed_url\": \"<signed_https_url_pointing_to_a_resource_on_S3>\",\n      \"statement_summary_token\": \"37f07818-2a2c-4c82-a721-a479936d5b2e\",\n      \"token\": \"file_token\",\n      \"type\": \"STATEMENT_PDF\"\n    },\n    {\n      \"account_token\": \"credit_account_token4567\",\n      \"closing_date\": \"2023-06-30 00:27:09\",\n      \"opening_date\": \"2023-06-01 00:27:09\",\n      \"signed_url\": \"<signed_https_url_pointing_to_a_resource_on_S3>\",\n      \"statement_summary_token\": \"79938791-5e15-456a-bf13-c39142c9a763\",\n      \"token\": \"file_token\",\n      \"type\": \"STATEMENT_PDF\"\n    }\n  ],\n  \"end_index\": 0,\n  \"is_more\": false,\n  \"start_index\": 0\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a1851ec3-55d4-4cf9-b0b5-2e49bec3fe75",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "statements",
+                    "files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "2024-01-01 00:00:00+00:00"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2024-03-01 03:59:59+00:00"
+                    },
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-createdTime"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which to retrieve statement files.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 8972,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f71ff79b-a70c-43e9-ab5e-194ebe5d9487",
+          "name": "Retrieve account statement summary",
+          "request": {
+            "name": "Retrieve account statement summary",
+            "description": {
+              "content": "Retrieve a statement summary for a credit account.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token",
+                "statements",
+                ":statement_summary_token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account for which you want to retrieve a statement summary.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "statement_summary_token",
+                  "description": "(Required) Unique identifier of the statement summary to retrieve.\n\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "2982b6ad-f8d3-40e9-a808-123d0ab2e9ea",
+              "name": "A JSON object containing statement_summary information",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "statements",
+                    ":statement_summary_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to retrieve a statement summary.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "statement_summary_token",
+                      "description": "(Required) Unique identifier of the statement summary to retrieve.\n\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"account_token\": \"my_account_token_12\",\n  \"available_credit\": 800,\n  \"closing_balance\": 2000,\n  \"closing_date\": \"2021-07-01 00:27:09+00:00\",\n  \"created_time\": \"2021-07-01 00:27:09+00:00\",\n  \"credit_limit\": 10000,\n  \"credits\": 0,\n  \"cycle_type\": \"BEGINNING_REVOLVING\",\n  \"days_in_billing_cycle\": 31,\n  \"fees\": 0,\n  \"interest\": 0,\n  \"opening_balance\": 1000,\n  \"opening_date\": \"2021-07-01 00:27:09+00:00\",\n  \"past_due_amount\": 0,\n  \"payments\": 0,\n  \"purchases\": 200,\n  \"token\": \"acc0544e-4075-fe67-93dd-6b5cd443adb1\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4039d8f3-87ef-4ba1-9c44-c90230cb445b",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "statements",
+                    ":statement_summary_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to retrieve a statement summary.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "statement_summary_token",
+                      "description": "(Required) Unique identifier of the statement summary to retrieve.\n\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 8972,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "50cf6f2c-7bd3-41af-b08c-8f39168a9c6e",
+          "name": "List files for a statement summary",
+          "request": {
+            "name": "List files for a statement summary",
+            "description": {
+              "content": "Retrieve an array of statement files for a specific statement summary.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token",
+                "statements",
+                ":statement_summary_token",
+                "files"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "5",
+                  "description": "Number of statement files to return."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "Sort order index from which to begin returning files."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account for which to retrieve statement files for a statement summary.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "statement_summary_token",
+                  "description": "(Required) Unique identifier of the statement summary whose statement files you want to retrieve.\n\nSend a `GET` request to `/credit/accounts/{token}/statements` to retrieve existing statement summary tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "156037ef-1b30-4604-8a24-a0ff61ccb1b2",
+              "name": "Expected response to a valid request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "statements",
+                    ":statement_summary_token",
+                    "files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which to retrieve statement files for a statement summary.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "statement_summary_token",
+                      "description": "(Required) Unique identifier of the statement summary whose statement files you want to retrieve.\n\nSend a `GET` request to `/credit/accounts/{token}/statements` to retrieve existing statement summary tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 1,\n  \"data\": [\n    {\n      \"account_token\": \"credit_account_token1234\",\n      \"closing_date\": \"2023-07-31 00:27:09\",\n      \"opening_date\": \"2023-07-01 00:27:09\",\n      \"signed_url\": \"<signed_https_url_pointing_to_a_resource_on_S3>\",\n      \"statement_summary_token\": \"37f07818-2a2c-4c82-a721-a479936d5b2e\",\n      \"token\": \"file_token\",\n      \"type\": \"STATEMENT_PDF\"\n    }\n  ],\n  \"end_index\": 0,\n  \"is_more\": false,\n  \"start_index\": 0\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8b4fc3bd-9457-4c52-8dec-2b58baba5588",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "statements",
+                    ":statement_summary_token",
+                    "files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which to retrieve statement files for a statement summary.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "statement_summary_token",
+                      "description": "(Required) Unique identifier of the statement summary whose statement files you want to retrieve.\n\nSend a `GET` request to `/credit/accounts/{token}/statements` to retrieve existing statement summary tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 8972,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "aa6cbe08-777e-4c78-b414-b8d452a33206",
+          "name": "Retrieve account statement interest charges",
+          "request": {
+            "name": "Retrieve account statement interest charges",
+            "description": {
+              "content": "Retrieve the interest charges on a credit account's statement summary.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token",
+                "statements",
+                ":statement_summary_token",
+                "interestcharges"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account for which you want to retrieve the statement interest charges.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "statement_summary_token",
+                  "description": "(Required) Unique identifier of the statement summary from which to retrieve the interest charges.\n\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "365bb4ac-cdbb-411c-8f54-e86dc2aa829e",
+              "name": "Expected response to a valid request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "statements",
+                    ":statement_summary_token",
+                    "interestcharges"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to retrieve the statement interest charges.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "statement_summary_token",
+                      "description": "(Required) Unique identifier of the statement summary from which to retrieve the interest charges.\n\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"account_token\": \"credit_account_token1234\",\n  \"data\": [\n    {\n      \"amount\": 2.31,\n      \"apr_type\": \"GO_TO\",\n      \"apr_value\": 14.99,\n      \"balance_subject_to_interest_rate\": 181.67,\n      \"balance_type\": \"PURCHASE\"\n    }\n  ],\n  \"statement_summary_token\": \"statement_summary_token1234\",\n  \"user_token\": \"user_token1234\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6112fc2b-633b-4c7b-9557-4a24d2a23367",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "statements",
+                    ":statement_summary_token",
+                    "interestcharges"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to retrieve the statement interest charges.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "statement_summary_token",
+                      "description": "(Required) Unique identifier of the statement summary from which to retrieve the interest charges.\n\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 8972,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8eb0331b-b95c-44db-87fe-d3656bb813b3",
+          "name": "List account statement journal entries",
+          "request": {
+            "name": "List account statement journal entries",
+            "description": {
+              "content": "Retrieve an array of journal entries on a credit account's statement summary.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting>>.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token",
+                "statements",
+                ":statement_summary_token",
+                "journalentries"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "5",
+                  "description": "Number of journal entry resources to return."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "Sort order index of the first resource in the returned array."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand",
+                  "value": "<string>",
+                  "description": "Embeds the specified object into the response."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand",
+                  "value": "<string>",
+                  "description": "Embeds the specified object into the response."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "lastModifiedTime",
+                  "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account for which to retrieve the statement journal entries.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "statement_summary_token",
+                  "description": "(Required) Unique identifier of the statement summary from which to retrieve journal entries.\n\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "a9e39ae0-ac50-4905-b1ed-412081786f81",
+              "name": "Expected response to a valid request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "statements",
+                    ":statement_summary_token",
+                    "journalentries"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "expand",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "lastModifiedTime"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which to retrieve the statement journal entries.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "statement_summary_token",
+                      "description": "(Required) Unique identifier of the statement summary from which to retrieve journal entries.\n\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 3,\n  \"data\": [\n    {\n      \"account_token\": \"my_account_token_12\",\n      \"amount\": 2.31,\n      \"card_token\": \"my_credit_card_token7794\",\n      \"created_time\": \"2023-08-01 07:00:19.756000+00:00\",\n      \"currency_code\": \"USD\",\n      \"detail_object\": {\n        \"account_token\": \"my_account_token_12\",\n        \"average_daily_balance\": 181.67,\n        \"created_date\": \"2023-08-01 07:00:19.755000+00:00\",\n        \"currency_code\": \"USD\",\n        \"daily_periodic_rate\": 0.00041068,\n        \"days_in_billing_cycle\": 31,\n        \"goto_apr\": 14.99,\n        \"interest_amount\": 2.31,\n        \"statement_balance\": 208.93,\n        \"statement_closing_date\": \"2023-08-01 03:59:59.999000+00:00\",\n        \"statement_opening_date\": \"2023-07-01 04:00:00\",\n        \"statement_token\": \"statement_token_75b\",\n        \"token\": \"detail_token_96749\",\n        \"updated_date\": \"2023-08-01 07:00:19.755000+00:00\"\n      },\n      \"detail_token\": \"detail_token_96749\",\n      \"group\": \"INTEREST\",\n      \"id\": \"11112222\",\n      \"impact_time\": \"2023-08-01 03:59:59.999000+00:00\",\n      \"memo\": \"Interest charge on purchases\",\n      \"request_time\": \"2023-08-01 03:59:59.999000+00:00\",\n      \"status\": \"POSTED\",\n      \"token\": \"interest_journal_entry_token1111\",\n      \"type\": \"account.interest\",\n      \"user_token\": \"user_token1111\"\n    },\n    {\n      \"account_token\": \"my_account_token_12\",\n      \"amount\": 15,\n      \"card_token\": \"my_credit_card_token7794\",\n      \"created_time\": \"2023-07-01 07:00:24.240000+00:00\",\n      \"currency_code\": \"USD\",\n      \"detail_object\": {\n        \"account_token\": \"my_account_token_12\",\n        \"amount\": 15,\n        \"created\": \"2023-07-01 07:00:24.239000+00:00\",\n        \"currency_code\": \"USD\",\n        \"description\": \"Late Payment Fee\",\n        \"method\": \"FLAT\",\n        \"token\": \"detail_token_11221\",\n        \"type\": \"LATE_PAYMENT_FEE\",\n        \"value\": 25\n      },\n      \"detail_token\": \"detail_token_11221\",\n      \"group\": \"FEE\",\n      \"id\": \"44445678\",\n      \"impact_time\": \"2023-07-01 03:59:59.999000+00:00\",\n      \"memo\": \"Late payment fee\",\n      \"request_time\": \"2023-07-01 03:59:59.999000+00:00\",\n      \"status\": \"POSTED\",\n      \"token\": \"fee_journal_entry_token2121\",\n      \"type\": \"account.fee.payment.late\",\n      \"user_token\": \"user_token2121\"\n    },\n    {\n      \"account_token\": \"my_account_token_12\",\n      \"amount\": 9.11,\n      \"card_token\": \"my_credit_card_token7794\",\n      \"created_time\": \"2023-09-26 11:53:48.228000+00:00\",\n      \"currency_code\": \"USD\",\n      \"detail_object\": {\n        \"acquirer\": {\n          \"system_trace_audit_number\": 0\n        },\n        \"acquirer_fee_amount\": 0,\n        \"acquirer_reference_data\": 4.355106395860054e+22,\n        \"acting_user_token\": \"user_token4632\",\n        \"amount\": 9.11,\n        \"approval_code\": 946791,\n        \"batch_number\": 2021048291031352,\n        \"card\": {\n          \"last_four\": 4489,\n          \"metadata\": {}\n        },\n        \"card_acceptor\": {\n          \"city\": \"OAKLAND\",\n          \"country_code\": \"US\",\n          \"mcc\": 5814,\n          \"mid\": 555600244811,\n          \"name\": \"SWEET TREATS 0484\",\n          \"postal_code\": 94612,\n          \"state\": \"CA\"\n        },\n        \"card_token\": \"my_credit_card_token7794\",\n        \"clearing_record_sequence_number\": 0,\n        \"created_time\": \"2023-09-26 11:53:46+00:00\",\n        \"currency_code\": \"USD\",\n        \"currency_conversion\": {\n          \"network\": {\n            \"conversion_rate\": 1,\n            \"original_amount\": 9.11,\n            \"original_currency_code\": 840\n          }\n        },\n        \"duration\": 378,\n        \"fees\": {\n          \"amount\": 0.19131,\n          \"credit_debit\": \"C\",\n          \"type\": \"INTERCHANGE_FEE\"\n        },\n        \"gpa\": {\n          \"available_balance\": 0,\n          \"balances\": {\n            \"USD\": {\n              \"available_balance\": 0,\n              \"credit_balance\": 0,\n              \"currency_code\": \"USD\",\n              \"impacted_amount\": -9.11,\n              \"ledger_balance\": 61.7,\n              \"pending_credits\": 0\n            }\n          },\n          \"credit_balance\": 0,\n          \"currency_code\": \"USD\",\n          \"impacted_amount\": -9.11,\n          \"ledger_balance\": 61.7,\n          \"pending_credits\": 0\n        },\n        \"gpa_order\": {\n          \"amount\": 9.11,\n          \"created_time\": \"2023-09-25 20:59:43+00:00\",\n          \"currency_code\": \"USD\",\n          \"funding\": {\n            \"amount\": 9.11,\n            \"source\": {\n              \"active\": true,\n              \"created_time\": \"2023-06-22 18:41:14+00:00\",\n              \"is_default_account\": false,\n              \"last_modified_time\": \"2023-06-22 18:41:14+00:00\",\n              \"name\": \"My Funding Source\",\n              \"token\": \"funding_source_token6789\",\n              \"type\": \"programgateway\"\n            }\n          },\n          \"funding_source_token\": \"funding_source_token6789\",\n          \"jit_funding\": {\n            \"acting_user_token\": \"user_token4632\",\n            \"amount\": 9.11,\n            \"method\": \"pgfs.authorization.capture\",\n            \"original_jit_funding_token\": \"jit_funding_token4be7\",\n            \"token\": \"jit_funding_token43a3\",\n            \"user_token\": \"user_token4632\"\n          },\n          \"last_modified_time\": \"2023-09-26 11:53:47+00:00\",\n          \"response\": {\n            \"code\": 0,\n            \"memo\": \"Approved or completed successfully\"\n          },\n          \"state\": \"COMPLETION\",\n          \"token\": \"gpa_order_token2c2c5\",\n          \"transaction_token\": \"transaction_token42352a\",\n          \"user_token\": \"user_token4632\"\n        },\n        \"identifier\": 6457,\n        \"issuer_interchange_amount\": 0.19131,\n        \"issuer_payment_node\": \"042f97a3458b59e3cce0269f66e864d8\",\n        \"issuer_received_time\": \"2023-09-26 11:53:46.886000+00:00\",\n        \"network\": \"VISA\",\n        \"network_metadata\": {\n          \"product_id\": \"VISA_TRADITIONAL\",\n          \"program_id\": \"\"\n        },\n        \"network_reference_id\": 218552461989029,\n        \"pos\": {\n          \"is_installment\": false,\n          \"is_recurring\": false,\n          \"partial_approval_capable\": false,\n          \"pin_present\": false,\n          \"purchase_amount_only\": false,\n          \"terminal_id\": 101\n        },\n        \"preceding_related_transaction_token\": \"journal_entry_token2460\",\n        \"request_amount\": 9.11,\n        \"response\": {\n          \"code\": 0,\n          \"memo\": \"Approved or completed successfully\"\n        },\n        \"settlement_date\": \"2023-09-26 00:00:00+00:00\",\n        \"state\": \"COMPLETION\",\n        \"subnetwork\": \"VISANET\",\n        \"token\": \"detail_token_645736\",\n        \"transaction_metadata\": {\n          \"payment_channel\": \"OTHER\"\n        },\n        \"type\": \"authorization.clearing\",\n        \"user\": {\n          \"metadata\": {\n            \"notification_email\": \"hello@myemail.com\"\n          }\n        },\n        \"user_token\": \"user_token4632\",\n        \"user_transaction_time\": \"2023-09-25 20:59:43+00:00\"\n      },\n      \"detail_token\": \"detail_token_645736\",\n      \"group\": \"PURCHASE\",\n      \"id\": \"12345678\",\n      \"impact_time\": \"2023-09-26 11:53:48.228000+00:00\",\n      \"memo\": \"SWEET TREATS 0484\",\n      \"related_token\": \"journal_entry_token2460\",\n      \"request_time\": \"2023-09-25 20:59:43\",\n      \"root_token\": \"journal_entry_token2460\",\n      \"status\": \"POSTED\",\n      \"token\": \"purchase_journal_entry_token6789\",\n      \"type\": \"authorization.clearing\",\n      \"user_token\": \"user_token12\"\n    }\n  ],\n  \"end_index\": 4,\n  \"is_more\": true,\n  \"start_index\": 0\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cc8a890a-e05a-4004-88af-2706c3d82775",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "statements",
+                    ":statement_summary_token",
+                    "journalentries"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "expand",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "lastModifiedTime"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which to retrieve the statement journal entries.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "statement_summary_token",
+                      "description": "(Required) Unique identifier of the statement summary from which to retrieve journal entries.\n\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 8972,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e2a8b6fe-6827-4ba3-866d-33def9fc55fb",
+          "name": "List account statement ledger entries",
+          "request": {
+            "name": "List account statement ledger entries",
+            "description": {
+              "content": "[IMPORTANT]\nThis feature is being deprecated and replaced by statement journal entries.\nTo list statement journal entries, see <</core-api/credit-account-journal-entries#listStatementJournalEntries, List account statement journal entries>>.\n\nRetrieve an array of ledger entries on a credit account's statement summary.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting>>.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token",
+                "statements",
+                ":statement_summary_token",
+                "ledgerentries"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "expand",
+                  "value": "<string>",
+                  "description": "Embeds the specified object into the response."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand",
+                  "value": "<string>",
+                  "description": "Embeds the specified object into the response."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "lastModifiedTime",
+                  "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account for which to retrieve the statement ledger entries.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "statement_summary_token",
+                  "description": "(Required) Unique identifier of the statement summary from which to retrieve ledger entries.\n\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "a69e19f5-cbd8-42a3-9634-2ea7a4f56294",
+              "name": "Expected response to a valid request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "statements",
+                    ":statement_summary_token",
+                    "ledgerentries"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "expand",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "lastModifiedTime"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which to retrieve the statement ledger entries.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "statement_summary_token",
+                      "description": "(Required) Unique identifier of the statement summary from which to retrieve ledger entries.\n\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"account_token\": \"my_account_token_12\",\n    \"amount\": 9.11,\n    \"card_token\": \"my_credit_card_token7794\",\n    \"created_time\": \"2023-09-26 11:53:48.228000+00:00\",\n    \"currency_code\": \"USD\",\n    \"detail_object\": {\n      \"acquirer\": {\n        \"system_trace_audit_number\": 0\n      },\n      \"acquirer_fee_amount\": 0,\n      \"acquirer_reference_data\": 4.355106395860054e+22,\n      \"acting_user_token\": \"user_token4632\",\n      \"amount\": 9.11,\n      \"approval_code\": 946791,\n      \"batch_number\": 2021048291031352,\n      \"card\": {\n        \"last_four\": 4489,\n        \"metadata\": {}\n      },\n      \"card_acceptor\": {\n        \"city\": \"OAKLAND\",\n        \"country_code\": \"US\",\n        \"mcc\": 5814,\n        \"mid\": 555600244811,\n        \"name\": \"SWEET TREATS 0484\",\n        \"postal_code\": 94612,\n        \"state\": \"CA\"\n      },\n      \"card_token\": \"my_credit_card_token7794\",\n      \"clearing_record_sequence_number\": 0,\n      \"created_time\": \"2023-09-26 11:53:46+00:00\",\n      \"currency_code\": \"USD\",\n      \"currency_conversion\": {\n        \"network\": {\n          \"conversion_rate\": 1,\n          \"original_amount\": 9.11,\n          \"original_currency_code\": 840\n        }\n      },\n      \"duration\": 378,\n      \"fees\": {\n        \"amount\": 0.19131,\n        \"credit_debit\": \"C\",\n        \"type\": \"INTERCHANGE_FEE\"\n      },\n      \"gpa\": {\n        \"available_balance\": 0,\n        \"balances\": {\n          \"USD\": {\n            \"available_balance\": 0,\n            \"credit_balance\": 0,\n            \"currency_code\": \"USD\",\n            \"impacted_amount\": -9.11,\n            \"ledger_balance\": 61.7,\n            \"pending_credits\": 0\n          }\n        },\n        \"credit_balance\": 0,\n        \"currency_code\": \"USD\",\n        \"impacted_amount\": -9.11,\n        \"ledger_balance\": 61.7,\n        \"pending_credits\": 0\n      },\n      \"gpa_order\": {\n        \"amount\": 9.11,\n        \"created_time\": \"2023-09-25 20:59:43+00:00\",\n        \"currency_code\": \"USD\",\n        \"funding\": {\n          \"amount\": 9.11,\n          \"source\": {\n            \"active\": true,\n            \"created_time\": \"2023-06-22 18:41:14+00:00\",\n            \"is_default_account\": false,\n            \"last_modified_time\": \"2023-06-22 18:41:14+00:00\",\n            \"name\": \"My Funding Source\",\n            \"token\": \"funding_source_token6789\",\n            \"type\": \"programgateway\"\n          }\n        },\n        \"funding_source_token\": \"funding_source_token6789\",\n        \"jit_funding\": {\n          \"acting_user_token\": \"user_token4632\",\n          \"amount\": 9.11,\n          \"method\": \"pgfs.authorization.capture\",\n          \"original_jit_funding_token\": \"jit_funding_token4be7\",\n          \"token\": \"jit_funding_token43a3\",\n          \"user_token\": \"user_token4632\"\n        },\n        \"last_modified_time\": \"2023-09-26 11:53:47+00:00\",\n        \"response\": {\n          \"code\": 0,\n          \"memo\": \"Approved or completed successfully\"\n        },\n        \"state\": \"COMPLETION\",\n        \"token\": \"gpa_order_token2c2c5\",\n        \"transaction_token\": \"transaction_token42352a\",\n        \"user_token\": \"user_token4632\"\n      },\n      \"identifier\": 6457,\n      \"issuer_interchange_amount\": 0.19131,\n      \"issuer_payment_node\": \"042f97a3458b59e3cce0269f66e864d8\",\n      \"issuer_received_time\": \"2023-09-26 11:53:46.886000+00:00\",\n      \"network\": \"VISA\",\n      \"network_metadata\": {\n        \"product_id\": \"VISA_TRADITIONAL\",\n        \"program_id\": \"\"\n      },\n      \"network_reference_id\": 218552461989029,\n      \"pos\": {\n        \"is_installment\": false,\n        \"is_recurring\": false,\n        \"partial_approval_capable\": false,\n        \"pin_present\": false,\n        \"purchase_amount_only\": false,\n        \"terminal_id\": 101\n      },\n      \"preceding_related_transaction_token\": \"ledger_entry_token2460\",\n      \"request_amount\": 9.11,\n      \"response\": {\n        \"code\": 0,\n        \"memo\": \"Approved or completed successfully\"\n      },\n      \"settlement_date\": \"2023-09-26 00:00:00+00:00\",\n      \"state\": \"COMPLETION\",\n      \"subnetwork\": \"VISANET\",\n      \"token\": \"detail_token_645736\",\n      \"transaction_metadata\": {\n        \"payment_channel\": \"OTHER\"\n      },\n      \"type\": \"authorization.clearing\",\n      \"user\": {\n        \"metadata\": {\n          \"notification_email\": \"hello@myemail.com\"\n        }\n      },\n      \"user_token\": \"user_token4632\",\n      \"user_transaction_time\": \"2023-09-25 20:59:43+00:00\"\n    },\n    \"detail_token\": \"detail_token_645736\",\n    \"group\": \"PURCHASE\",\n    \"id\": \"12345678\",\n    \"impact_time\": \"2023-09-26 11:53:48.228000+00:00\",\n    \"memo\": \"SWEET TREATS 0484\",\n    \"metadata\": {\n      \"failure_reason\": \"insufficient balance\",\n      \"failure_time\": \"2023-08-01 07:00:19.756000+00:00\"\n    },\n    \"related_token\": \"ledger_entry_token2460\",\n    \"request_time\": \"2023-09-25 20:59:43\",\n    \"root_token\": \"ledger_entry_token2460\",\n    \"status\": \"POSTED\",\n    \"token\": \"ledger_entry_token6789\",\n    \"type\": \"authorization.clearing\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "93bbf2b6-38ca-47de-9ef0-93eb03422687",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "statements",
+                    ":statement_summary_token",
+                    "ledgerentries"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "expand",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "lastModifiedTime"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which to retrieve the statement ledger entries.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "statement_summary_token",
+                      "description": "(Required) Unique identifier of the statement summary from which to retrieve ledger entries.\n\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 8972,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4dfb6687-d7f7-40c0-8360-29046fa3a715",
+          "name": "Retrieve account statement payment information",
+          "request": {
+            "name": "Retrieve account statement payment information",
+            "description": {
+              "content": "Retrieve the payment information on a credit account's statement summary.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token",
+                "statements",
+                ":statement_summary_token",
+                "paymentinfo"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account for which you want to retrieve the statement payment information.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "statement_summary_token",
+                  "description": "(Required) Unique identifier of the statement summary from which to retrieve the payment information.\n\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "9c722fbb-5480-4d74-bfcf-a5559e19f3a8",
+              "name": "Expected response to a valid request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "statements",
+                    ":statement_summary_token",
+                    "paymentinfo"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to retrieve the statement payment information.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "statement_summary_token",
+                      "description": "(Required) Unique identifier of the statement summary from which to retrieve the payment information.\n\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"created_time\": \"2021-07-01 00:27:09+00:00\",\n  \"minimum_payment_due\": 25,\n  \"new_statement_balance\": 2000,\n  \"payment_cutoff_date\": \"2021-07-01 00:27:09+00:00\",\n  \"payment_due_date\": \"2021-07-01 00:27:09+00:00\",\n  \"statement_summary_token\": \"acc0544e-4075-fe67-93dd-6b5cd443adb1\",\n  \"three_year_savings\": 0,\n  \"token\": \"5e3182dc-fc8f-4a83-8038-8808297ca0ca\",\n  \"warnings\": [\n    {\n      \"disclosure\": \"NEGATIVE_OR_NO_AMORTIZATION\",\n      \"interest_paid\": 0,\n      \"monthly_payment\": 0,\n      \"pay_off_period\": 1,\n      \"period_type\": \"MONTH\",\n      \"total_paid\": 0,\n      \"type\": \"MIN_PAYMENT\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e405ae91-7fc4-4faa-b951-7df68eaf2540",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "statements",
+                    ":statement_summary_token",
+                    "paymentinfo"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to retrieve the statement payment information.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "statement_summary_token",
+                      "description": "(Required) Unique identifier of the statement summary from which to retrieve the payment information.\n\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 8972,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a9b9bb34-b348-400c-82a9-79e867bebc49",
+          "name": "List payment reminders by statement summary",
+          "request": {
+            "name": "List payment reminders by statement summary",
+            "description": {
+              "content": "Retrieve an array of payment reminder details for a specific statement summary token.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token",
+                "statements",
+                ":statement_summary_token",
+                "paymentreminders",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "10",
+                  "description": "Number of payment reminder resources to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "Sort order index of the first resource in the returned array."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "-createdTime",
+                  "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n*NOTE:*\nYou must sort using system field names such as `createdTime`, and not by the field names appearing in response bodies such as `created_time`."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account for which you want to retrieve the statement payment information.\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "statement_summary_token",
+                  "description": "(Required) Unique identifier of the statement summary from which to retrieve the payment information.\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "09a5b403-a878-4e53-9a92-eb17a4542dd9",
+              "name": "Successful response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "statements",
+                    ":statement_summary_token",
+                    "paymentreminders",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "10"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-createdTime"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to retrieve the statement payment information.\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "statement_summary_token",
+                      "description": "(Required) Unique identifier of the statement summary from which to retrieve the payment information.\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 8251,\n  \"data\": [\n    {\n      \"account_token\": \"string\",\n      \"created_time\": \"2021-01-15T02:45:02.960Z\",\n      \"days_until_due\": 2993,\n      \"payment_cutoff_date\": \"1970-09-14T00:09:10.947Z\",\n      \"payment_due_date\": \"1998-04-03T20:58:28.645Z\",\n      \"remaining_minimum_payment_due\": 6553.131397902892,\n      \"statement_summary_token\": \"184794a0-cd0d-be65-69c6-34bbe68f0e31\",\n      \"token\": \"string\"\n    }\n  ],\n  \"end_index\": 6534,\n  \"is_more\": true,\n  \"start_index\": 9465\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6a5baa8d-1e69-4449-9c75-1a2f6b0a4db4",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "statements",
+                    ":statement_summary_token",
+                    "paymentreminders",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "10"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-createdTime"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to retrieve the statement payment information.\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "statement_summary_token",
+                      "description": "(Required) Unique identifier of the statement summary from which to retrieve the payment information.\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 8972,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "21275303-e37f-47de-a38b-680685ad9c2c",
+          "name": "Get payment reminder",
+          "request": {
+            "name": "Get payment reminder",
+            "description": {
+              "content": "Retrieve a single payment reminder on a specific statement summary",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token",
+                "statements",
+                ":statement_summary_token",
+                "paymentreminders",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account for which you want to retrieve the statement payment reminder.\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "statement_summary_token",
+                  "description": "(Required) Unique identifier of the statement summary for which you want to retrieve the statement payment reminder.\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Unique identifier of the payment reminder you want to retrieve.\nSend a `GET` request to `/credit/accounts/{account_token}/statements/{statement_summary_token}/paymentreminders/{token}` to retrieve existing payment reminder tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "2bd0bbcc-86f3-4ce5-b218-fb42850934a1",
+              "name": "Successful response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "statements",
+                    ":statement_summary_token",
+                    "paymentreminders",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to retrieve the statement payment reminder.\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "statement_summary_token",
+                      "description": "(Required) Unique identifier of the statement summary for which you want to retrieve the statement payment reminder.\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the payment reminder you want to retrieve.\nSend a `GET` request to `/credit/accounts/{account_token}/statements/{statement_summary_token}/paymentreminders/{token}` to retrieve existing payment reminder tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"account_token\": \"string\",\n  \"created_time\": \"1978-09-05T18:15:56.411Z\",\n  \"days_until_due\": 3828,\n  \"payment_cutoff_date\": \"1957-02-21T06:52:58.139Z\",\n  \"payment_due_date\": \"1971-09-09T11:05:49.942Z\",\n  \"remaining_minimum_payment_due\": 9094.489577562383,\n  \"statement_summary_token\": \"3e63b432-5d7a-f9ee-b7f9-ba55a186a351\",\n  \"token\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a151213f-f080-44b6-be81-ccba0ea4d94c",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "statements",
+                    ":statement_summary_token",
+                    "paymentreminders",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to retrieve the statement payment reminder.\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "statement_summary_token",
+                      "description": "(Required) Unique identifier of the statement summary for which you want to retrieve the statement payment reminder.\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the payment reminder you want to retrieve.\nSend a `GET` request to `/credit/accounts/{account_token}/statements/{statement_summary_token}/paymentreminders/{token}` to retrieve existing payment reminder tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 8972,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "30c5f445-ee45-4ac1-bdb7-926d90d0101a",
+          "name": "Retrieve account statement rewards",
+          "request": {
+            "name": "Retrieve account statement rewards",
+            "description": {
+              "content": "Retrieve the rewards on a credit account's statement summary.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token",
+                "statements",
+                ":statement_summary_token",
+                "rewards"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account from which to retrieve statement rewards.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "statement_summary_token",
+                  "description": "(Required) Unique identifier of the statement summary from which to retrieve rewards.\n\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "dc5ed382-c1d4-4e80-9fe9-329a4aad847d",
+              "name": "Expected response to a valid request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "statements",
+                    ":statement_summary_token",
+                    "rewards"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account from which to retrieve statement rewards.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "statement_summary_token",
+                      "description": "(Required) Unique identifier of the statement summary from which to retrieve rewards.\n\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"created_time\": \"2022-09-01 00:27:09+00:00\",\n  \"current_billing_cycle_reward\": 0,\n  \"previous_billing_cycle_reward\": 0,\n  \"token\": \"account_statement_reward1234\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "78c27c11-2e63-4bbf-bdf4-679e79ea3e26",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "statements",
+                    ":statement_summary_token",
+                    "rewards"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account from which to retrieve statement rewards.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "statement_summary_token",
+                      "description": "(Required) Unique identifier of the statement summary from which to retrieve rewards.\n\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 8972,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d6e4fd10-9dfb-4612-9592-3a2943ba6c93",
+          "name": "Retrieve account statement year-to-date totals",
+          "request": {
+            "name": "Retrieve account statement year-to-date totals",
+            "description": {
+              "content": "Retrieve the year-to-date fee and interest totals on a credit account's statement summary.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token",
+                "statements",
+                ":statement_summary_token",
+                "yeartodate"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account from which to retrieve statement year-to-date totals.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "statement_summary_token",
+                  "description": "(Required) Unique identifier of the statement summary from which to retrieve year-to-date totals.\n\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "ccc5a535-2360-459f-bbc3-f175cf35984c",
+              "name": "A JSON object containing year-to-date information",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "statements",
+                    ":statement_summary_token",
+                    "yeartodate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account from which to retrieve statement year-to-date totals.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "statement_summary_token",
+                      "description": "(Required) Unique identifier of the statement summary from which to retrieve year-to-date totals.\n\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"account_token\": \"my_account_token_12\",\n  \"created_time\": \"2021-07-01 00:27:09+00:00\",\n  \"statement_token\": \"c07918af-2ffa-4da9-972c-6b3d24b2a772\",\n  \"token\": \"c40b683b-ad88-51b6-a1fa-bc9961bc011e\",\n  \"total_fees\": 0,\n  \"total_interest\": 0\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fec68558-4f9e-4aae-a1a8-52907a5ded13",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "statements",
+                    ":statement_summary_token",
+                    "yeartodate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account from which to retrieve statement year-to-date totals.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "statement_summary_token",
+                      "description": "(Required) Unique identifier of the statement summary from which to retrieve year-to-date totals.\n\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 8972,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f5cb3dbb-c51a-4bbf-b314-0d9e6a819603",
+          "name": "Resend credit event notification",
+          "request": {
+            "name": "Resend credit event notification",
+            "description": {
+              "content": "Resends a credit event notification to your webhook endpoint.\n\nAlthough you send this request as a `POST`, all parameters are passed in the URL and the body is empty.\nThe event notification is resent to your webhook endpoint and also returned in the response to this request.\n\nFor details on how to configure your webhook endpoint, see the About Webhooks <</developer-guides/about-webhooks#_tutorial, tutorial>>.\nFor the complete `/webhooks` endpoint reference, see <</core-api/webhooks, Webhooks>>.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "webhooks",
+                ":event_type",
+                ":resource_token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "event_type",
+                  "description": "(Required) Specifies the type of event you want to resend."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "resource_token",
+                  "description": "(Required) Unique identifier of the resource for which you want to resend a notification.\n\n* Send a `GET` request to `/credit/accounts/{account_token}/journalentries` to retrieve existing journal entry tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/ledgerentries` to retrieve existing ledger entry tokens.\n* Send a `GET` request to `/accounts/{account_token}/accounttransitions` to retrieve existing account transition tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/payments/{payment_token}` to retrieve existing payment transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements` to retrieve existing statement summary tokens.\n* Send a `GET` request to `/accounts/{account_token}/delinquencystate/transitions` to retrieve existing delinquency state transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements/{statement_summary_token}/paymentreminders/{token}` to retrieve existing payment reminder tokens.\n* Send a `GET` request to `/credit/substatuses` to retrieve existing substatus tokens.\n* Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens and identify the specific account for the resend event."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST"
+          },
+          "response": [
+            {
+              "id": "17a177af-6d74-4abc-904b-a0fae562f0f6",
+              "name": "Event response for which the webhook event was resent",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ":event_type",
+                    ":resource_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "event_type",
+                      "description": "(Required) Specifies the type of event you want to resend."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "resource_token",
+                      "description": "(Required) Unique identifier of the resource for which you want to resend a notification.\n\n* Send a `GET` request to `/credit/accounts/{account_token}/journalentries` to retrieve existing journal entry tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/ledgerentries` to retrieve existing ledger entry tokens.\n* Send a `GET` request to `/accounts/{account_token}/accounttransitions` to retrieve existing account transition tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/payments/{payment_token}` to retrieve existing payment transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements` to retrieve existing statement summary tokens.\n* Send a `GET` request to `/accounts/{account_token}/delinquencystate/transitions` to retrieve existing delinquency state transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements/{statement_summary_token}/paymentreminders/{token}` to retrieve existing payment reminder tokens.\n* Send a `GET` request to `/credit/substatuses` to retrieve existing substatus tokens.\n* Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens and identify the specific account for the resend event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"account_token\": \"my_credit_account_token\",\n  \"available_credit\": 0,\n  \"closing_balance\": 506.41,\n  \"closing_date\": \"2025-04-01 03:59:59.999000+00:00\",\n  \"created_time\": \"2023-08-18 22:04:31.261000+00:00\",\n  \"credit_limit\": 500,\n  \"credits\": 0,\n  \"cycle_type\": \"REVOLVING\",\n  \"days_in_billing_cycle\": 31,\n  \"fees\": 15,\n  \"interest\": 4.96,\n  \"opening_balance\": 496.45,\n  \"opening_date\": \"2025-03-01 05:00:00+00:00\",\n  \"past_due_amount\": 10,\n  \"payments\": 10,\n  \"purchases\": 0,\n  \"token\": \"my_credit_account_statement_token\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a5b4d569-3985-4c53-95ac-2345151efec7",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ":event_type",
+                    ":resource_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "event_type",
+                      "description": "(Required) Specifies the type of event you want to resend."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "resource_token",
+                      "description": "(Required) Unique identifier of the resource for which you want to resend a notification.\n\n* Send a `GET` request to `/credit/accounts/{account_token}/journalentries` to retrieve existing journal entry tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/ledgerentries` to retrieve existing ledger entry tokens.\n* Send a `GET` request to `/accounts/{account_token}/accounttransitions` to retrieve existing account transition tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/payments/{payment_token}` to retrieve existing payment transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements` to retrieve existing statement summary tokens.\n* Send a `GET` request to `/accounts/{account_token}/delinquencystate/transitions` to retrieve existing delinquency state transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements/{statement_summary_token}/paymentreminders/{token}` to retrieve existing payment reminder tokens.\n* Send a `GET` request to `/credit/substatuses` to retrieve existing substatus tokens.\n* Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens and identify the specific account for the resend event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 8972,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "cea0116e-6a6c-40f0-957b-8fc7a169cfd2",
+    "name": "Core accepted countries Statements API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.\n\nContact Support:\n Name: Marqeta\n Email: support@marqeta.com",
+      "type": "text/plain"
+    }
+  }
+}

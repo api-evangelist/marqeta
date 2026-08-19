@@ -1,0 +1,151 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries Credit Account Disputes API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Credit Account Disputes",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List account disputes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token/disputes",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which to retrieve the disputes.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of disputes resources to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`."
+              },
+              {
+                "name": "ledger_entry_tokens",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of the journal entry in dispute.\nThis type of identifier can only be used for `authorization.clearing`-type journal entries."
+              },
+              {
+                "name": "statuses",
+                "value": "",
+                "type": "query",
+                "description": "Status of the dispute."
+              }
+            ]
+          },
+          "docs": "Retrieve an array of disputes on a credit account.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>."
+        },
+        {
+          "info": {
+            "name": "Create account dispute",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/accounts/:account_token/disputes",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which to create a dispute.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a dispute of a journal entry on a credit account."
+        },
+        {
+          "info": {
+            "name": "Retrieve account dispute",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token/disputes/:dispute_token",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account from which to retrieve a dispute.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "dispute_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the dispute to retrieve.\n\nSend a `GET` request to `/credit/accounts/{account_token}/disputes` to retrieve existing dispute tokens."
+              }
+            ]
+          },
+          "docs": "Retrieve a dispute from a credit account."
+        },
+        {
+          "info": {
+            "name": "Update account dispute",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/accounts/:account_token/disputes/:dispute_token/transitions",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account from which to update a dispute.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "dispute_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the dispute to update.\n\nSend a `GET` request to `/credit/accounts/{account_token}/disputes` to retrieve existing credit account tokens."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the amount or status of a dispute on a credit account."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

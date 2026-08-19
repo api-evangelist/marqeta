@@ -1,0 +1,607 @@
+{
+  "item": [
+    {
+      "id": "2ab8f641-f134-47fa-bb95-0ccf7e66c516",
+      "name": "Account Cards",
+      "description": {
+        "content": "// Conditional snippet for beta or internal content\ninclude::../../maturity-admonition-banner.adoc[]\n\nUse the account cards endpoints to create and retrieve credit cards that can access the credit line on a <</core-api/credit-accounts, credit account>>.\n\nOnce a credit card is created, you can use the `/cards` endpoint to <</core-api/cards#putCardsToken, update the card>> or <</developer-guides/managing-lost-stolen-or-damaged-cards, manage lost, stolen, or damaged cards>>.\n\nTo receive webhook notifications when card transition or card action events occur, see <</core-api/event-types#_card_transition_events, Card transition events>> and <</core-api/event-types#_card_action_events, Card action events>> in Event Types.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "2485837e-be82-4c36-a6cc-bdd28ae6a77c",
+          "name": "List account cards",
+          "request": {
+            "name": "List account cards",
+            "description": {
+              "content": "Retrieve an array of cards for a credit account.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token",
+                "cards"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Status of the credit cards to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "5",
+                  "description": "Number of credit card resources to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "Sort order index of the first resource in the returned array."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "-lastModifiedTime",
+                  "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account for which to retrieve credit cards.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "d38da1bf-72f8-446c-8ee1-9daacbf6f9a5",
+              "name": "Expected response to a valid request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "cards"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which to retrieve credit cards.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 2,\n  \"data\": [\n    {\n      \"account_token\": \"my_account_token_12\",\n      \"created_time\": \"2024-09-03 19:39:53.719000+00:00\",\n      \"token\": \"credit_card_token1234\",\n      \"updated_time\": \"2024-09-03 19:39:53.719000+00:00\",\n      \"user_token\": \"user1234\"\n    },\n    {\n      \"account_token\": \"my_account_token_13\",\n      \"created_time\": \"2024-09-13 19:19:51.412000+00:00\",\n      \"token\": \"credit_card_token5678\",\n      \"updated_time\": \"2024-09-13 19:19:51.421000+00:00\",\n      \"user_token\": \"user5678\"\n    }\n  ],\n  \"end_index\": 0,\n  \"is_more\": false,\n  \"start_index\": 0\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0295b986-65a7-4632-8554-4ccbe5577a8b",
+              "name": "Unexpected error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "cards"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which to retrieve credit cards.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 508,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6c710074-0d6f-4987-87d6-4ceaeff84159",
+          "name": "Create account card",
+          "request": {
+            "name": "Create account card",
+            "description": {
+              "content": "Create a credit card for an existing credit account.\n\n[NOTE]\nYou can ship cards to an address different from the <</core-api/users, user>> address.\nAfter creating a card, send a `PUT` request to the `/cards` endpoint with the new address in the `fulfillment.shipping` object.\nFor more, see <</core-api/cards#putCardsToken, Update card>>.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token",
+                "cards"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account for which to create a credit card.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "<object>",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ad97bfa1-84df-4b80-bc6c-851411cf2523",
+              "name": "Expected response to a valid request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "cards"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which to create a credit card.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"card_product_token\": \"my-card-product1234\",\n  \"user_token\": \"user1234\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"account_token\": \"my_account_token_12\",\n  \"created_time\": \"2024-09-03 19:39:53.719000+00:00\",\n  \"token\": \"my_credit_card_token1234\",\n  \"updated_time\": \"2024-09-03 19:39:53.719000+00:00\",\n  \"user_token\": \"user1234\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d5441e07-c22d-4883-90e5-55a10778a588",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "cards"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which to create a credit card.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"card_product_token\": \"my-card-product1234\",\n  \"user_token\": \"user1234\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 508,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3cc9ac0e-2caf-428b-9183-e3caccdd84af",
+          "name": "Retrieve account card",
+          "request": {
+            "name": "Retrieve account card",
+            "description": {
+              "content": "Retrieve a credit card for a credit account.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token",
+                "cards",
+                ":card_token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account for which to retrieve a credit card.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "card_token",
+                  "description": "(Required) Unique identifier of the credit card to retrieve.\n\nSend a `GET` request to `/credit/accounts/{account_token}/cards` to retrieve existing credit card tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "67c44a1c-c950-4a58-960c-761243e82344",
+              "name": "Expected response to a valid request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "cards",
+                    ":card_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which to retrieve a credit card.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "card_token",
+                      "description": "(Required) Unique identifier of the credit card to retrieve.\n\nSend a `GET` request to `/credit/accounts/{account_token}/cards` to retrieve existing credit card tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"account_token\": \"my_account_token_12\",\n  \"created_time\": \"2024-09-03 19:39:53.719000+00:00\",\n  \"token\": \"my_credit_card_token1234\",\n  \"updated_time\": \"2024-09-03 19:39:53.719000+00:00\",\n  \"user_token\": \"user1234\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "27d4d9cc-5a98-4a0a-ba98-11fda665dded",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "cards",
+                    ":card_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which to retrieve a credit card.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "card_token",
+                      "description": "(Required) Unique identifier of the credit card to retrieve.\n\nSend a `GET` request to `/credit/accounts/{account_token}/cards` to retrieve existing credit card tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 508,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "ea243c8e-e705-4c45-bb6a-56da202a795c",
+    "name": "Core accepted countries Account Cards API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.\n\nContact Support:\n Name: Marqeta\n Email: support@marqeta.com",
+      "type": "text/plain"
+    }
+  }
+}

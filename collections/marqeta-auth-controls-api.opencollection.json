@@ -1,0 +1,243 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries auth controls API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "auth controls",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Lists all global auth control exceptions for the program",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/authcontrols",
+            "params": [
+              {
+                "name": "card_product",
+                "value": "",
+                "type": "query",
+                "description": "Card product token. Use \"null\" to get auth controls that are not associated with any card product."
+              },
+              {
+                "name": "user",
+                "value": "",
+                "type": "query",
+                "description": "User token. Use \"null\" to get auth controls that are not associated with any user."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of items to retrieve. Count can be between 1 - 10 items."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Indicates from what row to start returning data."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field by which to sort the returned items. Use any field in the model, or system fields lastModifiedTime or createdTime."
+              }
+            ]
+          },
+          "docs": "Lists all global auth control exceptions for the program"
+        },
+        {
+          "info": {
+            "name": "Creates an auth control exception",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/authcontrols",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates an auth control exception"
+        },
+        {
+          "info": {
+            "name": "Lists all auth control exempted MIDs for the program",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/authcontrols/exemptmids",
+            "params": [
+              {
+                "name": "card_product",
+                "value": "",
+                "type": "query",
+                "description": "Card product token. Use \"null\" to get auth controls that are not associated with any card product."
+              },
+              {
+                "name": "user",
+                "value": "",
+                "type": "query",
+                "description": "User token. Use \"null\" to get auth controls that are not associated with any user."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of items to retrieve. Count can be between 1 - 10 items."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Indicates from what row to start returning data."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field by which to sort the returned items. Use any field in the model, or system fields lastModifiedTime or createdTime."
+              }
+            ]
+          },
+          "docs": "Lists all auth control exempted MIDs for the program"
+        },
+        {
+          "info": {
+            "name": "Creates an auth control for exempting MIDs",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/authcontrols/exemptmids",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates an auth control for exempting MIDs"
+        },
+        {
+          "info": {
+            "name": "Returns a specific auth control exemptmids",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/authcontrols/exemptmids/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Auth control token"
+              }
+            ]
+          },
+          "docs": "Returns a specific auth control exemptmids"
+        },
+        {
+          "info": {
+            "name": "Updates the status an auth control exemptmids",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/authcontrols/exemptmids/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Auth control token"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates the status an auth control exemptmids"
+        },
+        {
+          "info": {
+            "name": "Returns a specific auth control exception",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/authcontrols/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Auth control token"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+              }
+            ]
+          },
+          "docs": "Returns a specific auth control exception"
+        },
+        {
+          "info": {
+            "name": "Updates an auth control exception",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/authcontrols/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Auth control token"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates an auth control exception"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

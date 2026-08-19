@@ -1,0 +1,114 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries Admin API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Admin",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Replays all failed statement from statement error processing table",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/admin/replayfailedstatements"
+          },
+          "docs": "Replays all failed statement from statement error processing table"
+        },
+        {
+          "info": {
+            "name": "Replays all failed statements by short code from statement error processing table",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/admin/replayfailedstatements/:short_code",
+            "params": [
+              {
+                "name": "short_code",
+                "value": "",
+                "type": "path",
+                "description": "Short code of the program"
+              }
+            ]
+          },
+          "docs": "Replays all failed statements by short code from statement error processing table"
+        },
+        {
+          "info": {
+            "name": "Schedules statements for applicable accounts",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/admin/schedulestatements"
+          },
+          "docs": "Schedules statements for applicable accounts"
+        },
+        {
+          "info": {
+            "name": "Replays single failed statement by short code  and account token from statement error processing table",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/admin/:short_code/replayfailedstatement/:account_token",
+            "params": [
+              {
+                "name": "short_code",
+                "value": "",
+                "type": "path",
+                "description": "Short code of the program"
+              },
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "account token of the account"
+              }
+            ]
+          },
+          "docs": "Creates and enables a feature flag for a specified program short code"
+        },
+        {
+          "info": {
+            "name": "Create a new ACHO ACH transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/admin/:short_code/retryachpayments",
+            "params": [
+              {
+                "name": "short_code",
+                "value": "",
+                "type": "path",
+                "description": "Short code of the program"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new ACHO ACH transfer for payment who's current transfer has failed and is in ERROR state."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

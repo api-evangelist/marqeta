@@ -1,0 +1,676 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries Users API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Users",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List users",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/users",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of user resources to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "search_type",
+                "value": "",
+                "type": "query",
+                "description": "Search type."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (`field_1,field_2`, and so on).\nLeave blank to return all fields."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nUse any field in the resource model, or one of the system fields `lastModifiedTime` or `createdTime`.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order."
+              }
+            ]
+          },
+          "docs": "To return an array of all of a program's users, send a `GET` request to the `/users` endpoint.\nThis endpoint supports <</core-api/field-filtering, field filtering>> and <</core-api/sorting-and-pagination, pagination>>.\nTo narrow your result set to users that match certain criteria, see the <<search_users,Search users>> endpoint.\n\nThe `business_token` field is conditionally returned in the response (it cannot be set through the API).\nYou can use this field in conjunction with the `parent_token` f"
+        },
+        {
+          "info": {
+            "name": "Create user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/users",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint enables you to create a user.\nA new user's initial status depends on the <</core-api/kyc-verification, Know Your Customer (KYC) requirements>> of the program or associated <</core-api/account-holder-groups, account holder group>>.\n\n[cols=\"1,1,1,1\"]\n|===\n| KYC Required | Initial User Status | User Active on Creation | User Limitations\n\n| Always\n| `UNVERIFIED`\n| Optional\n| Cannot load funds; cannot activate cards.\n\n| Conditionally\n| `LIMITED`\n| Optional\n| Restricted by rules in `acco"
+        },
+        {
+          "info": {
+            "name": "Update user password",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/users/auth/changepassword",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "To change a user password, send a `POST` request to the `/users/auth/changepassword` endpoint and include the `current_password` and `new_password` in link:http://www.json.org/[JSON, window=\"_blank\"] format in the body of the request.\nThis endpoint operates in the context of a currently logged-in user.\n\nA successful password change returns an empty response body with a response code of `204 No Content`."
+        },
+        {
+          "info": {
+            "name": "Create client access token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/users/auth/clientaccesstoken",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Each time you want to display a virtual card's sensitive data (for example, when using `marqeta.js`), you must first request a new, single-use client access token from the Marqeta platform by sending a `POST` request to the `/users/auth/clientaccesstoken` endpoint.\nUnredeemed client access tokens expire after five minutes."
+        },
+        {
+          "info": {
+            "name": "Retrieve client access token",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/users/auth/clientaccesstoken/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Client access token."
+              },
+              {
+                "name": "application_token",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of the `application` object."
+              }
+            ]
+          },
+          "docs": "To retrieve application and card information using a client access token, send a `GET` request to the `/users/auth/clientaccesstoken/{token}` endpoint."
+        },
+        {
+          "info": {
+            "name": "Log in user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/users/auth/login",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "To log in a user and return a user access token, send a `POST` request to the `/users/auth/login` endpoint and include the user details in link:http://www.json.org/[JSON, window=\"_blank\"] format in the body of the request.\n\n[TIP]\nTo check a user's credentials without logging out the user, call the `/users/auth/onetime` endpoint."
+        },
+        {
+          "info": {
+            "name": "Log out user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/users/auth/logout"
+          },
+          "docs": "To log out a user, send a `POST` request to the `/users/auth/logout` endpoint.\n\nA successful logout returns an empty response body with a response code of `204 No Content`."
+        },
+        {
+          "info": {
+            "name": "Create single-use token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/users/auth/onetime",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint returns a single-use access token.\nThis type of token authorizes a single request to access API endpoints and data associated with a particular user.\nA single-use access token differs from a user access token (as returned by `POST` `/users/auth/login`) only in the number of times it can be used.\n\nTo return a single-use access token, send a `POST` request to the `/users/auth/onetime` endpoint.\nProvide one of these sets of input data:\n\n* *Case #1* – Application token and user access "
+        },
+        {
+          "info": {
+            "name": "Request user password reset token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/users/auth/resetpassword",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this endpoint to generate a password reset token for a user.\nSend a `POST` request to the `/users/auth/resetpassword` endpoint and include the user's email address in link:http://www.json.org/[JSON, window=\"_blank\"] format in the body of the request.\nThis request generates and sends an email message containing the `user_token` and `password_reset_token` to the user's email address.\nYou must customize the email message with a link that passes the `user_token` and `password_reset_token` to a w"
+        },
+        {
+          "info": {
+            "name": "Reset user password",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/users/auth/resetpassword/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Password reset token generated using the `POST /users/auth/resetpassword` operation."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "To reset the user's password, send a `POST` request to the `/users/auth/resetpassword/{token}` endpoint that includes a password reset token generated using the `POST /users/auth/resetpassword` operation.\nInclude the `user_token` and `new_password` in link:http://www.json.org/[JSON, window=\"_blank\"] format in the body of the request.\nInclude the `password_reset_token` as a path parameter.\n\nA successful password reset returns an empty response body with a response code of `204 No Content`."
+        },
+        {
+          "info": {
+            "name": "Request email verification token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/users/auth/verifyemail"
+          },
+          "docs": "Send a `POST` request to the `/users/auth/verifyemail` endpoint to request an email verification token.\nNo input parameters are required because this operation is performed in the context of an authenticated user.\n\nThis initial request generates and sends an email message containing the email verification token to the cardholder's email address.\nThis email message must include a link that passes the email verification token to a web page where a subsequent request verifies the email address.\n\nA "
+        },
+        {
+          "info": {
+            "name": "Verify email address",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/users/auth/verifyemail/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Email verification token generated using the `POST /users/auth/verifyemail` operation."
+              }
+            ]
+          },
+          "docs": "To verify a user's email address, send a `POST` request to the `/users/auth/verifyemail/{email_verification_token}` endpoint that includes an `email_verification_token` generated using the `POST /users/auth/verifyemail` operation.\nInclude the `email_verification_token` as a path parameter.\n\nA successful email verification returns an empty response body with a response code of `204 No Content`."
+        },
+        {
+          "info": {
+            "name": "Search users",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/users/lookup",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of user resources to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "search_type",
+                "value": "",
+                "type": "query",
+                "description": "Search type."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (`field_1,field_2`, and so on).\nLeave blank to return all fields."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nUse any field in the resource model, or one of the system fields `lastModifiedTime` or `createdTime`.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "To search for one or more users, send a `POST` request to the `/users/lookup` endpoint.\nInclude in the message body any parameters by which you want to query.\nThis endpoint supports <</core-api/field-filtering, field filtering>> and <</core-api/sorting-and-pagination, pagination>>."
+        },
+        {
+          "info": {
+            "name": "List user child accounts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/users/:parent_token/children",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of user resources to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "parent_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the parent account holder."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (`field_1,field_2`, and so on).\nLeave blank to return all fields."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nUse any field in the resource model, or one of the system fields `lastModifiedTime` or `createdTime`.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order."
+              }
+            ]
+          },
+          "docs": "To retrieve users who are children of a parent user or business, send a `GET` request to the `/users/{parent_token}/children` endpoint.\nInclude the parent's user or business token as a URL path parameter.\n\nThe `business_token` field is conditionally returned in the response (it cannot be set through the API).\nYou can use this field in conjunction with the `parent_token` field to determine whether the user has a parent or grandparent that is a business:\n\n[cols=\"1,1,1\"]\n|===\n| parent_token | busin"
+        },
+        {
+          "info": {
+            "name": "Retrieve user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/users/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the user resource."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (`field_1,field_2`, and so on).\nLeave blank to return all fields."
+              }
+            ]
+          },
+          "docs": "To retrieve a specific user, send a `GET` request to the `/users/{token}` endpoint.\nInclude the user `token` path parameter to specify the user to return.\n\nThe `business_token` field is conditionally returned in the response (it cannot be set through the API).\nYou can use this field in conjunction with the `parent_token` field to determine whether the user has a parent or grandparent that is a business:\n\n[cols=\"1,1,1\"]\n|===\n| parent_token | business_token | Description\n\n| Not populated\n| Not pop"
+        },
+        {
+          "info": {
+            "name": "Update user",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/users/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the user resource you want to update."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "To update a specific user resource, send a `PUT` request to the `/users/{token}` endpoint.\nInclude the user `token` path parameter to specify the user to update.\n\nTo unlink a child user account from a parent account, pass a null value to the `parent_token` field of the child user resource."
+        },
+        {
+          "info": {
+            "name": "Retrieve user identification number",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/users/:token/ssn",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the user resource."
+              },
+              {
+                "name": "full_ssn",
+                "value": "",
+                "type": "query",
+                "description": "To return the full identification number, set to `true`.\nTo return only the last four digits, set to `false`.\n\nIf the identifications array contains only the last four digits of the identification number, the `/users/{token}/ssn` endpoint will return only the last four digits, regardless of the `full_ssn` parameter."
+              }
+            ]
+          },
+          "docs": "To retrieve the government-issued identification number for a user, send a `GET` request to the `/users/{token}/ssn` endpoint.\nInclude the `token` path parameter to specify the user whose identification number (SSN, ITIN, TIN, NIN, SIN) you wish to return.\nYou can indicate whether to return the full number or the last four digits only."
+        },
+        {
+          "info": {
+            "name": "Lists all users who match a phone number",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/users/phonenumber/:phone_number",
+            "params": [
+              {
+                "name": "phone_number",
+                "value": "",
+                "type": "path",
+                "description": "Phone number"
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of users to retrieve"
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Start index"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              }
+            ]
+          },
+          "docs": "Lists all users who match a phone number"
+        },
+        {
+          "info": {
+            "name": "Lists cardholder notes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/users/:token/notes",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "User token"
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Start index"
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of notes to retrieve"
+              },
+              {
+                "name": "created_by",
+                "value": "",
+                "type": "query",
+                "description": "Created by"
+              },
+              {
+                "name": "created_by_user_role",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of created by user roles"
+              },
+              {
+                "name": "include_private",
+                "value": "",
+                "type": "query",
+                "description": "Include private notes and private fields in note response"
+              },
+              {
+                "name": "search_type",
+                "value": "",
+                "type": "query",
+                "description": "Search type"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              }
+            ]
+          },
+          "docs": "Lists cardholder notes"
+        },
+        {
+          "info": {
+            "name": "Creates a note for the cardholder",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/users/:token/notes",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "User token"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a note for the cardholder"
+        },
+        {
+          "info": {
+            "name": "Updates a specific note for a cardholder",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/users/:token/notes/:notes_token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "User token"
+              },
+              {
+                "name": "notes_token",
+                "value": "",
+                "type": "path",
+                "description": "Notes token"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a specific note for a cardholder"
+        },
+        {
+          "info": {
+            "name": "Retrieve user activity data",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/views/users/:time_agg",
+            "params": [
+              {
+                "name": "time_agg",
+                "value": "",
+                "type": "path",
+                "description": "Aggregation time level for the data. Use 'day' for daily rollups, 'week' for weekly rollups, 'month' for monthly rollups, or 'detail' for individual record-level data."
+              },
+              {
+                "name": "program",
+                "value": "",
+                "type": "query",
+                "description": "The name of your Marqeta card program. This parameter is required for most DiVA API endpoints to scope the data to your program."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to include in the response. If not specified, all available fields are returned."
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "Start date for filtering data (format YYYY-MM-DD). Returns records on or after this date."
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "End date for filtering data (format YYYY-MM-DD). Returns records on or before this date."
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Response format. Use 'json' for JSON responses or 'csv' for comma-separated bulk file format. Defaults to json."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of records to return per request."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Zero-based offset for pagination."
+              }
+            ]
+          },
+          "docs": "Returns cardholder (user) data aggregated over the specified time period. Includes registration counts, KYC status distributions, and account status summaries for program reporting."
+        },
+        {
+          "info": {
+            "name": "Retrieve detailed user information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/views/users/detail",
+            "params": [
+              {
+                "name": "program",
+                "value": "",
+                "type": "query",
+                "description": "The name of your Marqeta card program. This parameter is required for most DiVA API endpoints to scope the data to your program."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to include in the response. If not specified, all available fields are returned."
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Response format. Use 'json' for JSON responses or 'csv' for comma-separated bulk file format. Defaults to json."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of records to return per request."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Zero-based offset for pagination."
+              }
+            ]
+          },
+          "docs": "Returns detailed information for each cardholder in your program, including current account status, KYC verification status, associated cards, and GPA balance summary."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,1599 @@
+{
+  "item": [
+    {
+      "id": "1e5a45a9-25b3-4e31-91e1-89429ca33b4e",
+      "name": "push to card",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3d6c939e-e253-465a-ac90-2412b9f1c7b6",
+          "name": "Lists all push-to-card disbursements",
+          "request": {
+            "name": "Lists all push-to-card disbursements",
+            "description": {},
+            "url": {
+              "path": [
+                "pushtocards",
+                "disburse"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "10",
+                  "description": "Number of push-to-card disbursements to retrieve"
+                },
+                {
+                  "disabled": false,
+                  "key": "fields",
+                  "value": "<string>",
+                  "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "Start index"
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "-createdTime",
+                  "description": "Sort order"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ea28694d-a461-4d19-a275-6309b7173858",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pushtocards",
+                    "disburse"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "10"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-createdTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 629,\n  \"data\": [\n    {\n      \"created_time\": \"2010-07-01T12:02:12.465Z\",\n      \"last_modified_time\": \"1976-07-10T22:31:46.978Z\",\n      \"amount\": 6970.50833641647,\n      \"currency_code\": \"string\",\n      \"memo\": \"string\",\n      \"payment_instrument_token\": \"string\",\n      \"status\": \"string\",\n      \"tags\": \"string\",\n      \"token\": \"string\"\n    },\n    {\n      \"created_time\": \"1983-08-26T19:06:16.228Z\",\n      \"last_modified_time\": \"1958-01-27T23:35:47.391Z\",\n      \"amount\": 7663.62545426349,\n      \"currency_code\": \"string\",\n      \"memo\": \"string\",\n      \"payment_instrument_token\": \"string\",\n      \"status\": \"string\",\n      \"tags\": \"string\",\n      \"token\": \"string\"\n    }\n  ],\n  \"end_index\": 6047,\n  \"is_more\": false,\n  \"start_index\": 6385\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "538218f2-750a-459a-8200-fb34d2569f0f",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pushtocards",
+                    "disburse"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "10"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-createdTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ff2819e3-70ba-4280-8ce3-c1276681d408",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pushtocards",
+                    "disburse"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "10"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-createdTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "298665f9-6648-4db8-9729-ddc21feaeb51",
+          "name": "Initiates a push-to-card money disbursement",
+          "request": {
+            "name": "Initiates a push-to-card money disbursement",
+            "description": {},
+            "url": {
+              "path": [
+                "pushtocards",
+                "disburse"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": \"<number>\",\n  \"currency_code\": \"<string>\",\n  \"payment_instrument_token\": \"<string>\",\n  \"token\": \"<string>\",\n  \"memo\": \"<string>\",\n  \"soft_descriptor\": {\n    \"address\": {\n      \"city\": \"<string>\",\n      \"county\": \"<string>\",\n      \"line1\": \"<string>\",\n      \"postal_code\": \"<string>\",\n      \"state\": \"<string>\",\n      \"country\": \"<string>\",\n      \"line2\": \"<string>\"\n    },\n    \"name\": \"<string>\",\n    \"email\": \"<string>\",\n    \"phone\": {\n      \"number\": \"<string>\",\n      \"country_code\": \"<string>\"\n    }\n  },\n  \"tags\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e645a0c1-06bd-455e-a4ee-8bc98cd3effd",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pushtocards",
+                    "disburse"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"<number>\",\n  \"currency_code\": \"<string>\",\n  \"payment_instrument_token\": \"<string>\",\n  \"token\": \"<string>\",\n  \"memo\": \"<string>\",\n  \"soft_descriptor\": {\n    \"address\": {\n      \"city\": \"<string>\",\n      \"county\": \"<string>\",\n      \"line1\": \"<string>\",\n      \"postal_code\": \"<string>\",\n      \"state\": \"<string>\",\n      \"country\": \"<string>\",\n      \"line2\": \"<string>\"\n    },\n    \"name\": \"<string>\",\n    \"email\": \"<string>\",\n    \"phone\": {\n      \"number\": \"<string>\",\n      \"country_code\": \"<string>\"\n    }\n  },\n  \"tags\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"created_time\": \"1998-11-04T08:53:46.549Z\",\n  \"last_modified_time\": \"2004-12-31T12:59:23.444Z\",\n  \"amount\": 8265.49961541609,\n  \"currency_code\": \"string\",\n  \"memo\": \"string\",\n  \"payment_instrument_token\": \"string\",\n  \"status\": \"string\",\n  \"tags\": \"string\",\n  \"token\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d50f9e23-c185-4501-a432-bdfd98f6d77a",
+              "name": "User input error/Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pushtocards",
+                    "disburse"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"<number>\",\n  \"currency_code\": \"<string>\",\n  \"payment_instrument_token\": \"<string>\",\n  \"token\": \"<string>\",\n  \"memo\": \"<string>\",\n  \"soft_descriptor\": {\n    \"address\": {\n      \"city\": \"<string>\",\n      \"county\": \"<string>\",\n      \"line1\": \"<string>\",\n      \"postal_code\": \"<string>\",\n      \"state\": \"<string>\",\n      \"country\": \"<string>\",\n      \"line2\": \"<string>\"\n    },\n    \"name\": \"<string>\",\n    \"email\": \"<string>\",\n    \"phone\": {\n      \"number\": \"<string>\",\n      \"country_code\": \"<string>\"\n    }\n  },\n  \"tags\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f8169437-68d3-44c0-853a-09e617fac4b2",
+              "name": "Payment instrument is not active",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pushtocards",
+                    "disburse"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"<number>\",\n  \"currency_code\": \"<string>\",\n  \"payment_instrument_token\": \"<string>\",\n  \"token\": \"<string>\",\n  \"memo\": \"<string>\",\n  \"soft_descriptor\": {\n    \"address\": {\n      \"city\": \"<string>\",\n      \"county\": \"<string>\",\n      \"line1\": \"<string>\",\n      \"postal_code\": \"<string>\",\n      \"state\": \"<string>\",\n      \"country\": \"<string>\",\n      \"line2\": \"<string>\"\n    },\n    \"name\": \"<string>\",\n    \"email\": \"<string>\",\n    \"phone\": {\n      \"number\": \"<string>\",\n      \"country_code\": \"<string>\"\n    }\n  },\n  \"tags\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "bb8eebc3-f6a8-40f9-8367-122c2bfaa28f",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pushtocards",
+                    "disburse"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"<number>\",\n  \"currency_code\": \"<string>\",\n  \"payment_instrument_token\": \"<string>\",\n  \"token\": \"<string>\",\n  \"memo\": \"<string>\",\n  \"soft_descriptor\": {\n    \"address\": {\n      \"city\": \"<string>\",\n      \"county\": \"<string>\",\n      \"line1\": \"<string>\",\n      \"postal_code\": \"<string>\",\n      \"state\": \"<string>\",\n      \"country\": \"<string>\",\n      \"line2\": \"<string>\"\n    },\n    \"name\": \"<string>\",\n    \"email\": \"<string>\",\n    \"phone\": {\n      \"number\": \"<string>\",\n      \"country_code\": \"<string>\"\n    }\n  },\n  \"tags\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f31acbdb-c0b6-43cb-98fb-70c199edc009",
+          "name": "Returns a specific push-to-card disbursement",
+          "request": {
+            "name": "Returns a specific push-to-card disbursement",
+            "description": {},
+            "url": {
+              "path": [
+                "pushtocards",
+                "disburse",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "fields",
+                  "value": "<string>",
+                  "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Push-to-card disbursement token"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "43aab67e-8ee2-4942-a898-11429ffbd380",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pushtocards",
+                    "disburse",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Push-to-card disbursement token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"created_time\": \"1998-11-04T08:53:46.549Z\",\n  \"last_modified_time\": \"2004-12-31T12:59:23.444Z\",\n  \"amount\": 8265.49961541609,\n  \"currency_code\": \"string\",\n  \"memo\": \"string\",\n  \"payment_instrument_token\": \"string\",\n  \"status\": \"string\",\n  \"tags\": \"string\",\n  \"token\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3afdcaed-f0e3-42ee-99cb-5f568b976147",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pushtocards",
+                    "disburse",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Push-to-card disbursement token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8c02b81c-4968-41a0-a478-736d4ad93489",
+              "name": "Push-to-card disbursement not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pushtocards",
+                    "disburse",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Push-to-card disbursement token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "2a06fa34-5118-4081-854e-3b0d21cdfa86",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pushtocards",
+                    "disburse",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Push-to-card disbursement token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4495b56e-84fc-483f-bc4b-3a58afac405c",
+          "name": "Returns all push-to-card payment card details",
+          "request": {
+            "name": "Returns all push-to-card payment card details",
+            "description": {},
+            "url": {
+              "path": [
+                "pushtocards",
+                "paymentcard"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "10",
+                  "description": "Number of push-to-card payment cards to retrieve"
+                },
+                {
+                  "disabled": false,
+                  "key": "user_token",
+                  "value": "<string>",
+                  "description": "(Required) User token"
+                },
+                {
+                  "disabled": false,
+                  "key": "fields",
+                  "value": "<string>",
+                  "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "Start index"
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "-createdTime",
+                  "description": "Sort order"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f5ec8df6-f54e-465a-a9af-c01637b4c576",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pushtocards",
+                    "paymentcard"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "10"
+                    },
+                    {
+                      "key": "user_token",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-createdTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 3809,\n  \"data\": [\n    {\n      \"created_time\": \"2025-06-12T12:18:57.546Z\",\n      \"last_modified_time\": \"1960-09-18T23:11:38.260Z\",\n      \"address_1\": \"string\",\n      \"address_2\": \"string\",\n      \"city\": \"string\",\n      \"country\": \"string\",\n      \"exp_date\": \"string\",\n      \"fast_fund_transfer_eligible\": false,\n      \"gambling_fund_transfer_eligible\": false,\n      \"last_four\": \"string\",\n      \"last_name\": \"string\",\n      \"name_on_card\": \"string\",\n      \"postal_code\": \"s\",\n      \"state\": \"s\",\n      \"token\": \"string\"\n    },\n    {\n      \"created_time\": \"1950-09-11T09:56:27.764Z\",\n      \"last_modified_time\": \"1949-01-19T16:21:08.542Z\",\n      \"address_1\": \"string\",\n      \"address_2\": \"string\",\n      \"city\": \"string\",\n      \"country\": \"string\",\n      \"exp_date\": \"string\",\n      \"fast_fund_transfer_eligible\": false,\n      \"gambling_fund_transfer_eligible\": false,\n      \"last_four\": \"string\",\n      \"last_name\": \"string\",\n      \"name_on_card\": \"string\",\n      \"postal_code\": \"string\",\n      \"state\": \"s\",\n      \"token\": \"string\"\n    }\n  ],\n  \"end_index\": 2804,\n  \"is_more\": false,\n  \"start_index\": 5422\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7e18b64c-d02b-46ae-8be2-b13d3dff6487",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pushtocards",
+                    "paymentcard"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "10"
+                    },
+                    {
+                      "key": "user_token",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-createdTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6218e677-d812-4aa8-9e31-16d224e8f441",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pushtocards",
+                    "paymentcard"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "10"
+                    },
+                    {
+                      "key": "user_token",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-createdTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "59e6bd1f-bf1f-42dd-b4bd-0659de516fb9",
+          "name": "Adds an external card to which funds will be pushed",
+          "request": {
+            "name": "Adds an external card to which funds will be pushed",
+            "description": {},
+            "url": {
+              "path": [
+                "pushtocards",
+                "paymentcard"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address_1\": \"<string>\",\n  \"city\": \"<string>\",\n  \"country\": \"<string>\",\n  \"cvv\": \"<string>\",\n  \"exp_date\": \"<string>\",\n  \"name_on_card\": \"<string>\",\n  \"pan\": \"<string>\",\n  \"postal_code\": \"<string>\",\n  \"state\": \"<string>\",\n  \"token\": \"<string>\",\n  \"user_token\": \"<string>\",\n  \"address_2\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "18d42878-3258-4584-8e21-a6c5f10a5c5d",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pushtocards",
+                    "paymentcard"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"address_1\": \"<string>\",\n  \"city\": \"<string>\",\n  \"country\": \"<string>\",\n  \"cvv\": \"<string>\",\n  \"exp_date\": \"<string>\",\n  \"name_on_card\": \"<string>\",\n  \"pan\": \"<string>\",\n  \"postal_code\": \"<string>\",\n  \"state\": \"<string>\",\n  \"token\": \"<string>\",\n  \"user_token\": \"<string>\",\n  \"address_2\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"created_time\": \"2019-01-05T20:01:29.959Z\",\n  \"last_modified_time\": \"1987-10-25T22:16:44.447Z\",\n  \"address_1\": \"string\",\n  \"address_2\": \"string\",\n  \"city\": \"string\",\n  \"country\": \"string\",\n  \"exp_date\": \"string\",\n  \"fast_fund_transfer_eligible\": false,\n  \"gambling_fund_transfer_eligible\": false,\n  \"last_four\": \"string\",\n  \"last_name\": \"string\",\n  \"name_on_card\": \"string\",\n  \"postal_code\": \"string\",\n  \"state\": \"st\",\n  \"token\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "de312452-fa52-4100-b942-7ee56f86d17b",
+              "name": "User input error/Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pushtocards",
+                    "paymentcard"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"address_1\": \"<string>\",\n  \"city\": \"<string>\",\n  \"country\": \"<string>\",\n  \"cvv\": \"<string>\",\n  \"exp_date\": \"<string>\",\n  \"name_on_card\": \"<string>\",\n  \"pan\": \"<string>\",\n  \"postal_code\": \"<string>\",\n  \"state\": \"<string>\",\n  \"token\": \"<string>\",\n  \"user_token\": \"<string>\",\n  \"address_2\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a5f57ddd-2b92-46fc-96f3-17bdaec16101",
+              "name": "Token already associated with a different payload",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pushtocards",
+                    "paymentcard"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"address_1\": \"<string>\",\n  \"city\": \"<string>\",\n  \"country\": \"<string>\",\n  \"cvv\": \"<string>\",\n  \"exp_date\": \"<string>\",\n  \"name_on_card\": \"<string>\",\n  \"pan\": \"<string>\",\n  \"postal_code\": \"<string>\",\n  \"state\": \"<string>\",\n  \"token\": \"<string>\",\n  \"user_token\": \"<string>\",\n  \"address_2\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3fb88816-8691-4bfc-99d1-7a8083054e85",
+              "name": "Push-to-card information is invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pushtocards",
+                    "paymentcard"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"address_1\": \"<string>\",\n  \"city\": \"<string>\",\n  \"country\": \"<string>\",\n  \"cvv\": \"<string>\",\n  \"exp_date\": \"<string>\",\n  \"name_on_card\": \"<string>\",\n  \"pan\": \"<string>\",\n  \"postal_code\": \"<string>\",\n  \"state\": \"<string>\",\n  \"token\": \"<string>\",\n  \"user_token\": \"<string>\",\n  \"address_2\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d672e8e4-961c-408a-8ca5-8304a89f4d2b",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pushtocards",
+                    "paymentcard"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"address_1\": \"<string>\",\n  \"city\": \"<string>\",\n  \"country\": \"<string>\",\n  \"cvv\": \"<string>\",\n  \"exp_date\": \"<string>\",\n  \"name_on_card\": \"<string>\",\n  \"pan\": \"<string>\",\n  \"postal_code\": \"<string>\",\n  \"state\": \"<string>\",\n  \"token\": \"<string>\",\n  \"user_token\": \"<string>\",\n  \"address_2\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "62fd50c8-56c9-4646-81c6-7e6065daa5a8",
+          "name": "Returns a specific paymentcard object",
+          "request": {
+            "name": "Returns a specific paymentcard object",
+            "description": {},
+            "url": {
+              "path": [
+                "pushtocards",
+                "paymentcard",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "fields",
+                  "value": "<string>",
+                  "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Push-to-card token"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "66985dd5-21f3-465f-9445-040986e0f340",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pushtocards",
+                    "paymentcard",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Push-to-card token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"created_time\": \"2019-01-05T20:01:29.959Z\",\n  \"last_modified_time\": \"1987-10-25T22:16:44.447Z\",\n  \"address_1\": \"string\",\n  \"address_2\": \"string\",\n  \"city\": \"string\",\n  \"country\": \"string\",\n  \"exp_date\": \"string\",\n  \"fast_fund_transfer_eligible\": false,\n  \"gambling_fund_transfer_eligible\": false,\n  \"last_four\": \"string\",\n  \"last_name\": \"string\",\n  \"name_on_card\": \"string\",\n  \"postal_code\": \"string\",\n  \"state\": \"st\",\n  \"token\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "af9a0367-f0e3-4262-b9f1-9962e921fc6f",
+              "name": "User input error/Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pushtocards",
+                    "paymentcard",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Push-to-card token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ce56f2a1-2313-4528-9a93-96a318876889",
+              "name": "Push-to-card details not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pushtocards",
+                    "paymentcard",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Push-to-card token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f7d48bb3-3a0e-4e9e-8127-be8e982592a1",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pushtocards",
+                    "paymentcard",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Push-to-card token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "72bc40bb-cb64-4dc0-b4ec-5434cc688650",
+    "name": "Core accepted countries push to card API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.\n\nContact Support:\n Name: Marqeta\n Email: support@marqeta.com",
+      "type": "text/plain"
+    }
+  }
+}

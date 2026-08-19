@@ -1,0 +1,682 @@
+{
+  "item": [
+    {
+      "id": "edcbc7c7-3847-4377-9d04-0d85e890ace5",
+      "name": "Program Gateways",
+      "description": {
+        "content": "// Conditional snippet for beta or internal content\ninclude::../../maturity-admonition-banner.adoc[]\n\nUse the Credit Program Gateways endpoints to create, retrieve, and update Program Gateways for your credit program.\nA Program Gateway allows you to exchange messages with Marqeta's credit platform regarding decisions on transaction authorizations.\n\nFor more on Program Gateways, see <</developer-guides/about-credit-program-gateways, About Credit Program Gateways>>.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "cba8eba2-d7c3-43b9-8b26-a520a72331d8",
+          "name": "List Program Gateways",
+          "request": {
+            "name": "List Program Gateways",
+            "description": {
+              "content": "Retrieve an array of existing Credit Program Gateways.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "programgateways"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "5",
+                  "description": "Number of Program Gateway resources to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "Sort order index of the first resource in the returned array."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "-lastModifiedTime",
+                  "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "526db2c6-e7a2-41f5-b2fc-05e0f55ed0e6",
+              "name": "Expected response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programgateways"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 6735,\n  \"data\": [\n    {\n      \"active\": true,\n      \"basic_auth_password\": \"string\",\n      \"basic_auth_username\": \"string\",\n      \"created_time\": \"1953-03-05T15:51:15.348Z\",\n      \"custom_header\": {},\n      \"mtls\": false,\n      \"name\": \"string\",\n      \"timeout_millis\": 1870,\n      \"token\": \"string\",\n      \"updated_time\": \"1998-01-08T21:42:52.052Z\",\n      \"url\": \"string\"\n    },\n    {\n      \"active\": true,\n      \"basic_auth_password\": \"string\",\n      \"basic_auth_username\": \"string\",\n      \"created_time\": \"1996-09-11T17:40:47.858Z\",\n      \"custom_header\": {},\n      \"mtls\": false,\n      \"name\": \"string\",\n      \"timeout_millis\": 1259,\n      \"token\": \"string\",\n      \"updated_time\": \"2013-10-07T17:38:26.314Z\",\n      \"url\": \"string\"\n    }\n  ],\n  \"end_index\": 9961,\n  \"is_more\": false,\n  \"start_index\": 6976\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "830be871-def5-4045-8789-3d4ce6da8348",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programgateways"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 984,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9fa43889-67de-4516-9128-ac20b3aec35e",
+          "name": "Create Program Gateway",
+          "request": {
+            "name": "Create Program Gateway",
+            "description": {
+              "content": "Create a new Credit Program Gateway.\n\nUse this endpoint to configure your Program Gateway to receive gateway requests from Marqeta's credit platform.\nYou can create multiple Program Gateways, but only one can be active per credit program.\n\n[NOTE]\nTo create a Program Gateway, you must have consumer or admin credentials.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "programgateways"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"basic_auth_password\": \"<string>\",\n  \"basic_auth_username\": \"<string>\",\n  \"name\": \"<string>\",\n  \"url\": \"<string>\",\n  \"active\": true,\n  \"custom_header\": {\n    \"key_0\": \"<string>\"\n  },\n  \"mtls\": false,\n  \"timeout_millis\": 2000,\n  \"token\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "afc93d7a-d52f-476d-932f-b90e3c1b9b03",
+              "name": "Expected response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programgateways"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"basic_auth_password\": \"my_20-50_character_password\",\n  \"basic_auth_username\": \"my_username\",\n  \"custom_header\": {\n    \"my_header_name_1\": \"my_value_1\"\n  },\n  \"name\": \"My Program Gateway\",\n  \"url\": \"https://my-url\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"active\": true,\n  \"basic_auth_password\": \"string\",\n  \"basic_auth_username\": \"string\",\n  \"created_time\": \"1999-03-31T09:03:12.171Z\",\n  \"custom_header\": {},\n  \"mtls\": false,\n  \"name\": \"string\",\n  \"timeout_millis\": 1314,\n  \"token\": \"string\",\n  \"updated_time\": \"1948-07-28T14:43:34.021Z\",\n  \"url\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "01c54b3d-b507-40a9-981e-b8e74405501d",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programgateways"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"basic_auth_password\": \"my_20-50_character_password\",\n  \"basic_auth_username\": \"my_username\",\n  \"custom_header\": {\n    \"my_header_name_1\": \"my_value_1\"\n  },\n  \"name\": \"My Program Gateway\",\n  \"url\": \"https://my-url\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 984,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "560f7c84-5914-4bd1-83c8-33dc47998219",
+          "name": "Retrieve Program Gateway",
+          "request": {
+            "name": "Retrieve Program Gateway",
+            "description": {
+              "content": "Retrieve an existing Credit Program Gateway.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "programgateways",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Unique identifier of the Program Gateway to retrieve.\n\nSend a `GET` request to `/credit/programgateways` to retrieve existing Program Gateway tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "fd7215a3-c524-4b61-a507-7318a06ef5b3",
+              "name": "Response containing details for the requested Program Gateway.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programgateways",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the Program Gateway to retrieve.\n\nSend a `GET` request to `/credit/programgateways` to retrieve existing Program Gateway tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"active\": false,\n  \"basic_auth_password\": \"my_20-50_character_password\",\n  \"basic_auth_username\": \"my_username\",\n  \"created_time\": \"2024-11-30 20:00:51+00:00\",\n  \"last_modified_time\": \"2024-11-30 23:39:10+00:00\",\n  \"name\": \"My Program Gateway Name\",\n  \"timeout_millis\": 2000,\n  \"token\": \"my_pg_token_1234\",\n  \"url\": \"https://my_secure_domain.com/my_gateway\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "45f27288-574d-4ed2-919f-a0263491baa1",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programgateways",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the Program Gateway to retrieve.\n\nSend a `GET` request to `/credit/programgateways` to retrieve existing Program Gateway tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 984,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8c7bfaf0-fb2b-41d1-a55b-6151b5b4745a",
+          "name": "Update Program Gateway",
+          "request": {
+            "name": "Update Program Gateway",
+            "description": {
+              "content": "Update an existing Credit Program Gateway.\n\nYou may want to update a Program Gateway if you are switching it to active or inactive, updating the URL, username, or password, and more.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "programgateways",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Unique identifier of the Program Gateway to update."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"active\": true,\n  \"basic_auth_password\": \"<string>\",\n  \"basic_auth_username\": \"<string>\",\n  \"custom_header\": {\n    \"key_0\": \"<string>\",\n    \"key_1\": \"<string>\",\n    \"key_2\": \"<string>\"\n  },\n  \"mtls\": false,\n  \"name\": \"<string>\",\n  \"timeout_millis\": \"<integer>\",\n  \"token\": \"<string>\",\n  \"url\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a9c1b612-7967-4c57-95b7-8d43acf45dd3",
+              "name": "Response containing updated Program Gateway.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programgateways",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the Program Gateway to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"active\": true,\n  \"basic_auth_password\": \"<string>\",\n  \"basic_auth_username\": \"<string>\",\n  \"custom_header\": {\n    \"key_0\": \"<string>\"\n  },\n  \"mtls\": false,\n  \"name\": \"<string>\",\n  \"timeout_millis\": \"<integer>\",\n  \"token\": \"<string>\",\n  \"url\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"active\": true,\n  \"basic_auth_password\": \"string\",\n  \"basic_auth_username\": \"string\",\n  \"created_time\": \"1999-03-31T09:03:12.171Z\",\n  \"custom_header\": {},\n  \"mtls\": false,\n  \"name\": \"string\",\n  \"timeout_millis\": 1314,\n  \"token\": \"string\",\n  \"updated_time\": \"1948-07-28T14:43:34.021Z\",\n  \"url\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "63a5ac87-3aad-4444-9b80-59e330d2296c",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programgateways",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the Program Gateway to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"active\": true,\n  \"basic_auth_password\": \"<string>\",\n  \"basic_auth_username\": \"<string>\",\n  \"custom_header\": {\n    \"key_0\": \"<string>\"\n  },\n  \"mtls\": false,\n  \"name\": \"<string>\",\n  \"timeout_millis\": \"<integer>\",\n  \"token\": \"<string>\",\n  \"url\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 984,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "a3aa310c-987a-42bd-a2ae-26f9d93a0180",
+    "name": "Core accepted countries Program Gateways API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.\n\nContact Support:\n Name: Marqeta\n Email: support@marqeta.com",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries Account Cards API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Account Cards",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List account cards",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token/cards",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which to retrieve credit cards.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Status of the credit cards to retrieve."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of credit card resources to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`."
+              }
+            ]
+          },
+          "docs": "Retrieve an array of cards for a credit account.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>."
+        },
+        {
+          "info": {
+            "name": "Create account card",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/accounts/:account_token/cards",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which to create a credit card.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a credit card for an existing credit account.\n\n[NOTE]\nYou can ship cards to an address different from the <</core-api/users, user>> address.\nAfter creating a card, send a `PUT` request to the `/cards` endpoint with the new address in the `fulfillment.shipping` object.\nFor more, see <</core-api/cards#putCardsToken, Update card>>."
+        },
+        {
+          "info": {
+            "name": "Retrieve account card",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token/cards/:card_token",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which to retrieve a credit card.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "card_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit card to retrieve.\n\nSend a `GET` request to `/credit/accounts/{account_token}/cards` to retrieve existing credit card tokens."
+              }
+            ]
+          },
+          "docs": "Retrieve a credit card for a credit account."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

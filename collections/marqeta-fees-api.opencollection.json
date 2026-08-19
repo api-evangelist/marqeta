@@ -1,0 +1,198 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries Fees API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Fees",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List account fees",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token/fees",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which you want to retrieve fees.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of account fee resources to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              }
+            ]
+          },
+          "docs": "Retrieve an array of fees for a credit account.\n\nThis endpoint supports <</core-api/sorting-and-pagination, pagination>>."
+        },
+        {
+          "info": {
+            "name": "Create fee for an account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/accounts/:account_token/fees",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which you want to create a fee.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a fee for an existing credit account."
+        },
+        {
+          "info": {
+            "name": "Retrieve account fee",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token/fees/:fee_token",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which you want to retrieve the fee.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "fee_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the fee to retrieve.\n\nSend a `GET` request to `/credit/accounts/{account_token}/fees` to retrieve existing account fee tokens."
+              }
+            ]
+          },
+          "docs": "Retrieve a fee for a credit account."
+        },
+        {
+          "info": {
+            "name": "Lists all fees",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/fees",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of fees to retrieve"
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Start index"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              }
+            ]
+          },
+          "docs": "Lists all fees"
+        },
+        {
+          "info": {
+            "name": "Creates a fee",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/fees",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a fee"
+        },
+        {
+          "info": {
+            "name": "Returns a specific fee",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/fees/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Fee token"
+              }
+            ]
+          },
+          "docs": "Returns a specific fee"
+        },
+        {
+          "info": {
+            "name": "Updates a specific fee",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/fees/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Fee token"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a specific fee"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

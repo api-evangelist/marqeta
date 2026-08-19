@@ -1,0 +1,2990 @@
+{
+  "item": [
+    {
+      "id": "8473e493-7174-412f-8226-cb538b3fc3a3",
+      "name": "chargebacks",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "d88cebf3-c529-45df-921d-d5d7a3fc896a",
+          "name": "List all chargebacks",
+          "request": {
+            "name": "List all chargebacks",
+            "description": {},
+            "url": {
+              "path": [
+                "chargebacks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "5",
+                  "description": "Number of chargebacks to retrieve"
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "Start index"
+                },
+                {
+                  "disabled": false,
+                  "key": "network_reference_id",
+                  "value": "<string>",
+                  "description": "Network reference ID"
+                },
+                {
+                  "disabled": false,
+                  "key": "transaction_token",
+                  "value": "<string>",
+                  "description": "Transaction token"
+                },
+                {
+                  "disabled": false,
+                  "key": "amount",
+                  "value": "<string>",
+                  "description": "Amount"
+                },
+                {
+                  "disabled": false,
+                  "key": "states",
+                  "value": "<string>",
+                  "description": "Comma-delimited list of chargeback states to display e.g. INITIATED | REPRESENTMENT | PREARBITRATION | ARBITRATION | CASE_WON | CASE_LOST | NETWORK_REJECTED | WITHDRAWN | WRITTEN_OFF_ISSUER | WRITTEN_OFF_PROGRAM"
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "-lastModifiedTime",
+                  "description": "Sort order"
+                },
+                {
+                  "disabled": false,
+                  "key": "network_case_id",
+                  "value": "<string>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8bd6e2f7-ee2e-4f86-b740-5da94cc945d6",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "network_reference_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "transaction_token",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "amount",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "states",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    },
+                    {
+                      "key": "network_case_id",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 797,\n  \"data\": [\n    {\n      \"amount\": 1704.4333725051295,\n      \"channel\": \"GATEWAY\",\n      \"created_time\": \"1969-04-11T10:30:37.107Z\",\n      \"credit_user\": false,\n      \"last_modified_time\": \"1954-08-08T13:51:21.956Z\",\n      \"network\": \"MASTERCARD\",\n      \"state\": \"NETWORK_REJECTED\",\n      \"token\": \"string\",\n      \"transaction_token\": \"string\",\n      \"currency_code\": \"str\",\n      \"memo\": \"string\",\n      \"network_case_id\": \"strin\",\n      \"reason_code\": \"string\"\n    },\n    {\n      \"amount\": 3750.9927669780222,\n      \"channel\": \"ISSUER\",\n      \"created_time\": \"1968-08-16T02:26:09.692Z\",\n      \"credit_user\": false,\n      \"last_modified_time\": \"2000-05-30T07:09:41.838Z\",\n      \"network\": \"PULSE\",\n      \"state\": \"REPRESENTMENT\",\n      \"token\": \"string\",\n      \"transaction_token\": \"string\",\n      \"currency_code\": \"str\",\n      \"memo\": \"string\",\n      \"network_case_id\": \"string\",\n      \"reason_code\": \"string\"\n    }\n  ],\n  \"end_index\": 8917,\n  \"is_more\": false,\n  \"start_index\": 1563\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f732dc0e-793b-42ce-ad03-58d2465648aa",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "network_reference_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "transaction_token",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "amount",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "states",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    },
+                    {
+                      "key": "network_case_id",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f4efd61b-4bfc-41db-8206-f47fe27aab70",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "network_reference_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "transaction_token",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "amount",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "states",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    },
+                    {
+                      "key": "network_case_id",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b60d8965-13d3-4476-ae41-c846d1b50dea",
+          "name": "Creates a chargeback",
+          "request": {
+            "name": "Creates a chargeback",
+            "description": {},
+            "url": {
+              "path": [
+                "chargebacks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": \"<number>\",\n  \"channel\": \"<string>\",\n  \"transaction_token\": \"<string>\",\n  \"credit_user\": true,\n  \"currency_code\": \"<string>\",\n  \"memo\": \"<string>\",\n  \"pre_initiated\": \"<boolean>\",\n  \"reason_code\": \"<string>\",\n  \"reason_description\": \"<string>\",\n  \"regulation_type\": \"<string>\",\n  \"status\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "efe3fb35-1a61-4b8f-9900-ad9e6412f41a",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"<number>\",\n  \"channel\": \"<string>\",\n  \"transaction_token\": \"<string>\",\n  \"credit_user\": true,\n  \"currency_code\": \"<string>\",\n  \"memo\": \"<string>\",\n  \"pre_initiated\": \"<boolean>\",\n  \"reason_code\": \"<string>\",\n  \"reason_description\": \"<string>\",\n  \"regulation_type\": \"<string>\",\n  \"status\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"amount\": 9905.58666140298,\n  \"channel\": \"ISSUER_AUTOMATED\",\n  \"created_time\": \"1970-06-15T02:22:23.925Z\",\n  \"credit_user\": false,\n  \"last_modified_time\": \"2025-12-19T12:07:39.308Z\",\n  \"network\": \"PULSE\",\n  \"state\": \"NETWORK_REJECTED\",\n  \"token\": \"string\",\n  \"transaction_token\": \"string\",\n  \"currency_code\": \"str\",\n  \"memo\": \"str\",\n  \"network_case_id\": \"string\",\n  \"reason_code\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fe027d2b-216e-47ab-b080-bb80220645d9",
+              "name": "User input error/Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"<number>\",\n  \"channel\": \"<string>\",\n  \"transaction_token\": \"<string>\",\n  \"credit_user\": true,\n  \"currency_code\": \"<string>\",\n  \"memo\": \"<string>\",\n  \"pre_initiated\": \"<boolean>\",\n  \"reason_code\": \"<string>\",\n  \"reason_description\": \"<string>\",\n  \"regulation_type\": \"<string>\",\n  \"status\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b28ecc92-46d8-4889-932d-00bd19ea2cc5",
+              "name": "Token already associated with a different payload",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"<number>\",\n  \"channel\": \"<string>\",\n  \"transaction_token\": \"<string>\",\n  \"credit_user\": true,\n  \"currency_code\": \"<string>\",\n  \"memo\": \"<string>\",\n  \"pre_initiated\": \"<boolean>\",\n  \"reason_code\": \"<string>\",\n  \"reason_description\": \"<string>\",\n  \"regulation_type\": \"<string>\",\n  \"status\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8c77b81a-4502-4ff7-bfbe-70831cf46f31",
+              "name": "Pre-condition failed. Chargeback amount is greater than user GPA balance",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"<number>\",\n  \"channel\": \"<string>\",\n  \"transaction_token\": \"<string>\",\n  \"credit_user\": true,\n  \"currency_code\": \"<string>\",\n  \"memo\": \"<string>\",\n  \"pre_initiated\": \"<boolean>\",\n  \"reason_code\": \"<string>\",\n  \"reason_description\": \"<string>\",\n  \"regulation_type\": \"<string>\",\n  \"status\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Precondition Failed",
+              "code": 412,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d5e07baa-cd1a-40e7-86e9-ef857dfa8591",
+              "name": "Unable to return funds back to cardholder",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"<number>\",\n  \"channel\": \"<string>\",\n  \"transaction_token\": \"<string>\",\n  \"credit_user\": true,\n  \"currency_code\": \"<string>\",\n  \"memo\": \"<string>\",\n  \"pre_initiated\": \"<boolean>\",\n  \"reason_code\": \"<string>\",\n  \"reason_description\": \"<string>\",\n  \"regulation_type\": \"<string>\",\n  \"status\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7c651e60-172a-4db3-9427-a42e6e52051e",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"<number>\",\n  \"channel\": \"<string>\",\n  \"transaction_token\": \"<string>\",\n  \"credit_user\": true,\n  \"currency_code\": \"<string>\",\n  \"memo\": \"<string>\",\n  \"pre_initiated\": \"<boolean>\",\n  \"reason_code\": \"<string>\",\n  \"reason_description\": \"<string>\",\n  \"regulation_type\": \"<string>\",\n  \"status\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "463c134a-fd78-40a6-8f87-4d9257947d87",
+          "name": "Creates a chargeback allocation acknowledgement",
+          "request": {
+            "name": "Creates a chargeback allocation acknowledgement",
+            "description": {},
+            "url": {
+              "path": [
+                "chargebacks",
+                "allocationacknowledgement"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"chargeback_token\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8f3554ac-97cc-4fe5-920b-77b22e14078d",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks",
+                    "allocationacknowledgement"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"chargeback_token\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"amount\": 9905.58666140298,\n  \"channel\": \"ISSUER_AUTOMATED\",\n  \"created_time\": \"1970-06-15T02:22:23.925Z\",\n  \"credit_user\": false,\n  \"last_modified_time\": \"2025-12-19T12:07:39.308Z\",\n  \"network\": \"PULSE\",\n  \"state\": \"NETWORK_REJECTED\",\n  \"token\": \"string\",\n  \"transaction_token\": \"string\",\n  \"currency_code\": \"str\",\n  \"memo\": \"str\",\n  \"network_case_id\": \"string\",\n  \"reason_code\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "19b3abb1-1f90-47c2-b325-a8be5cd42b9d",
+              "name": "User input error/Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks",
+                    "allocationacknowledgement"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"chargeback_token\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "afc60f50-3328-4512-9713-b4478e7feea0",
+              "name": "Token already associated with a different payload",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks",
+                    "allocationacknowledgement"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"chargeback_token\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6fbea819-2dde-4599-8e15-8e801457e5f5",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks",
+                    "allocationacknowledgement"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"chargeback_token\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6227d27f-e976-4c60-9b33-d78b9c2b48e5",
+          "name": "Creates a chargeback transition",
+          "request": {
+            "name": "Creates a chargeback transition",
+            "description": {},
+            "url": {
+              "path": [
+                "chargebacks",
+                "transitions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"chargeback_token\": \"<string>\",\n  \"state\": \"<string>\",\n  \"amount\": \"<number>\",\n  \"reason\": \"<string>\",\n  \"regulation_type\": \"<string>\",\n  \"token\": \"<string>\",\n  \"type\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "cbcbe42f-3375-4759-b420-d07cdc836f2d",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks",
+                    "transitions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"chargeback_token\": \"<string>\",\n  \"state\": \"<string>\",\n  \"amount\": \"<number>\",\n  \"reason\": \"<string>\",\n  \"regulation_type\": \"<string>\",\n  \"token\": \"<string>\",\n  \"type\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"channel\": \"ISSUER_AUTOMATED\",\n  \"chargeback_token\": \"string\",\n  \"created_time\": \"1964-08-05T05:56:22.003Z\",\n  \"last_modified_time\": \"1972-09-07T00:21:54.816Z\",\n  \"previous_state\": \"INITIATED\",\n  \"state\": \"ARBITRATION_DECISION\",\n  \"token\": \"string\",\n  \"type\": \"written.off.program\",\n  \"amount\": 8412.810660182955,\n  \"reason\": \"string\",\n  \"transaction_token\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "75d901d2-6b78-42c0-85e1-944f46c0a75f",
+              "name": "User input error/Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks",
+                    "transitions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"chargeback_token\": \"<string>\",\n  \"state\": \"<string>\",\n  \"amount\": \"<number>\",\n  \"reason\": \"<string>\",\n  \"regulation_type\": \"<string>\",\n  \"token\": \"<string>\",\n  \"type\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "32a84eba-0c54-443e-975a-4693d18c301c",
+              "name": "Token already associated with a different payload",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks",
+                    "transitions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"chargeback_token\": \"<string>\",\n  \"state\": \"<string>\",\n  \"amount\": \"<number>\",\n  \"reason\": \"<string>\",\n  \"regulation_type\": \"<string>\",\n  \"token\": \"<string>\",\n  \"type\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "2f234b74-287e-4316-95bb-b9db754ffc64",
+              "name": "Unable to perform chargeback transition",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks",
+                    "transitions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"chargeback_token\": \"<string>\",\n  \"state\": \"<string>\",\n  \"amount\": \"<number>\",\n  \"reason\": \"<string>\",\n  \"regulation_type\": \"<string>\",\n  \"token\": \"<string>\",\n  \"type\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7434fe4b-55fa-44c3-b20a-105058c93b3f",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks",
+                    "transitions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"chargeback_token\": \"<string>\",\n  \"state\": \"<string>\",\n  \"amount\": \"<number>\",\n  \"reason\": \"<string>\",\n  \"regulation_type\": \"<string>\",\n  \"token\": \"<string>\",\n  \"type\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f21e75c7-8825-4d53-8bca-a2a1b3606d2f",
+          "name": "Returns a specific chargeback transition",
+          "request": {
+            "name": "Returns a specific chargeback transition",
+            "description": {},
+            "url": {
+              "path": [
+                "chargebacks",
+                "transitions",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Chargeback transition token"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "11a88092-0734-4358-8ccb-d2ef7ba91754",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks",
+                    "transitions",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Chargeback transition token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"channel\": \"ISSUER_AUTOMATED\",\n  \"chargeback_token\": \"string\",\n  \"created_time\": \"1964-08-05T05:56:22.003Z\",\n  \"last_modified_time\": \"1972-09-07T00:21:54.816Z\",\n  \"previous_state\": \"INITIATED\",\n  \"state\": \"ARBITRATION_DECISION\",\n  \"token\": \"string\",\n  \"type\": \"written.off.program\",\n  \"amount\": 8412.810660182955,\n  \"reason\": \"string\",\n  \"transaction_token\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0810ac9f-44f0-4ac3-aef7-7814a0e2f2a1",
+              "name": "User input error/Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks",
+                    "transitions",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Chargeback transition token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c3b37d8f-613a-4def-87a5-87b350f5c90d",
+              "name": "Transition not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks",
+                    "transitions",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Chargeback transition token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "58e0d115-46ed-4aef-abab-9c32ba7a6e5d",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks",
+                    "transitions",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Chargeback transition token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0b39f9fb-47d3-4c2f-bab0-8be14194ada2",
+          "name": "Lists all chargeback transitions that are related to a chargeback",
+          "request": {
+            "name": "Lists all chargeback transitions that are related to a chargeback",
+            "description": {},
+            "url": {
+              "path": [
+                "chargebacks",
+                ":chargeback_token",
+                "transitions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "5",
+                  "description": "Number of transitions to retrieve"
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "Start index"
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "-lastModifiedTime",
+                  "description": "Sort order"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "chargeback_token",
+                  "description": "(Required) Chargeback token"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a1a1afaf-cb66-4dc7-abc7-b04b4cf0be00",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks",
+                    ":chargeback_token",
+                    "transitions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "chargeback_token",
+                      "description": "(Required) Chargeback token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 1518,\n  \"data\": [\n    {\n      \"channel\": \"ISSUER\",\n      \"chargeback_token\": \"string\",\n      \"created_time\": \"2013-09-15T22:08:31.477Z\",\n      \"last_modified_time\": \"2007-11-10T13:09:57.910Z\",\n      \"previous_state\": \"ARBITRATION\",\n      \"state\": \"ARBITRATION\",\n      \"token\": \"string\",\n      \"type\": \"case.lost\",\n      \"amount\": 5191.72742594759,\n      \"reason\": \"string\",\n      \"transaction_token\": \"string\"\n    },\n    {\n      \"channel\": \"ISSUER_AUTOMATED\",\n      \"chargeback_token\": \"string\",\n      \"created_time\": \"2017-08-18T15:48:55.754Z\",\n      \"last_modified_time\": \"2011-06-28T19:53:55.468Z\",\n      \"previous_state\": \"REPRESENTMENT\",\n      \"state\": \"INITIATED\",\n      \"token\": \"string\",\n      \"type\": \"case.won\",\n      \"amount\": 4257.060258877415,\n      \"reason\": \"string\",\n      \"transaction_token\": \"string\"\n    }\n  ],\n  \"end_index\": 982,\n  \"is_more\": false,\n  \"start_index\": 6613\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "09f64ddb-e424-4c8a-ad25-1c233458d6ea",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks",
+                    ":chargeback_token",
+                    "transitions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "chargeback_token",
+                      "description": "(Required) Chargeback token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ceb46c1e-a8f7-4e1f-9c4f-cd16141d756f",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks",
+                    ":chargeback_token",
+                    "transitions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "chargeback_token",
+                      "description": "(Required) Chargeback token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d262b128-a5bb-4d51-9150-82ffd4e9b3fc",
+          "name": "Returns a specific chargeback",
+          "request": {
+            "name": "Returns a specific chargeback",
+            "description": {},
+            "url": {
+              "path": [
+                "chargebacks",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2e8e2ae5-e72a-4ea3-aba9-f619e5344bf1",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"amount\": 9905.58666140298,\n  \"channel\": \"ISSUER_AUTOMATED\",\n  \"created_time\": \"1970-06-15T02:22:23.925Z\",\n  \"credit_user\": false,\n  \"last_modified_time\": \"2025-12-19T12:07:39.308Z\",\n  \"network\": \"PULSE\",\n  \"state\": \"NETWORK_REJECTED\",\n  \"token\": \"string\",\n  \"transaction_token\": \"string\",\n  \"currency_code\": \"str\",\n  \"memo\": \"str\",\n  \"network_case_id\": \"string\",\n  \"reason_code\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f2ba44c4-2495-4de7-bc6d-0e305ac274df",
+              "name": "Chargeback not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "82cef3aa-dbb2-491f-b683-37152edb27b3",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0b1cdcc9-0731-444d-bfde-991fe01065d4",
+          "name": "Updates chargeback data",
+          "request": {
+            "name": "Updates chargeback data",
+            "description": {},
+            "url": {
+              "path": [
+                "chargebacks",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason_code\": \"<string>\",\n  \"reason_description\": \"<string>\",\n  \"status\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a322a007-a651-4357-972b-5cf05fae231a",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reason_code\": \"<string>\",\n  \"reason_description\": \"<string>\",\n  \"status\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"amount\": 9905.58666140298,\n  \"channel\": \"ISSUER_AUTOMATED\",\n  \"created_time\": \"1970-06-15T02:22:23.925Z\",\n  \"credit_user\": false,\n  \"last_modified_time\": \"2025-12-19T12:07:39.308Z\",\n  \"network\": \"PULSE\",\n  \"state\": \"NETWORK_REJECTED\",\n  \"token\": \"string\",\n  \"transaction_token\": \"string\",\n  \"currency_code\": \"str\",\n  \"memo\": \"str\",\n  \"network_case_id\": \"string\",\n  \"reason_code\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a09ce068-10c8-4ab1-8476-3d55b0669da6",
+              "name": "Chargeback not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reason_code\": \"<string>\",\n  \"reason_description\": \"<string>\",\n  \"status\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "89bb3e8c-0086-45b2-8f25-a05c9ddb2207",
+              "name": "Unable to update chargeback",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reason_code\": \"<string>\",\n  \"reason_description\": \"<string>\",\n  \"status\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1464158d-9499-48a5-8869-34340b2082cd",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reason_code\": \"<string>\",\n  \"reason_description\": \"<string>\",\n  \"status\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a2edde18-6825-4e6d-8b65-0797950efe35",
+          "name": "Grants provisional credit",
+          "request": {
+            "name": "Grants provisional credit",
+            "description": {},
+            "url": {
+              "path": [
+                "chargebacks",
+                ":token",
+                "grantprovisionalcredit"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "93f25e5b-2bfc-473c-ac90-762e49d3150d",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks",
+                    ":token",
+                    "grantprovisionalcredit"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"amount\": 9905.58666140298,\n  \"channel\": \"ISSUER_AUTOMATED\",\n  \"created_time\": \"1970-06-15T02:22:23.925Z\",\n  \"credit_user\": false,\n  \"last_modified_time\": \"2025-12-19T12:07:39.308Z\",\n  \"network\": \"PULSE\",\n  \"state\": \"NETWORK_REJECTED\",\n  \"token\": \"string\",\n  \"transaction_token\": \"string\",\n  \"currency_code\": \"str\",\n  \"memo\": \"str\",\n  \"network_case_id\": \"string\",\n  \"reason_code\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ada1c4be-c926-45dc-815e-bb2259b7c7a6",
+              "name": "Chargeback not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks",
+                    ":token",
+                    "grantprovisionalcredit"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7cca9b0f-6f91-4a4c-9feb-21074d78787f",
+              "name": "Unable to grant provisional credit",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks",
+                    ":token",
+                    "grantprovisionalcredit"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "32e6134d-c536-4e72-a7b2-8625faf42d32",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks",
+                    ":token",
+                    "grantprovisionalcredit"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1e1c1579-4b6a-4148-969e-97963aa14b0d",
+          "name": "Reverses provisional credit",
+          "request": {
+            "name": "Reverses provisional credit",
+            "description": {},
+            "url": {
+              "path": [
+                "chargebacks",
+                ":token",
+                "reverseprovisionalcredit"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a3228961-2b6f-4ca8-a588-8c8ad15914f4",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks",
+                    ":token",
+                    "reverseprovisionalcredit"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"amount\": 9905.58666140298,\n  \"channel\": \"ISSUER_AUTOMATED\",\n  \"created_time\": \"1970-06-15T02:22:23.925Z\",\n  \"credit_user\": false,\n  \"last_modified_time\": \"2025-12-19T12:07:39.308Z\",\n  \"network\": \"PULSE\",\n  \"state\": \"NETWORK_REJECTED\",\n  \"token\": \"string\",\n  \"transaction_token\": \"string\",\n  \"currency_code\": \"str\",\n  \"memo\": \"str\",\n  \"network_case_id\": \"string\",\n  \"reason_code\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "104cdcfc-714b-4494-a8ce-47a3f5f895f2",
+              "name": "Chargeback not found; chargeback at terminal state",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks",
+                    ":token",
+                    "reverseprovisionalcredit"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "90cf8f7a-19d4-43e2-bc76-4913c643ee17",
+              "name": "Unable to reverse provisional credit",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks",
+                    ":token",
+                    "reverseprovisionalcredit"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f5999c73-4345-4665-b791-17e8095c7973",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chargebacks",
+                    ":token",
+                    "reverseprovisionalcredit"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7786fa5c-b3bb-4525-8fdb-44b7fff9c533",
+          "name": "Retrieve chargeback data",
+          "request": {
+            "name": "Retrieve chargeback data",
+            "description": {
+              "content": "Returns chargeback data aggregated by transaction or time period. Includes dispute status, amounts, reason codes, and resolution details for tracking chargeback activity and financial exposure.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "views",
+                "chargebacks",
+                ":time_agg"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "program",
+                  "value": "<string>",
+                  "description": "(Required) The name of your Marqeta card program. This parameter is required for most DiVA API endpoints to scope the data to your program."
+                },
+                {
+                  "disabled": false,
+                  "key": "fields",
+                  "value": "<string>",
+                  "description": "Comma-delimited list of fields to include in the response. If not specified, all available fields are returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_date",
+                  "value": "<date>",
+                  "description": "Start date for filtering data (format YYYY-MM-DD). Returns records on or after this date."
+                },
+                {
+                  "disabled": false,
+                  "key": "end_date",
+                  "value": "<date>",
+                  "description": "End date for filtering data (format YYYY-MM-DD). Returns records on or before this date."
+                },
+                {
+                  "disabled": false,
+                  "key": "format",
+                  "value": "json",
+                  "description": "Response format. Use 'json' for JSON responses or 'csv' for comma-separated bulk file format. Defaults to json."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "1000",
+                  "description": "Maximum number of records to return per request."
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Zero-based offset for pagination."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "time_agg",
+                  "description": "(Required) Aggregation time level for the data. Use 'day' for daily rollups, 'week' for weekly rollups, 'month' for monthly rollups, or 'detail' for individual record-level data."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d6e56a7d-affb-48bc-818e-057f24e8f1c1",
+              "name": "Chargeback data for the specified time period.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "views",
+                    "chargebacks",
+                    ":time_agg"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "program",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "format",
+                      "value": "json"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "1000"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "time_agg",
+                      "description": "(Required) Aggregation time level for the data. Use 'day' for daily rollups, 'week' for weekly rollups, 'month' for monthly rollups, or 'detail' for individual record-level data."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"meta\": {\n    \"total_count\": 8264,\n    \"limit\": 3999,\n    \"offset\": 4885,\n    \"has_more\": true\n  },\n  \"data\": [\n    {\n      \"date\": \"string\",\n      \"program\": \"string\",\n      \"chargeback_count\": 3990,\n      \"total_chargeback_amount\": 153.28380603787605,\n      \"reason_code\": \"string\",\n      \"status\": \"string\"\n    },\n    {\n      \"date\": \"string\",\n      \"program\": \"string\",\n      \"chargeback_count\": 85,\n      \"total_chargeback_amount\": 1027.6006635122926,\n      \"reason_code\": \"string\",\n      \"status\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "13b9db8d-9c1a-41f0-a658-b7752e4490b8",
+              "name": "Bad request. One or more required query parameters are missing or contain invalid values.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "views",
+                    "chargebacks",
+                    ":time_agg"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "program",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "format",
+                      "value": "json"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "1000"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "time_agg",
+                      "description": "(Required) Aggregation time level for the data. Use 'day' for daily rollups, 'week' for weekly rollups, 'month' for monthly rollups, or 'detail' for individual record-level data."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_code\": \"string\",\n  \"error_message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6924958a-2656-4392-bf52-c1defdd1251b",
+              "name": "Unauthorized. The provided application token and access token credentials are invalid or missing.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "views",
+                    "chargebacks",
+                    ":time_agg"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "program",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "format",
+                      "value": "json"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "1000"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "time_agg",
+                      "description": "(Required) Aggregation time level for the data. Use 'day' for daily rollups, 'week' for weekly rollups, 'month' for monthly rollups, or 'detail' for individual record-level data."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_code\": \"string\",\n  \"error_message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "ec3f2959-0e06-4a9c-9017-7f3058fc986b",
+    "name": "Core accepted countries chargebacks API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.\n\nContact Support:\n Name: Marqeta\n Email: support@marqeta.com",
+      "type": "text/plain"
+    }
+  }
+}

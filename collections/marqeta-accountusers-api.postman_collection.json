@@ -1,0 +1,192 @@
+{
+  "item": [
+    {
+      "id": "6699903c-bfde-4a9d-a5e4-bee58095cf99",
+      "name": "AccountUsers",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5c3662aa-e171-49a3-a3af-0b2f7dbe1f9a",
+          "name": "Retrieve user",
+          "request": {
+            "name": "Retrieve user",
+            "description": {
+              "content": "Retrieve a user's account information.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accountusers",
+                ":user_token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "user_token",
+                  "description": "(Required) Unique identifier of the user to retrieve.\nSend a `GET` request to `/account/users` to retrieve existing user tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "2f1cb67e-746f-44ae-a2a8-aa581f02520b",
+              "name": "User details and associated account information",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accountusers",
+                    ":user_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "user_token",
+                      "description": "(Required) Unique identifier of the user to retrieve.\nSend a `GET` request to `/account/users` to retrieve existing user tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"address1\": \"Addres Test\",\n  \"address2\": \"1 Under Stair Case Rd\",\n  \"city\": \"New York\",\n  \"country\": \"US\",\n  \"credit_accounts\": [\n    {\n      \"is_primary\": true,\n      \"token\": \"account-token-5678\"\n    }\n  ],\n  \"email\": \"abc@hogwarts.edu\",\n  \"first_name\": \"Harry\",\n  \"last_name\": \"Potter\",\n  \"phone\": \"0000000000\",\n  \"state\": \"NY\",\n  \"token\": \"user-token-1234\",\n  \"zip\": \"11217\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a04852f4-1556-4e82-9d99-6379fbfe3874",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accountusers",
+                    ":user_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "user_token",
+                      "description": "(Required) Unique identifier of the user to retrieve.\nSend a `GET` request to `/account/users` to retrieve existing user tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9773,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "8ced9f24-5bc7-4f8f-ab80-0234df229b09",
+    "name": "Core accepted countries AccountUsers API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.\n\nContact Support:\n Name: Marqeta\n Email: support@marqeta.com",
+      "type": "text/plain"
+    }
+  }
+}

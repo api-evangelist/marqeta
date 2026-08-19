@@ -1,0 +1,113 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries card products API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "card products",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Lists all card products",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/cardproducts",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of items to retrieve. Count can be between 1 - 10 items."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Indicates from what row to start returning data."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              }
+            ]
+          },
+          "docs": "Lists all card products"
+        },
+        {
+          "info": {
+            "name": "Creates a card product",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/cardproducts",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a card product"
+        },
+        {
+          "info": {
+            "name": "Returns a specific card product",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/cardproducts/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Card product token"
+              }
+            ]
+          },
+          "docs": "Returns a specific card product"
+        },
+        {
+          "info": {
+            "name": "Updates a specific card product",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/cardproducts/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Card product token"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a specific card product"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,225 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries Payment Schedules API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Payment Schedules",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List payment schedules",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token/paymentschedules",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which you want to retrieve payment schedules.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "statuses",
+                "value": "",
+                "type": "query",
+                "description": "Status of the payment schedules to retrieve."
+              },
+              {
+                "name": "frequency",
+                "value": "",
+                "type": "query",
+                "description": "Frequency of the payment schedules to retrieve."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of payment schedule resources to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`."
+              }
+            ]
+          },
+          "docs": "Retrieve an array of payment schedules on a specific credit account.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>."
+        },
+        {
+          "info": {
+            "name": "Create payment schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/accounts/:account_token/paymentschedules",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which you want to create a payment schedule.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new payment schedule, either one-time or recurring."
+        },
+        {
+          "info": {
+            "name": "Retrieve payment schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token/paymentschedules/:payment_schedule_token",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which you want to retrieve a payment schedule.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "payment_schedule_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the payment schedule that you want to retrieve.\n\nSend a `GET` request to `/credit/accounts/{account_token}/paymentschedules` to retrieve existing payment schedule tokens."
+              }
+            ]
+          },
+          "docs": "Retrieve a single payment schedule on a specific credit account."
+        },
+        {
+          "info": {
+            "name": "Retrieve payment schedule transitions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token/paymentschedules/:payment_schedule_token/transitions",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which you want to retrieve payment schedule transitions.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "payment_schedule_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the payment schedule for which you want to retrieve transitions.\n\nSend a `GET` request to `/credit/accounts/{account_token}/paymentschedules` to retrieve existing payment schedule tokens."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of payment schedule resources to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `createdTime`, and not by the field names appearing in response bodies such as `created_time`."
+              }
+            ]
+          },
+          "docs": "Retrieve an array of payment schedule transitions on a specific credit account."
+        },
+        {
+          "info": {
+            "name": "Create payment schedule transition",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/accounts/:account_token/paymentschedules/:payment_schedule_token/transitions",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account on which to transition a payment schedule.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "payment_schedule_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the payment schedule whose status is to transition.\n\nSend a `GET` request to `/credit/accounts/{account_token}/paymentschedules` to retrieve existing payment schedule tokens."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Transition a payment schedule to a new status."
+        },
+        {
+          "info": {
+            "name": "Retrieve payment schedule transition",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token/paymentschedules/:payment_schedule_token/transitions/:token",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which you want to retrieve a payment schedule transition.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "payment_schedule_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the payment schedule you want to retrieve.\n\nSend a `GET` request to `/credit/accounts/{account_token}/paymentschedules` to retrieve existing payment schedule tokens."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the payment schedule transition you want to retrieve.\n\nSend a `GET` request to `/credit/accounts/{account_token}/paymentschedules/{payment_schedule_token}/transitions` to retrieve existing payment schedule transition tokens."
+              }
+            ]
+          },
+          "docs": "Retrieve a single payment schedule transition on a specific credit account."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,871 @@
+{
+  "item": [
+    {
+      "id": "f670ce47-4eb8-4c3b-a0da-222e69dac6b6",
+      "name": "User Transitions",
+      "description": {
+        "content": "// Conditional snippet for beta or internal content\ninclude::../../maturity-admonition-banner.adoc[]\n\n// This source file is used by InfoDev to generate API reference documentation.\n// File location in GitHub is:\n// https://github.marqeta.com/openapi/coreapi/blob/main/openapi/usertransitions/openapi.yaml\n\nUse the `/usertransitions` endpoints to transition user resources between statuses, as well as to retrieve and list status changes for a user resource.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "84302888-5cfb-48e3-b19b-61fee3104bc9",
+          "name": "Create user transition",
+          "request": {
+            "name": "Create user transition",
+            "description": {
+              "content": "This endpoint enables you to change a user's status, depending on your role and the previous status change.\nBy changing a user's status, you can control the user's capabilities and the setting of the `user.active` field.\nDo not set the value of the `user.active` field directly.\n\n[cols=\"2a,4a,3a\"]\n|===\n| The user.status Field | Description | User Limitations\n\n| `UNVERIFIED`\n| Initial status of a new user belonging to an account holder group where KYC is always required.\n\n*Allowable Transitions:*  +\n`ACTIVE`, `CLOSED`, `TERMINATED`\n| Cannot activate cards or load funds.\n\n*user.active Field:*  +\n`false`\n\n| `LIMITED`\n| Initial status of a new user belonging to an account holder group where KYC is conditionally required.\n\n*Allowable Transitions:*  +\n`ACTIVE`, `SUSPENDED`, `CLOSED`\n| Restricted by rules in `accountholdergroups.pre_kyc_controls`.\n\n*user.active Field:*  +\n`true`\n\n| `ACTIVE`\n| Status of a user who has passed KYC, or initial status of a new user belonging to an account holder group where KYC is never required.\n\n*Allowable Transitions:*  +\n`SUSPENDED`, `CLOSED`, `UNVERIFIED`\n| None.\n\n*user.active Field:*  +\n`true`\n\n| `SUSPENDED`\n| The user is temporarily inactive.\n\nTransitioning a suspended user to the `ACTIVE` status is restricted, based on your role and the details of the previous status change.\n\n*Allowable Transitions:*  +\n`ACTIVE`, `LIMITED`, `UNVERIFIED`, `CLOSED`, `TERMINATED`\n| Cannot activate cards, load funds, or transact.\n\n*user.active Field:*  +\n`false`\n\n| `CLOSED`\n| The user is permanently inactive.\n\nIn general, the `CLOSED` status should be terminal.\nFor exceptional cases, you can transition a user to other statuses, depending on your role and the details of the previous status change.\nContact your Marqeta representative for more information.\n\n*Allowable Transitions:*  +\n`ACTIVE`, `LIMITED`, `UNVERIFIED`, `SUSPENDED`, `TERMINATED`\n| Cannot activate cards, load funds, or transact.\n\n*user.active Field:*  +\n`false`\n\n| `TERMINATED`\n| The user account is permanently closed.\nUse the `TERMINATED` state to comply with regulatory requirements, such as the requirement that a user account be irreversibly closed when it does not pass Know Your Customer (KYC) verification.\n\n*NOTE:* `TERMINATED` is a terminal status.\nYou must have the Admin or Program Manager role to transition a user to the `TERMINATED` state.\nYou cannot transition a user from `TERMINATED` to any other state.\nContact your Marqeta representative for more information.\n\n*Allowable Transitions:*   +\nNone\n| Cannot load funds, activate cards, or transact.\n\n*The user.active field:*   +\n`false`\n\n|===\n\n[NOTE]\nThe Marqeta platform transitions a user's status in response to certain events.\nFor example, a user in the `UNVERIFIED` status is transitioned to `ACTIVE` when the user passes KYC verification.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "usertransitions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"channel\": \"<string>\",\n  \"reason_code\": \"<string>\",\n  \"status\": \"<string>\",\n  \"user_token\": \"<string>\",\n  \"idempotentHash\": \"<string>\",\n  \"reason\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0509ad8c-e075-44b6-83e3-eadcdb1d8e31",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "usertransitions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"channel\": \"API\",\n  \"reason\": \"Activating user\",\n  \"reason_code\": \"00\",\n  \"status\": \"ACTIVE\",\n  \"token\": \"activate_05\",\n  \"user_token\": \"my_user_01\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"channel\": \"API\",\n  \"created_time\": \"2025-03-15 00:00:00+00:00\",\n  \"metadata\": {\n    \"my_name_1\": \"my_value_1\",\n    \"my_name_2\": \"my_value_2\"\n  },\n  \"reason\": \"Activating user\",\n  \"reason_code\": \"00\",\n  \"status\": \"ACTIVE\",\n  \"token\": \"activate_05\",\n  \"user_token\": \"my_user_01\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e11f205f-32bf-460a-bd5a-8fb873c95f17",
+              "name": "User input error/Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "usertransitions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"channel\": \"API\",\n  \"reason\": \"Activating user\",\n  \"reason_code\": \"00\",\n  \"status\": \"ACTIVE\",\n  \"token\": \"activate_05\",\n  \"user_token\": \"my_user_01\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "95cdc3cd-57b9-4845-840b-6e53e920a3ef",
+              "name": "Request already processed with a different payload",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "usertransitions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"channel\": \"API\",\n  \"reason\": \"Activating user\",\n  \"reason_code\": \"00\",\n  \"status\": \"ACTIVE\",\n  \"token\": \"activate_05\",\n  \"user_token\": \"my_user_01\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c85ed8f7-b76f-4436-a422-7bd1d173216e",
+              "name": "Pre-condition setup issue",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "usertransitions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"channel\": \"API\",\n  \"reason\": \"Activating user\",\n  \"reason_code\": \"00\",\n  \"status\": \"ACTIVE\",\n  \"token\": \"activate_05\",\n  \"user_token\": \"my_user_01\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Precondition Failed",
+              "code": 412,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "887908ab-3da4-4ab4-8e3f-3cbff1bc1f92",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "usertransitions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"channel\": \"API\",\n  \"reason\": \"Activating user\",\n  \"reason_code\": \"00\",\n  \"status\": \"ACTIVE\",\n  \"token\": \"activate_05\",\n  \"user_token\": \"my_user_01\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "64cba951-5c2f-4f0c-97a3-7393206619c4",
+          "name": "List transitions for user",
+          "request": {
+            "name": "List transitions for user",
+            "description": {
+              "content": "List all transitions for a given user.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "usertransitions",
+                "user",
+                ":user_token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "5",
+                  "description": "Number of user transitions to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "Sort order index of the first resource in the returned array."
+                },
+                {
+                  "disabled": false,
+                  "key": "fields",
+                  "value": "<string>",
+                  "description": "Comma-delimited list of fields to return (`field_1,field_2`, and so on).\nLeave blank to return all fields."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "-id",
+                  "description": "Field on which to sort.\nUse any field in the resource model, or one of the system fields `lastModifiedTime` or `createdTime`.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "user_token",
+                  "description": "(Required) Unique identifier of the user resource."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "943f2538-5cde-4d21-a3a1-bfad20e5ae38",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "usertransitions",
+                    "user",
+                    ":user_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-id"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "user_token",
+                      "description": "(Required) Unique identifier of the user resource."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 1,\n  \"data\": [\n    {\n      \"channel\": \"API\",\n      \"created_time\": \"2025-03-15 00:00:00+00:00\",\n      \"metadata\": {\n        \"my_name_1\": \"my_value_1\",\n        \"my_name_2\": \"my_value_2\"\n      },\n      \"reason\": \"Activating user\",\n      \"reason_code\": \"00\",\n      \"status\": \"ACTIVE\",\n      \"token\": \"activate_05\",\n      \"user_token\": \"my_user_01\"\n    }\n  ],\n  \"end_index\": 0,\n  \"is_more\": false,\n  \"start_index\": 0\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "56e52cda-d3c5-42d0-927e-d70eef11b165",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "usertransitions",
+                    "user",
+                    ":user_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-id"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "user_token",
+                      "description": "(Required) Unique identifier of the user resource."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a0af8739-b0a5-4d49-a1ad-cac2b5d73fa5",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "usertransitions",
+                    "user",
+                    ":user_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-id"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "user_token",
+                      "description": "(Required) Unique identifier of the user resource."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d4f775f4-b6a3-4ab7-9ada-26799f2e352b",
+          "name": "Retrieve user transition",
+          "request": {
+            "name": "Retrieve user transition",
+            "description": {
+              "content": "Retrieve a user transition.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "usertransitions",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "fields",
+                  "value": "<string>",
+                  "description": "Comma-delimited list of fields to return (`field_1,field_2`, and so on).\nLeave blank to return all fields."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Unique identifier of the user transition you want to retrieve."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ee5a9dc8-7b78-42ec-be3c-d5044d08d6ea",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "usertransitions",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the user transition you want to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"channel\": \"API\",\n  \"created_time\": \"2025-03-15 00:00:00+00:00\",\n  \"metadata\": {\n    \"my_name_1\": \"my_value_1\",\n    \"my_name_2\": \"my_value_2\"\n  },\n  \"reason\": \"Activating user\",\n  \"reason_code\": \"00\",\n  \"status\": \"ACTIVE\",\n  \"token\": \"activate_05\",\n  \"user_token\": \"my_user_01\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e1c031a2-6edf-40c4-ac7e-10b6dcc9c2fe",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "usertransitions",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the user transition you want to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "90458cd9-4cc6-4482-bfd6-3b73399d2734",
+              "name": "Cardholder not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "usertransitions",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the user transition you want to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6e844bd8-33fa-4abb-b49d-91e62bc23222",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "usertransitions",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the user transition you want to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "49495b9b-167b-437b-9571-098d60a6d46c",
+    "name": "Core accepted countries User Transitions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.\n\nContact Support:\n Name: Marqeta\n Email: support@marqeta.com",
+      "type": "text/plain"
+    }
+  }
+}

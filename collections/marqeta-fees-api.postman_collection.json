@@ -1,0 +1,1462 @@
+{
+  "item": [
+    {
+      "id": "66be0e95-eebe-4582-a00d-0d1d083cff83",
+      "name": "Fees",
+      "description": {
+        "content": "// Conditional snippet for beta or internal content\ninclude::../../maturity-admonition-banner.adoc[]\n\n// This source file is used by InfoDev to generate API reference documentation. File location in GitHub is:\n// File location in GitHub is: openapi/fees/openapi.yaml\n\nA `fees` resource represents a monetary assessment against an account holder's general purpose account (GPA).\nAssessing a fee transfers funds from the account holder's GPA account to your program's fee account.\nBy default, every account has a GPA account used for the funding of transfers.\n\nYou can assess fees either post-transaction or in real time.\nReal-time fee assessment ensures the account has sufficient funds available to cover both the transaction amount and the fee before authorization of the transaction.\nTo assess fees in real time, you must create a real-time fee group using the `/realtimefeegroups` endpoint.\n\nWhen assessing a post-transaction fee, you can either debit existing GPA funds, or pull in new funds from a funding source.\nTo use existing GPA funds, use the `/feetransfers` endpoint.\nTo pull in new funds, use the fees array in `/gpaorders`.\n\n[NOTE]\nIf your program uses Gateway JIT Funding, you cannot assess fees.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "2eb31ec8-9600-4783-bae2-d6c93380a354",
+          "name": "List account fees",
+          "request": {
+            "name": "List account fees",
+            "description": {
+              "content": "Retrieve an array of fees for a credit account.\n\nThis endpoint supports <</core-api/sorting-and-pagination, pagination>>.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token",
+                "fees"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "5",
+                  "description": "Number of account fee resources to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "Sort order index of the first resource in the returned array."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account for which you want to retrieve fees.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "ee7ce0be-d5c2-434a-ac9a-09e4417a6327",
+              "name": "Expected response to a valid request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "fees"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to retrieve fees.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 2,\n  \"data\": [\n    {\n      \"account_token\": \"my_account_token_12\",\n      \"amount\": 10,\n      \"applied_to_amount\": null,\n      \"channel\": \"API\",\n      \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n      \"currency_code\": \"USD\",\n      \"description\": \"Account was opened\",\n      \"journal_tokens\": [\n        \"journal_token1\"\n      ],\n      \"method\": \"FLAT\",\n      \"status\": \"POSTED\",\n      \"subtype\": \"ACCOUNT_OPENING_FEE\",\n      \"token\": \"my_account_fee_token1234\",\n      \"type\": \"ACCOUNT_FEE\",\n      \"value\": 10\n    },\n    {\n      \"account_token\": \"my_account_token_12\",\n      \"amount\": 19,\n      \"applied_to_amount\": null,\n      \"channel\": \"API\",\n      \"created_time\": \"2022-04-05 18:25:47.751000+00:00\",\n      \"currency_code\": \"USD\",\n      \"description\": \"Metal card requested\",\n      \"journal_tokens\": [\n        \"journal_token2\"\n      ],\n      \"method\": \"FLAT\",\n      \"status\": \"POSTED\",\n      \"subtype\": \"UPGRADE_FEE\",\n      \"token\": \"my_account_fee_token456\",\n      \"type\": \"ACCOUNT_FEE\",\n      \"value\": 19\n    }\n  ],\n  \"end_index\": 1,\n  \"is_more\": false,\n  \"start_index\": 0\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c27a4f7a-06fb-423d-ae60-9bc460ef78be",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "fees"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to retrieve fees.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 6218,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7bc9a01b-055e-47a7-a8f5-34ac28e73166",
+          "name": "Create fee for an account",
+          "request": {
+            "name": "Create fee for an account",
+            "description": {
+              "content": "Create a fee for an existing credit account.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token",
+                "fees"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account for which you want to create a fee.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": \"<number>\",\n  \"currency_code\": \"USD\",\n  \"type\": \"<string>\",\n  \"description\": \"<string>\",\n  \"subtype\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "969e6312-d0d3-40c0-bb49-ad569594d030",
+              "name": "Expected response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "fees"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to create a fee.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": 10,\n  \"currency_code\": \"USD\",\n  \"description\": \"Account was opened\",\n  \"subtype\": \"ACCOUNT_OPENING_FEE\",\n  \"type\": \"ACCOUNT_FEE\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"account_token\": \"my_account_token_12\",\n  \"amount\": 10,\n  \"applied_to_amount\": null,\n  \"channel\": \"API\",\n  \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n  \"currency_code\": \"USD\",\n  \"description\": \"Account was opened\",\n  \"journal_tokens\": [\n    \"journal_token123\"\n  ],\n  \"method\": \"FLAT\",\n  \"status\": \"POSTED\",\n  \"subtype\": \"ACCOUNT_OPENING_FEE\",\n  \"token\": \"my_account_fee_token1234\",\n  \"type\": \"ACCOUNT_FEE\",\n  \"value\": 10\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4ef67621-18f9-4591-acf8-72142c56cdee",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "fees"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to create a fee.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": 10,\n  \"currency_code\": \"USD\",\n  \"description\": \"Account was opened\",\n  \"subtype\": \"ACCOUNT_OPENING_FEE\",\n  \"type\": \"ACCOUNT_FEE\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 6218,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e99474d6-db59-41aa-ac7a-089c0bca181b",
+          "name": "Retrieve account fee",
+          "request": {
+            "name": "Retrieve account fee",
+            "description": {
+              "content": "Retrieve a fee for a credit account.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token",
+                "fees",
+                ":fee_token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account for which you want to retrieve the fee.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "fee_token",
+                  "description": "(Required) Unique identifier of the fee to retrieve.\n\nSend a `GET` request to `/credit/accounts/{account_token}/fees` to retrieve existing account fee tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "47f49561-bf13-4975-a605-d4231619b7c2",
+              "name": "A JSON object containing account_fee information",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "fees",
+                    ":fee_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to retrieve the fee.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "fee_token",
+                      "description": "(Required) Unique identifier of the fee to retrieve.\n\nSend a `GET` request to `/credit/accounts/{account_token}/fees` to retrieve existing account fee tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"account_token\": \"my_account_token_12\",\n  \"amount\": 10,\n  \"applied_to_amount\": null,\n  \"channel\": \"API\",\n  \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n  \"currency_code\": \"USD\",\n  \"description\": \"Account was opened\",\n  \"journal_tokens\": [\n    \"journal_token123\"\n  ],\n  \"method\": \"FLAT\",\n  \"status\": \"POSTED\",\n  \"subtype\": \"ACCOUNT_OPENING_FEE\",\n  \"token\": \"my_account_fee_token1234\",\n  \"type\": \"ACCOUNT_FEE\",\n  \"value\": 10\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ff6002b6-f92e-45a2-a5c0-32ddac0a96d2",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "fees",
+                    ":fee_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to retrieve the fee.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "fee_token",
+                      "description": "(Required) Unique identifier of the fee to retrieve.\n\nSend a `GET` request to `/credit/accounts/{account_token}/fees` to retrieve existing account fee tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 6218,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d1103273-44e2-4883-8150-64837c97e8b4",
+          "name": "Lists all fees",
+          "request": {
+            "name": "Lists all fees",
+            "description": {},
+            "url": {
+              "path": [
+                "fees"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "100",
+                  "description": "Number of fees to retrieve"
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "Start index"
+                },
+                {
+                  "disabled": false,
+                  "key": "fields",
+                  "value": "<string>",
+                  "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "-createdTime",
+                  "description": "Sort order"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "cd0e964b-7a0d-4a15-9775-9ceeaa1a0195",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fees"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "100"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-createdTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 7474,\n  \"data\": [\n    {\n      \"active\": true,\n      \"amount\": 2062.6848923093057,\n      \"created_time\": \"1995-02-04T19:54:46.753Z\",\n      \"currency_code\": \"string\",\n      \"last_modified_time\": \"2009-09-25T04:08:17.309Z\",\n      \"name\": \"string\",\n      \"token\": \"string\",\n      \"category\": \"string\",\n      \"fee_attributes\": {\n        \"reason\": \"string\",\n        \"region\": \"string\",\n        \"status\": \"string\",\n        \"transaction_type\": \"string\"\n      },\n      \"memo\": \"string\",\n      \"tags\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"active\": false,\n      \"amount\": 6371.761669642585,\n      \"created_time\": \"1957-11-08T04:23:18.461Z\",\n      \"currency_code\": \"string\",\n      \"last_modified_time\": \"1986-10-11T09:53:46.236Z\",\n      \"name\": \"string\",\n      \"token\": \"string\",\n      \"category\": \"string\",\n      \"fee_attributes\": {\n        \"reason\": \"string\",\n        \"region\": \"string\",\n        \"status\": \"string\",\n        \"transaction_type\": \"string\"\n      },\n      \"memo\": \"string\",\n      \"tags\": \"string\",\n      \"type\": \"string\"\n    }\n  ],\n  \"end_index\": 6979,\n  \"is_more\": false,\n  \"start_index\": 4645\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c4901a44-77bc-42ad-934f-9f0d5a4dd1c7",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fees"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "100"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-createdTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "167d63ef-c98b-43dc-aa94-6d4117f72754",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fees"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "100"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-createdTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "47861a89-647f-4e69-847e-53e70c52faff",
+          "name": "Creates a fee",
+          "request": {
+            "name": "Creates a fee",
+            "description": {},
+            "url": {
+              "path": [
+                "fees"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": \"<number>\",\n  \"currency_code\": \"<string>\",\n  \"name\": \"<string>\",\n  \"active\": true,\n  \"category\": \"<string>\",\n  \"fee_attributes\": {\n    \"reason\": \"<string>\",\n    \"region\": \"<string>\",\n    \"status\": \"<string>\",\n    \"transaction_type\": \"<string>\"\n  },\n  \"memo\": \"<string>\",\n  \"tags\": \"<string>\",\n  \"token\": \"<string>\",\n  \"type\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ae42746f-4cd1-4357-9c1f-8214c74caefd",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fees"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"<number>\",\n  \"currency_code\": \"<string>\",\n  \"name\": \"<string>\",\n  \"active\": true,\n  \"category\": \"<string>\",\n  \"fee_attributes\": {\n    \"reason\": \"<string>\",\n    \"region\": \"<string>\",\n    \"status\": \"<string>\",\n    \"transaction_type\": \"<string>\"\n  },\n  \"memo\": \"<string>\",\n  \"tags\": \"<string>\",\n  \"token\": \"<string>\",\n  \"type\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"active\": false,\n  \"amount\": 2213.784352670198,\n  \"created_time\": \"2002-05-23T12:38:05.617Z\",\n  \"currency_code\": \"string\",\n  \"last_modified_time\": \"2016-12-13T23:35:00.786Z\",\n  \"name\": \"string\",\n  \"token\": \"string\",\n  \"category\": \"string\",\n  \"fee_attributes\": {\n    \"reason\": \"<string>\",\n    \"region\": \"<string>\",\n    \"status\": \"<string>\",\n    \"transaction_type\": \"<string>\"\n  },\n  \"memo\": \"string\",\n  \"tags\": \"string\",\n  \"type\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d8ef38a4-4fe9-4c6c-be7a-7a53b819ce4d",
+              "name": "User input error/Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fees"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"<number>\",\n  \"currency_code\": \"<string>\",\n  \"name\": \"<string>\",\n  \"active\": true,\n  \"category\": \"<string>\",\n  \"fee_attributes\": {\n    \"reason\": \"<string>\",\n    \"region\": \"<string>\",\n    \"status\": \"<string>\",\n    \"transaction_type\": \"<string>\"\n  },\n  \"memo\": \"<string>\",\n  \"tags\": \"<string>\",\n  \"token\": \"<string>\",\n  \"type\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0e07a07d-a65d-4368-85b3-dd2e4a9098da",
+              "name": "Request already processed with a different payload",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fees"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"<number>\",\n  \"currency_code\": \"<string>\",\n  \"name\": \"<string>\",\n  \"active\": true,\n  \"category\": \"<string>\",\n  \"fee_attributes\": {\n    \"reason\": \"<string>\",\n    \"region\": \"<string>\",\n    \"status\": \"<string>\",\n    \"transaction_type\": \"<string>\"\n  },\n  \"memo\": \"<string>\",\n  \"tags\": \"<string>\",\n  \"token\": \"<string>\",\n  \"type\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a3924677-09fe-49ad-80ba-79e11352ca4d",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fees"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"<number>\",\n  \"currency_code\": \"<string>\",\n  \"name\": \"<string>\",\n  \"active\": true,\n  \"category\": \"<string>\",\n  \"fee_attributes\": {\n    \"reason\": \"<string>\",\n    \"region\": \"<string>\",\n    \"status\": \"<string>\",\n    \"transaction_type\": \"<string>\"\n  },\n  \"memo\": \"<string>\",\n  \"tags\": \"<string>\",\n  \"token\": \"<string>\",\n  \"type\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "24296d44-f7ad-4e5d-a7d2-314593f222c1",
+          "name": "Returns a specific fee",
+          "request": {
+            "name": "Returns a specific fee",
+            "description": {},
+            "url": {
+              "path": [
+                "fees",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Fee token"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "325de0bb-8146-48f8-bad2-1033d459c7bd",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fees",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Fee token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"active\": false,\n  \"amount\": 2213.784352670198,\n  \"created_time\": \"2002-05-23T12:38:05.617Z\",\n  \"currency_code\": \"string\",\n  \"last_modified_time\": \"2016-12-13T23:35:00.786Z\",\n  \"name\": \"string\",\n  \"token\": \"string\",\n  \"category\": \"string\",\n  \"fee_attributes\": {\n    \"reason\": \"<string>\",\n    \"region\": \"<string>\",\n    \"status\": \"<string>\",\n    \"transaction_type\": \"<string>\"\n  },\n  \"memo\": \"string\",\n  \"tags\": \"string\",\n  \"type\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bef87bae-0d49-4e69-855c-25aef6991391",
+              "name": "Fee not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fees",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Fee token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "06a6ec35-5451-4529-adb6-81543e786c4b",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fees",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Fee token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a6902da6-76dc-42fc-af9e-ae974c9a1cca",
+          "name": "Updates a specific fee",
+          "request": {
+            "name": "Updates a specific fee",
+            "description": {},
+            "url": {
+              "path": [
+                "fees",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Fee token"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"active\": true,\n  \"amount\": \"<number>\",\n  \"category\": \"<string>\",\n  \"currency_code\": \"<string>\",\n  \"fee_attributes\": {\n    \"reason\": \"<string>\",\n    \"region\": \"<string>\",\n    \"status\": \"<string>\",\n    \"transaction_type\": \"<string>\"\n  },\n  \"memo\": \"<string>\",\n  \"name\": \"<string>\",\n  \"tags\": \"<string>\",\n  \"type\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7cc4d294-d4bc-4089-86b8-f7ecf2e68518",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fees",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Fee token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"active\": true,\n  \"amount\": \"<number>\",\n  \"category\": \"<string>\",\n  \"currency_code\": \"<string>\",\n  \"fee_attributes\": {\n    \"reason\": \"<string>\",\n    \"region\": \"<string>\",\n    \"status\": \"<string>\",\n    \"transaction_type\": \"<string>\"\n  },\n  \"memo\": \"<string>\",\n  \"name\": \"<string>\",\n  \"tags\": \"<string>\",\n  \"type\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"active\": false,\n  \"amount\": 2213.784352670198,\n  \"created_time\": \"2002-05-23T12:38:05.617Z\",\n  \"currency_code\": \"string\",\n  \"last_modified_time\": \"2016-12-13T23:35:00.786Z\",\n  \"name\": \"string\",\n  \"token\": \"string\",\n  \"category\": \"string\",\n  \"fee_attributes\": {\n    \"reason\": \"<string>\",\n    \"region\": \"<string>\",\n    \"status\": \"<string>\",\n    \"transaction_type\": \"<string>\"\n  },\n  \"memo\": \"string\",\n  \"tags\": \"string\",\n  \"type\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6c13bd4b-626f-4866-81e7-3cf533ff3c1c",
+              "name": "User input error/Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fees",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Fee token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"active\": true,\n  \"amount\": \"<number>\",\n  \"category\": \"<string>\",\n  \"currency_code\": \"<string>\",\n  \"fee_attributes\": {\n    \"reason\": \"<string>\",\n    \"region\": \"<string>\",\n    \"status\": \"<string>\",\n    \"transaction_type\": \"<string>\"\n  },\n  \"memo\": \"<string>\",\n  \"name\": \"<string>\",\n  \"tags\": \"<string>\",\n  \"type\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6b69ecce-dacc-4459-aae2-deb773ddda56",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fees",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Fee token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"active\": true,\n  \"amount\": \"<number>\",\n  \"category\": \"<string>\",\n  \"currency_code\": \"<string>\",\n  \"fee_attributes\": {\n    \"reason\": \"<string>\",\n    \"region\": \"<string>\",\n    \"status\": \"<string>\",\n    \"transaction_type\": \"<string>\"\n  },\n  \"memo\": \"<string>\",\n  \"name\": \"<string>\",\n  \"tags\": \"<string>\",\n  \"type\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "2d1fe0ae-2ede-42eb-8fa8-9097945385b5",
+    "name": "Core accepted countries Fees API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.\n\nContact Support:\n Name: Marqeta\n Email: support@marqeta.com",
+      "type": "text/plain"
+    }
+  }
+}

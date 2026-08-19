@@ -1,0 +1,1969 @@
+{
+  "item": [
+    {
+      "id": "79685740-a879-4527-963e-97d415ab646b",
+      "name": "Program Transfers",
+      "description": {
+        "content": "// Conditional snippet for beta or internal content\ninclude::../../maturity-admonition-banner.adoc[]\n\nA program transfer moves funds from an account holder's general purpose account (GPA) to a program funding source.\nIn contrast to a fee transfer, the program transfer amount is specified by the transfer itself and can therefore be set dynamically.\nAn auto reload is triggered if the GPA has insufficient funds to cover the transfer amount and auto reload is enabled.\n\n[NOTE]\nThe `/programtransfers` endpoint is only available for specific, pre-approved use cases.\nFor more information about this endpoint, contact your Marqeta representative.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "699c2c27-3a03-4727-93e4-cd34c6cbabf4",
+          "name": "List program transfers",
+          "request": {
+            "name": "List program transfers",
+            "description": {
+              "content": "Use this endpoint to list all program transfers.\n\nTo narrow your result set to program transfers of a particular type or that are associated with a particular account holder, include the appropriate parameters from the following URL Query Parameters table.\nThis endpoint also supports <</core-api/field-filtering, field filtering>>, <</core-api/sorting-and-pagination, pagination>>, and <</core-api/sorting-and-pagination, sorting>>.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "programtransfers"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "5",
+                  "description": "Number of program transfers to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "Sort order index of the first resource in the returned array."
+                },
+                {
+                  "disabled": false,
+                  "key": "fields",
+                  "value": "<string>",
+                  "description": "Comma-delimited list of fields to return (`field_1,field_2`, and so on).\nLeave blank to return all fields."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "-lastModifiedTime",
+                  "description": "Field on which to sort.\nUse any field in the resource model, or one of the system fields `lastModifiedTime` or `createdTime`.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order."
+                },
+                {
+                  "disabled": false,
+                  "key": "user_token",
+                  "value": "<string>",
+                  "description": "Unique identifier of the user account holder whose program transfers you want to retrieve.\n\nSend a `GET` request to `/users` to retrieve user tokens."
+                },
+                {
+                  "disabled": false,
+                  "key": "business_token",
+                  "value": "<string>",
+                  "description": "Unique identifier of the business account holder whose program transfers you want to retrieve.\n\nSend a `GET` request to `/businesses` to retrieve business tokens."
+                },
+                {
+                  "disabled": false,
+                  "key": "type_token",
+                  "value": "<string>",
+                  "description": "Unique identifier of the program transfer type to retrieve."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e42bb5c0-f8d5-4ae8-ad58-4ed78173b43f",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programtransfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    },
+                    {
+                      "key": "user_token",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "business_token",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "type_token",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 2,\n  \"data[]\": {\n    \"amount\": 1,\n    \"created_time\": \"2023-03-11 21:02:45+00:00\",\n    \"currency_code\": \"USD\",\n    \"memo\": \"This is my program transfer\",\n    \"tags\": \"tag1, tag2, tag3\",\n    \"token\": \"my_program_transfer_02\",\n    \"transaction_token\": \"170\",\n    \"type_token\": \"my_program_transfer_type_01\",\n    \"user_token\": \"my_user_01\"\n  },\n  \"end_index\": 1,\n  \"is_more\": false,\n  \"start_index\": 0\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c992c8c2-93bb-4304-a313-9b9a4bf8b2c8",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programtransfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    },
+                    {
+                      "key": "user_token",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "business_token",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "type_token",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "18026b20-d937-4d1d-8786-7d3bd5682b24",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programtransfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    },
+                    {
+                      "key": "user_token",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "business_token",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "type_token",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0f24f0a4-71bc-44de-91c8-e5aca6572a28",
+          "name": "Create program transfer",
+          "request": {
+            "name": "Create program transfer",
+            "description": {
+              "content": "Use this endpoint to create a program transfer.\nAdd the program transfer details to the body of the request in link:http://www.json.org/[JSON, window=\"_blank\"] format.\n\nInclude either `user_token` or `business_token` in the message body to specify the account holder whose general purpose account (GPA) will be debited by the program transfer.\nThe user or business must already exist.\n\n[NOTE]\nIf the GPA has insufficient funds to cover both the amount of the program transfer and all attached fees, then no funds are transferred.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "programtransfers"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": \"<number>\",\n  \"currency_code\": \"<string>\",\n  \"type_token\": \"<string>\",\n  \"business_token\": \"<string>\",\n  \"fees\": [\n    {\n      \"token\": \"<string>\",\n      \"memo\": \"<string>\",\n      \"overrideAmount\": \"<number>\",\n      \"tags\": \"<string>\"\n    },\n    {\n      \"token\": \"<string>\",\n      \"memo\": \"<string>\",\n      \"overrideAmount\": \"<number>\",\n      \"tags\": \"<string>\"\n    }\n  ],\n  \"memo\": \"<string>\",\n  \"tags\": \"<string>\",\n  \"token\": \"<string>\",\n  \"user_token\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6c0b1cd0-58fc-4e0b-871f-861c18039e7a",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programtransfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": 1,\n  \"currency_code\": \"USD\",\n  \"memo\": \"This is my program transfer\",\n  \"tags\": \"tag1, tag2, tag3\",\n  \"token\": \"my_program_transfer_01\",\n  \"type_token\": \"my_program_transfer_type_01\",\n  \"user_token\": \"my_user_01\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"amount\": 1,\n  \"created_time\": \"2023-03-11 20:58:30+00:00\",\n  \"currency_code\": \"USD\",\n  \"memo\": \"This is my program transfer\",\n  \"tags\": \"tag1, tag2, tag3\",\n  \"token\": \"my_program_transfer_01\",\n  \"transaction_token\": \"169\",\n  \"type_token\": \"my_program_transfer_type_01\",\n  \"user_token\": \"my_user_01\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c0110318-d23b-48db-bc6e-5cd2f4efa404",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programtransfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": 1,\n  \"currency_code\": \"USD\",\n  \"memo\": \"This is my program transfer\",\n  \"tags\": \"tag1, tag2, tag3\",\n  \"token\": \"my_program_transfer_01\",\n  \"type_token\": \"my_program_transfer_type_01\",\n  \"user_token\": \"my_user_01\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f1f62b07-ef61-4aba-a1d8-ef8a9c5df55c",
+              "name": "Not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programtransfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": 1,\n  \"currency_code\": \"USD\",\n  \"memo\": \"This is my program transfer\",\n  \"tags\": \"tag1, tag2, tag3\",\n  \"token\": \"my_program_transfer_01\",\n  \"type_token\": \"my_program_transfer_type_01\",\n  \"user_token\": \"my_user_01\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "95fd8adb-02cd-43d0-9838-31e7ebea86ae",
+              "name": "Request already processed with a different payload",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programtransfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": 1,\n  \"currency_code\": \"USD\",\n  \"memo\": \"This is my program transfer\",\n  \"tags\": \"tag1, tag2, tag3\",\n  \"token\": \"my_program_transfer_01\",\n  \"type_token\": \"my_program_transfer_type_01\",\n  \"user_token\": \"my_user_01\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9c79e85a-9fe9-4690-9a36-2d9fe55ce14e",
+              "name": "Pre-condition failed. Unload amount is greater than load amount",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programtransfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": 1,\n  \"currency_code\": \"USD\",\n  \"memo\": \"This is my program transfer\",\n  \"tags\": \"tag1, tag2, tag3\",\n  \"token\": \"my_program_transfer_01\",\n  \"type_token\": \"my_program_transfer_type_01\",\n  \"user_token\": \"my_user_01\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Precondition Failed",
+              "code": 412,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a7dbd681-92a5-465a-934b-700ff046ca42",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programtransfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": 1,\n  \"currency_code\": \"USD\",\n  \"memo\": \"This is my program transfer\",\n  \"tags\": \"tag1, tag2, tag3\",\n  \"token\": \"my_program_transfer_01\",\n  \"type_token\": \"my_program_transfer_type_01\",\n  \"user_token\": \"my_user_01\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ce1d9288-54eb-44c2-8a4a-9d5c5f73d2b1",
+          "name": "List program transfer types",
+          "request": {
+            "name": "List program transfer types",
+            "description": {
+              "content": "Use this endpoint to list all program transfer types.\n\nThis endpoint supports <</core-api/field-filtering, field filtering>>, <</core-api/sorting-and-pagination, pagination>>, and <</core-api/sorting-and-pagination, sorting>>.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "programtransfers",
+                "types"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "5",
+                  "description": "Number of program transfer types to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "Sort order index of the first resource in the returned array."
+                },
+                {
+                  "disabled": false,
+                  "key": "fields",
+                  "value": "<string>",
+                  "description": "Comma-delimited list of fields to return (`field_1,field_2`, and so on).\nLeave blank to return all fields."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "-lastModifiedTime",
+                  "description": "Field on which to sort.\nUse any field in the resource model, or one of the system fields `lastModifiedTime` or `createdTime`.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "567fbd41-6a5f-4918-9fa2-df8fd6dbaf6c",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programtransfers",
+                    "types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 2,\n  \"data[]\": {\n    \"created_time\": \"2023-03-15 19:53:23+00:00\",\n    \"last_modified_time\": \"2023-03-15 19:53:23+00:00\",\n    \"memo\": \"This is my other program transfer type.\",\n    \"program_funding_source_token\": \"pfs_test_01\",\n    \"tags\": \"tag1, tag2, tag3\",\n    \"token\": \"my_program_transfer_type_02\"\n  },\n  \"end_index\": 1,\n  \"is_more\": false,\n  \"start_index\": 0\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cf74b289-078c-41b9-b5b1-b7cbf67866b0",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programtransfers",
+                    "types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4be71083-87a7-4997-a4a0-f3a45e757609",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programtransfers",
+                    "types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0fbd2c46-a766-4a90-9709-d91e300afef0",
+          "name": "Create program transfer type",
+          "request": {
+            "name": "Create program transfer type",
+            "description": {
+              "content": "Use this endpoint to create a program transfer type.\nAdd the program transfer details to the body of the request in link:http://www.json.org/[JSON, window=\"_blank\"] format.\n\nYou are required to pass in a `program_funding_source_token` to associate a program funding source with the program transfer type.\nYou must therefore create a program funding source before creating a program transfer type.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "programtransfers",
+                "types"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"memo\": \"<string>\",\n  \"program_funding_source_token\": \"<string>\",\n  \"tags\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "35fd0223-7509-4ec2-bcf2-a9ff7fc20424",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programtransfers",
+                    "types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"memo\": \"This is my program transfer type.\",\n  \"program_funding_source_token\": \"my_pfs_01\",\n  \"tags\": \"tag1, tag2, tag3\",\n  \"token\": \"my_program_transfer_type_01\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"created_time\": \"2023-03-15 19:18:50+00:00\",\n  \"last_modified_time\": \"2023-03-15 19:18:50+00:00\",\n  \"memo\": \"This is my program transfer type.\",\n  \"program_funding_source_token\": \"my_pfs_01\",\n  \"tags\": \"tag1, tag2, tag3\",\n  \"token\": \"my_program_transfer_type_01\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f7b719fc-e0ac-4e6d-9dd0-a592481dd37b",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programtransfers",
+                    "types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"memo\": \"This is my program transfer type.\",\n  \"program_funding_source_token\": \"my_pfs_01\",\n  \"tags\": \"tag1, tag2, tag3\",\n  \"token\": \"my_program_transfer_type_01\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f55b7fad-3104-479e-88ce-c10bed9c0782",
+              "name": "Program funding source not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programtransfers",
+                    "types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"memo\": \"This is my program transfer type.\",\n  \"program_funding_source_token\": \"my_pfs_01\",\n  \"tags\": \"tag1, tag2, tag3\",\n  \"token\": \"my_program_transfer_type_01\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c71449cc-440b-4e34-8dfb-73ee6cce083f",
+              "name": "Token already used",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programtransfers",
+                    "types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"memo\": \"This is my program transfer type.\",\n  \"program_funding_source_token\": \"my_pfs_01\",\n  \"tags\": \"tag1, tag2, tag3\",\n  \"token\": \"my_program_transfer_type_01\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1a52b1be-b958-483a-993b-43da77f94dd3",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programtransfers",
+                    "types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"memo\": \"This is my program transfer type.\",\n  \"program_funding_source_token\": \"my_pfs_01\",\n  \"tags\": \"tag1, tag2, tag3\",\n  \"token\": \"my_program_transfer_type_01\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "aac270ba-f797-4328-a02a-f236c5dbc91a",
+          "name": "Retrieve program transfer type",
+          "request": {
+            "name": "Retrieve program transfer type",
+            "description": {
+              "content": "Use this endpoint to retrieve a specific program transfer.\nInclude the `type_token` path parameter to indicate the program transfer type to return.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "programtransfers",
+                "types",
+                ":type_token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "type_token",
+                  "description": "(Required) Unique identifier of the program transfer type."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3548576b-f5c8-4ffb-ba68-5b49799ca434",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programtransfers",
+                    "types",
+                    ":type_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "type_token",
+                      "description": "(Required) Unique identifier of the program transfer type."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"created_time\": \"2023-03-15 19:18:50+00:00\",\n  \"last_modified_time\": \"2023-03-15 19:18:50+00:00\",\n  \"memo\": \"This is my program transfer type.\",\n  \"program_funding_source_token\": \"pfs_test_01\",\n  \"tags\": \"tag1, tag2, tag3\",\n  \"token\": \"my_program_transfer_type_01\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6fc327f5-df08-45c6-b02a-7583fe59215a",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programtransfers",
+                    "types",
+                    ":type_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "type_token",
+                      "description": "(Required) Unique identifier of the program transfer type."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c23efa02-4b42-4605-831b-d8440a8ce448",
+              "name": "Program transfer type not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programtransfers",
+                    "types",
+                    ":type_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "type_token",
+                      "description": "(Required) Unique identifier of the program transfer type."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6a77a791-9f92-4000-b0b9-8fde85df706e",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programtransfers",
+                    "types",
+                    ":type_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "type_token",
+                      "description": "(Required) Unique identifier of the program transfer type."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "327fb747-835e-4d5a-882f-c5e37d73be78",
+          "name": "Update program transfer type",
+          "request": {
+            "name": "Update program transfer type",
+            "description": {
+              "content": "Use this endpoint to update a program transfer type.\nInclude the `type_token` path parameter to indicate the program transfer type to update.\nAdd the modified detail parameters to the body of the request in link:http://www.json.org/[JSON, window=\"_blank\"] format.\nOnly values of parameters in the request are modified; all others are left unchanged.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "programtransfers",
+                "types",
+                ":type_token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "type_token",
+                  "description": "(Required) Unique identifier of the program transfer type."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"memo\": \"<string>\",\n  \"program_funding_source_token\": \"<string>\",\n  \"tags\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6d2fd83e-427c-491b-91f7-4a6ee0182b0d",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programtransfers",
+                    "types",
+                    ":type_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "type_token",
+                      "description": "(Required) Unique identifier of the program transfer type."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"memo\": \"Update program funding source.\",\n  \"program_funding_source_token\": \"pfs_test_02\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"created_time\": \"2023-03-15 19:53:23+00:00\",\n  \"last_modified_time\": \"2023-03-15 19:58:33+00:00\",\n  \"memo\": \"Update program funding source.\",\n  \"program_funding_source_token\": \"pfs_test_02\",\n  \"tags\": \"tag1, tag2, tag3\",\n  \"token\": \"my_program_transfer_type_02\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8e2c55a8-5478-4d18-aaea-139152a76e8e",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programtransfers",
+                    "types",
+                    ":type_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "type_token",
+                      "description": "(Required) Unique identifier of the program transfer type."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"memo\": \"Update program funding source.\",\n  \"program_funding_source_token\": \"pfs_test_02\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "82d99d5a-09c3-4957-a883-a60bec43eb38",
+              "name": "Program transfer type not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programtransfers",
+                    "types",
+                    ":type_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "type_token",
+                      "description": "(Required) Unique identifier of the program transfer type."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"memo\": \"Update program funding source.\",\n  \"program_funding_source_token\": \"pfs_test_02\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3c89a090-7c6b-4f02-afbd-08222e12ad15",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programtransfers",
+                    "types",
+                    ":type_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "type_token",
+                      "description": "(Required) Unique identifier of the program transfer type."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"memo\": \"Update program funding source.\",\n  \"program_funding_source_token\": \"pfs_test_02\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "026b4e15-a783-438c-a94d-99553d21f698",
+          "name": "Retrieve program transfer",
+          "request": {
+            "name": "Retrieve program transfer",
+            "description": {
+              "content": "Use this endpoint to retrieve a specific program transfer.\nInclude the program transfer `token` path parameter to specify the program transfer to retrieve.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "programtransfers",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Unique identifier of the program transfer."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "bd451a3f-7293-4553-8486-e439ebc24649",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programtransfers",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the program transfer."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"amount\": 1,\n  \"created_time\": \"2023-03-11 21:02:45+00:00\",\n  \"currency_code\": \"USD\",\n  \"memo\": \"This is my program transfer\",\n  \"tags\": \"tag1, tag2, tag3\",\n  \"token\": \"my_program_transfer_02\",\n  \"transaction_token\": \"170\",\n  \"type_token\": \"my_program_transfer_type_01\",\n  \"user_token\": \"my_user_01\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e7ff4ea9-aafa-41a1-9eab-1063dd40fb34",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programtransfers",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the program transfer."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9ec9da03-14b3-4948-a705-da6bb159863a",
+              "name": "Return not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programtransfers",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the program transfer."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a59960d2-18bf-4fea-bc7c-29e09da35c2e",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programtransfers",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the program transfer."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "1e2e78df-843f-4761-bfbe-f28039f8eed2",
+    "name": "Core accepted countries Program Transfers API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.\n\nContact Support:\n Name: Marqeta\n Email: support@marqeta.com",
+      "type": "text/plain"
+    }
+  }
+}

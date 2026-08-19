@@ -1,0 +1,70 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries PINs API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "PINs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create or update PIN",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/pins",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates or updates a personal identification number (PIN) for an existing card.\nAlthough cardholders might choose a four-, five-, or six-digit PIN if they set their PIN at an automated teller machine, they can only set a four-digit PIN using Marqeta's Set PIN widget or the create or update PIN endpoint (`PUT /pins`).\nCardholders can update their PIN through the API regardless of its length, but the new PIN value they choose must contain four digits.\n\nIf you want to manage a card's PIN, first cre"
+        },
+        {
+          "info": {
+            "name": "Create PIN control token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/pins/controltoken",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a control token necessary when creating or updating a card's personal identification number (PIN).\n\nCreating, updating, or revealing a card's PIN is a two-step process.\nYou must first create the control token that is required to create the PIN, and then you create, update, or reveal the PIN itself.\n\nThe lifespan of the control token in a production environment is either five minutes or one hour from creation, depending on the token type.\nIf multiple tokens are requested for a single card"
+        },
+        {
+          "info": {
+            "name": "Reveal PIN",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/pins/reveal",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Reveals the personal identification number (PIN) of an existing, active card.\nBe aware that while a cardholder can only set a four-digit PIN using the Marqeta Set PIN widget or `PUT /pins` API, you may see a four-, five-, or six-digit PIN in cases where your cardholders have set a new PIN at an automated teller machine.\n\n[WARNING]\nOnly use this endpoint to access a PIN in order to reveal it to its cardholder.\nDo not use this endpoint for the purpose of storing a PIN at any location.\n\nSending a r"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

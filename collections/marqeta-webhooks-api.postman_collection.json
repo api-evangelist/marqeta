@@ -1,0 +1,1857 @@
+{
+  "item": [
+    {
+      "id": "aaffac4c-46c1-4d9a-9599-f73e66cd423d",
+      "name": "Webhooks",
+      "description": {
+        "content": "// Conditional snippet for beta or internal content\ninclude::../../maturity-admonition-banner.adoc[]\n\nWebhooks are notifications about API events, sent as they occur.\nThe Marqeta platform sends these notifications to an endpoint that is hosted in your environment and configured to receive and process them.\n\nCreate a webhook object to represent your webhook endpoint.\nConfigure it with the URL of your webhook endpoint and a set of credentials for accessing that endpoint.\nYou can configure it to send notifications for a single event, a group of events by type, or all event types.\nTo set up multiple webhook endpoints and route different types of event notifications to each, create multiple webhook objects and configure each to send a specific type of event notification to a specific endpoint.\n\nSee <</developer-guides/about-webhooks, About Webhooks>> for information on notifications and a tutorial that walks you through the configuration of your webhook endpoint.\n\nSee <</core-api/event-types, Event Types>> for reference documentation on the types of events that the Marqeta platform supports.\n\n[NOTE]\nWebhooks URLs are cached.\nChanges made on your webhook endpoint can take up to one hour to be applied.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "643b1a96-4e05-49a0-9b3d-84f64cd269e7",
+          "name": "List webhooks",
+          "request": {
+            "name": "List webhooks",
+            "description": {
+              "content": "Returns an array of all webhooks.\n\nThis endpoint supports <</core-api/field-filtering, field filtering>>, <</core-api/sorting-and-pagination, sorting>>, and <</core-api/sorting-and-pagination, pagination>>.\n\n[NOTE]\nAs shown in the example, `config.secret`, `config.basic_auth_username`, and `config.basic_auth_password` are masked in responses to this and all other requests.\nTo ensure you can access these values as needed, update them on your endpoint, store them securely, and then <</core-api/webhooks#put, update the webhook subscription>>.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "webhooks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "active",
+                  "value": "false",
+                  "description": "Set to `true` to return only active webhook configurations, otherwise all webhook configurations will be returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "5",
+                  "description": "Number of resources to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "Sort order index of the first resource in the returned array."
+                },
+                {
+                  "disabled": false,
+                  "key": "fields",
+                  "value": "<string>",
+                  "description": "Comma-delimited list of fields to return (`field_1,field_2`, and so on).\nLeave blank to return all fields."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "-createdTime",
+                  "description": "Field on which to sort.\nUse any field in the resource model, or one of the system fields `lastModifiedTime` or `createdTime`.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6846332b-49c5-4e07-aac1-b6ea8f85c3cd",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "active",
+                      "value": "false"
+                    },
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-createdTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 1,\n  \"data\": [\n    {\n      \"active\": true,\n      \"config\": {\n        \"basic_auth_password\": \"m**********d\",\n        \"basic_auth_username\": \"m**********e\",\n        \"custom_header\": {\n          \"my_header_name_1\": \"my_value_1\",\n          \"my_header_name_2\": \"my_value_2\",\n          \"my_header_name_3\": \"my_value_3\"\n        },\n        \"secret\": \"m**********t\",\n        \"signature_algorithm\": \"HMAC_SHA_256\",\n        \"url\": \"https://my_secure_domain.com/webhook\"\n      },\n      \"created_time\": \"2023-02-24 23:20:28+00:00\",\n      \"events\": [\n        \"*\"\n      ],\n      \"last_modified_time\": \"2023-02-24 23:20:28+00:00\",\n      \"name\": \"my_webhook_name\",\n      \"token\": \"my_webhook_token\"\n    }\n  ],\n  \"end_index\": 0,\n  \"is_more\": true,\n  \"start_index\": 0\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a1955a68-d73c-484f-bbba-c30c0d912b43",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "active",
+                      "value": "false"
+                    },
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-createdTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d50f9f4c-54bc-41fb-9148-490792702324",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "active",
+                      "value": "false"
+                    },
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-createdTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a1ba4dcf-ac15-455f-a083-beb5ca3f2d06",
+          "name": "Create webhook",
+          "request": {
+            "name": "Create webhook",
+            "description": {
+              "content": "Creates a webhook.\n\n[NOTE]\nAs shown in the example, `config.secret`, `config.basic_auth_username`, and `config.basic_auth_password` are masked in responses to this and all other requests.\nTo access these values later, store them securely before making the request.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "webhooks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"config\": {\n    \"basic_auth_password\": \"<string>\",\n    \"basic_auth_username\": \"<string>\",\n    \"url\": \"<string>\",\n    \"custom_header\": {\n      \"key_0\": \"<string>\"\n    },\n    \"secret\": \"<string>\",\n    \"signature_algorithm\": \"<string>\",\n    \"use_mtls\": false\n  },\n  \"events\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"name\": \"<string>\",\n  \"active\": true,\n  \"token\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "cb6d8c3a-38b6-4904-99f1-34017695d615",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"active\": true,\n  \"config\": {\n    \"basic_auth_password\": \"my_20-to-50-character_password\",\n    \"basic_auth_username\": \"my_username\",\n    \"custom_header\": {\n      \"my_header_name_1\": \"my_value_1\",\n      \"my_header_name_2\": \"my_value_2\"\n    },\n    \"secret\": \"my_20-character-min_secret\",\n    \"signature_algorithm\": \"HMAC_SHA_256\",\n    \"url\": \"https://my_secure_domain.com/webhook\"\n  },\n  \"events\": [\n    \"*\"\n  ],\n  \"name\": \"my_webhook_name\",\n  \"token\": \"my_webhook_token\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"active\": true,\n  \"config\": {\n    \"basic_auth_password\": \"m**********d\",\n    \"basic_auth_username\": \"m**********e\",\n    \"custom_header\": {\n      \"my_header_name_1\": \"my_value_1\",\n      \"my_header_name_2\": \"my_value_2\"\n    },\n    \"secret\": \"m**********t\",\n    \"signature_algorithm\": \"HMAC_SHA_256\",\n    \"url\": \"https://my_secure_domain.com/webhook\"\n  },\n  \"created_time\": \"2023-02-24 23:20:28+00:00\",\n  \"events\": [\n    \"*\"\n  ],\n  \"last_modified_time\": \"2023-02-24 23:20:28+00:00\",\n  \"name\": \"my_webhook_name\",\n  \"token\": \"my_webhook_token\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "986a87e9-3c41-49c4-86ea-7d57ca4074b4",
+              "name": "User input error/Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"active\": true,\n  \"config\": {\n    \"basic_auth_password\": \"my_20-to-50-character_password\",\n    \"basic_auth_username\": \"my_username\",\n    \"custom_header\": {\n      \"my_header_name_1\": \"my_value_1\",\n      \"my_header_name_2\": \"my_value_2\"\n    },\n    \"secret\": \"my_20-character-min_secret\",\n    \"signature_algorithm\": \"HMAC_SHA_256\",\n    \"url\": \"https://my_secure_domain.com/webhook\"\n  },\n  \"events\": [\n    \"*\"\n  ],\n  \"name\": \"my_webhook_name\",\n  \"token\": \"my_webhook_token\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "aff352a5-9e23-445b-9418-97e839055e08",
+              "name": "Request already processed with a different payload",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"active\": true,\n  \"config\": {\n    \"basic_auth_password\": \"my_20-to-50-character_password\",\n    \"basic_auth_username\": \"my_username\",\n    \"custom_header\": {\n      \"my_header_name_1\": \"my_value_1\",\n      \"my_header_name_2\": \"my_value_2\"\n    },\n    \"secret\": \"my_20-character-min_secret\",\n    \"signature_algorithm\": \"HMAC_SHA_256\",\n    \"url\": \"https://my_secure_domain.com/webhook\"\n  },\n  \"events\": [\n    \"*\"\n  ],\n  \"name\": \"my_webhook_name\",\n  \"token\": \"my_webhook_token\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ea5ab3cd-4b84-4b53-9236-fe9f0bf11d7b",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"active\": true,\n  \"config\": {\n    \"basic_auth_password\": \"my_20-to-50-character_password\",\n    \"basic_auth_username\": \"my_username\",\n    \"custom_header\": {\n      \"my_header_name_1\": \"my_value_1\",\n      \"my_header_name_2\": \"my_value_2\"\n    },\n    \"secret\": \"my_20-character-min_secret\",\n    \"signature_algorithm\": \"HMAC_SHA_256\",\n    \"url\": \"https://my_secure_domain.com/webhook\"\n  },\n  \"events\": [\n    \"*\"\n  ],\n  \"name\": \"my_webhook_name\",\n  \"token\": \"my_webhook_token\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f57a42ef-b60d-482e-9d1e-1338708e24a5",
+          "name": "Update webhook custom headers",
+          "request": {
+            "name": "Update webhook custom headers",
+            "description": {
+              "content": "Adds or updates a webhook's custom HTTP headers.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "webhooks",
+                "customheaders",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Unique identifier of the webhook."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"custom_header\": {\n    \"key_0\": \"<string>\",\n    \"key_1\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "002da0a8-788e-407d-9bc5-a67a73f10a1d",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    "customheaders",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"custom_header\": {\n    \"my_header_name_1\": \"my_value_1\",\n    \"my_header_name_2\": \"my_value_2\",\n    \"my_header_name_3\": \"my_value_3\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"active\": true,\n  \"config\": {\n    \"basic_auth_password\": \"m**********d\",\n    \"basic_auth_username\": \"m**********e\",\n    \"custom_header\": {\n      \"my_header_name_1\": \"my_value_1\",\n      \"my_header_name_2\": \"my_value_2\",\n      \"my_header_name_3\": \"my_value_3\"\n    },\n    \"secret\": \"m**********t\",\n    \"signature_algorithm\": \"HMAC_SHA_256\",\n    \"url\": \"https://my_secure_domain.com/webhook\"\n  },\n  \"created_time\": \"2023-02-06 08:12:32+00:00\",\n  \"events\": [\n    \"transaction.*\"\n  ],\n  \"last_modified_time\": \"2023-02-26 22:07:23+00:00\",\n  \"name\": \"my_webhook_name\",\n  \"token\": \"my_webhook_01\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4d529464-166c-496a-82f4-e98f370b32b3",
+              "name": "User input error/Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    "customheaders",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"custom_header\": {\n    \"my_header_name_1\": \"my_value_1\",\n    \"my_header_name_2\": \"my_value_2\",\n    \"my_header_name_3\": \"my_value_3\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "83a6283e-f872-4604-aef7-459e2776164f",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    "customheaders",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"custom_header\": {\n    \"my_header_name_1\": \"my_value_1\",\n    \"my_header_name_2\": \"my_value_2\",\n    \"my_header_name_3\": \"my_value_3\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7ec8cbce-106d-4ca3-875c-16f96a03f10b",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    "customheaders",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"custom_header\": {\n    \"my_header_name_1\": \"my_value_1\",\n    \"my_header_name_2\": \"my_value_2\",\n    \"my_header_name_3\": \"my_value_3\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "99934a9f-517d-4a48-9a22-138759a58f5a",
+          "name": "Retrieve webhook",
+          "request": {
+            "name": "Retrieve webhook",
+            "description": {
+              "content": "Retrieves a webhook.\n\n[NOTE]\nAs shown in the example, `config.secret`, `config.basic_auth_username`, and `config.basic_auth_password` are masked in responses to this and all other requests.\nTo ensure you can access these values as needed, update them on your endpoint, store them securely, and then <</core-api/webhooks#put, update the webhook subscription>>.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "webhooks",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Unique identifier of the webhook."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "cd81ffdd-4d77-4b4e-b2ed-798abe2e97b5",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"config\": {\n    \"basic_auth_password\": \"stringstring\",\n    \"basic_auth_username\": \"stringstring\",\n    \"url\": \"string\",\n    \"custom_header\": {\n      \"key_0\": \"string\",\n      \"key_1\": \"string\"\n    },\n    \"secret\": \"stringstring\",\n    \"signature_algorithm\": \"string\",\n    \"use_mtls\": false\n  },\n  \"events\": [\n    \"string\",\n    \"string\"\n  ],\n  \"name\": \"string\",\n  \"active\": true,\n  \"created_time\": \"1992-08-21T16:33:45.839Z\",\n  \"last_modified_time\": \"1979-12-11T16:46:28.383Z\",\n  \"token\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b3a89d57-f871-4766-ae0b-0c97482b6e67",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "32d05fcd-a339-4b39-9290-389242f93b02",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "22831402-3a97-4abe-9b3b-33b618219a32",
+          "name": "Update webhook",
+          "request": {
+            "name": "Update webhook",
+            "description": {
+              "content": "Updates a webhook.\n\nYou can also use this endpoint to disable webhooks you no longer want to receive—there is no `DELETE` method available to remove unneeded webhooks.\nTo disable a webhook, use this endpoint to set its `active` field to `false`.\n\n[NOTE]\nAs shown in the example, `config.secret`, `config.basic_auth_username`, and `config.basic_auth_password` are masked in responses to this and all other requests.\nTo access these values later, store them securely before making the request.\nWhen modifying authentication credentials, update the endpoint configuration before updating your webhook subscription to avoid missing any important event notifications.\n\nFor instructions on managing your webhooks via the Developer Dashboard, see the <</developer-guides/developer-tools/#_to_disable_a_webhook, Developer Tools>> guide.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "webhooks",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Unique identifier of the webhook."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"config\": {\n    \"basic_auth_password\": \"<string>\",\n    \"basic_auth_username\": \"<string>\",\n    \"url\": \"<string>\",\n    \"custom_header\": {\n      \"key_0\": \"<string>\",\n      \"key_1\": \"<string>\"\n    },\n    \"secret\": \"<string>\",\n    \"signature_algorithm\": \"<string>\",\n    \"use_mtls\": false\n  },\n  \"events\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"name\": \"<string>\",\n  \"active\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a091661e-4083-468b-adc4-aad095b85dce",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"config\": {\n    \"basic_auth_password\": \"<string>\",\n    \"basic_auth_username\": \"<string>\",\n    \"url\": \"<string>\",\n    \"custom_header\": {\n      \"key_0\": \"<string>\",\n      \"key_1\": \"<string>\",\n      \"key_2\": \"<string>\",\n      \"key_3\": \"<string>\"\n    },\n    \"secret\": \"<string>\",\n    \"signature_algorithm\": \"<string>\",\n    \"use_mtls\": false\n  },\n  \"events\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"name\": \"<string>\",\n  \"active\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"config\": {\n    \"basic_auth_password\": \"stringstring\",\n    \"basic_auth_username\": \"stringstring\",\n    \"url\": \"string\",\n    \"custom_header\": {\n      \"key_0\": \"string\",\n      \"key_1\": \"string\",\n      \"key_2\": \"string\",\n      \"key_3\": \"string\"\n    },\n    \"secret\": \"stringstring\",\n    \"signature_algorithm\": \"str\",\n    \"use_mtls\": false\n  },\n  \"events\": [\n    \"string\",\n    \"string\"\n  ],\n  \"name\": \"string\",\n  \"active\": true,\n  \"created_time\": \"2017-02-11T06:01:36.346Z\",\n  \"last_modified_time\": \"1982-11-15T02:15:20.230Z\",\n  \"token\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "230519c0-d3c8-4dd5-a76e-1306d7010670",
+              "name": "User input error/Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"config\": {\n    \"basic_auth_password\": \"<string>\",\n    \"basic_auth_username\": \"<string>\",\n    \"url\": \"<string>\",\n    \"custom_header\": {\n      \"key_0\": \"<string>\",\n      \"key_1\": \"<string>\",\n      \"key_2\": \"<string>\",\n      \"key_3\": \"<string>\"\n    },\n    \"secret\": \"<string>\",\n    \"signature_algorithm\": \"<string>\",\n    \"use_mtls\": false\n  },\n  \"events\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"name\": \"<string>\",\n  \"active\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ea56c100-2ce8-4699-a6c7-18ef3d0be5e8",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"config\": {\n    \"basic_auth_password\": \"<string>\",\n    \"basic_auth_username\": \"<string>\",\n    \"url\": \"<string>\",\n    \"custom_header\": {\n      \"key_0\": \"<string>\",\n      \"key_1\": \"<string>\",\n      \"key_2\": \"<string>\",\n      \"key_3\": \"<string>\"\n    },\n    \"secret\": \"<string>\",\n    \"signature_algorithm\": \"<string>\",\n    \"use_mtls\": false\n  },\n  \"events\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"name\": \"<string>\",\n  \"active\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4344791c-5dc0-4799-92f2-323ddb49e801",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"config\": {\n    \"basic_auth_password\": \"<string>\",\n    \"basic_auth_username\": \"<string>\",\n    \"url\": \"<string>\",\n    \"custom_header\": {\n      \"key_0\": \"<string>\",\n      \"key_1\": \"<string>\",\n      \"key_2\": \"<string>\",\n      \"key_3\": \"<string>\"\n    },\n    \"secret\": \"<string>\",\n    \"signature_algorithm\": \"<string>\",\n    \"use_mtls\": false\n  },\n  \"events\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"name\": \"<string>\",\n  \"active\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c9ab7f72-9b05-4e35-b9a5-9cf115cedf94",
+          "name": "Ping webhook",
+          "request": {
+            "name": "Ping webhook",
+            "description": {
+              "content": "Pings your webhook endpoint.\n\nSend a ping request to your webhook endpoint to validate credentials and connectivity.\nYour webhook endpoint must be configured to respond.\n\n=== Configuring your webhook endpoint\n\nWhen the Marqeta platform receives the ping request, it sends a `POST` request containing the following body to the URL of your webhook endpoint:\n\n[#ping-webhook-sample]\n[source,json]\n----\n{\n  \"pings\": [\n    {\n      \"token\": \"marqeta\",\n      \"payload\": \"healthcheck\"\n    }\n  ]\n}\n----\n\nTo indicate that it is functioning properly, your webhook endpoint must respond with a status code of `200` (see <</developer-guides/signature-verification, Signature Verification>> for a code example that identifies a ping request).\nThe response can optionally include a link:http://www.json.org/[JSON, window=\"_blank\"]-formatted body, for example:\n\n[#ping-webhook-sample-2]\n[source,json]\n----\n{\"my_endpoint_status\": \"alive\"}\n----\n\nThe Marqeta platform then responds to its requestor by echoing, as-is, the response code and body received from your webhook endpoint.\n\n=== Using the ping facility\n\nTo ping a webhook endpoint, send a `POST` request to `/webhooks/{token}/ping` and use the `token` path parameter to specify which webhook you want to reach.\nInclude an empty, link:http://www.json.org/[JSON, window=\"_blank\"]-formatted body in the request, that is:\n\n[#ping-webhook-sample-3]\n[source,json]\n----\n{}\n----\n\nThe following chain of actions occurs during the successful execution of a ping operation:\n\n. The Marqeta platform receives the ping request (`POST` to `/webhooks/{token}/ping`).\n. The Marqeta platform sends a request to your webhook endpoint.\n. Your webhook endpoint responds with a status code of \"200\" and an optional body.\n. The Marqeta platform responds to its requestor by echoing, as-is, the response code and body it received from your webhook endpoint.\n\n[NOTE]\nIf the customer-hosted endpoint fails to respond within five seconds, the Marqeta platform times out the request and responds with the following message body (where `<optional message>` represents additional details you can choose to include in the response):\n\n[#ping-webhook-sample-4]\n[source,json]\n----\n{\n  \"error_message\": \"Webhook operation failed \" + <optional message>,\n  \"error_code\": \"422600\"\n}\n----\n\nFailed pings are not automatically retried.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "webhooks",
+                ":token",
+                "ping"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Unique identifier of the webhook."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f2c26a96-651d-47a9-90d4-9a495e128d5c",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ":token",
+                    "ping"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"pings\": [\n    {\n      \"my_endpoint_status\": \"alive\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6aa4cac3-557f-42da-a382-969f9507b4f5",
+              "name": "User input error/Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ":token",
+                    "ping"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "90658a6c-4e29-47a0-a1dd-4a371185dff9",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ":token",
+                    "ping"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "72129a20-dd69-42be-83e3-c405d0af2e09",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ":token",
+                    "ping"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "839c26d9-819c-40f8-8a47-38f2309815c8",
+          "name": "Resend event notification",
+          "request": {
+            "name": "Resend event notification",
+            "description": {
+              "content": "Resends an event notification to your webhook endpoint.\n\nAlthough you send this request as a `POST`, all parameters are passed in the URL and the body is empty.\nThe event notification is resent to your webhook endpoint and is also returned in the response to this request.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "webhooks",
+                ":token",
+                ":event_type",
+                ":event_token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Unique identifier of the webhook."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "event_type",
+                  "description": "(Required) Specifies the type of event you want to resend."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "event_token",
+                  "description": "(Required) Unique identifier of the event for which you want to resend a notification."
+                }
+              ]
+            },
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3b7a26f8-03b5-4d50-9f1f-b0995a0ad1fa",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ":token",
+                    ":event_type",
+                    ":event_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the webhook."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "event_type",
+                      "description": "(Required) Specifies the type of event you want to resend."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "event_token",
+                      "description": "(Required) Unique identifier of the event for which you want to resend a notification."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c8749f39-f68b-480a-a2f4-766f1d5a380f",
+              "name": "User input error/Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ":token",
+                    ":event_type",
+                    ":event_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the webhook."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "event_type",
+                      "description": "(Required) Specifies the type of event you want to resend."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "event_token",
+                      "description": "(Required) Unique identifier of the event for which you want to resend a notification."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "569c74e0-836c-428b-beff-2d356a79c1cb",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ":token",
+                    ":event_type",
+                    ":event_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the webhook."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "event_type",
+                      "description": "(Required) Specifies the type of event you want to resend."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "event_token",
+                      "description": "(Required) Unique identifier of the event for which you want to resend a notification."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a947549f-bb08-4636-9d84-40fa612ecf6e",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ":token",
+                    ":event_type",
+                    ":event_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the webhook."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "event_type",
+                      "description": "(Required) Specifies the type of event you want to resend."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "event_token",
+                      "description": "(Required) Unique identifier of the event for which you want to resend a notification."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "52e03cbb-69a5-4f48-9482-6db1595772ea",
+    "name": "Core accepted countries Webhooks API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.\n\nContact Support:\n Name: Marqeta\n Email: support@marqeta.com",
+      "type": "text/plain"
+    }
+  }
+}

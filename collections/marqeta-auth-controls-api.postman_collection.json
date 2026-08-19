@@ -1,0 +1,2012 @@
+{
+  "item": [
+    {
+      "id": "e9e7297b-c76d-4107-b529-970ab488cd24",
+      "name": "auth controls",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a83eedd0-fe1c-4b83-a554-7eb00ae3f301",
+          "name": "Lists all global auth control exceptions for the program",
+          "request": {
+            "name": "Lists all global auth control exceptions for the program",
+            "description": {},
+            "url": {
+              "path": [
+                "authcontrols"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "card_product",
+                  "value": "<string>",
+                  "description": "Card product token. Use \"null\" to get auth controls that are not associated with any card product."
+                },
+                {
+                  "disabled": false,
+                  "key": "user",
+                  "value": "<string>",
+                  "description": "User token. Use \"null\" to get auth controls that are not associated with any user."
+                },
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "5",
+                  "description": "Number of items to retrieve. Count can be between 1 - 10 items."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "Indicates from what row to start returning data."
+                },
+                {
+                  "disabled": false,
+                  "key": "fields",
+                  "value": "<string>",
+                  "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "-lastModifiedTime",
+                  "description": "Field by which to sort the returned items. Use any field in the model, or system fields lastModifiedTime or createdTime."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "49e565ea-1c15-4dbe-b9f9-02294baa60f6",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authcontrols"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "card_product",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 3347,\n  \"data\": [\n    {\n      \"name\": \"string\",\n      \"active\": true,\n      \"association\": {\n        \"account_template_token\": \"string\",\n        \"card_product_token\": \"string\",\n        \"user_token\": \"string\"\n      },\n      \"end_time\": \"1975-01-31T21:41:41.098Z\",\n      \"merchant_scope\": {\n        \"mcc\": \"str\",\n        \"mcc_group\": \"string\",\n        \"merchant_group_token\": \"string\",\n        \"mid\": \"stri\"\n      },\n      \"start_time\": \"1948-07-15T10:11:37.709Z\",\n      \"token\": \"string\"\n    },\n    {\n      \"name\": \"string\",\n      \"active\": true,\n      \"association\": {\n        \"account_template_token\": \"string\",\n        \"card_product_token\": \"stri\",\n        \"user_token\": \"string\"\n      },\n      \"end_time\": \"1977-07-24T04:47:04.132Z\",\n      \"merchant_scope\": {\n        \"mcc\": \"st\",\n        \"mcc_group\": \"string\",\n        \"merchant_group_token\": \"string\",\n        \"mid\": \"string\"\n      },\n      \"start_time\": \"1987-09-11T11:45:21.337Z\",\n      \"token\": \"string\"\n    }\n  ],\n  \"end_index\": 5450,\n  \"is_more\": false,\n  \"start_index\": 3572\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d29869b3-12df-4ff3-a271-e44f5c4f4efd",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authcontrols"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "card_product",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f5298062-fe3f-46e1-bb81-023b342da866",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authcontrols"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "card_product",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4ad196e2-1fae-4b97-9a25-de63d98c6334",
+          "name": "Creates an auth control exception",
+          "request": {
+            "name": "Creates an auth control exception",
+            "description": {},
+            "url": {
+              "path": [
+                "authcontrols"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"active\": true,\n  \"association\": {\n    \"account_template_token\": \"<string>\",\n    \"card_product_token\": \"<string>\",\n    \"user_token\": \"<string>\"\n  },\n  \"end_time\": \"<dateTime>\",\n  \"merchant_scope\": {\n    \"mcc\": \"<string>\",\n    \"mcc_group\": \"<string>\",\n    \"merchant_group_token\": \"<string>\",\n    \"mid\": \"<string>\"\n  },\n  \"start_time\": \"<dateTime>\",\n  \"token\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4a6c39b3-74bf-47a4-ad4b-0e6001406eb5",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authcontrols"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"active\": true,\n  \"association\": {\n    \"account_template_token\": \"<string>\",\n    \"card_product_token\": \"<string>\",\n    \"user_token\": \"<string>\"\n  },\n  \"end_time\": \"<dateTime>\",\n  \"merchant_scope\": {\n    \"mcc\": \"<string>\",\n    \"mcc_group\": \"<string>\",\n    \"merchant_group_token\": \"<string>\",\n    \"mid\": \"<string>\"\n  },\n  \"start_time\": \"<dateTime>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"string\",\n  \"active\": true,\n  \"association\": {\n    \"account_template_token\": \"<string>\",\n    \"card_product_token\": \"<string>\",\n    \"user_token\": \"<string>\"\n  },\n  \"end_time\": \"2024-11-10T23:01:02.314Z\",\n  \"merchant_scope\": {\n    \"mcc\": \"<string>\",\n    \"mcc_group\": \"<string>\",\n    \"merchant_group_token\": \"<string>\",\n    \"mid\": \"<string>\"\n  },\n  \"start_time\": \"1985-04-14T13:04:14.243Z\",\n  \"token\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ea8baba0-9e15-4bdd-97a0-183815c46fde",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authcontrols"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"active\": true,\n  \"association\": {\n    \"account_template_token\": \"<string>\",\n    \"card_product_token\": \"<string>\",\n    \"user_token\": \"<string>\"\n  },\n  \"end_time\": \"<dateTime>\",\n  \"merchant_scope\": {\n    \"mcc\": \"<string>\",\n    \"mcc_group\": \"<string>\",\n    \"merchant_group_token\": \"<string>\",\n    \"mid\": \"<string>\"\n  },\n  \"start_time\": \"<dateTime>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "eeb28656-ca2a-4c39-9997-35453585ebda",
+              "name": "Token already associated with a different payload",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authcontrols"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"active\": true,\n  \"association\": {\n    \"account_template_token\": \"<string>\",\n    \"card_product_token\": \"<string>\",\n    \"user_token\": \"<string>\"\n  },\n  \"end_time\": \"<dateTime>\",\n  \"merchant_scope\": {\n    \"mcc\": \"<string>\",\n    \"mcc_group\": \"<string>\",\n    \"merchant_group_token\": \"<string>\",\n    \"mid\": \"<string>\"\n  },\n  \"start_time\": \"<dateTime>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d5ad0da0-5456-4ea9-ae42-beb87da8dc5a",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authcontrols"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"active\": true,\n  \"association\": {\n    \"account_template_token\": \"<string>\",\n    \"card_product_token\": \"<string>\",\n    \"user_token\": \"<string>\"\n  },\n  \"end_time\": \"<dateTime>\",\n  \"merchant_scope\": {\n    \"mcc\": \"<string>\",\n    \"mcc_group\": \"<string>\",\n    \"merchant_group_token\": \"<string>\",\n    \"mid\": \"<string>\"\n  },\n  \"start_time\": \"<dateTime>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5dc03e0c-7451-4a11-a313-a30ffd31e3f5",
+          "name": "Lists all auth control exempted MIDs for the program",
+          "request": {
+            "name": "Lists all auth control exempted MIDs for the program",
+            "description": {},
+            "url": {
+              "path": [
+                "authcontrols",
+                "exemptmids"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "card_product",
+                  "value": "<string>",
+                  "description": "Card product token. Use \"null\" to get auth controls that are not associated with any card product."
+                },
+                {
+                  "disabled": false,
+                  "key": "user",
+                  "value": "<string>",
+                  "description": "User token. Use \"null\" to get auth controls that are not associated with any user."
+                },
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "5",
+                  "description": "Number of items to retrieve. Count can be between 1 - 10 items."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "Indicates from what row to start returning data."
+                },
+                {
+                  "disabled": false,
+                  "key": "fields",
+                  "value": "<string>",
+                  "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "-lastModifiedTime",
+                  "description": "Field by which to sort the returned items. Use any field in the model, or system fields lastModifiedTime or createdTime."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8516b0db-2db9-4453-b7af-5dcde0b6581d",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authcontrols",
+                    "exemptmids"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "card_product",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 9054,\n  \"data\": [\n    {\n      \"name\": \"string\",\n      \"active\": false,\n      \"association\": {\n        \"account_template_token\": \"<string>\",\n        \"card_product_token\": \"<string>\",\n        \"user_token\": \"<string>\"\n      },\n      \"created\": \"1948-08-29T23:15:36.462Z\",\n      \"end_time\": \"1955-02-06T00:28:24.514Z\",\n      \"last_updated\": \"1993-02-04T02:35:31.324Z\",\n      \"merchant_group_token\": \"string\",\n      \"mid\": \"string\",\n      \"start_time\": \"1988-08-08T16:08:21.549Z\",\n      \"token\": \"string\"\n    },\n    {\n      \"name\": \"string\",\n      \"active\": false,\n      \"association\": {\n        \"account_template_token\": \"<string>\",\n        \"card_product_token\": \"<string>\",\n        \"user_token\": \"<string>\"\n      },\n      \"created\": \"1995-02-05T03:24:44.827Z\",\n      \"end_time\": \"1974-09-17T16:33:54.582Z\",\n      \"last_updated\": \"1978-11-29T22:55:39.778Z\",\n      \"merchant_group_token\": \"string\",\n      \"mid\": \"string\",\n      \"start_time\": \"1971-05-30T03:56:22.670Z\",\n      \"token\": \"string\"\n    }\n  ],\n  \"end_index\": 6699,\n  \"is_more\": false,\n  \"start_index\": 3511\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bf8ac8e6-f28c-45bc-92bb-1a38017dc53e",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authcontrols",
+                    "exemptmids"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "card_product",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ad012080-7cb9-4be9-85c2-1a2ddb6fb848",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authcontrols",
+                    "exemptmids"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "card_product",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b3580ac3-e653-420b-a16d-e168c1f76811",
+          "name": "Creates an auth control for exempting MIDs",
+          "request": {
+            "name": "Creates an auth control for exempting MIDs",
+            "description": {},
+            "url": {
+              "path": [
+                "authcontrols",
+                "exemptmids"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"association\": {\n    \"account_template_token\": \"<string>\",\n    \"card_product_token\": \"<string>\",\n    \"user_token\": \"<string>\"\n  },\n  \"end_time\": \"<dateTime>\",\n  \"merchant_group_token\": \"<string>\",\n  \"mid\": \"<string>\",\n  \"start_time\": \"<dateTime>\",\n  \"token\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "dbf09889-9f0c-4ac0-b193-db3510d6afd0",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authcontrols",
+                    "exemptmids"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"association\": {\n    \"account_template_token\": \"<string>\",\n    \"card_product_token\": \"<string>\",\n    \"user_token\": \"<string>\"\n  },\n  \"end_time\": \"<dateTime>\",\n  \"merchant_group_token\": \"<string>\",\n  \"mid\": \"<string>\",\n  \"start_time\": \"<dateTime>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"string\",\n  \"active\": false,\n  \"association\": {\n    \"account_template_token\": \"<string>\",\n    \"card_product_token\": \"<string>\",\n    \"user_token\": \"<string>\"\n  },\n  \"created\": \"1962-07-11T17:19:43.075Z\",\n  \"end_time\": \"1993-01-14T06:55:48.479Z\",\n  \"last_updated\": \"2014-11-11T23:40:42.681Z\",\n  \"merchant_group_token\": \"strin\",\n  \"mid\": \"string\",\n  \"start_time\": \"1985-09-21T21:00:30.415Z\",\n  \"token\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5a28802b-ac5b-445f-9ea8-031386c0d405",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authcontrols",
+                    "exemptmids"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"association\": {\n    \"account_template_token\": \"<string>\",\n    \"card_product_token\": \"<string>\",\n    \"user_token\": \"<string>\"\n  },\n  \"end_time\": \"<dateTime>\",\n  \"merchant_group_token\": \"<string>\",\n  \"mid\": \"<string>\",\n  \"start_time\": \"<dateTime>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a2043d2b-7d12-4583-941e-6555af2b49e7",
+              "name": "Token already associated with a different payload",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authcontrols",
+                    "exemptmids"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"association\": {\n    \"account_template_token\": \"<string>\",\n    \"card_product_token\": \"<string>\",\n    \"user_token\": \"<string>\"\n  },\n  \"end_time\": \"<dateTime>\",\n  \"merchant_group_token\": \"<string>\",\n  \"mid\": \"<string>\",\n  \"start_time\": \"<dateTime>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c25e7b20-e879-44f1-b374-dc4d4f65ca05",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authcontrols",
+                    "exemptmids"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"association\": {\n    \"account_template_token\": \"<string>\",\n    \"card_product_token\": \"<string>\",\n    \"user_token\": \"<string>\"\n  },\n  \"end_time\": \"<dateTime>\",\n  \"merchant_group_token\": \"<string>\",\n  \"mid\": \"<string>\",\n  \"start_time\": \"<dateTime>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "011d988e-c496-4174-bb6c-b8f3500fa042",
+          "name": "Returns a specific auth control exemptmids",
+          "request": {
+            "name": "Returns a specific auth control exemptmids",
+            "description": {},
+            "url": {
+              "path": [
+                "authcontrols",
+                "exemptmids",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Auth control token"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e1a29f44-b762-40bf-8d2f-28c5065ff979",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authcontrols",
+                    "exemptmids",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Auth control token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"string\",\n  \"active\": false,\n  \"association\": {\n    \"account_template_token\": \"<string>\",\n    \"card_product_token\": \"<string>\",\n    \"user_token\": \"<string>\"\n  },\n  \"created\": \"1962-07-11T17:19:43.075Z\",\n  \"end_time\": \"1993-01-14T06:55:48.479Z\",\n  \"last_updated\": \"2014-11-11T23:40:42.681Z\",\n  \"merchant_group_token\": \"strin\",\n  \"mid\": \"string\",\n  \"start_time\": \"1985-09-21T21:00:30.415Z\",\n  \"token\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b8e30b3d-da4f-47a8-9a06-cf19261f3a7b",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authcontrols",
+                    "exemptmids",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Auth control token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "fbfc6406-9c72-492c-8881-fe6d26e518af",
+              "name": "Auth control exception MIDs not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authcontrols",
+                    "exemptmids",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Auth control token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e627a504-3240-4fae-8755-50223a0945d2",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authcontrols",
+                    "exemptmids",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Auth control token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "997829be-ec06-4551-ade3-32f40da25f94",
+          "name": "Updates the status an auth control exemptmids",
+          "request": {
+            "name": "Updates the status an auth control exemptmids",
+            "description": {},
+            "url": {
+              "path": [
+                "authcontrols",
+                "exemptmids",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Auth control token"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"active\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "184c5922-5cdb-49ba-a91d-7c230ef73595",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authcontrols",
+                    "exemptmids",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Auth control token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"active\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1a62a789-2e75-40f8-80e1-7b82609663a6",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authcontrols",
+                    "exemptmids",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Auth control token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"active\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d46d1f59-779f-47fc-be59-89f497eaa6b7",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authcontrols",
+                    "exemptmids",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Auth control token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"active\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d512b7bd-89d5-4fec-bc9c-43275c896d37",
+          "name": "Returns a specific auth control exception",
+          "request": {
+            "name": "Returns a specific auth control exception",
+            "description": {},
+            "url": {
+              "path": [
+                "authcontrols",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "fields",
+                  "value": "<string>",
+                  "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Auth control token"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9057dd1a-41f1-45b3-b19d-77eaba19ef63",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authcontrols",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Auth control token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"string\",\n  \"active\": true,\n  \"association\": {\n    \"account_template_token\": \"<string>\",\n    \"card_product_token\": \"<string>\",\n    \"user_token\": \"<string>\"\n  },\n  \"end_time\": \"2024-11-10T23:01:02.314Z\",\n  \"merchant_scope\": {\n    \"mcc\": \"<string>\",\n    \"mcc_group\": \"<string>\",\n    \"merchant_group_token\": \"<string>\",\n    \"mid\": \"<string>\"\n  },\n  \"start_time\": \"1985-04-14T13:04:14.243Z\",\n  \"token\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "970c41d4-8d95-43fa-8bd1-44eff59bee51",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authcontrols",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Auth control token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "29adf807-c658-4875-a1d7-484b4ce04e96",
+              "name": "Auth control not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authcontrols",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Auth control token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "547cb4ad-819c-47a7-b6d5-f1159f9bf9ec",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authcontrols",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Auth control token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b30190da-707a-4d68-97f2-899deedc1005",
+          "name": "Updates an auth control exception",
+          "request": {
+            "name": "Updates an auth control exception",
+            "description": {},
+            "url": {
+              "path": [
+                "authcontrols",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Auth control token"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"<string>\",\n  \"active\": true,\n  \"association\": {\n    \"account_template_token\": \"<string>\",\n    \"card_product_token\": \"<string>\",\n    \"user_token\": \"<string>\"\n  },\n  \"end_time\": \"<dateTime>\",\n  \"merchant_scope\": {\n    \"mcc\": \"<string>\",\n    \"mcc_group\": \"<string>\",\n    \"mid\": \"<string>\"\n  },\n  \"name\": \"<string>\",\n  \"start_time\": \"<dateTime>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "87004e7e-5198-45c5-adc6-d8b5668bc887",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authcontrols",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Auth control token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"token\": \"<string>\",\n  \"active\": true,\n  \"association\": {\n    \"account_template_token\": \"<string>\",\n    \"card_product_token\": \"<string>\",\n    \"user_token\": \"<string>\"\n  },\n  \"end_time\": \"<dateTime>\",\n  \"merchant_scope\": {\n    \"mcc\": \"<string>\",\n    \"mcc_group\": \"<string>\",\n    \"mid\": \"<string>\"\n  },\n  \"name\": \"<string>\",\n  \"start_time\": \"<dateTime>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"string\",\n  \"active\": true,\n  \"association\": {\n    \"account_template_token\": \"<string>\",\n    \"card_product_token\": \"<string>\",\n    \"user_token\": \"<string>\"\n  },\n  \"end_time\": \"2024-11-10T23:01:02.314Z\",\n  \"merchant_scope\": {\n    \"mcc\": \"<string>\",\n    \"mcc_group\": \"<string>\",\n    \"merchant_group_token\": \"<string>\",\n    \"mid\": \"<string>\"\n  },\n  \"start_time\": \"1985-04-14T13:04:14.243Z\",\n  \"token\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "86a5c31b-5273-4eb0-a2fe-04074f89e934",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authcontrols",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Auth control token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"token\": \"<string>\",\n  \"active\": true,\n  \"association\": {\n    \"account_template_token\": \"<string>\",\n    \"card_product_token\": \"<string>\",\n    \"user_token\": \"<string>\"\n  },\n  \"end_time\": \"<dateTime>\",\n  \"merchant_scope\": {\n    \"mcc\": \"<string>\",\n    \"mcc_group\": \"<string>\",\n    \"mid\": \"<string>\"\n  },\n  \"name\": \"<string>\",\n  \"start_time\": \"<dateTime>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "44e0a757-d601-47ac-bdd7-2a76b0a0c925",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authcontrols",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Auth control token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"token\": \"<string>\",\n  \"active\": true,\n  \"association\": {\n    \"account_template_token\": \"<string>\",\n    \"card_product_token\": \"<string>\",\n    \"user_token\": \"<string>\"\n  },\n  \"end_time\": \"<dateTime>\",\n  \"merchant_scope\": {\n    \"mcc\": \"<string>\",\n    \"mcc_group\": \"<string>\",\n    \"mid\": \"<string>\"\n  },\n  \"name\": \"<string>\",\n  \"start_time\": \"<dateTime>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "6ccff88e-511d-48a4-aa09-11098b3f4919",
+    "name": "Core accepted countries auth controls API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.\n\nContact Support:\n Name: Marqeta\n Email: support@marqeta.com",
+      "type": "text/plain"
+    }
+  }
+}

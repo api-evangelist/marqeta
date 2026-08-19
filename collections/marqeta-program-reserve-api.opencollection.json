@@ -1,0 +1,111 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries Program Reserve API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Program Reserve",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve reserve account balances",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/programreserve/balances"
+          },
+          "docs": "Use this endpoint to return balances for your program reserve account (sometimes referred to as a _program funding account_)."
+        },
+        {
+          "info": {
+            "name": "List program reserve transactions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/programreserve/transactions",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of resources to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nUse any field in the resource model, or one of the system fields `lastModifiedTime` or `createdTime`.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order."
+              }
+            ]
+          },
+          "docs": "Use this endpoint to return a list of credits and debits made to your program reserve account.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>."
+        },
+        {
+          "info": {
+            "name": "getProgramReserveDeposits",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/programreserve/deposits",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of items to retrieve"
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Start index"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              }
+            ]
+          }
+        },
+        {
+          "info": {
+            "name": "deposit",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/programreserve/deposits",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,208 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries Program Balances API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Program Balances",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve program funding balances",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/views/programbalances/:time_agg",
+            "params": [
+              {
+                "name": "time_agg",
+                "value": "",
+                "type": "path",
+                "description": "Aggregation time level for the data. Use 'day' for daily rollups, 'week' for weekly rollups, 'month' for monthly rollups, or 'detail' for individual record-level data."
+              },
+              {
+                "name": "program",
+                "value": "",
+                "type": "query",
+                "description": "The name of your Marqeta card program. This parameter is required for most DiVA API endpoints to scope the data to your program."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to include in the response. If not specified, all available fields are returned."
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "Start date for filtering data (format YYYY-MM-DD). Returns records on or after this date."
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "End date for filtering data (format YYYY-MM-DD). Returns records on or before this date."
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Response format. Use 'json' for JSON responses or 'csv' for comma-separated bulk file format. Defaults to json."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of records to return per request."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Zero-based offset for pagination."
+              }
+            ]
+          },
+          "docs": "Returns program funding balance data aggregated over the specified time period. Use this endpoint for financial reconciliation to retrieve beginning bank balance, amount to send, and ending bank balance. Supports daily, weekly, and monthly aggregation levels. An example request for daily balances: /views/programbalances/day?program=my_program&fields=beginning_bank_balance,amount_to_send,ending_bank_balance"
+        },
+        {
+          "info": {
+            "name": "Retrieve program settlement balances",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/views/programbalancessettlement/:time_agg",
+            "params": [
+              {
+                "name": "time_agg",
+                "value": "",
+                "type": "path",
+                "description": "Aggregation time level for the data. Use 'day' for daily rollups, 'week' for weekly rollups, 'month' for monthly rollups, or 'detail' for individual record-level data."
+              },
+              {
+                "name": "program",
+                "value": "",
+                "type": "query",
+                "description": "The name of your Marqeta card program. This parameter is required for most DiVA API endpoints to scope the data to your program."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to include in the response. If not specified, all available fields are returned."
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "Start date for filtering data (format YYYY-MM-DD). Returns records on or after this date."
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "End date for filtering data (format YYYY-MM-DD). Returns records on or before this date."
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Response format. Use 'json' for JSON responses or 'csv' for comma-separated bulk file format. Defaults to json."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of records to return per request."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Zero-based offset for pagination."
+              }
+            ]
+          },
+          "docs": "Returns program settlement balance data aggregated over the specified time period. Settlement balances reflect funds settled between Marqeta and the card networks. Use this alongside the programbalances view for full financial reconciliation."
+        },
+        {
+          "info": {
+            "name": "Retrieve activity balance data",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/views/activitybalances/:time_agg",
+            "params": [
+              {
+                "name": "time_agg",
+                "value": "",
+                "type": "path",
+                "description": "Aggregation time level for the data. Use 'day' for daily rollups, 'week' for weekly rollups, 'month' for monthly rollups, or 'detail' for individual record-level data."
+              },
+              {
+                "name": "program",
+                "value": "",
+                "type": "query",
+                "description": "The name of your Marqeta card program. This parameter is required for most DiVA API endpoints to scope the data to your program."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to include in the response. If not specified, all available fields are returned."
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "Start date for filtering data (format YYYY-MM-DD). Returns records on or after this date."
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "End date for filtering data (format YYYY-MM-DD). Returns records on or before this date."
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Response format. Use 'json' for JSON responses or 'csv' for comma-separated bulk file format. Defaults to json."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of records to return per request."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Zero-based offset for pagination."
+              }
+            ]
+          },
+          "docs": "Returns cardholder activity balance data aggregated over the specified time period. Provides a summary of GPA balance changes driven by card transactions, loads, and transfers for program financial reporting."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

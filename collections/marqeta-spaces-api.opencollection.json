@@ -1,0 +1,143 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries Spaces API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Spaces",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get spaces.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/spaces"
+          },
+          "docs": "Get spaces."
+        },
+        {
+          "info": {
+            "name": "Create space.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/spaces"
+          },
+          "docs": "Create space."
+        },
+        {
+          "info": {
+            "name": "deleteQueue",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/v3/spaces/redis-queue/:queueName",
+            "params": [
+              {
+                "name": "queueName",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          }
+        },
+        {
+          "info": {
+            "name": "Get space.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/spaces/:space/:key",
+            "params": [
+              {
+                "name": "space",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "key",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "timeout",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get space."
+        },
+        {
+          "info": {
+            "name": "Create space for key.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/spaces/:space/:key",
+            "params": [
+              {
+                "name": "space",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "key",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "timeout",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Create space for key."
+        },
+        {
+          "info": {
+            "name": "Delete space.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/v3/spaces/:space/:key",
+            "params": [
+              {
+                "name": "space",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "key",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete space."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

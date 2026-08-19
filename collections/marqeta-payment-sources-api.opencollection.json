@@ -1,0 +1,137 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries Payment Sources API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Payment Sources",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List payment sources",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/paymentsources",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of the credit account associated with the payment source."
+              },
+              {
+                "name": "user_token",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of the user associated with the payment source."
+              },
+              {
+                "name": "business_token",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of the business associated with the payment source."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of payment source resources to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`."
+              },
+              {
+                "name": "statuses",
+                "value": "",
+                "type": "query",
+                "description": "Array of statuses to use for filtering payment sources."
+              }
+            ]
+          },
+          "docs": "Retrieve an array of payment sources.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>."
+        },
+        {
+          "info": {
+            "name": "Create payment source",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/paymentsources",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a payment source from which to make payments."
+        },
+        {
+          "info": {
+            "name": "Retrieve payment source",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/paymentsources/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the payment source to retrieve.\n\nSend a `GET` request to `/credit/paymentsources` to retrieve existing payment source tokens."
+              }
+            ]
+          },
+          "docs": "Retrieve a payment source."
+        },
+        {
+          "info": {
+            "name": "Update payment source",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/paymentsources/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the payment source to retrieve.\n\nSend a `GET` request to `/credit/paymentsources` to retrieve existing payment source tokens."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update details of a payment source."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

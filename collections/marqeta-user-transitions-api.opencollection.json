@@ -1,0 +1,108 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries User Transitions API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "User Transitions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create user transition",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/usertransitions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint enables you to change a user's status, depending on your role and the previous status change.\nBy changing a user's status, you can control the user's capabilities and the setting of the `user.active` field.\nDo not set the value of the `user.active` field directly.\n\n[cols=\"2a,4a,3a\"]\n|===\n| The user.status Field | Description | User Limitations\n\n| `UNVERIFIED`\n| Initial status of a new user belonging to an account holder group where KYC is always required.\n\n*Allowable Transitions:* "
+        },
+        {
+          "info": {
+            "name": "List transitions for user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/usertransitions/user/:user_token",
+            "params": [
+              {
+                "name": "user_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the user resource."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of user transitions to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (`field_1,field_2`, and so on).\nLeave blank to return all fields."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nUse any field in the resource model, or one of the system fields `lastModifiedTime` or `createdTime`.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order."
+              }
+            ]
+          },
+          "docs": "List all transitions for a given user."
+        },
+        {
+          "info": {
+            "name": "Retrieve user transition",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/usertransitions/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the user transition you want to retrieve."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (`field_1,field_2`, and so on).\nLeave blank to return all fields."
+              }
+            ]
+          },
+          "docs": "Retrieve a user transition."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

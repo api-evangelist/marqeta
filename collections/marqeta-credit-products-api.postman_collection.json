@@ -1,0 +1,757 @@
+{
+  "item": [
+    {
+      "id": "0de3d6ff-627a-4d98-b3c4-1d33c3054719",
+      "name": "Credit Products",
+      "description": {
+        "content": "// Conditional snippet for beta or internal content\ninclude::../../maturity-admonition-banner.adoc[]\n\n[IMPORTANT]\nThis feature is deprecated and replaced by credit product policies, which is part of the bundles feature.\nFor more on policies and bundles in a credit program, see <</developer-guides/credit-programs-dashboard, Managing Credit Programs in the Marqeta Dashboard>>.\n\nThe credit products feature on Marqeta's credit platform enables you to create and manage a credit product and customize its characteristics, such as the credit line range and required fees or APRs.\nCredit product characteristics determine the behaviors and attributes of associated credit accounts.\nFor more on credit products, see <</developer-guides/about-credit-products, About Credit Products>>.\n\nTo receive webhook notifications when product transition events occur, see <</core-api/event-types#_credit_product_transition_events, Credit product transition events>> in Event Types.\n\n[IMPORTANT]\n====\nTo create and manage credit products, you must use the link:https://app.marqeta.com/[Marqeta Dashboard, window=\"_blank\"].\nFor more, see <</developer-guides/credit-products-dashboard, Managing Credit Products in the Marqeta Dashboard>>.\n\n&#160; +\n\nThe following endpoints are displayed for reference purposes only.\n====",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ce4e3986-0ccb-45d7-a12a-551df0807d0d",
+          "name": "List credit products",
+          "request": {
+            "name": "List credit products",
+            "description": {
+              "content": "Retrieve an array of credit products.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "products"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "An array of statuses by which to filter credit products."
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "An array of statuses by which to filter credit products."
+                },
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "5",
+                  "description": "Number of credit product resources to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "Sort order index of the first resource in the returned array."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "-lastModifiedTime",
+                  "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "ab647fcc-daa6-4831-9d7c-61f0fc8e3c19",
+              "name": "Expected response to a valid request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 2,\n  \"data\": [\n    {\n      \"card_product_tokens\": [\n        \"my_card_product1234\"\n      ],\n      \"classification\": \"CONSUMER\",\n      \"config\": {\n        \"billing_cycle_day\": 1,\n        \"fees\": [\n          \"LATE_PAYMENT_FEE\"\n        ],\n        \"fees_config\": [],\n        \"payment_due_day\": 31,\n        \"periodic_fees\": [\n          {\n            \"frequency\": \"ANNUAL\",\n            \"number_of_days_post_activation\": 5\n          },\n          {\n            \"frequency\": \"MONTHLY\",\n            \"number_of_days_post_activation\": 28\n          }\n        ],\n        \"rewards_config\": []\n      },\n      \"created_time\": \"2023-09-03 19:03:21.035000+00:00\",\n      \"credit_line\": {\n        \"max\": 200000,\n        \"min\": 25\n      },\n      \"currency_code\": \"USD\",\n      \"description\": \"Description of credit product\",\n      \"interest_calculation\": {\n        \"day_count\": \"ACTUAL\",\n        \"exclude_tran_types\": [\n          \"ANNUAL_FEE\",\n          \"LATE_PAYMENT_FEE\",\n          \"CASH_BACK_STATEMENT_CREDIT\"\n        ],\n        \"grace_days_application\": \"NEXT_CYCLE_DATE\",\n        \"interest_application\": [\n          \"PRINCIPAL\",\n          \"FEES\"\n        ],\n        \"interest_on_grace_reactivation\": \"ACCRUE_FULL_CYCLE\",\n        \"method\": \"AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS\",\n        \"minimum_interest\": 1\n      },\n      \"min_payment_calculation\": {\n        \"include_overlimit_amount\": false,\n        \"include_past_due_amount\": false,\n        \"min_payment_flat_amount\": 25,\n        \"min_payment_percentage\": {\n          \"include_fees_charged\": [],\n          \"include_interest_charged\": false,\n          \"percentage_of_balance\": 1\n        }\n      },\n      \"min_payment_flat_amount\": 25,\n      \"min_payment_percentage\": 1,\n      \"name\": \"Gold Card\",\n      \"payment_allocation_order\": [\n        \"INTEREST\",\n        \"FEES\",\n        \"PRINCIPAL\"\n      ],\n      \"product_sub_type\": \"CREDIT_CARD\",\n      \"product_type\": \"REVOLVING\",\n      \"status\": \"ACTIVE\",\n      \"token\": \"my_credit_product_token1234\",\n      \"updated_time\": \"2023-09-03 19:03:21.035000+00:00\",\n      \"usage\": [\n        \"PURCHASE\"\n      ]\n    },\n    {\n      \"card_product_tokens\": [\n        \"card-product-token-d308\",\n        \"card-product-token-cc10\"\n      ],\n      \"classification\": \"CONSUMER\",\n      \"config\": {\n        \"billing_cycle_day\": 1,\n        \"fees\": [\n          \"LATE_PAYMENT_FEE\"\n        ],\n        \"fees_config\": [],\n        \"payment_due_day\": 31,\n        \"periodic_fees\": [\n          {\n            \"frequency\": \"ANNUAL\",\n            \"number_of_days_post_activation\": 5\n          },\n          {\n            \"frequency\": \"MONTHLY\",\n            \"number_of_days_post_activation\": 28\n          }\n        ],\n        \"rewards_config\": []\n      },\n      \"created_time\": \"2023-10-26 14:46:26.678000+00:00\",\n      \"credit_line\": {\n        \"max\": 20000,\n        \"min\": 200\n      },\n      \"currency_code\": \"USD\",\n      \"description\": \"Platinum consumer product\",\n      \"interest_calculation\": {\n        \"day_count\": \"ACTUAL\",\n        \"exclude_tran_types\": [\n          \"LATE_PAYMENT_FEE\",\n          \"ANNUAL_FEE\",\n          \"CASH_BACK_STATEMENT_CREDIT\"\n        ],\n        \"grace_days_application\": \"NEXT_CYCLE_DATE\",\n        \"interest_application\": [\n          \"PRINCIPAL\",\n          \"FEES\"\n        ],\n        \"interest_on_grace_reactivation\": \"ACCRUE_FULL_CYCLE\",\n        \"method\": \"AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS\",\n        \"minimum_interest\": 1\n      },\n      \"min_payment_flat_amount\": 22,\n      \"min_payment_percentage\": 2,\n      \"name\": \"My Platinum Credit Product\",\n      \"payment_allocation_order\": [\n        \"INTEREST\",\n        \"FEES\",\n        \"PRINCIPAL\"\n      ],\n      \"product_sub_type\": \"CREDIT_CARD\",\n      \"product_type\": \"REVOLVING\",\n      \"status\": \"ACTIVE\",\n      \"token\": \"credit-product-token-9163\",\n      \"updated_time\": \"2023-10-26 16:45:19.908000+00:00\",\n      \"usage\": [\n        \"PURCHASE\"\n      ]\n    }\n  ],\n  \"end_index\": 0,\n  \"is_more\": true,\n  \"start_index\": 0\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "af8d4a81-922b-4c59-8fbb-042063a100de",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 1416,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "66a13346-8349-4509-bd12-5e0ccf2be2ee",
+          "name": "Create credit product",
+          "request": {
+            "name": "Create credit product",
+            "description": {
+              "content": "Create a credit product.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "products"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"card_product_tokens\": [\n    \"<string>\"\n  ],\n  \"classification\": \"CONSUMER\",\n  \"config\": {\n    \"billing_cycle_day\": \"<integer>\",\n    \"billing_cycle_day_strategy\": \"MANUAL\",\n    \"billing_cycle_frequency\": \"MONTHLY\",\n    \"fees\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"payment_due_day\": \"<integer>\",\n    \"payment_due_interval\": -1,\n    \"periodic_fees\": [\n      {\n        \"frequency\": \"<string>\",\n        \"number_of_days_post_activation\": \"<integer>\"\n      },\n      {\n        \"frequency\": \"<string>\",\n        \"number_of_days_post_activation\": \"<integer>\"\n      }\n    ]\n  },\n  \"credit_line\": {\n    \"max\": \"<number>\",\n    \"min\": \"<number>\"\n  },\n  \"currency_code\": \"USD\",\n  \"interest_calculation\": {\n    \"day_count\": \"<string>\",\n    \"grace_days_application\": \"<string>\",\n    \"interest_application\": [\n      \"PRINCIPAL\",\n      \"FEES\"\n    ],\n    \"interest_on_grace_reactivation\": \"<string>\",\n    \"method\": \"<string>\",\n    \"minimum_interest\": \"<number>\",\n    \"exclude_tran_types\": [\n      \"ANNUAL_FEE\",\n      \"MONTHLY_FEE\",\n      \"LATE_PAYMENT_FEE\",\n      \"CASH_BACK_STATEMENT_CREDIT\",\n      \"FOREIGN_TRANSACTION_FEE\"\n    ]\n  },\n  \"min_payment_flat_amount\": \"<number>\",\n  \"min_payment_percentage\": \"<number>\",\n  \"name\": \"<string>\",\n  \"payment_allocation_order\": [\n    \"INTEREST\",\n    \"FEES\",\n    \"PRINCIPAL\"\n  ],\n  \"product_sub_type\": \"CREDIT_CARD\",\n  \"product_type\": \"REVOLVING\",\n  \"usage\": [\n    \"<string>\"\n  ],\n  \"description\": \"<string>\",\n  \"min_payment_calculation\": {\n    \"include_past_due_amount\": \"<boolean>\",\n    \"min_payment_flat_amount\": \"<number>\",\n    \"min_payment_percentage\": {\n      \"include_fees_charged\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"percentage_of_balance\": \"<number>\",\n      \"include_all_fees_charged\": \"<boolean>\"\n    },\n    \"include_overlimit_amount\": 6805\n  },\n  \"status\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2b70add1-df4c-441f-9b53-e75646951e25",
+              "name": "Expected response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"card_product_tokens\": [\n    \"my_card_product1234\"\n  ],\n  \"classification\": \"CONSUMER\",\n  \"config\": {\n    \"billing_cycle_day\": 1,\n    \"fees\": [\n      \"LATE_PAYMENT_FEE\"\n    ],\n    \"payment_due_day\": 31,\n    \"periodic_fees\": []\n  },\n  \"credit_line\": {\n    \"max\": 200000,\n    \"min\": 25\n  },\n  \"currency_code\": \"USD\",\n  \"interest_calculation\": {\n    \"day_count\": \"ACTUAL\",\n    \"exclude_tran_types\": [\n      \"ANNUAL_FEE\",\n      \"LATE_PAYMENT_FEE\",\n      \"CASH_BACK_STATEMENT_CREDIT\"\n    ],\n    \"grace_days_application\": \"NEXT_CYCLE_DATE\",\n    \"interest_application\": [\n      \"PRINCIPAL\",\n      \"FEES\"\n    ],\n    \"interest_on_grace_reactivation\": \"ACCRUE_FULL_CYCLE\",\n    \"method\": \"AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS\",\n    \"minimum_interest\": 1\n  },\n  \"min_payment_calculation\": {\n    \"include_overlimit_amount\": true,\n    \"include_past_due_amount\": true,\n    \"min_payment_flat_amount\": 25,\n    \"min_payment_percentage\": {\n      \"include_fees_charged\": [\n        \"LATE_PAYMENT_FEE\"\n      ],\n      \"include_interest_charged\": false,\n      \"percentage_of_balance\": 1\n    }\n  },\n  \"min_payment_flat_amount\": 25,\n  \"min_payment_percentage\": 1,\n  \"name\": \"my_credit_product1234\",\n  \"payment_allocation_order\": [\n    \"INTEREST\",\n    \"FEES\",\n    \"PRINCIPAL\"\n  ],\n  \"product_sub_type\": \"CREDIT_CARD\",\n  \"product_type\": \"REVOLVING\",\n  \"status\": \"ACTIVE\",\n  \"usage\": [\n    \"PURCHASE\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"card_product_tokens\": [\n    \"my_card_product1234\"\n  ],\n  \"classification\": \"CONSUMER\",\n  \"config\": {\n    \"billing_cycle_day\": 1,\n    \"fees\": [\n      \"LATE_PAYMENT_FEE\"\n    ],\n    \"fees_config\": [],\n    \"payment_due_day\": 31,\n    \"periodic_fees\": [],\n    \"rewards_config\": []\n  },\n  \"created_time\": \"2021-09-03 19:03:21.035000+00:00\",\n  \"credit_line\": {\n    \"max\": 200000,\n    \"min\": 25\n  },\n  \"currency_code\": \"USD\",\n  \"description\": \"Description of credit product\",\n  \"interest_calculation\": {\n    \"day_count\": \"ACTUAL\",\n    \"exclude_tran_types\": [\n      \"ANNUAL_FEE\",\n      \"LATE_PAYMENT_FEE\",\n      \"CASH_BACK_STATEMENT_CREDIT\"\n    ],\n    \"grace_days_application\": \"NEXT_CYCLE_DATE\",\n    \"interest_application\": [\n      \"PRINCIPAL\",\n      \"FEES\"\n    ],\n    \"interest_on_grace_reactivation\": \"ACCRUE_FULL_CYCLE\",\n    \"method\": \"AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS\",\n    \"minimum_interest\": 1\n  },\n  \"min_payment_calculation\": {\n    \"include_overlimit_amount\": false,\n    \"include_past_due_amount\": false,\n    \"min_payment_flat_amount\": 25,\n    \"min_payment_percentage\": {\n      \"include_fees_charged\": [],\n      \"include_interest_charged\": false,\n      \"percentage_of_balance\": 1\n    }\n  },\n  \"min_payment_flat_amount\": 25,\n  \"min_payment_percentage\": 1,\n  \"name\": \"Gold Card\",\n  \"payment_allocation_order\": [\n    \"INTEREST\",\n    \"FEES\",\n    \"PRINCIPAL\"\n  ],\n  \"product_sub_type\": \"CREDIT_CARD\",\n  \"product_type\": \"REVOLVING\",\n  \"status\": \"ACTIVE\",\n  \"token\": \"my_credit_product_token1234\",\n  \"updated_time\": \"2021-09-03 19:03:21.035000+00:00\",\n  \"usage\": [\n    \"PURCHASE\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7a25dbaa-8d76-4ba9-8401-6f55e55dc8f7",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"card_product_tokens\": [\n    \"my_card_product1234\"\n  ],\n  \"classification\": \"CONSUMER\",\n  \"config\": {\n    \"billing_cycle_day\": 1,\n    \"fees\": [\n      \"LATE_PAYMENT_FEE\"\n    ],\n    \"payment_due_day\": 31,\n    \"periodic_fees\": []\n  },\n  \"credit_line\": {\n    \"max\": 200000,\n    \"min\": 25\n  },\n  \"currency_code\": \"USD\",\n  \"interest_calculation\": {\n    \"day_count\": \"ACTUAL\",\n    \"exclude_tran_types\": [\n      \"ANNUAL_FEE\",\n      \"LATE_PAYMENT_FEE\",\n      \"CASH_BACK_STATEMENT_CREDIT\"\n    ],\n    \"grace_days_application\": \"NEXT_CYCLE_DATE\",\n    \"interest_application\": [\n      \"PRINCIPAL\",\n      \"FEES\"\n    ],\n    \"interest_on_grace_reactivation\": \"ACCRUE_FULL_CYCLE\",\n    \"method\": \"AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS\",\n    \"minimum_interest\": 1\n  },\n  \"min_payment_calculation\": {\n    \"include_overlimit_amount\": true,\n    \"include_past_due_amount\": true,\n    \"min_payment_flat_amount\": 25,\n    \"min_payment_percentage\": {\n      \"include_fees_charged\": [\n        \"LATE_PAYMENT_FEE\"\n      ],\n      \"include_interest_charged\": false,\n      \"percentage_of_balance\": 1\n    }\n  },\n  \"min_payment_flat_amount\": 25,\n  \"min_payment_percentage\": 1,\n  \"name\": \"my_credit_product1234\",\n  \"payment_allocation_order\": [\n    \"INTEREST\",\n    \"FEES\",\n    \"PRINCIPAL\"\n  ],\n  \"product_sub_type\": \"CREDIT_CARD\",\n  \"product_type\": \"REVOLVING\",\n  \"status\": \"ACTIVE\",\n  \"usage\": [\n    \"PURCHASE\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 1416,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "67e3476a-6497-4cd0-aa83-1dbbff5dfb41",
+          "name": "Retrieve credit product",
+          "request": {
+            "name": "Retrieve credit product",
+            "description": {
+              "content": "Retrieve a credit product.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "products",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Unique identifier of the credit product to retrieve.\n\nSend a `GET` request to `/credit/products` to retrieve existing credit product tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "3c282b4c-a88b-4d3d-b583-df3d870c0428",
+              "name": "A JSON object containing product information",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the credit product to retrieve.\n\nSend a `GET` request to `/credit/products` to retrieve existing credit product tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"card_product_tokens\": [\n    \"card-product-token-2222\"\n  ],\n  \"classification\": \"CONSUMER\",\n  \"config\": {\n    \"billing_cycle_day\": 1,\n    \"fees\": [\n      \"LATE_PAYMENT_FEE\"\n    ],\n    \"payment_due_day\": 31,\n    \"periodic_fees\": [\n      {\n        \"frequency\": \"ANNUAL\",\n        \"number_of_days_post_activation\": 5\n      },\n      {\n        \"frequency\": \"MONTHLY\",\n        \"number_of_days_post_activation\": 28\n      }\n    ]\n  },\n  \"created_time\": \"2020-12-17 00:11:46+00:00\",\n  \"credit_line\": {\n    \"max\": 3500,\n    \"min\": 1500\n  },\n  \"currency_code\": \"USD\",\n  \"description\": \"Description of Gold Product\",\n  \"interest_calculation\": {\n    \"day_count\": \"ACTUAL\",\n    \"exclude_tran_types\": [\n      \"ANNUAL_FEE\",\n      \"LATE_PAYMENT_FEE\",\n      \"CASH_BACK_STATEMENT_CREDIT\"\n    ],\n    \"grace_days_application\": \"NEXT_CYCLE_DATE\",\n    \"interest_application\": [\n      \"PRINCIPAL\",\n      \"FEES\"\n    ],\n    \"interest_on_grace_reactivation\": \"ACCRUE_FULL_CYCLE\",\n    \"method\": \"AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS\",\n    \"minimum_interest\": 1\n  },\n  \"min_payment_flat_amount\": 0.01,\n  \"min_payment_percentage\": 0.0001,\n  \"name\": \"Gold Product\",\n  \"payment_allocation_order\": [\n    \"INTEREST\",\n    \"FEES\",\n    \"PRINCIPAL\"\n  ],\n  \"product_sub_type\": \"CREDIT_CARD\",\n  \"product_type\": \"REVOLVING\",\n  \"status\": \"DRAFT\",\n  \"token\": \"credit-product-token1111\",\n  \"updated_time\": \"2020-12-17 00:11:46+00:00\",\n  \"usage\": [\n    \"PURCHASE\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e1ce70b5-dd4f-4199-9b42-6c2ab8de43f5",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the credit product to retrieve.\n\nSend a `GET` request to `/credit/products` to retrieve existing credit product tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 1416,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cc17f080-d6a1-4bae-8f77-22ef755ea3c7",
+          "name": "Retrieve credit product lineage",
+          "request": {
+            "name": "Retrieve credit product lineage",
+            "description": {
+              "content": "Retrieve the lineage of a credit product, which is an array of related credit products whose lineage can be traced back to the same original credit product.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "products",
+                ":token",
+                "lineage"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "An array of statuses by which to filter credit products."
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "An array of statuses by which to filter credit products."
+                },
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "5",
+                  "description": "Number of credit product resources to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "Sort order index of the first resource in the returned array."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "-lastModifiedTime",
+                  "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Unique identifier of the credit product whose lineage you want to retrieve.\n\nSend a `GET` request to `/credit/products` to retrieve existing credit product tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "d78684be-9f3b-49f5-9619-e290b91dd959",
+              "name": "Expected response to a valid request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ":token",
+                    "lineage"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the credit product whose lineage you want to retrieve.\n\nSend a `GET` request to `/credit/products` to retrieve existing credit product tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 3,\n  \"data\": [\n    {\n      \"card_product_tokens\": [\n        \"card-product-token-d308\",\n        \"card-product-token-cc10\"\n      ],\n      \"classification\": \"CONSUMER\",\n      \"config\": {\n        \"billing_cycle_day\": 1,\n        \"payment_due_day\": 31\n      },\n      \"created_time\": \"2023-10-26 14:46:26.678000+00:00\",\n      \"credit_line\": {\n        \"max\": 20000,\n        \"min\": 200\n      },\n      \"currency_code\": \"USD\",\n      \"description\": \"Platinum consumer product\",\n      \"interest_calculation\": {\n        \"day_count\": \"ACTUAL\",\n        \"exclude_tran_types\": [\n          \"LATE_PAYMENT_FEE\",\n          \"ANNUAL_FEE\",\n          \"CASH_BACK_STATEMENT_CREDIT\"\n        ],\n        \"grace_days_application\": \"NEXT_CYCLE_DATE\",\n        \"interest_application\": [\n          \"PRINCIPAL\",\n          \"FEES\"\n        ],\n        \"interest_on_grace_reactivation\": \"ACCRUE_FULL_CYCLE\",\n        \"method\": \"AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS\",\n        \"minimum_interest\": 1\n      },\n      \"min_payment_calculation\": {\n        \"include_overlimit_amount\": false,\n        \"include_past_due_amount\": true,\n        \"min_payment_flat_amount\": 22,\n        \"min_payment_percentage\": {\n          \"include_fees_charged\": [],\n          \"include_interest_charged\": false,\n          \"percentage_of_balance\": 2\n        }\n      },\n      \"min_payment_flat_amount\": 22,\n      \"min_payment_percentage\": 2,\n      \"name\": \"My Platinum Credit Product\",\n      \"parent_product_token\": \"credit-product-token-366b\",\n      \"payment_allocation_order\": [\n        \"INTEREST\",\n        \"FEES\",\n        \"PRINCIPAL\"\n      ],\n      \"product_sub_type\": \"CREDIT_CARD\",\n      \"product_type\": \"REVOLVING\",\n      \"status\": \"ACTIVE\",\n      \"token\": \"credit-product-token-9163\",\n      \"updated_time\": \"2023-10-26 16:45:19.908000+00:00\",\n      \"usage\": [\n        \"PURCHASE\"\n      ]\n    },\n    {\n      \"card_product_tokens\": [\n        \"card-product-token-d308\"\n      ],\n      \"classification\": \"CONSUMER\",\n      \"config\": {\n        \"billing_cycle_day\": 1,\n        \"payment_due_day\": 31\n      },\n      \"created_time\": \"2023-10-26 14:43:11.187000+00:00\",\n      \"credit_line\": {\n        \"max\": 20000,\n        \"min\": 200\n      },\n      \"currency_code\": \"USD\",\n      \"description\": \"Platinum consumer product\",\n      \"interest_calculation\": {\n        \"day_count\": \"ACTUAL\",\n        \"exclude_tran_types\": [\n          \"LATE_PAYMENT_FEE\",\n          \"ANNUAL_FEE\",\n          \"CASH_BACK_STATEMENT_CREDIT\"\n        ],\n        \"grace_days_application\": \"NEXT_CYCLE_DATE\",\n        \"interest_application\": [\n          \"PRINCIPAL\",\n          \"FEES\"\n        ],\n        \"interest_on_grace_reactivation\": \"ACCRUE_FULL_CYCLE\",\n        \"method\": \"AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS\",\n        \"minimum_interest\": 1\n      },\n      \"min_payment_calculation\": {\n        \"include_overlimit_amount\": false,\n        \"include_past_due_amount\": false,\n        \"min_payment_flat_amount\": 22,\n        \"min_payment_percentage\": {\n          \"include_fees_charged\": [],\n          \"include_interest_charged\": false,\n          \"percentage_of_balance\": 2\n        }\n      },\n      \"min_payment_flat_amount\": 22,\n      \"min_payment_percentage\": 2,\n      \"name\": \"My Platinum Credit Product\",\n      \"payment_allocation_order\": [\n        \"INTEREST\",\n        \"FEES\",\n        \"PRINCIPAL\"\n      ],\n      \"product_sub_type\": \"CREDIT_CARD\",\n      \"product_type\": \"REVOLVING\",\n      \"status\": \"ARCHIVED\",\n      \"token\": \"credit-product-token-366b\",\n      \"updated_time\": \"2023-10-26 16:45:19.907000+00:00\",\n      \"usage\": [\n        \"PURCHASE\"\n      ]\n    },\n    {\n      \"card_product_tokens\": [\n        \"card-product-token-d308\",\n        \"card-product-token-cc10\"\n      ],\n      \"classification\": \"CONSUMER\",\n      \"config\": {\n        \"billing_cycle_day\": 1,\n        \"payment_due_day\": 31\n      },\n      \"created_time\": \"2023-10-26 14:44:54.770000+00:00\",\n      \"credit_line\": {\n        \"max\": 20000,\n        \"min\": 200\n      },\n      \"currency_code\": \"USD\",\n      \"description\": \"Platinum consumer product\",\n      \"interest_calculation\": {\n        \"day_count\": \"ACTUAL\",\n        \"exclude_tran_types\": [\n          \"LATE_PAYMENT_FEE\",\n          \"ANNUAL_FEE\",\n          \"CASH_BACK_STATEMENT_CREDIT\"\n        ],\n        \"grace_days_application\": \"NEXT_CYCLE_DATE\",\n        \"interest_application\": [\n          \"PRINCIPAL\",\n          \"FEES\"\n        ],\n        \"interest_on_grace_reactivation\": \"ACCRUE_FULL_CYCLE\",\n        \"method\": \"AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS\",\n        \"minimum_interest\": 1\n      },\n      \"min_payment_calculation\": {\n        \"include_overlimit_amount\": false,\n        \"include_past_due_amount\": false,\n        \"min_payment_flat_amount\": 22,\n        \"min_payment_percentage\": {\n          \"include_fees_charged\": [],\n          \"include_interest_charged\": false,\n          \"percentage_of_balance\": 2\n        }\n      },\n      \"min_payment_flat_amount\": 22,\n      \"min_payment_percentage\": 2,\n      \"name\": \"My Platinum Credit Product\",\n      \"parent_product_token\": \"credit-product-token-366b\",\n      \"payment_allocation_order\": [\n        \"INTEREST\",\n        \"FEES\",\n        \"PRINCIPAL\"\n      ],\n      \"product_sub_type\": \"CREDIT_CARD\",\n      \"product_type\": \"REVOLVING\",\n      \"status\": \"REJECTED\",\n      \"token\": \"credit-product-token-4373\",\n      \"updated_time\": \"2023-10-26 14:45:26.015000+00:00\",\n      \"usage\": [\n        \"PURCHASE\"\n      ]\n    }\n  ],\n  \"end_index\": 2,\n  \"is_more\": false,\n  \"start_index\": 0\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "44dbaa18-9147-4423-bf29-140e18a95df8",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ":token",
+                    "lineage"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the credit product whose lineage you want to retrieve.\n\nSend a `GET` request to `/credit/products` to retrieve existing credit product tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 1416,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "6f73366e-35e5-47fb-9765-dd83ea91e772",
+    "name": "Core accepted countries Credit Products API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.\n\nContact Support:\n Name: Marqeta\n Email: support@marqeta.com",
+      "type": "text/plain"
+    }
+  }
+}

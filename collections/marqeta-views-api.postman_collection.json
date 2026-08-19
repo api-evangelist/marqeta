@@ -1,0 +1,231 @@
+{
+  "item": [
+    {
+      "id": "4d200ece-7acf-40b8-9c75-f239b136c200",
+      "name": "Views",
+      "description": {
+        "content": "View endpoints provide programmatic access to aggregated platform data derived from card program activity. Each view represents a specific dataset such as transactions, balances, or card states, aggregated at a configurable time level.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5369fc84-d65b-4135-8bbf-dc7e3dd7670b",
+          "name": "List available views",
+          "request": {
+            "name": "List available views",
+            "description": {
+              "content": "Returns a list of all available view endpoints for the DiVA API. Each view provides access to a specific type of program data aggregated at a defined level. Use this endpoint to discover which datasets are available for your program.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "views"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "program",
+                  "value": "<string>",
+                  "description": "(Required) The name of your Marqeta card program. This parameter is required for most DiVA API endpoints to scope the data to your program."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "64c10bdf-e67d-4d99-908e-69d09c0bdec8",
+              "name": "A list of available view endpoints.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "views"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "program",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"views\": [\n    {\n      \"name\": \"string\",\n      \"path\": \"string\",\n      \"description\": \"string\",\n      \"time_aggregations\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"name\": \"string\",\n      \"path\": \"string\",\n      \"description\": \"string\",\n      \"time_aggregations\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b369c410-6dec-4e8d-bef8-be6d13400db0",
+              "name": "Bad request. One or more required query parameters are missing or contain invalid values.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "views"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "program",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_code\": \"string\",\n  \"error_message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "193fad65-f6b4-4b04-84bb-f8f6fdfdc80b",
+              "name": "Unauthorized. The provided application token and access token credentials are invalid or missing.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "views"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "program",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_code\": \"string\",\n  \"error_message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "52db2e46-f3a8-4bb0-b740-d73721b00e91",
+    "name": "Core accepted countries Views API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.\n\nContact Support:\n Name: Marqeta\n Email: support@marqeta.com",
+      "type": "text/plain"
+    }
+  }
+}

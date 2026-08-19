@@ -1,0 +1,581 @@
+{
+  "item": [
+    {
+      "id": "cf73a596-d317-40ec-b708-ce783bd218dd",
+      "name": "Adjustments",
+      "description": {
+        "content": "// Conditional snippet for beta or internal content\ninclude::../../maturity-admonition-banner.adoc[]\n\nUse the adjustments endpoints to create and retrieve account adjustments on Marqeta's credit platform.\nAn account adjustment adjusts the amount of a <</core-api/credit-account-journal-entries, journal entry>> or account balance.\n\nCreating an adjustment triggers the creation of a <</core-api/credit-account-journal-entries, journal entry>> belonging to the `ADJUSTMENT` group.\nFor more on adjustment journal entries, see <</developer-guides/about-credit-account-journal-entries#_adjustments, Adjustments>> in the About Credit Account Journal Entries guide.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3008a9a6-865b-40bb-ac5a-44a435611f02",
+          "name": "List account adjustments",
+          "request": {
+            "name": "List account adjustments",
+            "description": {
+              "content": "Retrieve an array of adjustments for a credit account.\n\nThis endpoint supports <</core-api/sorting-and-pagination, pagination>>.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token",
+                "adjustments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "5",
+                  "description": "Number of account adjustment resources to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "Sort order index of the first resource in the returned array."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account for which you want to retrieve adjustments.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "d97d5da9-a0a3-4871-bfcb-9fc04b9e10ec",
+              "name": "Expected response to a valid request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "adjustments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to retrieve adjustments.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 2,\n  \"data\": [\n    {\n      \"account_token\": \"my_account_token_12\",\n      \"adjustment_detail_object\": null,\n      \"amount\": -25,\n      \"currency_code\": \"USD\",\n      \"description\": \"Waived late payment fee\",\n      \"detail_token\": null,\n      \"external_adjustment_id\": null,\n      \"note\": null,\n      \"original_ledger_entry_token\": \"a0216141-13d6-e2e2-7227-abcd12345678\",\n      \"reason\": \"OTHER\",\n      \"related_detail_object\": null,\n      \"related_detail_token\": null,\n      \"source_account_type\": \"PROGRAM_FUNDING\",\n      \"token\": \"my_account_adjustment_token1234\",\n      \"type\": \"FEE\"\n    },\n    {\n      \"account_token\": \"my_account_token_12\",\n      \"adjustment_detail_object\": {\n        \"account_token\": \"my_account_token_12\",\n        \"average_daily_balance\": 181.67,\n        \"created_date\": \"2024-08-01 07:00:19.755000+00:00\",\n        \"currency_code\": \"USD\",\n        \"daily_periodic_rate\": 0.00041068,\n        \"days_in_billing_cycle\": 31,\n        \"goto_apr\": 14.99,\n        \"interest_amount\": 2.31,\n        \"statement_balance\": 208.93,\n        \"statement_closing_date\": \"2024-08-01 03:59:59.999000+00:00\",\n        \"statement_opening_date\": \"2024-07-01 04:00:00\",\n        \"statement_token\": \"statement_token_75b\",\n        \"token\": \"interest_detail_token1234\",\n        \"updated_date\": \"2024-08-01 07:00:19.755000+00:00\"\n      },\n      \"amount\": -100,\n      \"currency_code\": \"USD\",\n      \"description\": \"interest adjustment\",\n      \"detail_token\": \"interest_detail_token1234\",\n      \"external_adjustment_id\": \"e37e27a1-ad70-382e-846d-a31ab59d00f9\",\n      \"note\": \"interest adjustment for dispute\",\n      \"original_ledger_entry_token\": \"a0216141-13d6-e2e2-7227-abcd12345678\",\n      \"reason\": \"OTHER\",\n      \"related_detail_object\": {\n        \"account_token\": \"account_token_12\",\n        \"amount\": 500,\n        \"category\": \"FRAUD\",\n        \"created_time\": \"2025-07-01 00:27:09+00:00\",\n        \"ledger_entry_token\": \"journal_entry_token1222\",\n        \"notes\": \"string\",\n        \"resolved_at\": \"2025-07-01 00:27:09+00:00\",\n        \"status\": \"ACTIVE\",\n        \"token\": \"dispute_token_1234\",\n        \"updated_time\": \"2025-07-01 00:27:09+00:00\"\n      },\n      \"related_detail_token\": \"dispute_token1234\",\n      \"source_account_type\": \"PROGRAM_FUNDING\",\n      \"token\": \"my_account_adjustment_token1234\",\n      \"type\": \"INTEREST\"\n    }\n  ],\n  \"end_index\": 1,\n  \"is_more\": false,\n  \"start_index\": 0\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a6e4d7bd-2ecb-410d-80da-7b6f566b81f1",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "adjustments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to retrieve adjustments.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 524,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "160b9b60-ea29-4918-85c6-e869803de83f",
+          "name": "Create account adjustment",
+          "request": {
+            "name": "Create account adjustment",
+            "description": {
+              "content": "Create an adjustment for an existing credit account.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token",
+                "adjustments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account for which you want to create an adjustment.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": \"<number>\",\n  \"currency_code\": \"USD\",\n  \"description\": \"<string>\",\n  \"external_adjustment_id\": \"<uuid>\",\n  \"note\": \"<string>\",\n  \"original_ledger_entry_token\": \"<uuid>\",\n  \"reason\": \"<string>\",\n  \"source_account_type\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "311dcc1f-c409-4773-9b3b-0af8c9cb73d9",
+              "name": "Expected response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "adjustments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to create an adjustment.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": -25,\n  \"currency_code\": \"USD\",\n  \"description\": \"Waived late payment fee\",\n  \"original_ledger_entry_token\": \"2384f927-e4fe-47af-8ff6-0712ee41a2eb\",\n  \"source_account_type\": \"SPONSOR_BANK\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"account_token\": \"my_account_token_12\",\n  \"adjustment_detail_object\": null,\n  \"amount\": -25,\n  \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n  \"currency_code\": \"USD\",\n  \"description\": \"Waived late payment fee\",\n  \"detail_token\": null,\n  \"external_adjustment_id\": null,\n  \"note\": null,\n  \"original_ledger_entry_token\": \"a0216141-13d6-e2e2-7227-abcd12345678\",\n  \"reason\": \"OTHER\",\n  \"related_detail_object\": null,\n  \"related_detail_token\": null,\n  \"source_account_type\": \"SPONSOR_BANK\",\n  \"token\": \"my_account_adjustment_token1234\",\n  \"type\": \"FEE\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "51695a6b-381e-4c4e-95f5-1360d814f772",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "adjustments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to create an adjustment.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": -25,\n  \"currency_code\": \"USD\",\n  \"description\": \"Waived late payment fee\",\n  \"original_ledger_entry_token\": \"2384f927-e4fe-47af-8ff6-0712ee41a2eb\",\n  \"source_account_type\": \"SPONSOR_BANK\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 524,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4944106a-19d8-45be-a9d2-c907199a3a1b",
+          "name": "Retrieve account adjustment",
+          "request": {
+            "name": "Retrieve account adjustment",
+            "description": {
+              "content": "Retrieve an adjustment for a credit account.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token",
+                "adjustments",
+                ":adjustment_token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account for which you want to retrieve an adjustment.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "adjustment_token",
+                  "description": "(Required) Unique identifier of the adjustment to retrieve.\n\nSend a `GET` request to `/credit/accounts/{account_token}/adjustments` to retrieve existing account adjustment tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "99c92a03-e2ae-410f-a7b6-8c63d3e96aa8",
+              "name": "A JSON object containing account_adjustment information",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "adjustments",
+                    ":adjustment_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to retrieve an adjustment.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "adjustment_token",
+                      "description": "(Required) Unique identifier of the adjustment to retrieve.\n\nSend a `GET` request to `/credit/accounts/{account_token}/adjustments` to retrieve existing account adjustment tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"account_token\": \"my_account_token_12\",\n  \"adjustment_detail_object\": null,\n  \"amount\": -25,\n  \"currency_code\": \"USD\",\n  \"description\": \"Waived late payment fee\",\n  \"detail_token\": null,\n  \"external_adjustment_id\": null,\n  \"note\": null,\n  \"original_ledger_entry_token\": \"a0216141-13d6-e2e2-7227-abcd12345678\",\n  \"reason\": \"OTHER\",\n  \"related_detail_object\": null,\n  \"related_detail_token\": null,\n  \"source_account_type\": \"SPONSOR_BANK\",\n  \"token\": \"my_account_adjustment_token1234\",\n  \"type\": \"FEE\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "186319ce-fe63-45ac-bacb-0d1b61e1c601",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "adjustments",
+                    ":adjustment_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to retrieve an adjustment.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "adjustment_token",
+                      "description": "(Required) Unique identifier of the adjustment to retrieve.\n\nSend a `GET` request to `/credit/accounts/{account_token}/adjustments` to retrieve existing account adjustment tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 524,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "bd49a6c5-a1f1-49a4-8206-9ca2b5f09cb8",
+    "name": "Core accepted countries Adjustments API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.\n\nContact Support:\n Name: Marqeta\n Email: support@marqeta.com",
+      "type": "text/plain"
+    }
+  }
+}

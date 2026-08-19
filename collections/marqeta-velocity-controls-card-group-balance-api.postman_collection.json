@@ -1,0 +1,199 @@
+{
+  "item": [
+    {
+      "id": "0e9d9359-d95d-49d1-b65e-0a32a6c0f3af",
+      "name": "Velocity Controls Card Group Balance",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5180afc6-c991-4a0e-994f-1055390efeb2",
+          "name": "List Velocity Controls Card Group Balances",
+          "request": {
+            "name": "List Velocity Controls Card Group Balances",
+            "description": {
+              "content": "Get a list of all Velocity Controls Card Group Balances in the program",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "velocitycontrols",
+                "cardgroup",
+                ":card_group_token",
+                "available"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "card_group_token",
+                  "description": "(Required) Unique identifier of the card group for which to retrieve balances."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d2fa9b7c-56ff-476b-9f66-afd15ec03a1b",
+              "name": "Expected response to a valid request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "velocitycontrols",
+                    "cardgroup",
+                    ":card_group_token",
+                    "available"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "card_group_token",
+                      "description": "(Required) Unique identifier of the card group for which to retrieve balances."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 2685,\n  \"data\": [\n    {\n      \"amount_limit\": 6868.741230042044,\n      \"currency_code\": \"string\",\n      \"active\": false,\n      \"association\": {\n        \"card_group_token\": \"string\"\n      },\n      \"merchant_scope\": {\n        \"attribute\": \"string\",\n        \"decline_other_merchants\": false,\n        \"scope\": \"mcc\"\n      },\n      \"name\": \"string\",\n      \"token\": \"string\",\n      \"usage_limit\": 6965,\n      \"velocity_window\": \"MONTH\",\n      \"velocity_window_start_day\": 1776,\n      \"available\": {\n        \"amount\": 4373.229199960071,\n        \"days_remaining\": 9,\n        \"uses\": 7824\n      }\n    },\n    {\n      \"amount_limit\": 8294.629892220522,\n      \"currency_code\": \"string\",\n      \"active\": false,\n      \"association\": {\n        \"card_group_token\": \"string\"\n      },\n      \"merchant_scope\": {\n        \"attribute\": \"string\",\n        \"decline_other_merchants\": false,\n        \"scope\": \"mcc\"\n      },\n      \"name\": \"string\",\n      \"token\": \"string\",\n      \"usage_limit\": 4238,\n      \"velocity_window\": \"MONTH\",\n      \"velocity_window_start_day\": 3655,\n      \"available\": {\n        \"amount\": 7850.952349849949,\n        \"days_remaining\": 8618,\n        \"uses\": 6102\n      }\n    }\n  ],\n  \"end_index\": 9805,\n  \"is_more\": false,\n  \"start_index\": 7305\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0f58252e-32a5-4c9b-926d-435e29e54f97",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "velocitycontrols",
+                    "cardgroup",
+                    ":card_group_token",
+                    "available"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "card_group_token",
+                      "description": "(Required) Unique identifier of the card group for which to retrieve balances."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 8326,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "6f175129-ea49-46e6-9f5e-4465325f8d9c",
+    "name": "Core accepted countries Velocity Controls Card Group Balance API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.\n\nContact Support:\n Name: Marqeta\n Email: support@marqeta.com",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries Program Gateways API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Program Gateways",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Program Gateways",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/programgateways",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of Program Gateway resources to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`."
+              }
+            ]
+          },
+          "docs": "Retrieve an array of existing Credit Program Gateways.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>."
+        },
+        {
+          "info": {
+            "name": "Create Program Gateway",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/programgateways",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new Credit Program Gateway.\n\nUse this endpoint to configure your Program Gateway to receive gateway requests from Marqeta's credit platform.\nYou can create multiple Program Gateways, but only one can be active per credit program.\n\n[NOTE]\nTo create a Program Gateway, you must have consumer or admin credentials."
+        },
+        {
+          "info": {
+            "name": "Retrieve Program Gateway",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/programgateways/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the Program Gateway to retrieve.\n\nSend a `GET` request to `/credit/programgateways` to retrieve existing Program Gateway tokens."
+              }
+            ]
+          },
+          "docs": "Retrieve an existing Credit Program Gateway."
+        },
+        {
+          "info": {
+            "name": "Update Program Gateway",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/programgateways/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the Program Gateway to update."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing Credit Program Gateway.\n\nYou may want to update a Program Gateway if you are switching it to active or inactive, updating the URL, username, or password, and more."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

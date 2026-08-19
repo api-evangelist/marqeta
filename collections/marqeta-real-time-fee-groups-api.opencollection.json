@@ -1,0 +1,119 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries Real-Time Fee Groups API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Real-Time Fee Groups",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List real-time fee groups",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/realtimefeegroups",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of real-time fee groups to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "The sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (`field_1,field_2`, and so on).\n\nLeave blank to return all fields."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nUse any field in the resource model, or one of the system fields `lastModifiedTime` or `createdTime`.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order."
+              }
+            ]
+          },
+          "docs": "Use this endpoint to list existing real-time fee groups.\n\nThis endpoint supports <</core-api/field-filtering, field filtering>> and <</core-api/sorting-and-pagination, pagination>>."
+        },
+        {
+          "info": {
+            "name": "Create real-time fee group",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/realtimefeegroups",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this endpoint to create a real-time fee group."
+        },
+        {
+          "info": {
+            "name": "Retrieve real-time fee group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/realtimefeegroups/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the real-time fee group."
+              }
+            ]
+          },
+          "docs": "Use this endpoint to retrieve a specific real-time fee group.\nInclude the real-time fee group `token` path parameter to specify the real-time fee group to return."
+        },
+        {
+          "info": {
+            "name": "Update real-time fee group",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/realtimefeegroups/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the real-time fee group."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this endpoint to update a real-time fee group.\nInclude the real-time fee group `token` path parameter to specify the real-time fee group to update."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

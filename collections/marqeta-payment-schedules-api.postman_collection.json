@@ -1,0 +1,1278 @@
+{
+  "item": [
+    {
+      "id": "7e755e43-68a0-4073-9c3c-d4f5124a507e",
+      "name": "Payment Schedules",
+      "description": {
+        "content": "// Conditional snippet for beta or internal content\ninclude::../../maturity-admonition-banner.adoc[]\n\nUse the payment schedule endpoints to create and retrieve payment schedules and payment schedule transitions on a <</core-api/credit-accounts, credit account>>.\n\nA payment schedule allows you to schedule a one-time or recurring payment on a credit account.\nFor more on payments, see <</developer-guides/about-credit-account-payments, About Credit Account Payments>>.\n\nTo receive webhook notifications when ACH payment transition events occur, see <</core-api/event-types#_credit_account_payment_transition_events, Credit account payment transition events>> in Event Types.\n\nMaking a payment on a payment schedule triggers the creation of a <</core-api/credit-account-journal-entries, journal entry>> belonging to the `PAYMENT` group.\nFor more on payment journal entries, see <</developer-guides/about-credit-account-journal-entries#_payments, Payments>> in the About Credit Account Journal Entries guide.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "372bc6d9-9b37-4947-8167-d9592e5de195",
+          "name": "List payment schedules",
+          "request": {
+            "name": "List payment schedules",
+            "description": {
+              "content": "Retrieve an array of payment schedules on a specific credit account.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token",
+                "paymentschedules"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "statuses",
+                  "value": "<string>",
+                  "description": "Status of the payment schedules to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "statuses",
+                  "value": "<string>",
+                  "description": "Status of the payment schedules to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "frequency",
+                  "value": "<string>",
+                  "description": "Frequency of the payment schedules to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "frequency",
+                  "value": "<string>",
+                  "description": "Frequency of the payment schedules to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "5",
+                  "description": "Number of payment schedule resources to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "Sort order index of the first resource in the returned array."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "-lastModifiedTime",
+                  "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account for which you want to retrieve payment schedules.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "c939116e-e69f-4f4f-89a8-43551d8ec71f",
+              "name": "Expected response to a valid request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "paymentschedules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "statuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "frequency",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "frequency",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to retrieve payment schedules.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 2,\n  \"data\": [\n    {\n      \"account_token\": \"account1\",\n      \"amount\": null,\n      \"amount_category\": \"REMAINING_STATEMENT_BALANCE\",\n      \"created_time\": \"2023-08-22 22:17:11.407000+00:00\",\n      \"currency_code\": \"USD\",\n      \"description\": \"Sample payoff\",\n      \"frequency\": \"MONTHLY\",\n      \"next_payment_impact_date\": \"2023-08-31\",\n      \"payment_day\": \"PAYMENT_DUE_DAY\",\n      \"payment_source_token\": \"source1\",\n      \"status\": \"ACTIVE\",\n      \"token\": \"mytoken\",\n      \"updated_time\": \"2023-08-22 22:17:11.407000+00:00\"\n    },\n    {\n      \"account_token\": \"account1\",\n      \"amount\": 100,\n      \"amount_category\": \"FIXED\",\n      \"created_time\": \"2023-07-22 22:13:31.426000+00:00\",\n      \"currency_code\": \"USD\",\n      \"description\": \"Sample payment\",\n      \"frequency\": \"ONCE\",\n      \"next_payment_impact_date\": \"2023-08-10\",\n      \"payment_day\": \"PAYMENT_DUE_DAY\",\n      \"payment_source_token\": \"source1\",\n      \"status\": \"COMPLETED\",\n      \"token\": \"mytoken1\",\n      \"updated_time\": \"2023-07-22 22:13:31.426000+00:00\"\n    }\n  ],\n  \"end_index\": 1,\n  \"is_more\": false,\n  \"start_index\": 0\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "771710de-7e93-4aac-8984-59ceaf73b4ef",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "paymentschedules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "statuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "frequency",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "frequency",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to retrieve payment schedules.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4738,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "22d21e63-f89b-430b-a1f0-815c45239584",
+          "name": "Create payment schedule",
+          "request": {
+            "name": "Create payment schedule",
+            "description": {
+              "content": "Create a new payment schedule, either one-time or recurring.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token",
+                "paymentschedules"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account for which you want to create a payment schedule.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount_category\": \"<string>\",\n  \"currency_code\": \"USD\",\n  \"frequency\": \"<string>\",\n  \"amount\": \"<number>\",\n  \"description\": \"<string>\",\n  \"next_payment_impact_date\": \"<date>\",\n  \"payment_day\": \"<string>\",\n  \"payment_source_token\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "bb657be0-d44b-4a4e-8d45-1bdcedb91ce4",
+              "name": "Newly created payment schedule.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "paymentschedules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to create a payment schedule.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": 100,\n  \"amount_category\": \"FIXED\",\n  \"currency_code\": \"USD\",\n  \"description\": \"Account statement payment\",\n  \"frequency\": \"MONTHLY\",\n  \"payment_day\": \"PAYMENT_DUE_DAY\",\n  \"payment_source_token\": \"payment_source_token_1112\",\n  \"token\": \"payment_schedule_token_1239\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"account_token\": \"12f10563-d5f2-11ec-889b-bd3a73e55331\",\n  \"amount\": 2500,\n  \"amount_category\": \"FIXED\",\n  \"created_time\": \"2024-01-12 15:03:09.717000+00:00\",\n  \"currency_code\": \"USD\",\n  \"description\": \"Scheduled account payment\",\n  \"frequency\": \"ONCE\",\n  \"next_payment_impact_date\": \"2024-01-31\",\n  \"payment_source_token\": \"7d68f45b-1232-4283-a0ea-6b0418d37692\",\n  \"status\": \"COMPLETED\",\n  \"token\": \"4749ab00-fec1-471c-ac5b-b8d31d06d7e4\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d2e409a6-8439-4079-84e7-34dee9f9cd65",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "paymentschedules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to create a payment schedule.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": 100,\n  \"amount_category\": \"FIXED\",\n  \"currency_code\": \"USD\",\n  \"description\": \"Account statement payment\",\n  \"frequency\": \"MONTHLY\",\n  \"payment_day\": \"PAYMENT_DUE_DAY\",\n  \"payment_source_token\": \"payment_source_token_1112\",\n  \"token\": \"payment_schedule_token_1239\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4738,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "79992727-ce60-4fd2-8a30-d373f840fd15",
+          "name": "Retrieve payment schedule",
+          "request": {
+            "name": "Retrieve payment schedule",
+            "description": {
+              "content": "Retrieve a single payment schedule on a specific credit account.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token",
+                "paymentschedules",
+                ":payment_schedule_token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account for which you want to retrieve a payment schedule.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "payment_schedule_token",
+                  "description": "(Required) Unique identifier of the payment schedule that you want to retrieve.\n\nSend a `GET` request to `/credit/accounts/{account_token}/paymentschedules` to retrieve existing payment schedule tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "e45c870c-b312-446e-bbba-f418d18d5966",
+              "name": "Expected response to a valid request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "paymentschedules",
+                    ":payment_schedule_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to retrieve a payment schedule.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "payment_schedule_token",
+                      "description": "(Required) Unique identifier of the payment schedule that you want to retrieve.\n\nSend a `GET` request to `/credit/accounts/{account_token}/paymentschedules` to retrieve existing payment schedule tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"account_token\": \"12f10563-d5f2-11ec-889b-bd3a73e55331\",\n  \"amount\": 2500,\n  \"amount_category\": \"FIXED\",\n  \"created_time\": \"2024-01-12 15:03:09.717000+00:00\",\n  \"currency_code\": \"USD\",\n  \"description\": \"Scheduled account payment\",\n  \"frequency\": \"ONCE\",\n  \"next_payment_impact_date\": \"2024-01-31\",\n  \"payment_source_token\": \"7d68f45b-1232-4283-a0ea-6b0418d37692\",\n  \"status\": \"COMPLETED\",\n  \"token\": \"4749ab00-fec1-471c-ac5b-b8d31d06d7e4\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c2c9636e-087d-4200-bf8d-4d82338e1816",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "paymentschedules",
+                    ":payment_schedule_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to retrieve a payment schedule.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "payment_schedule_token",
+                      "description": "(Required) Unique identifier of the payment schedule that you want to retrieve.\n\nSend a `GET` request to `/credit/accounts/{account_token}/paymentschedules` to retrieve existing payment schedule tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4738,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "637d3545-4efc-48d9-964a-a40de5914112",
+          "name": "Retrieve payment schedule transitions",
+          "request": {
+            "name": "Retrieve payment schedule transitions",
+            "description": {
+              "content": "Retrieve an array of payment schedule transitions on a specific credit account.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token",
+                "paymentschedules",
+                ":payment_schedule_token",
+                "transitions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "5",
+                  "description": "Number of payment schedule resources to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "Sort order index of the first resource in the returned array."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "-createdTime",
+                  "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `createdTime`, and not by the field names appearing in response bodies such as `created_time`."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account for which you want to retrieve payment schedule transitions.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "payment_schedule_token",
+                  "description": "(Required) Unique identifier of the payment schedule for which you want to retrieve transitions.\n\nSend a `GET` request to `/credit/accounts/{account_token}/paymentschedules` to retrieve existing payment schedule tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "80341261-6848-4b46-9b32-0ee549649e02",
+              "name": "Expected response to a valid request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "paymentschedules",
+                    ":payment_schedule_token",
+                    "transitions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-createdTime"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to retrieve payment schedule transitions.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "payment_schedule_token",
+                      "description": "(Required) Unique identifier of the payment schedule for which you want to retrieve transitions.\n\nSend a `GET` request to `/credit/accounts/{account_token}/paymentschedules` to retrieve existing payment schedule tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 2,\n  \"data\": [\n    {\n      \"account_token\": \"account1\",\n      \"created_time\": \"2023-08-23 11:25:34.342000+00:00\",\n      \"payment_schedule_token\": \"payment1\",\n      \"status\": \"TERMINATED\",\n      \"token\": \"transition1\",\n      \"updated_time\": \"2023-08-23 11:25:34.342000+00:00\"\n    },\n    {\n      \"account_token\": \"account2\",\n      \"created_time\": \"2023-08-22 22:17:11.407000+00:00\",\n      \"payment_schedule_token\": \"payment2\",\n      \"status\": \"ACTIVE\",\n      \"token\": \"transition2\",\n      \"updated_time\": \"2023-08-22 22:17:11.407000+00:00\"\n    }\n  ],\n  \"end_index\": 1,\n  \"is_more\": false,\n  \"start_index\": 0\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "73d51a17-d4aa-4d5c-b0e3-ed633e0b7e20",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "paymentschedules",
+                    ":payment_schedule_token",
+                    "transitions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-createdTime"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to retrieve payment schedule transitions.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "payment_schedule_token",
+                      "description": "(Required) Unique identifier of the payment schedule for which you want to retrieve transitions.\n\nSend a `GET` request to `/credit/accounts/{account_token}/paymentschedules` to retrieve existing payment schedule tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4738,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d75da5cd-776d-4bf0-a5e6-cc5b9f3a880e",
+          "name": "Create payment schedule transition",
+          "request": {
+            "name": "Create payment schedule transition",
+            "description": {
+              "content": "Transition a payment schedule to a new status.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token",
+                "paymentschedules",
+                ":payment_schedule_token",
+                "transitions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account on which to transition a payment schedule.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "payment_schedule_token",
+                  "description": "(Required) Unique identifier of the payment schedule whose status is to transition.\n\nSend a `GET` request to `/credit/accounts/{account_token}/paymentschedules` to retrieve existing payment schedule tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3863154e-c8df-4e55-b527-6344707d5336",
+              "name": "Newly created payment schedule transition.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "paymentschedules",
+                    ":payment_schedule_token",
+                    "transitions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account on which to transition a payment schedule.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "payment_schedule_token",
+                      "description": "(Required) Unique identifier of the payment schedule whose status is to transition.\n\nSend a `GET` request to `/credit/accounts/{account_token}/paymentschedules` to retrieve existing payment schedule tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"TERMINATED\",\n  \"token\": \"4749ab00-fec1-471c-ac5b-b8d31d06d7e4\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"account_token\": \"credit_account_token_1232\",\n  \"created_time\": \"2024-01-12 15:03:09.717000+00:00\",\n  \"payment_schedule_token\": \"payment_schedule_token_1232\",\n  \"status\": \"TERMINATED\",\n  \"token\": \"payment_schedule_transition_token_111\",\n  \"updated_time\": \"2024-01-12 15:03:09.717000+00:00\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a1bba05f-0fca-48c4-86e0-bad231210e6f",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "paymentschedules",
+                    ":payment_schedule_token",
+                    "transitions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account on which to transition a payment schedule.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "payment_schedule_token",
+                      "description": "(Required) Unique identifier of the payment schedule whose status is to transition.\n\nSend a `GET` request to `/credit/accounts/{account_token}/paymentschedules` to retrieve existing payment schedule tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"TERMINATED\",\n  \"token\": \"4749ab00-fec1-471c-ac5b-b8d31d06d7e4\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4738,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "28a1e407-15b2-45b1-9b62-098df5af3195",
+          "name": "Retrieve payment schedule transition",
+          "request": {
+            "name": "Retrieve payment schedule transition",
+            "description": {
+              "content": "Retrieve a single payment schedule transition on a specific credit account.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token",
+                "paymentschedules",
+                ":payment_schedule_token",
+                "transitions",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account for which you want to retrieve a payment schedule transition.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "payment_schedule_token",
+                  "description": "(Required) Unique identifier of the payment schedule you want to retrieve.\n\nSend a `GET` request to `/credit/accounts/{account_token}/paymentschedules` to retrieve existing payment schedule tokens."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Unique identifier of the payment schedule transition you want to retrieve.\n\nSend a `GET` request to `/credit/accounts/{account_token}/paymentschedules/{payment_schedule_token}/transitions` to retrieve existing payment schedule transition tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "e6b21f69-8e14-458b-a2b7-f8ab5ff6d85e",
+              "name": "Expected response to a valid request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "paymentschedules",
+                    ":payment_schedule_token",
+                    "transitions",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to retrieve a payment schedule transition.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "payment_schedule_token",
+                      "description": "(Required) Unique identifier of the payment schedule you want to retrieve.\n\nSend a `GET` request to `/credit/accounts/{account_token}/paymentschedules` to retrieve existing payment schedule tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the payment schedule transition you want to retrieve.\n\nSend a `GET` request to `/credit/accounts/{account_token}/paymentschedules/{payment_schedule_token}/transitions` to retrieve existing payment schedule transition tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"account_token\": \"account1\",\n  \"created_time\": \"2023-08-22 22:17:11.407000+00:00\",\n  \"payment_schedule_token\": \"payment1\",\n  \"status\": \"ACTIVE\",\n  \"token\": \"transition2\",\n  \"updated_time\": \"2023-08-22 22:17:11.407000+00:00\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c8153019-bebb-431d-aafc-3bb90f797308",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "paymentschedules",
+                    ":payment_schedule_token",
+                    "transitions",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to retrieve a payment schedule transition.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "payment_schedule_token",
+                      "description": "(Required) Unique identifier of the payment schedule you want to retrieve.\n\nSend a `GET` request to `/credit/accounts/{account_token}/paymentschedules` to retrieve existing payment schedule tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the payment schedule transition you want to retrieve.\n\nSend a `GET` request to `/credit/accounts/{account_token}/paymentschedules/{payment_schedule_token}/transitions` to retrieve existing payment schedule transition tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4738,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "5843ea75-efd4-444d-a1d0-eb4f852b8619",
+    "name": "Core accepted countries Payment Schedules API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.\n\nContact Support:\n Name: Marqeta\n Email: support@marqeta.com",
+      "type": "text/plain"
+    }
+  }
+}

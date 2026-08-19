@@ -1,0 +1,44 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries Velocity Controls Card Group Balance API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Velocity Controls Card Group Balance",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Velocity Controls Card Group Balances",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/velocitycontrols/cardgroup/:card_group_token/available",
+            "params": [
+              {
+                "name": "card_group_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the card group for which to retrieve balances."
+              }
+            ]
+          },
+          "docs": "Get a list of all Velocity Controls Card Group Balances in the program"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

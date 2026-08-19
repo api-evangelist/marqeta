@@ -1,0 +1,105 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "accepted countries",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Lists all accepted countries",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/acceptedcountries",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of accepted countries to retrieve"
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Start index"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Name"
+              },
+              {
+                "name": "whitelist",
+                "value": "",
+                "type": "query",
+                "description": "Whitelist"
+              },
+              {
+                "name": "search_type",
+                "value": "",
+                "type": "query",
+                "description": "Search type"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              }
+            ]
+          },
+          "docs": "Lists all accepted countries"
+        },
+        {
+          "info": {
+            "name": "Returns a specific accepted country",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/acceptedcountries/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Accepted country token"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+              }
+            ]
+          },
+          "docs": "Returns a specific accepted country"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

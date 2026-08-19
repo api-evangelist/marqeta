@@ -1,0 +1,92 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries Migrations API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Migrations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get finalize status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/migrations/accounts/:account_token/finalize",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which you want to get the finalize status.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              }
+            ]
+          },
+          "docs": "Called to retrieve the finalize status of a migrated account\n"
+        },
+        {
+          "info": {
+            "name": "Get the current balance and available credit for a credit account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/migrations/accounts/:account_token/getaccountbalances",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which you want to retrieve fees.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              }
+            ]
+          },
+          "docs": "Retrieve the current balance, available credit for a credit account."
+        },
+        {
+          "info": {
+            "name": "Sync statement asset",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/migrations/accounts/:account_token/statements/:statement_summary_token/files",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which you want to sync a statement asset.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "statement_summary_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the migrated statement summary for which you want to sync an asset."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Sync a statement asset to a migrated statement summary."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

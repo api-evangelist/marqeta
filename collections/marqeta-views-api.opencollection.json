@@ -1,0 +1,44 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries Views API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Views",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List available views",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/views",
+            "params": [
+              {
+                "name": "program",
+                "value": "",
+                "type": "query",
+                "description": "The name of your Marqeta card program. This parameter is required for most DiVA API endpoints to scope the data to your program."
+              }
+            ]
+          },
+          "docs": "Returns a list of all available view endpoints for the DiVA API. Each view provides access to a specific type of program data aggregated at a defined level. Use this endpoint to discover which datasets are available for your program."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

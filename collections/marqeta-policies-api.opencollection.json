@@ -1,0 +1,620 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries Policies API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Policies",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List APR policies",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/policies/aprs",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of APR policy resources to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `effectiveDate`, and not by the field names appearing in response bodies such as `effective_date`."
+              }
+            ]
+          },
+          "docs": "Retrieve an array of existing APR policies.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>."
+        },
+        {
+          "info": {
+            "name": "Create APR policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/policies/aprs",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new annual percentage rate (APR) policy."
+        },
+        {
+          "info": {
+            "name": "Retrieve APR policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/policies/aprs/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the APR policy to retrieve.\n\nSend a `GET` request to `/policies/aprs` to retrieve existing APR policy tokens."
+              }
+            ]
+          },
+          "docs": "Retrieve a specific annual percentage rate (APR) policy.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>."
+        },
+        {
+          "info": {
+            "name": "Update APR policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/policies/aprs/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the APR policy to update.\n\nSend a `GET` request to `/policies/aprs` to retrieve existing APR policy tokens."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a specific APR policy."
+        },
+        {
+          "info": {
+            "name": "Clone APR policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/policies/aprs/:token/clone",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the APR policy to clone.\n\nSend a `GET` request to `/policies/aprs` to retrieve existing APR policy tokens."
+              }
+            ]
+          },
+          "docs": "Create a new annual percentage rate (APR) policy based on an existing APR policy."
+        },
+        {
+          "info": {
+            "name": "List APR schedules",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/policies/aprs/:token/schedule",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the APR policy on which to retrieve APR schedules.\n\nSend a `GET` request to `/policies/aprs` to retrieve existing product policy tokens."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of APR schedule resources to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`."
+              }
+            ]
+          },
+          "docs": "Retrieve an array of the historic annual percentage rate (APR) schedules on a specific APR policy.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>."
+        },
+        {
+          "info": {
+            "name": "List document policies",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/policies/documents",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of document policy resources to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`."
+              }
+            ]
+          },
+          "docs": "Retrieve an array of existing document policies.\nA document policy consists of all the pre- and post-application disclosures and credit program documents known as assets and templates.\nAssets contain finalized values after a bundle is created; templates do not contain finalized values.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>."
+        },
+        {
+          "info": {
+            "name": "Create document policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/policies/documents",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new document policy, which consists of all the pre- and post-application disclosures and credit program documents known as assets and templates.\nAssets contain finalized values after a bundle is created; templates do not contain finalized values."
+        },
+        {
+          "info": {
+            "name": "Retrieve document policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/policies/documents/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the document policy to retrieve.\n\nSend a `GET` request to `/policies/documents` to retrieve existing document policy tokens."
+              }
+            ]
+          },
+          "docs": "Retrieve a specific document policy, which consists of all the pre- and post-application disclosures and credit program documents known as assets and templates.\nAssets contain finalized values after a bundle is created; templates do not contain finalized values."
+        },
+        {
+          "info": {
+            "name": "Update document policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/policies/documents/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the document policy to update.\n\nSend a `GET` request to `/policies/documents` to retrieve existing document policy tokens."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a specific document policy, which consists of all the pre- and post-application disclosures and credit program documents known as assets and templates.\nAssets contain finalized values after a bundle is created; templates do not contain finalized values."
+        },
+        {
+          "info": {
+            "name": "Clone document policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/policies/documents/:token/clone",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the document policy to clone.\n\nSend a `GET` request to `/policies/documents` to retrieve existing document policy tokens."
+              }
+            ]
+          },
+          "docs": "Create a new document policy based on an existing document policy.\nA document policy consists of all the pre- and post-application disclosures and credit program documents known as assets and templates.\nAssets contain finalized values after a bundle is created; templates do not contain finalized values."
+        },
+        {
+          "info": {
+            "name": "List fee policies",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/policies/fees",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of fee policy resources to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`."
+              }
+            ]
+          },
+          "docs": "Retrieve an array of existing fee policies.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>."
+        },
+        {
+          "info": {
+            "name": "Create fee policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/policies/fees",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new fee policy."
+        },
+        {
+          "info": {
+            "name": "Retrieve fee policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/policies/fees/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the fee policy to retrieve.\n\nSend a `GET` request to `/policies/fee` to retrieve existing fee policy tokens."
+              }
+            ]
+          },
+          "docs": "Retrieve a specific fee policy.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>."
+        },
+        {
+          "info": {
+            "name": "Update fee policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/policies/fees/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the fee policy to retrieve.\n\nSend a `GET` request to `/policies/fee` to retrieve existing fee policy tokens."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a specific fee policy."
+        },
+        {
+          "info": {
+            "name": "Clone fee policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/policies/fees/:token/clone",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the fee policy to clone.\n\nSend a `GET` request to `/policies/fee` to retrieve existing fee policy tokens."
+              }
+            ]
+          },
+          "docs": "Create a new fee policy based on an existing fee policy."
+        },
+        {
+          "info": {
+            "name": "List credit product policies",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/policies/products",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of product policy resources to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`."
+              }
+            ]
+          },
+          "docs": "Retrieve an array of existing credit product policies.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>."
+        },
+        {
+          "info": {
+            "name": "Create credit product policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/policies/products",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new credit product policy."
+        },
+        {
+          "info": {
+            "name": "Retrieve credit product policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/policies/products/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit product policy to retrieve.\n\nSend a `GET` request to `/policies/products` to retrieve existing credit product policy tokens."
+              }
+            ]
+          },
+          "docs": "Retrieve a specific credit product policy."
+        },
+        {
+          "info": {
+            "name": "Update credit product policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/policies/products/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit product policy to retrieve.\n\nSend a `GET` request to `/policies/products` to retrieve existing credit product policy tokens."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a specific credit product policy."
+        },
+        {
+          "info": {
+            "name": "Add card product to credit product policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/policies/products/:token/cardproducts",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit product policy.\n\nSend a `GET` request to `/policies/products` to retrieve existing credit product policy tokens."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a card product to an existing credit product policy. This endpoint allows the caller to add a card product even if the bundle is ACTIVE."
+        },
+        {
+          "info": {
+            "name": "Clone credit product policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/policies/products/:token/clone",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit product policy to clone.\n\nSend a `GET` request to `/policies/products` to retrieve existing credit product policy tokens."
+              }
+            ]
+          },
+          "docs": "Create a new credit product policy based on an existing credit product policy."
+        },
+        {
+          "info": {
+            "name": "List reward policies",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/policies/rewards",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of reward policy resources to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`."
+              }
+            ]
+          },
+          "docs": "Retrieve an array of reward policies.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>."
+        },
+        {
+          "info": {
+            "name": "Create reward policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/policies/rewards",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new reward policy."
+        },
+        {
+          "info": {
+            "name": "Retrieve reward policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/policies/rewards/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the reward policy to retrieve.\n\nSend a `GET` request to `/policies/rewards` to retrieve existing reward policy tokens."
+              }
+            ]
+          },
+          "docs": "Retrieve a reward policy."
+        },
+        {
+          "info": {
+            "name": "Update reward policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/policies/rewards/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the reward policy to update.\n\nSend a `GET` request to `/policies/rewards` to retrieve existing reward policy tokens."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a reward policy."
+        },
+        {
+          "info": {
+            "name": "Clone reward policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/policies/rewards/:token/clone",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the reward policy to clone.\n\nSend a `GET` request to `/policies/rewards` to retrieve existing reward policy tokens."
+              }
+            ]
+          },
+          "docs": "Create a new reward policy based on existing reward policy."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

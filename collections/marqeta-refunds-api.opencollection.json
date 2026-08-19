@@ -1,0 +1,54 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries Refunds API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Refunds",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Simulate Refund Transition",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/simulation/accounts/:account_token/refunds/:refund_token/transitions",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which you want to create a balance refund.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "refund_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the refund to retrieve.\n\nSend a `GET` request to `/credit/accounts/{account_token}/refunds/{refund_token}` to retrieve existing refunds."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "api to simulate status transition of a refund."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

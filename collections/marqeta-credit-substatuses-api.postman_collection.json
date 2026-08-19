@@ -1,0 +1,923 @@
+{
+  "item": [
+    {
+      "id": "a01f09b5-4935-4172-8280-f6ee8ab2ffe2",
+      "name": "Credit Substatuses",
+      "description": {
+        "content": "// Conditional snippet for beta or internal content\ninclude::../../maturity-admonition-banner.adoc[]\n\nCredit substatuses can be applied to credit accounts or credit account holders.\nSubstatuses should be applied only after verification with Customer Support and after the cardholder request for the substatus designation has been accepted.\nSubstatuses define specific circumstances, such as bankruptcy, hardship or fraud.\nThey also affect account behavior or activity, including interest accrual, authorization requests, and account termination.\nSubstatus downstream account actions are not always reversible for the cardholder, which means that substatuses should be applied with caution.\n\nUse the substatus endpoints to apply or remove a substatus for a credit account or user.\nApplying a substatus causes immediate downstream changes to the account.\nFor additional information about substatuses, see <</developer-guides/about-credit-accounts#_account-substatuses,Account substatuses>> or <</developer-guides/about-credit-accounts#_account-holder-substatuses,Account holder substatuses>> in the <</developer-guides/about-credit-accounts,About Credit Accounts>> guide.\n\n[NOTE]\n====\nThe substatus `SCRA` stands for \"Servicemembers Civilian Relief Act.\"\nThe substatus `MLA` stands for \"Military Lending Act.\"\n====\n\nFor more information about receiving webhook notifications when account transition events occur, see <</core-api/event-types#_credit-substatus-events,Credit substatus events>> on the <</core-api/event-types,Event Types>> page.\n\n[IMPORTANT]\n====\nIf you are a Managed by Marqeta customer, a Marqeta customer service representative will apply the appropriate substatuses.\n====",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "62008f8b-5a31-46ad-ad9e-6adf637add45",
+          "name": "List substatuses",
+          "request": {
+            "name": "List substatuses",
+            "description": {
+              "content": "Retrieve an array of substatuses.\nThis endpoint supports <</core-api/sorting-and-pagination,sorting and pagination>>.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "substatuses"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "account_token",
+                  "value": "<string>",
+                  "description": "Unique identifier of the account for which to retrieve substatuses.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing account tokens."
+                },
+                {
+                  "disabled": false,
+                  "key": "user_token",
+                  "value": "<string>",
+                  "description": "Unique identifier of the user for which to retrieve substatuses.\n\nSend a `GET` request to `/users` to retrieve existing user tokens."
+                },
+                {
+                  "disabled": false,
+                  "key": "is_active",
+                  "value": "<boolean>",
+                  "description": "Denotes whether a substatus is active."
+                },
+                {
+                  "disabled": false,
+                  "key": "substatuses",
+                  "value": "<string>",
+                  "description": "Comma-delimited list of substatus types to include.\nAllowable values:\n`HARDSHIP`, `FRAUD`, `MLA`, `SCRA`, `DECEASED`, `BANKRUPTCY`, `POWER_OF_ATTORNEY`, `BLOCKED`, `CEASE_AND_DESIST`, `OPT_OUT`"
+                },
+                {
+                  "disabled": false,
+                  "key": "substatuses",
+                  "value": "<string>",
+                  "description": "Comma-delimited list of substatus types to include.\nAllowable values:\n`HARDSHIP`, `FRAUD`, `MLA`, `SCRA`, `DECEASED`, `BANKRUPTCY`, `POWER_OF_ATTORNEY`, `BLOCKED`, `CEASE_AND_DESIST`, `OPT_OUT`"
+                },
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "5",
+                  "description": "The number of resources to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "Sort order index of the first resource in the returned array."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "-createdTime",
+                  "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "824d0da4-f760-45bb-8c4b-d6e214857373",
+              "name": "Expected response to a valid request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "substatuses"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "account_token",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_token",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "is_active",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "substatuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "substatuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-createdTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 5819,\n  \"data\": [\n    {\n      \"is_active\": true,\n      \"resource_token\": \"string\",\n      \"resource_type\": \"BUSINESS\",\n      \"state\": \"BANKRUPTCY_WITHDRAWN_INACTIVE\",\n      \"substatus\": \"string\",\n      \"token\": \"string\",\n      \"attributes\": [\n        {\n          \"key\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"key\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"created_time\": \"2018-09-10T13:10:56.087Z\",\n      \"events\": [\n        {\n          \"channel\": \"API\",\n          \"created_time\": \"1954-08-01T06:52:29.299Z\",\n          \"effective_date\": \"1952-01-23T20:44:45.613Z\",\n          \"state\": \"FRAUD_CONFIRMED\",\n          \"created_by\": \"string\",\n          \"reason\": \"string\"\n        },\n        {\n          \"channel\": \"FRAUD\",\n          \"created_time\": \"1998-11-15T11:19:59.952Z\",\n          \"effective_date\": \"1964-01-30T00:08:56.441Z\",\n          \"state\": \"DECEASED_REPORTED\",\n          \"created_by\": \"string\",\n          \"reason\": \"string\"\n        }\n      ],\n      \"updated_time\": \"2024-08-07T13:30:06.031Z\"\n    },\n    {\n      \"is_active\": false,\n      \"resource_token\": \"string\",\n      \"resource_type\": \"USER\",\n      \"state\": \"BANKRUPTCY_WITHDRAWN\",\n      \"substatus\": \"string\",\n      \"token\": \"string\",\n      \"attributes\": [\n        {\n          \"key\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"key\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"created_time\": \"1969-11-14T08:44:51.740Z\",\n      \"events\": [\n        {\n          \"channel\": \"API\",\n          \"created_time\": \"2016-03-12T12:07:36.607Z\",\n          \"effective_date\": \"1981-02-13T18:27:21.093Z\",\n          \"state\": \"BANKRUPTCY_REAFFIRM_RESCINDED\",\n          \"created_by\": \"string\",\n          \"reason\": \"string\"\n        },\n        {\n          \"channel\": \"ADMIN\",\n          \"created_time\": \"1966-09-10T03:46:33.057Z\",\n          \"effective_date\": \"1953-04-16T15:03:06.263Z\",\n          \"state\": \"BANKRUPTCY_REAFFIRM_RESCINDED\",\n          \"created_by\": \"string\",\n          \"reason\": \"string\"\n        }\n      ],\n      \"updated_time\": \"1995-05-23T00:20:37.814Z\"\n    }\n  ],\n  \"end_index\": 6739,\n  \"is_more\": false,\n  \"start_index\": 553\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "42dd3c7a-49bd-4a70-aa4d-2f7570b5d667",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "substatuses"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "account_token",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_token",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "is_active",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "substatuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "substatuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-createdTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 7397,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "61372b14-98d7-4410-9a1e-b59f2915b625",
+          "name": "Create substatus",
+          "request": {
+            "name": "Create substatus",
+            "description": {
+              "content": "Create a new substatus for a credit account, user, or business.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "substatuses"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"events\": [\n    {\n      \"state\": \"<string>\",\n      \"channel\": \"<string>\",\n      \"created_by\": \"<string>\",\n      \"effective_date\": \"<dateTime>\",\n      \"reason\": \"<string>\"\n    },\n    {\n      \"state\": \"<string>\",\n      \"channel\": \"<string>\",\n      \"created_by\": \"<string>\",\n      \"effective_date\": \"<dateTime>\",\n      \"reason\": \"<string>\"\n    }\n  ],\n  \"resource_token\": \"<string>\",\n  \"resource_type\": \"<string>\",\n  \"substatus\": \"<string>\",\n  \"attributes\": [\n    {\n      \"key\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"value\": \"<string>\"\n    }\n  ],\n  \"token\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "28d6866f-8048-481f-9702-43c4b9cef905",
+              "name": "Expected response to a valid request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "substatuses"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attributes\": [\n    {\n      \"key\": \"military_start_date\",\n      \"value\": \"2024-04-02 11:23:23+00:00\"\n    }\n  ],\n  \"events\": [\n    {\n      \"channel\": \"ADMIN\",\n      \"reason\": \"Documents submitted and verified\",\n      \"state\": \"ACTIVE\"\n    }\n  ],\n  \"resource_token\": \"my_user_token\",\n  \"resource_type\": \"USER\",\n  \"substatus\": \"SCRA\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"attributes\": [\n    {\n      \"key\": \"military_start_date\",\n      \"value\": \"2024-04-02 11:23:23+00:00\"\n    }\n  ],\n  \"created_time\": \"2024-05-17 21:50:13.729000+00:00\",\n  \"events\": [\n    {\n      \"channel\": \"ADMIN\",\n      \"created_time\": \"2024-05-17 21:50:13.740000+00:00\",\n      \"effective_date\": \"2024-05-17 21:50:13.738000+00:00\",\n      \"reason\": \"Documents submitted and verified\",\n      \"state\": \"ACTIVE\"\n    }\n  ],\n  \"is_active\": true,\n  \"resource_token\": \"my_user_token\",\n  \"resource_type\": \"USER\",\n  \"state\": \"ACTIVE\",\n  \"substatus\": \"SCRA\",\n  \"token\": \"substatus_token\",\n  \"updated_time\": \"2024-05-17 21:51:39.774000+00:00\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "15913201-8d48-427f-8abf-36aa6ded29c0",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "substatuses"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attributes\": [\n    {\n      \"key\": \"military_start_date\",\n      \"value\": \"2024-04-02 11:23:23+00:00\"\n    }\n  ],\n  \"events\": [\n    {\n      \"channel\": \"ADMIN\",\n      \"reason\": \"Documents submitted and verified\",\n      \"state\": \"ACTIVE\"\n    }\n  ],\n  \"resource_token\": \"my_user_token\",\n  \"resource_type\": \"USER\",\n  \"substatus\": \"SCRA\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 7397,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "732f6b2d-0145-4ecf-a9b9-7e4001720a75",
+          "name": "Retrieve substatus",
+          "request": {
+            "name": "Retrieve substatus",
+            "description": {
+              "content": "Retrieve a user or account substatus.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "substatuses",
+                ":substatus_token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "substatus_token",
+                  "description": "(Required) Unique identifier of the substatus to retrieve.\n\nSend a `GET` request to `/credit/substatuses` to retrieve existing substatus tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "2f1a59b9-24ba-4d8f-b8b7-af1a225de3b4",
+              "name": "A JSON object containing substatus information",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "substatuses",
+                    ":substatus_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "substatus_token",
+                      "description": "(Required) Unique identifier of the substatus to retrieve.\n\nSend a `GET` request to `/credit/substatuses` to retrieve existing substatus tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"attributes\": [\n    {\n      \"key\": \"military_start_date\",\n      \"value\": \"2024-04-02 11:23:23+00:00\"\n    }\n  ],\n  \"created_time\": \"2024-04-02 11:23:23+00:00\",\n  \"events\": [\n    {\n      \"channel\": \"ADMIN\",\n      \"created_time\": \"2024-04-02 11:23:23+00:00\",\n      \"effective_date\": \"2024-04-02 11:23:23+00:00\",\n      \"reason\": \"Documents submitted and verified\",\n      \"state\": \"ACTIVE\"\n    }\n  ],\n  \"is_active\": true,\n  \"resource_token\": \"my_user_token\",\n  \"resource_type\": \"USER\",\n  \"state\": \"ACTIVE\",\n  \"substatus\": \"SCRA\",\n  \"token\": \"substatus_token\",\n  \"updated_time\": \"2024-04-02 11:23:23+00:00\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fe4774c9-4afb-4d0e-8223-aedb1ac5dc46",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "substatuses",
+                    ":substatus_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "substatus_token",
+                      "description": "(Required) Unique identifier of the substatus to retrieve.\n\nSend a `GET` request to `/credit/substatuses` to retrieve existing substatus tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 7397,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "84ffc6da-6176-4f07-b762-4ee0c0ff05a7",
+          "name": "Update substatus",
+          "request": {
+            "name": "Update substatus",
+            "description": {
+              "content": "Updating a substatus registers a new event that changes the substatus' state.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "substatuses",
+                ":substatus_token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "substatus_token",
+                  "description": "(Required) Unique identifier of the account substatus resource to retrieve.\n\nSend a `GET` request to `/credit/substatuses` to retrieve existing substatus tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"state\": \"<string>\",\n  \"channel\": \"<string>\",\n  \"created_by\": \"<string>\",\n  \"effective_date\": \"<dateTime>\",\n  \"reason\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4542c283-3a02-4ac8-a942-b19385a07670",
+              "name": "Updated substatus response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "substatuses",
+                    ":substatus_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "substatus_token",
+                      "description": "(Required) Unique identifier of the account substatus resource to retrieve.\n\nSend a `GET` request to `/credit/substatuses` to retrieve existing substatus tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"channel\": \"ADMIN\",\n  \"effective_date\": \"2024-04-09 11:23:23+00:00\",\n  \"reason\": \"Remove substatus from account\",\n  \"state\": \"INACTIVE\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"attributes\": [],\n  \"created_time\": \"2024-04-02 11:23:23+00:00\",\n  \"events\": [\n    {\n      \"channel\": \"SYSTEM\",\n      \"created_time\": \"2024-04-02 11:23:23+00:00\",\n      \"effective_date\": \"2024-04-02 11:23:23+00:00\",\n      \"reason\": \"Fraud system detected suspicious activity\",\n      \"state\": \"ACTIVE\"\n    },\n    {\n      \"channel\": \"ADMIN\",\n      \"created_time\": \"2024-04-02 11:23:23+00:00\",\n      \"effective_date\": \"2024-04-02 11:23:23+00:00\",\n      \"reason\": \"Verified non-fraud with cardholder\",\n      \"state\": \"INACTIVE\"\n    }\n  ],\n  \"is_active\": false,\n  \"resource_token\": \"my_account_token\",\n  \"resource_type\": \"ACCOUNT\",\n  \"state\": \"INACTIVE\",\n  \"substatus\": \"FRAUD\",\n  \"token\": \"substatus_token\",\n  \"updated_time\": \"2024-04-02 11:23:23+00:00\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "93816c79-5236-4f19-a7dc-175ad867215b",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "substatuses",
+                    ":substatus_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "substatus_token",
+                      "description": "(Required) Unique identifier of the account substatus resource to retrieve.\n\nSend a `GET` request to `/credit/substatuses` to retrieve existing substatus tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"channel\": \"ADMIN\",\n  \"effective_date\": \"2024-04-09 11:23:23+00:00\",\n  \"reason\": \"Remove substatus from account\",\n  \"state\": \"INACTIVE\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 7397,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "064bba7f-6c01-4231-ab31-2331e927e10f",
+          "name": "Resend credit event notification",
+          "request": {
+            "name": "Resend credit event notification",
+            "description": {
+              "content": "Resends a credit event notification to your webhook endpoint.\n\nAlthough you send this request as a `POST`, all parameters are passed in the URL and the body is empty.\nThe event notification is resent to your webhook endpoint and also returned in the response to this request.\n\nFor details on how to configure your webhook endpoint, see the About Webhooks <</developer-guides/about-webhooks#_tutorial, tutorial>>.\nFor the complete `/webhooks` endpoint reference, see <</core-api/webhooks, Webhooks>>.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "webhooks",
+                ":event_type",
+                ":resource_token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "event_type",
+                  "description": "(Required) Specifies the type of event you want to resend."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "resource_token",
+                  "description": "(Required) Unique identifier of the resource for which you want to resend a notification.\n\n* Send a `GET` request to `/credit/accounts/{account_token}/journalentries` to retrieve existing journal entry tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/ledgerentries` to retrieve existing ledger entry tokens.\n* Send a `GET` request to `/accounts/{account_token}/accounttransitions` to retrieve existing account transition tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/payments/{payment_token}` to retrieve existing payment transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements` to retrieve existing statement summary tokens.\n* Send a `GET` request to `/accounts/{account_token}/delinquencystate/transitions` to retrieve existing delinquency state transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements/{statement_summary_token}/paymentreminders/{token}` to retrieve existing payment reminder tokens.\n* Send a `GET` request to `/credit/substatuses` to retrieve existing substatus tokens.\n* Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens and identify the specific account for the resend event."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST"
+          },
+          "response": [
+            {
+              "id": "72408586-f555-4844-a057-f5f35ec5a2cb",
+              "name": "Event response for which the webhook event was resent",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ":event_type",
+                    ":resource_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "event_type",
+                      "description": "(Required) Specifies the type of event you want to resend."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "resource_token",
+                      "description": "(Required) Unique identifier of the resource for which you want to resend a notification.\n\n* Send a `GET` request to `/credit/accounts/{account_token}/journalentries` to retrieve existing journal entry tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/ledgerentries` to retrieve existing ledger entry tokens.\n* Send a `GET` request to `/accounts/{account_token}/accounttransitions` to retrieve existing account transition tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/payments/{payment_token}` to retrieve existing payment transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements` to retrieve existing statement summary tokens.\n* Send a `GET` request to `/accounts/{account_token}/delinquencystate/transitions` to retrieve existing delinquency state transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements/{statement_summary_token}/paymentreminders/{token}` to retrieve existing payment reminder tokens.\n* Send a `GET` request to `/credit/substatuses` to retrieve existing substatus tokens.\n* Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens and identify the specific account for the resend event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"account_token\": \"my_credit_account_token\",\n  \"available_credit\": 0,\n  \"closing_balance\": 506.41,\n  \"closing_date\": \"2025-04-01 03:59:59.999000+00:00\",\n  \"created_time\": \"2023-08-18 22:04:31.261000+00:00\",\n  \"credit_limit\": 500,\n  \"credits\": 0,\n  \"cycle_type\": \"REVOLVING\",\n  \"days_in_billing_cycle\": 31,\n  \"fees\": 15,\n  \"interest\": 4.96,\n  \"opening_balance\": 496.45,\n  \"opening_date\": \"2025-03-01 05:00:00+00:00\",\n  \"past_due_amount\": 10,\n  \"payments\": 10,\n  \"purchases\": 0,\n  \"token\": \"my_credit_account_statement_token\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4803a2c8-c9c1-4047-b9ba-454dc9078f0f",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ":event_type",
+                    ":resource_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "event_type",
+                      "description": "(Required) Specifies the type of event you want to resend."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "resource_token",
+                      "description": "(Required) Unique identifier of the resource for which you want to resend a notification.\n\n* Send a `GET` request to `/credit/accounts/{account_token}/journalentries` to retrieve existing journal entry tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/ledgerentries` to retrieve existing ledger entry tokens.\n* Send a `GET` request to `/accounts/{account_token}/accounttransitions` to retrieve existing account transition tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/payments/{payment_token}` to retrieve existing payment transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements` to retrieve existing statement summary tokens.\n* Send a `GET` request to `/accounts/{account_token}/delinquencystate/transitions` to retrieve existing delinquency state transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements/{statement_summary_token}/paymentreminders/{token}` to retrieve existing payment reminder tokens.\n* Send a `GET` request to `/credit/substatuses` to retrieve existing substatus tokens.\n* Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens and identify the specific account for the resend event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 7397,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "a5c640b2-0ae3-4d7e-9c80-1fa3b53cd272",
+    "name": "Core accepted countries Credit Substatuses API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.\n\nContact Support:\n Name: Marqeta\n Email: support@marqeta.com",
+      "type": "text/plain"
+    }
+  }
+}

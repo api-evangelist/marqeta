@@ -1,0 +1,44 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries AccountUsers API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "AccountUsers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accountusers/:user_token",
+            "params": [
+              {
+                "name": "user_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the user to retrieve.\nSend a `GET` request to `/account/users` to retrieve existing user tokens."
+              }
+            ]
+          },
+          "docs": "Retrieve a user's account information."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

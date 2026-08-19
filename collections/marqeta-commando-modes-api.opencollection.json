@@ -1,0 +1,130 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries commando modes API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "commando modes",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Lists all commando mode control sets",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/commandomodes",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of commando modes to retrieve"
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Start index"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              }
+            ]
+          },
+          "docs": "Lists all commando mode control sets"
+        },
+        {
+          "info": {
+            "name": "Returns a specific commando mode transition",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/commandomodes/transitions/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Commando mode transition token"
+              }
+            ]
+          },
+          "docs": "Returns a specific commando mode transition"
+        },
+        {
+          "info": {
+            "name": "Lists all commando mode transitions related to a commando mode control set",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/commandomodes/:commandomode_token/transitions",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of transitions to retrieve"
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Start index"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              },
+              {
+                "name": "commandomode_token",
+                "value": "",
+                "type": "path",
+                "description": "Commando mode token"
+              }
+            ]
+          },
+          "docs": "Lists all commando mode transitions related to a commando mode control set"
+        },
+        {
+          "info": {
+            "name": "Returns a specific commando mode control set",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/commandomodes/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns a specific commando mode control set"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

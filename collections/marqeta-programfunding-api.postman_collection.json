@@ -1,0 +1,426 @@
+{
+  "item": [
+    {
+      "id": "e1f6d9cb-ae2d-42c1-8d18-eb17671447dd",
+      "name": "ProgramFunding",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "94a9a007-736f-465f-af1c-edd213213e98",
+          "name": "List program fundings",
+          "request": {
+            "name": "List program fundings",
+            "description": {
+              "content": "Retrieve an array of program funding entries.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "admin",
+                "programs",
+                "funding"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "5",
+                  "description": "Number of program funding resources to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "Sort order index of the first resource in the returned array."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_date",
+                  "value": "<string>",
+                  "description": "Start date for filtering program funding entries."
+                },
+                {
+                  "disabled": false,
+                  "key": "end_date",
+                  "value": "<string>",
+                  "description": "End date for filtering program funding entries."
+                },
+                {
+                  "disabled": false,
+                  "key": "short_code",
+                  "value": "<string>",
+                  "description": "Short code for filtering program funding entries."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "a5f1f69b-b986-40d8-89e0-61e2a0bc98c6",
+              "name": "Expected response to a valid request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "admin",
+                    "programs",
+                    "funding"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "2014-01-01"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2014-04-01"
+                    },
+                    {
+                      "key": "short_code",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 2,\n  \"data\": [\n    {\n      \"amount\": 1000,\n      \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n      \"currency_code\": \"USD\",\n      \"memo\": \"This is a test memo\",\n      \"post_time\": \"2025-04-01 23:41:58+00:00\",\n      \"short_code\": \"my_program_short_code_12\",\n      \"token\": \"my_program_funding_token1234\",\n      \"updated_time\": \"2025-04-01 23:41:58.802000+00:00\"\n    },\n    {\n      \"amount\": 500,\n      \"created_time\": \"2025-04-02 23:41:58.802000+00:00\",\n      \"currency_code\": \"USD\",\n      \"memo\": \"This is a test memo\",\n      \"post_time\": \"2025-04-01 23:41:58+00:00\",\n      \"short_code\": \"my_program_short_code_34\",\n      \"token\": \"my_program_funding_token5678\",\n      \"updated_time\": \"2025-04-02 23:41:58.802000+00:00\"\n    }\n  ],\n  \"end_index\": 1,\n  \"is_more\": false,\n  \"start_index\": 0\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "563967b2-9b5d-402e-aa9e-6e256d92b480",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "admin",
+                    "programs",
+                    "funding"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "2014-01-01"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2014-04-01"
+                    },
+                    {
+                      "key": "short_code",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 1511,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8843dd45-c723-41ac-a7c8-67f693fe6009",
+          "name": "List program fundings",
+          "request": {
+            "name": "List program fundings",
+            "description": {
+              "content": "Retrieve an array of program funding entries.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "programs",
+                "funding"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "5",
+                  "description": "Number of program funding resources to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "Sort order index of the first resource in the returned array."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_date",
+                  "value": "<string>",
+                  "description": "Start date for filtering program funding entries."
+                },
+                {
+                  "disabled": false,
+                  "key": "end_date",
+                  "value": "<string>",
+                  "description": "End date for filtering program funding entries."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "8abe5079-c401-440a-ae8d-c362f33c4727",
+              "name": "Expected response to a valid request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programs",
+                    "funding"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "2014-01-01"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2014-04-01"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 2,\n  \"data\": [\n    {\n      \"amount\": 1000,\n      \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n      \"currency_code\": \"USD\",\n      \"memo\": \"This is a test memo\",\n      \"post_time\": \"2025-04-01 23:41:58.802000+00:00\",\n      \"short_code\": \"my_program_short_code_12\",\n      \"token\": \"my_program_funding_token1234\",\n      \"updated_time\": \"2025-04-01 23:41:58.802000+00:00\"\n    },\n    {\n      \"amount\": 500,\n      \"created_time\": \"2025-04-02 23:41:58.802000+00:00\",\n      \"currency_code\": \"USD\",\n      \"memo\": \"Another test memo\",\n      \"post_time\": \"2025-04-02 23:41:58.802000+00:00\",\n      \"short_code\": \"my_program_short_code_34\",\n      \"token\": \"my_program_funding_token5678\",\n      \"updated_time\": \"2025-04-02 23:41:58.802000+00:00\"\n    }\n  ],\n  \"end_index\": 1,\n  \"is_more\": false,\n  \"start_index\": 0\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3f7284b0-9594-4520-b410-45c8d60f57a4",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "programs",
+                    "funding"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "2014-01-01"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2014-04-01"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 1511,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "e07a57a6-08c5-4a3a-8e28-abc409e77175",
+    "name": "Core accepted countries ProgramFunding API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.\n\nContact Support:\n Name: Marqeta\n Email: support@marqeta.com",
+      "type": "text/plain"
+    }
+  }
+}

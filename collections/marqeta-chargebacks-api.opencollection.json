@@ -1,0 +1,323 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries chargebacks API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "chargebacks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List all chargebacks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/chargebacks",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of chargebacks to retrieve"
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Start index"
+              },
+              {
+                "name": "network_reference_id",
+                "value": "",
+                "type": "query",
+                "description": "Network reference ID"
+              },
+              {
+                "name": "transaction_token",
+                "value": "",
+                "type": "query",
+                "description": "Transaction token"
+              },
+              {
+                "name": "amount",
+                "value": "",
+                "type": "query",
+                "description": "Amount"
+              },
+              {
+                "name": "states",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of chargeback states to display e.g. INITIATED | REPRESENTMENT | PREARBITRATION | ARBITRATION | CASE_WON | CASE_LOST | NETWORK_REJECTED | WITHDRAWN | WRITTEN_OFF_ISSUER | WRITTEN_OFF_PROGRAM"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              },
+              {
+                "name": "network_case_id",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "List all chargebacks"
+        },
+        {
+          "info": {
+            "name": "Creates a chargeback",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/chargebacks",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a chargeback"
+        },
+        {
+          "info": {
+            "name": "Creates a chargeback allocation acknowledgement",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/chargebacks/allocationacknowledgement",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a chargeback allocation acknowledgement"
+        },
+        {
+          "info": {
+            "name": "Creates a chargeback transition",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/chargebacks/transitions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a chargeback transition"
+        },
+        {
+          "info": {
+            "name": "Returns a specific chargeback transition",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/chargebacks/transitions/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Chargeback transition token"
+              }
+            ]
+          },
+          "docs": "Returns a specific chargeback transition"
+        },
+        {
+          "info": {
+            "name": "Lists all chargeback transitions that are related to a chargeback",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/chargebacks/:chargeback_token/transitions",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of transitions to retrieve"
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Start index"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              },
+              {
+                "name": "chargeback_token",
+                "value": "",
+                "type": "path",
+                "description": "Chargeback token"
+              }
+            ]
+          },
+          "docs": "Lists all chargeback transitions that are related to a chargeback"
+        },
+        {
+          "info": {
+            "name": "Returns a specific chargeback",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/chargebacks/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns a specific chargeback"
+        },
+        {
+          "info": {
+            "name": "Updates chargeback data",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/chargebacks/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates chargeback data"
+        },
+        {
+          "info": {
+            "name": "Grants provisional credit",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/chargebacks/:token/grantprovisionalcredit",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Grants provisional credit"
+        },
+        {
+          "info": {
+            "name": "Reverses provisional credit",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/chargebacks/:token/reverseprovisionalcredit",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Reverses provisional credit"
+        },
+        {
+          "info": {
+            "name": "Retrieve chargeback data",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/views/chargebacks/:time_agg",
+            "params": [
+              {
+                "name": "time_agg",
+                "value": "",
+                "type": "path",
+                "description": "Aggregation time level for the data. Use 'day' for daily rollups, 'week' for weekly rollups, 'month' for monthly rollups, or 'detail' for individual record-level data."
+              },
+              {
+                "name": "program",
+                "value": "",
+                "type": "query",
+                "description": "The name of your Marqeta card program. This parameter is required for most DiVA API endpoints to scope the data to your program."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to include in the response. If not specified, all available fields are returned."
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "Start date for filtering data (format YYYY-MM-DD). Returns records on or after this date."
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "End date for filtering data (format YYYY-MM-DD). Returns records on or before this date."
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Response format. Use 'json' for JSON responses or 'csv' for comma-separated bulk file format. Defaults to json."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of records to return per request."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Zero-based offset for pagination."
+              }
+            ]
+          },
+          "docs": "Returns chargeback data aggregated by transaction or time period. Includes dispute status, amounts, reason codes, and resolution details for tracking chargeback activity and financial exposure."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

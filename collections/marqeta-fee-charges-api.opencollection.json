@@ -1,0 +1,73 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries fee charges API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "fee charges",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Creates a fee charge",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/feecharges",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a fee charge"
+        },
+        {
+          "info": {
+            "name": "Creates a realTime fee charge",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/feecharges/realtime",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a realTime fee charge"
+        },
+        {
+          "info": {
+            "name": "Returns a fee charge",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/feecharges/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns a fee charge"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

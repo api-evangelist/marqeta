@@ -1,0 +1,574 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries funding sources API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "funding sources",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Registers an ACH funding source",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/fundingsources/ach",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Registers an ACH funding source"
+        },
+        {
+          "info": {
+            "name": "Registers an ACH funding source through a partner",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/fundingsources/ach/partner",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Registers an ACH funding source through a partner"
+        },
+        {
+          "info": {
+            "name": "Retrieves a linked funding source balance from a partner",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/fundingsources/ach/partner/:funding_source_token/balance",
+            "params": [
+              {
+                "name": "funding_source_token",
+                "value": "",
+                "type": "path",
+                "description": "Funding source token"
+              }
+            ]
+          },
+          "docs": "Retrieves a linked funding source balance from a partner"
+        },
+        {
+          "info": {
+            "name": "Returns a user ACH account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/fundingsources/ach/:funding_source_token",
+            "params": [
+              {
+                "name": "funding_source_token",
+                "value": "",
+                "type": "path",
+                "description": "Funding account token"
+              }
+            ]
+          },
+          "docs": "Returns a user ACH account"
+        },
+        {
+          "info": {
+            "name": "Verifies a bank account as a funding source",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/fundingsources/ach/:funding_source_token",
+            "params": [
+              {
+                "name": "funding_source_token",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Verifies a bank account as a funding source"
+        },
+        {
+          "info": {
+            "name": "Returns the dollar amounts used to verify the ACH account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/fundingsources/ach/:funding_source_token/verificationamounts",
+            "params": [
+              {
+                "name": "funding_source_token",
+                "value": "",
+                "type": "path",
+                "description": "Funding account token"
+              }
+            ]
+          },
+          "docs": "Returns the dollar amounts used to verify the ACH account"
+        },
+        {
+          "info": {
+            "name": "Creates an account holder address for a funding source",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/fundingsources/addresses",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates an account holder address for a funding source"
+        },
+        {
+          "info": {
+            "name": "Lists all addresses for a business",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/fundingsources/addresses/business/:business_token",
+            "params": [
+              {
+                "name": "business_token",
+                "value": "",
+                "type": "path",
+                "description": "Business token"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+              }
+            ]
+          },
+          "docs": "Lists all addresses for a business"
+        },
+        {
+          "info": {
+            "name": "Lists all addresses for a user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/fundingsources/addresses/user/:user_token",
+            "params": [
+              {
+                "name": "user_token",
+                "value": "",
+                "type": "path",
+                "description": "User token"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+              }
+            ]
+          },
+          "docs": "Lists all addresses for a user"
+        },
+        {
+          "info": {
+            "name": "Returns a user address for a funding source",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/fundingsources/addresses/:funding_source_address_token",
+            "params": [
+              {
+                "name": "funding_source_address_token",
+                "value": "",
+                "type": "path",
+                "description": "Funding source address token"
+              }
+            ]
+          },
+          "docs": "Returns a user address for a funding source"
+        },
+        {
+          "info": {
+            "name": "Updates the account holder address for a funding source",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/fundingsources/addresses/:funding_source_address_token",
+            "params": [
+              {
+                "name": "funding_source_address_token",
+                "value": "",
+                "type": "path",
+                "description": "Funding source address token"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates the account holder address for a funding source"
+        },
+        {
+          "info": {
+            "name": "Lists all funding sources for a business",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/fundingsources/business/:business_token",
+            "params": [
+              {
+                "name": "business_token",
+                "value": "",
+                "type": "path",
+                "description": "Business token"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Type, such as a payment card or ACH"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+              }
+            ]
+          },
+          "docs": "Lists all funding sources for a business"
+        },
+        {
+          "info": {
+            "name": "Registers a payment card funding source",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/fundingsources/paymentcard",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Registers a payment card funding source"
+        },
+        {
+          "info": {
+            "name": "Returns a specific payment card",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/fundingsources/paymentcard/:funding_source_token",
+            "params": [
+              {
+                "name": "funding_source_token",
+                "value": "",
+                "type": "path",
+                "description": "Funding token"
+              }
+            ]
+          },
+          "docs": "Returns a specific payment card"
+        },
+        {
+          "info": {
+            "name": "Updates a specific payment card ",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/fundingsources/paymentcard/:funding_source_token",
+            "params": [
+              {
+                "name": "funding_source_token",
+                "value": "",
+                "type": "path",
+                "description": "Funding account token"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a specific payment card "
+        },
+        {
+          "info": {
+            "name": "Creates a program funding source",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/fundingsources/program",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a program funding source"
+        },
+        {
+          "info": {
+            "name": "Returns a list of Program ACH funding sources",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/fundingsources/program/ach",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of items to retrieve. Count can be between 1 - 10 items."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Indicates from what row to start returning data."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma delimited list of fields to return (e.g. field_1,field_2,..)"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              },
+              {
+                "name": "active",
+                "value": "",
+                "type": "query",
+                "description": "Returns programs with this active state"
+              }
+            ]
+          },
+          "docs": "Returns a list of Program ACH funding sources"
+        },
+        {
+          "info": {
+            "name": "Registers an ACH funding source for a program",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/fundingsources/program/ach",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Registers an ACH funding source for a program"
+        },
+        {
+          "info": {
+            "name": "Returns a specific program funding source",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/fundingsources/program/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Program funding source token"
+              }
+            ]
+          },
+          "docs": "Returns a specific program funding source"
+        },
+        {
+          "info": {
+            "name": "Updates a specific program funding source",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/fundingsources/program/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Program funding source token"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a specific program funding source"
+        },
+        {
+          "info": {
+            "name": "Creates a gateway program funding source",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/fundingsources/programgateway",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a gateway program funding source"
+        },
+        {
+          "info": {
+            "name": "Updates a specific gateway program funding source Custom headers",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/fundingsources/programgateway/customheaders/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Gateway program funding source token"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a specific gateway program funding source Custom headers"
+        },
+        {
+          "info": {
+            "name": "Returns a gateway program funding source",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/fundingsources/programgateway/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Gateway program funding source token"
+              }
+            ]
+          },
+          "docs": "Returns a gateway program funding source"
+        },
+        {
+          "info": {
+            "name": "Updates a specific gateway program funding source",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/fundingsources/programgateway/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Gateway program funding source token"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a specific gateway program funding source"
+        },
+        {
+          "info": {
+            "name": "Lists all funding sources for a user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/fundingsources/user/:user_token",
+            "params": [
+              {
+                "name": "user_token",
+                "value": "",
+                "type": "path",
+                "description": "User token"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Type, such as a payment card or ACH"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+              }
+            ]
+          },
+          "docs": "Lists all funding sources for a user"
+        },
+        {
+          "info": {
+            "name": "Configures a default funding source",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/fundingsources/:funding_source_token/default",
+            "params": [
+              {
+                "name": "funding_source_token",
+                "value": "",
+                "type": "path",
+                "description": "Funding account"
+              }
+            ]
+          },
+          "docs": "Configures a default funding source"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

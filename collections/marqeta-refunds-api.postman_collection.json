@@ -1,0 +1,254 @@
+{
+  "item": [
+    {
+      "id": "71ea64ad-6e42-4044-aefe-4ab35467d111",
+      "name": "Refunds",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "de3101c8-065a-45c0-8e52-2fc5be55e91e",
+          "name": "Simulate Refund Transition",
+          "request": {
+            "name": "Simulate Refund Transition",
+            "description": {
+              "content": "api to simulate status transition of a refund.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "simulation",
+                "accounts",
+                ":account_token",
+                "refunds",
+                ":refund_token",
+                "transitions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account for which you want to create a balance refund.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "refund_token",
+                  "description": "(Required) Unique identifier of the refund to retrieve.\n\nSend a `GET` request to `/credit/accounts/{account_token}/refunds/{refund_token}` to retrieve existing refunds."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "209776dc-4ce3-4cd6-a82b-af264fe17088",
+              "name": "Expected response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "simulation",
+                    "accounts",
+                    ":account_token",
+                    "refunds",
+                    ":refund_token",
+                    "transitions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to create a balance refund.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "refund_token",
+                      "description": "(Required) Unique identifier of the refund to retrieve.\n\nSend a `GET` request to `/credit/accounts/{account_token}/refunds/{refund_token}` to retrieve existing refunds."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"COMPLETED\",\n  \"token\": \"my_refund_token\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"account_token\": \"my_account_token_12\",\n  \"amount\": 10,\n  \"created_time\": \"2025-01-02 20:17:28+00:00\",\n  \"currency_code\": \"USD\",\n  \"description\": \"credit balance refund\",\n  \"method\": \"ACH\",\n  \"payment_source_token\": \"my_payment_funding_source_token\",\n  \"status\": \"PENDING\",\n  \"token\": \"credit_balance_refund_token1234\",\n  \"type\": \"CREDIT_BALANCE_REFUND\",\n  \"updated_time\": \"2025-01-02 20:17:28+00:00\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d6d257b9-590c-4a0b-bfb0-456ef8f92e29",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "simulation",
+                    "accounts",
+                    ":account_token",
+                    "refunds",
+                    ":refund_token",
+                    "transitions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to create a balance refund.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "refund_token",
+                      "description": "(Required) Unique identifier of the refund to retrieve.\n\nSend a `GET` request to `/credit/accounts/{account_token}/refunds/{refund_token}` to retrieve existing refunds."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"COMPLETED\",\n  \"token\": \"my_refund_token\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9235,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "d01c7d89-89bb-4f12-96eb-1fa534b63c64",
+    "name": "Core accepted countries Refunds API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.\n\nContact Support:\n Name: Marqeta\n Email: support@marqeta.com",
+      "type": "text/plain"
+    }
+  }
+}

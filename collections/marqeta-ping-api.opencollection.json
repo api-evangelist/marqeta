@@ -1,0 +1,51 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries ping API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "ping",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Returns a heartbeat to the consumer",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/ping"
+          },
+          "docs": "Tests if the Marqeta server is available and responsive."
+        },
+        {
+          "info": {
+            "name": "Echo test for sending payload to server",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/ping",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Echo test for sending payload to server"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

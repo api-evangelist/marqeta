@@ -1,0 +1,108 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries card transitions API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "card transitions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Creates a card transition object",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/cardtransitions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a card transition object"
+        },
+        {
+          "info": {
+            "name": "Lists all card transitions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/cardtransitions/card/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Card token"
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of card transitions to retrieve"
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Start index"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              }
+            ]
+          },
+          "docs": "Lists all card transitions"
+        },
+        {
+          "info": {
+            "name": "Returns a card transition object",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/cardtransitions/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Card transition token"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+              }
+            ]
+          },
+          "docs": "Returns a card transition object"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

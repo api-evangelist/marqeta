@@ -1,0 +1,1443 @@
+{
+  "item": [
+    {
+      "id": "afac1be7-c218-48c7-8826-2ebc0a7417af",
+      "name": "Bundles",
+      "description": {
+        "content": "// Conditional snippet for beta or internal content\ninclude::../../maturity-admonition-banner.adoc[]\n\nThe bundles feature on Marqeta's credit platform enables you to create and manage bundles by choosing the specific policies that make up a bundle.\nA bundle must contain one document policy, credit product policy, fee policy, APR policy, and an optional reward policy.\nThe configurations of each policy in a bundle determine the characteristics and attributes of the bundle's associated credit accounts, reward programs, disclosures, and more.\nFor more on how to configure a policy, see <</core-api/credit-policies, Policies>>.\n\n[IMPORTANT]\n====\nTo create and manage bundles, you must use the link:https://app.marqeta.com/[Marqeta Dashboard, window=\"_blank\"].\nFor more on bundles in the dashboard, see <</developer-guides/credit-programs-dashboard, Managing Credit Programs in the Marqeta Dashboard>>.\n\n&#160; +\n\nThe following endpoints are displayed for reference purposes only.\n====",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "1bbf5254-5329-45b2-b1ee-cbfe41f51a1d",
+          "name": "List bundles",
+          "request": {
+            "name": "List bundles",
+            "description": {
+              "content": "Retrieve an array of bundles.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bundles"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "5",
+                  "description": "Number of bundles resources to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "Sort order index of the first resource in the returned array."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "-lastModifiedTime",
+                  "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `lastModifiedTime`, not by the field names appearing in response bodies: for example, `last_modified_time`."
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "An array of statuses by which to filter bundles."
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "An array of statuses by which to filter bundles."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "ab04bc91-6b86-4fc6-bd80-46818c0fabbf",
+              "name": "Expected response to a valid request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bundles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 2,\n  \"data\": [\n    {\n      \"apr_policy_detail\": {\n        \"created_time\": \"2024-04-01 23:41:58.802000+00:00\",\n        \"description\": \"A gold APR policy\",\n        \"effective_date\": \"2024-05-01\",\n        \"name\": \"Gold APR Policy\",\n        \"purchases\": {\n          \"external_token\": \"my_external_purchase_token1234\",\n          \"name\": \"A purchase at a merchant\",\n          \"tiers\": [\n            {\n              \"apr\": 0,\n              \"margin_rate\": 1\n            },\n            {\n              \"apr\": 0,\n              \"margin_rate\": 5\n            }\n          ]\n        },\n        \"token\": \"my_apr_policy_token_1234\",\n        \"updated_time\": \"2024-04-05 16:04:48.643000+00:00\"\n      },\n      \"apr_policy_token\": \"my_apr_policy_token_1234\",\n      \"created_time\": \"2024-04-01 23:41:58.802000+00:00\",\n      \"credit_product_policy_detail\": {\n        \"card_products\": [\n          {\n            \"level\": \"TRADITIONAL\",\n            \"network\": \"VISA\",\n            \"token\": \"my_card_product_token1234\"\n          }\n        ],\n        \"classification\": \"CONSUMER\",\n        \"created_time\": \"2024-04-01 23:41:58.802000+00:00\",\n        \"credit_line\": {\n          \"max\": 3500,\n          \"min\": 50\n        },\n        \"currency_code\": \"USD\",\n        \"description\": \"A gold credit product policy\",\n        \"interest_calculation\": {\n          \"application_of_credits\": {\n            \"cycle_type\": \"END_REVOLVING\",\n            \"day\": 15\n          },\n          \"day_count\": \"ACTUAL\",\n          \"exclude_tran_types\": [\n            \"ANNUAL_FEE\",\n            \"LATE_PAYMENT_FEE\",\n            \"CASH_BACK_STATEMENT_CREDIT\"\n          ],\n          \"grace_days_application\": \"NEXT_CYCLE_DATE\",\n          \"interest_application\": [\n            \"PRINCIPAL\",\n            \"FEES\"\n          ],\n          \"interest_on_grace_reactivation\": \"ACCRUE_PAYMENT_DATE\",\n          \"method\": \"AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS\",\n          \"minimum_interest\": 1\n        },\n        \"name\": \"Gold Credit Product Policy\",\n        \"payments\": {\n          \"allocation_order\": [\n            \"INTEREST\",\n            \"FEES\",\n            \"PRINCIPAL\"\n          ],\n          \"billing_cycle_day\": 1,\n          \"due_day\": 31,\n          \"min_payment_calculation\": {\n            \"include_overlimit_amount\": true,\n            \"include_past_due_amount\": false,\n            \"min_payment_flat_amount\": 20,\n            \"min_payment_percentage\": {\n              \"include_fees_charged\": [\n                \"LATE_PAYMENT_FEE\"\n              ],\n              \"include_interest_charged\": false,\n              \"percentage_of_balance\": 1\n            }\n          }\n        },\n        \"product_sub_type\": \"CREDIT_CARD\",\n        \"product_type\": \"REVOLVING\",\n        \"token\": \"my_credit_product_policy_token_1234\",\n        \"updated_time\": \"2024-04-05 16:04:48.643000+00:00\",\n        \"usage\": [\n          \"PURCHASE\"\n        ]\n      },\n      \"credit_product_policy_token\": \"my_credit_product_policy_token_1234\",\n      \"description\": \"A gold credit bundle\",\n      \"document_policy_detail\": {\n        \"account_statement\": {\n          \"template_token\": \"an_account_statement_template_token1234\",\n          \"template_urls\": {\n            \"html\": \"https://url.com/an_account_statement_template_token1234.html\"\n          }\n        },\n        \"benefits_disclosure\": {\n          \"asset_token\": \"a_benefits_disclosure_asset_token1234\",\n          \"asset_urls\": {\n            \"html\": \"https://url.com/a_benefits_disclosure_asset_token1234.html\",\n            \"pdf\": \"https://url.com/a_benefits_disclosure_asset_token1234.pdf\",\n            \"png\": \"https://url.com/a_benefits_disclosure_asset_token1234.png\"\n          }\n        },\n        \"card_member_agreement\": {\n          \"asset_token\": \"a_card_member_agreement_asset_token1234\",\n          \"asset_urls\": {\n            \"html\": \"https://url.com/a_card_member_agreement_asset_token1234.html\",\n            \"pdf\": \"https://url.com/a_card_member_agreement_asset_token1234.pdf\",\n            \"png\": \"https://url.com/a_card_member_agreement_asset_token1234.png\"\n          }\n        },\n        \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n        \"e_disclosure\": {\n          \"asset_token\": \"a_e_disclosure_asset_token1234\",\n          \"asset_urls\": {\n            \"html\": \"https://url.com/a_e_disclosure_asset_token1234.html\",\n            \"pdf\": \"https://url.com/a_e_disclosure_asset_token1234.pdf\",\n            \"png\": \"https://url.com/a_e_disclosure_asset_token1234.png\"\n          }\n        },\n        \"name\": \"My Document Policy\",\n        \"notice_of_adverse_action\": {\n          \"template_token\": \"a_notice_of_adverse_action_template_token1234\",\n          \"template_urls\": {\n            \"html\": \"https://url.com/a_notice_of_adverse_action_template_token1234.html\"\n          }\n        },\n        \"privacy_policy\": {\n          \"asset_token\": \"a_privacy_policy_asset_token1234\",\n          \"asset_urls\": {\n            \"html\": \"https://url.com/a_privacy_policy_asset_token1234.html\",\n            \"pdf\": \"https://url.com/a_privacy_policy_asset_token1234.pdf\",\n            \"png\": \"https://url.com/a_privacy_policy_asset_token1234.png\"\n          }\n        },\n        \"rewards_disclosure\": {\n          \"asset_token\": \"a_rewards_disclosure_asset_token1234\",\n          \"asset_urls\": {\n            \"html\": \"https://url.com/a_rewards_disclosure_asset_token1234.html\",\n            \"pdf\": \"https://url.com/a_rewards_disclosure_asset_token1234.pdf\",\n            \"png\": \"https://url.com/a_rewards_disclosure_asset_token1234.png\"\n          },\n          \"template_token\": \"a_rewards_disclosure_template_token1234\",\n          \"template_urls\": {\n            \"html\": \"https://url.com/a_rewards_disclosure_template_token1234.html\"\n          }\n        },\n        \"summary_of_credit_terms\": {\n          \"asset_token\": \"a_summary_of_credit_terms_asset_token1234\",\n          \"asset_urls\": {\n            \"html\": \"https://url.com/a_summary_of_credit_terms_asset_token1234.html\",\n            \"pdf\": \"https://url.com/a_summary_of_credit_terms_asset_token1234.pdf\",\n            \"png\": \"https://url.com/a_summary_of_credit_terms_asset_token1234.png\"\n          },\n          \"template_token\": \"a_summary_of_credit_terms_template_token1234\",\n          \"template_urls\": {\n            \"html\": \"https://url.com/a_summary_of_credit_terms_template_token1234.html\"\n          }\n        },\n        \"terms_schedule\": {\n          \"template_token\": \"a_terms_schedule_template_token1234\",\n          \"template_urls\": {\n            \"html\": \"https://url.com/a_terms_schedule_template_token1234.html\"\n          }\n        },\n        \"token\": \"my_document_policy_token_1234\",\n        \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\"\n      },\n      \"document_policy_token\": \"my_document_policy_token_1234\",\n      \"fee_policy_detail\": {\n        \"account\": {\n          \"foreign_transaction_fee\": {\n            \"default_method\": \"PERCENTAGE\",\n            \"default_value\": 12.5\n          },\n          \"late_payment\": {\n            \"default_method\": \"FLAT\",\n            \"default_value\": 10\n          },\n          \"returned_payment\": {\n            \"default_method\": \"FLAT\",\n            \"default_value\": 10\n          }\n        },\n        \"created_time\": \"2024-04-01 23:41:58.802000+00:00\",\n        \"description\": \"A gold fee policy\",\n        \"name\": \"Gold Fee Policy\",\n        \"token\": \"my_fee_policy_token_1234\",\n        \"updated_time\": \"2024-04-05 16:04:48.643000+00:00\"\n      },\n      \"fee_policy_token\": \"my_fee_policy_token_1234\",\n      \"name\": \"Gold Credit Bundle\",\n      \"offer_policy_detail\": {\n        \"created_time\": \"2024-04-01 23:41:58.802000+00:00\",\n        \"description\": \"A gold offer policy\",\n        \"name\": \"Gold Offer Policy\",\n        \"token\": \"my_offer_policy_token_1234\",\n        \"updated_time\": \"2024-04-05 16:04:48.643000+00:00\"\n      },\n      \"offer_policy_token\": \"my_offer_policy_token_1234\",\n      \"parent_token\": \"my_parent_token_1234\",\n      \"reward_policy_detail\": {\n        \"accrual_strategy\": \"DEFAULT\",\n        \"conversions\": [\n          {\n            \"conversion_increment\": 10,\n            \"conversion_rate\": 0.001,\n            \"currency\": \"USD\",\n            \"type\": \"STATEMENT_CREDIT\"\n          }\n        ],\n        \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n        \"description\": \"A gold reward policy\",\n        \"exclusions\": {\n          \"custom_exclusions\": [\n            \"2000-2999\",\n            \"4321\"\n          ],\n          \"use_default_exclusions\": false\n        },\n        \"name\": \"Gold Reward Policy\",\n        \"redemption_strategy\": \"MANUAL\",\n        \"rounding_strategy\": \"ROUND_HALF_EVEN\",\n        \"rules\": [\n          {\n            \"amount\": null,\n            \"attributes\": {\n              \"mcc\": [\n                \"0001-1499\",\n                \"1500\"\n              ]\n            },\n            \"calculation_type\": \"PER_TRANSACTION\",\n            \"description\": \"Earn 3x on selected categories.\",\n            \"multiplier\": 3,\n            \"type\": \"MULTIPLIER_PER_TRANSACTION\"\n          }\n        ],\n        \"settlement_strategy\": \"STATEMENT\",\n        \"token\": \"my_reward_policy_token_1234\",\n        \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\"\n      },\n      \"reward_policy_token\": \"my_reward_policy_token_1234\",\n      \"status\": \"DRAFT\",\n      \"token\": \"my_bundle_token_1234\",\n      \"updated_time\": \"2024-04-05 16:04:48.643000+00:00\"\n    },\n    {\n      \"apr_policy_detail\": {\n        \"created_time\": \"2024-04-01 23:41:58.802000+00:00\",\n        \"description\": \"A silver APR policy\",\n        \"effective_date\": \"2024-06-01\",\n        \"name\": \"Silver APR Policy\",\n        \"purchases\": {\n          \"external_token\": \"my_external_purchase_token4321\",\n          \"name\": \"A purchase at a merchant\",\n          \"tiers\": [\n            {\n              \"apr\": 0,\n              \"margin_rate\": 3\n            },\n            {\n              \"apr\": 0,\n              \"margin_rate\": 6\n            }\n          ]\n        },\n        \"token\": \"my_apr_policy_token_4321\",\n        \"updated_time\": \"2024-04-05 16:04:48.643000+00:00\"\n      },\n      \"apr_policy_token\": \"my_apr_policy_token_4321\",\n      \"created_time\": \"2024-04-01 23:41:58.802000+00:00\",\n      \"credit_product_policy_detail\": {\n        \"card_products\": [\n          {\n            \"level\": \"TRADITIONAL\",\n            \"network\": \"VISA\",\n            \"token\": \"my_card_product_token4321\"\n          }\n        ],\n        \"classification\": \"CONSUMER\",\n        \"created_time\": \"2024-04-01 23:41:58.802000+00:00\",\n        \"credit_line\": {\n          \"max\": 3100,\n          \"min\": 50\n        },\n        \"currency_code\": \"USD\",\n        \"description\": \"A silver credit product policy\",\n        \"interest_calculation\": {\n          \"application_of_credits\": {\n            \"cycle_type\": \"END_REVOLVING\",\n            \"day\": 15\n          },\n          \"day_count\": \"ACTUAL\",\n          \"exclude_tran_types\": [\n            \"ANNUAL_FEE\",\n            \"LATE_PAYMENT_FEE\",\n            \"CASH_BACK_STATEMENT_CREDIT\"\n          ],\n          \"grace_days_application\": \"NEXT_CYCLE_DATE\",\n          \"interest_application\": [\n            \"PRINCIPAL\",\n            \"FEES\"\n          ],\n          \"interest_on_grace_reactivation\": \"ACCRUE_PAYMENT_DATE\",\n          \"method\": \"AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS\",\n          \"minimum_interest\": 1\n        },\n        \"name\": \"Silver Credit Product Policy\",\n        \"payments\": {\n          \"allocation_order\": [\n            \"INTEREST\",\n            \"FEES\",\n            \"PRINCIPAL\"\n          ],\n          \"billing_cycle_day\": 1,\n          \"due_day\": 31,\n          \"min_payment_calculation\": {\n            \"include_overlimit_amount\": true,\n            \"include_past_due_amount\": false,\n            \"min_payment_flat_amount\": 20,\n            \"min_payment_percentage\": {\n              \"include_fees_charged\": [\n                \"LATE_PAYMENT_FEE\"\n              ],\n              \"include_interest_charged\": false,\n              \"percentage_of_balance\": 1\n            }\n          }\n        },\n        \"product_sub_type\": \"CREDIT_CARD\",\n        \"product_type\": \"REVOLVING\",\n        \"token\": \"my_credit_product_policy_token_4321\",\n        \"updated_time\": \"2024-04-05 16:04:48.643000+00:00\",\n        \"usage\": [\n          \"PURCHASE\"\n        ]\n      },\n      \"credit_product_policy_token\": \"my_credit_product_policy_token_4321\",\n      \"description\": \"A silver credit bundle\",\n      \"document_policy_detail\": {\n        \"account_statement\": {\n          \"template_token\": \"an_account_statement_template_token4321\",\n          \"template_urls\": {\n            \"html\": \"https://url.com/an_account_statement_template_token4321.html\"\n          }\n        },\n        \"benefits_disclosure\": {\n          \"asset_token\": \"a_benefits_disclosure_asset_token4321\",\n          \"asset_urls\": {\n            \"html\": \"https://url.com/a_benefits_disclosure_asset_token4321.html\",\n            \"pdf\": \"https://url.com/a_benefits_disclosure_asset_token4321.pdf\",\n            \"png\": \"https://url.com/a_benefits_disclosure_asset_token4321.png\"\n          }\n        },\n        \"card_member_agreement\": {\n          \"asset_token\": \"a_card_member_agreement_asset_token4321\",\n          \"asset_urls\": {\n            \"html\": \"https://url.com/a_card_member_agreement_asset_token4321.html\",\n            \"pdf\": \"https://url.com/a_card_member_agreement_asset_token4321.pdf\",\n            \"png\": \"https://url.com/a_card_member_agreement_asset_token4321.png\"\n          }\n        },\n        \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n        \"e_disclosure\": {\n          \"asset_token\": \"a_e_disclosure_asset_token4321\",\n          \"asset_urls\": {\n            \"html\": \"https://url.com/a_e_disclosure_asset_token4321.html\",\n            \"pdf\": \"https://url.com/a_e_disclosure_asset_token4321.pdf\",\n            \"png\": \"https://url.com/a_e_disclosure_asset_token4321.png\"\n          }\n        },\n        \"name\": \"My Document Policy\",\n        \"notice_of_adverse_action\": {\n          \"template_token\": \"a_notice_of_adverse_action_template_token4321\",\n          \"template_urls\": {\n            \"html\": \"https://url.com/a_notice_of_adverse_action_template_token4321.html\"\n          }\n        },\n        \"privacy_policy\": {\n          \"asset_token\": \"a_privacy_policy_asset_token4321\",\n          \"asset_urls\": {\n            \"html\": \"https://url.com/a_privacy_policy_asset_token4321.html\",\n            \"pdf\": \"https://url.com/a_privacy_policy_asset_token4321.pdf\",\n            \"png\": \"https://url.com/a_privacy_policy_asset_token4321.png\"\n          }\n        },\n        \"rewards_disclosure\": {\n          \"asset_token\": \"a_rewards_disclosure_asset_token4321\",\n          \"asset_urls\": {\n            \"html\": \"https://url.com/a_rewards_disclosure_asset_token4321.html\",\n            \"pdf\": \"https://url.com/a_rewards_disclosure_asset_token4321.pdf\",\n            \"png\": \"https://url.com/a_rewards_disclosure_asset_token4321.png\"\n          },\n          \"template_token\": \"a_rewards_disclosure_template_token4321\",\n          \"template_urls\": {\n            \"html\": \"https://url.com/a_rewards_disclosure_template_token4321.html\"\n          }\n        },\n        \"summary_of_credit_terms\": {\n          \"asset_token\": \"a_summary_of_credit_terms_asset_token4321\",\n          \"asset_urls\": {\n            \"html\": \"https://url.com/a_summary_of_credit_terms_asset_token4321.html\",\n            \"pdf\": \"https://url.com/a_summary_of_credit_terms_asset_token4321.pdf\",\n            \"png\": \"https://url.com/a_summary_of_credit_terms_asset_token4321.png\"\n          },\n          \"template_token\": \"a_summary_of_credit_terms_template_token4321\",\n          \"template_urls\": {\n            \"html\": \"https://url.com/a_summary_of_credit_terms_template_token4321.html\"\n          }\n        },\n        \"terms_schedule\": {\n          \"template_token\": \"a_terms_schedule_template_token4321\",\n          \"template_urls\": {\n            \"html\": \"https://url.com/a_terms_schedule_template_token4321.html\"\n          }\n        },\n        \"token\": \"my_document_policy_token_4321\",\n        \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\"\n      },\n      \"document_policy_token\": \"my_document_policy_token_4321\",\n      \"fee_policy_detail\": {\n        \"account\": {\n          \"foreign_transaction_fee\": {\n            \"default_method\": \"PERCENTAGE\",\n            \"default_value\": 12.5\n          },\n          \"late_payment\": {\n            \"default_method\": \"FLAT\",\n            \"default_value\": 10\n          },\n          \"returned_payment\": {\n            \"default_method\": \"FLAT\",\n            \"default_value\": 10\n          }\n        },\n        \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n        \"description\": \"A silver fee policy\",\n        \"name\": \"Silver Fee Policy\",\n        \"token\": \"my_fee_policy_token_4321\",\n        \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\"\n      },\n      \"fee_policy_token\": \"my_fee_policy_token_4321\",\n      \"name\": \"Silver Credit Bundle\",\n      \"offer_policy_detail\": {\n        \"created_time\": \"2024-04-01 23:41:58.802000+00:00\",\n        \"description\": \"A silver offer policy\",\n        \"name\": \"Silver Offer Policy\",\n        \"token\": \"my_offer_policy_token_4321\",\n        \"updated_time\": \"2024-04-05 16:04:48.643000+00:00\"\n      },\n      \"offer_policy_token\": \"my_offer_policy_token_4321\",\n      \"parent_token\": \"my_parent_token_4321\",\n      \"reward_policy_detail\": {\n        \"accrual_strategy\": \"DEFAULT\",\n        \"conversions\": [\n          {\n            \"conversion_increment\": 10,\n            \"conversion_rate\": 0.001,\n            \"currency\": \"USD\",\n            \"type\": \"STATEMENT_CREDIT\"\n          }\n        ],\n        \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n        \"description\": \"A gold reward policy\",\n        \"exclusions\": {\n          \"custom_exclusions\": [\n            \"2000-2999\",\n            \"4321\"\n          ],\n          \"use_default_exclusions\": false\n        },\n        \"name\": \"Gold Reward Policy\",\n        \"redemption_strategy\": \"MANUAL\",\n        \"rounding_strategy\": \"ROUND_HALF_EVEN\",\n        \"rules\": [\n          {\n            \"amount\": null,\n            \"attributes\": {\n              \"mcc\": [\n                \"0001-1499\",\n                \"1500\"\n              ]\n            },\n            \"calculation_type\": \"PER_TRANSACTION\",\n            \"description\": \"Earn 3x on selected categories.\",\n            \"multiplier\": 3,\n            \"type\": \"MULTIPLIER_PER_TRANSACTION\"\n          }\n        ],\n        \"settlement_strategy\": \"STATEMENT\",\n        \"token\": \"my_reward_policy_token_4321\",\n        \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\"\n      },\n      \"reward_policy_token\": \"my_reward_policy_token_4321\",\n      \"status\": \"DRAFT\",\n      \"token\": \"my_bundle_token_4321\",\n      \"updated_time\": \"2024-04-05 16:04:48.643000+00:00\"\n    }\n  ],\n  \"end_index\": 2,\n  \"is_more\": true,\n  \"start_index\": 0\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "eed7b615-5ba1-4a39-95b6-496b977a5811",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bundles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 7823,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7e318970-ccc2-4351-9b04-f97cf094d7bd",
+          "name": "Create bundle",
+          "request": {
+            "name": "Create bundle",
+            "description": {
+              "content": "Create a bundle.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bundles"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"apr_policy_token\": \"<string>\",\n  \"credit_product_policy_token\": \"<string>\",\n  \"description\": \"<string>\",\n  \"document_policy_token\": \"<string>\",\n  \"fee_policy_token\": \"<string>\",\n  \"name\": \"<string>\",\n  \"status\": \"<string>\",\n  \"offer_policy_token\": \"<string>\",\n  \"reward_policy_token\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e13534f4-936c-496e-b484-31ed95a623a9",
+              "name": "Expected response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bundles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"apr_policy_token\": \"my_apr_policy_token_1234\",\n  \"credit_product_policy_token\": \"my_credit_product_policy_token_1234\",\n  \"description\": \"A gold credit bundle policy\",\n  \"document_policy_token\": \"my_document_policy_token_1234\",\n  \"fee_policy_token\": \"my_fee_policy_token_1234\",\n  \"name\": \"Gold Credit Bundle\",\n  \"offer_policy_token\": \"my_offer_policy_token_1234\",\n  \"reward_policy_token\": \"my_reward_policy_token_1234\",\n  \"status\": \"DRAFT\",\n  \"token\": \"my_bundle_token_1234\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"apr_policy_detail\": {\n    \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n    \"description\": \"A gold APR policy\",\n    \"effective_date\": \"2025-05-01\",\n    \"name\": \"Gold APR Policy\",\n    \"purchases\": {\n      \"external_token\": \"my_external_purchase_token1234\",\n      \"name\": \"A purchase at a merchant\",\n      \"tiers\": [\n        {\n          \"apr\": 0,\n          \"margin_rate\": 1\n        },\n        {\n          \"apr\": 0,\n          \"margin_rate\": 5\n        }\n      ]\n    },\n    \"token\": \"my_apr_policy_token_1234\",\n    \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\"\n  },\n  \"apr_policy_token\": \"my_apr_policy_token_1234\",\n  \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n  \"credit_product_policy_detail\": {\n    \"card_products\": [\n      {\n        \"level\": \"TRADITIONAL\",\n        \"network\": \"VISA\",\n        \"token\": \"my_card_product_token1234\"\n      }\n    ],\n    \"classification\": \"CONSUMER\",\n    \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n    \"credit_line\": {\n      \"max\": 3500,\n      \"min\": 50\n    },\n    \"currency_code\": \"USD\",\n    \"description\": \"A gold credit product policy\",\n    \"interest_calculation\": {\n      \"application_of_credits\": {\n        \"cycle_type\": \"END_REVOLVING\",\n        \"day\": 15\n      },\n      \"day_count\": \"ACTUAL\",\n      \"exclude_tran_types\": [\n        \"ANNUAL_FEE\",\n        \"LATE_PAYMENT_FEE\",\n        \"CASH_BACK_STATEMENT_CREDIT\"\n      ],\n      \"grace_days_application\": \"NEXT_CYCLE_DATE\",\n      \"interest_application\": [\n        \"PRINCIPAL\",\n        \"FEES\"\n      ],\n      \"interest_on_grace_reactivation\": \"ACCRUE_PAYMENT_DATE\",\n      \"method\": \"AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS\",\n      \"minimum_interest\": 1\n    },\n    \"name\": \"Gold Credit Product Policy\",\n    \"payments\": {\n      \"allocation_order\": [\n        \"INTEREST\",\n        \"FEES\",\n        \"PRINCIPAL\"\n      ],\n      \"billing_cycle_day\": 1,\n      \"due_day\": 31,\n      \"min_payment_calculation\": {\n        \"include_overlimit_amount\": true,\n        \"include_past_due_amount\": false,\n        \"min_payment_flat_amount\": 20,\n        \"min_payment_percentage\": {\n          \"include_fees_charged\": [\n            \"LATE_PAYMENT_FEE\"\n          ],\n          \"include_interest_charged\": false,\n          \"percentage_of_balance\": 1\n        }\n      }\n    },\n    \"product_sub_type\": \"CREDIT_CARD\",\n    \"product_type\": \"REVOLVING\",\n    \"token\": \"my_credit_product_policy_token_1234\",\n    \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\",\n    \"usage\": [\n      \"PURCHASE\"\n    ]\n  },\n  \"credit_product_policy_token\": \"my_credit_product_policy_token_1234\",\n  \"description\": \"A gold credit bundle policy\",\n  \"document_policy_detail\": {\n    \"account_statement\": {\n      \"template_token\": \"an_account_statement_template_token1234\",\n      \"template_urls\": {\n        \"html\": \"https://url.com/an_account_statement_template_token1234.html\"\n      }\n    },\n    \"benefits_disclosure\": {\n      \"asset_token\": \"a_benefits_disclosure_asset_token1234\",\n      \"asset_urls\": {\n        \"html\": \"https://url.com/a_benefits_disclosure_asset_token1234.html\",\n        \"pdf\": \"https://url.com/a_benefits_disclosure_asset_token1234.pdf\",\n        \"png\": \"https://url.com/a_benefits_disclosure_asset_token1234.png\"\n      }\n    },\n    \"card_member_agreement\": {\n      \"asset_token\": \"a_card_member_agreement_asset_token1234\",\n      \"asset_urls\": {\n        \"html\": \"https://url.com/a_card_member_agreement_asset_token1234.html\",\n        \"pdf\": \"https://url.com/a_card_member_agreement_asset_token1234.pdf\",\n        \"png\": \"https://url.com/a_card_member_agreement_asset_token1234.png\"\n      }\n    },\n    \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n    \"e_disclosure\": {\n      \"asset_token\": \"a_e_disclosure_asset_token1234\",\n      \"asset_urls\": {\n        \"html\": \"https://url.com/a_e_disclosure_asset_token1234.html\",\n        \"pdf\": \"https://url.com/a_e_disclosure_asset_token1234.pdf\",\n        \"png\": \"https://url.com/a_e_disclosure_asset_token1234.png\"\n      }\n    },\n    \"name\": \"My Document Policy\",\n    \"notice_of_adverse_action\": {\n      \"template_token\": \"a_notice_of_adverse_action_template_token1234\",\n      \"template_urls\": {\n        \"html\": \"https://url.com/a_notice_of_adverse_action_template_token1234.html\"\n      }\n    },\n    \"privacy_policy\": {\n      \"asset_token\": \"a_privacy_policy_asset_token1234\",\n      \"asset_urls\": {\n        \"html\": \"https://url.com/a_privacy_policy_asset_token1234.html\",\n        \"pdf\": \"https://url.com/a_privacy_policy_asset_token1234.pdf\",\n        \"png\": \"https://url.com/a_privacy_policy_asset_token1234.png\"\n      }\n    },\n    \"rewards_disclosure\": {\n      \"asset_token\": \"a_rewards_disclosure_asset_token1234\",\n      \"asset_urls\": {\n        \"html\": \"https://url.com/a_rewards_disclosure_asset_token1234.html\",\n        \"pdf\": \"https://url.com/a_rewards_disclosure_asset_token1234.pdf\",\n        \"png\": \"https://url.com/a_rewards_disclosure_asset_token1234.png\"\n      },\n      \"template_token\": \"a_rewards_disclosure_template_token1234\",\n      \"template_urls\": {\n        \"html\": \"https://url.com/a_rewards_disclosure_template_token1234.html\"\n      }\n    },\n    \"summary_of_credit_terms\": {\n      \"asset_token\": \"a_summary_of_credit_terms_asset_token1234\",\n      \"asset_urls\": {\n        \"html\": \"https://url.com/a_summary_of_credit_terms_asset_token1234.html\",\n        \"pdf\": \"https://url.com/a_summary_of_credit_terms_asset_token1234.pdf\",\n        \"png\": \"https://url.com/a_summary_of_credit_terms_asset_token1234.png\"\n      },\n      \"template_token\": \"a_summary_of_credit_terms_template_token1234\",\n      \"template_urls\": {\n        \"html\": \"https://asset-bucket.s3.amazonaws.com/short_code/a_summary_of_credit_terms_template_token1234/a_summary_of_credit_terms_template_token1234.html\"\n      }\n    },\n    \"terms_schedule\": {\n      \"template_token\": \"a_terms_schedule_template_token1234\",\n      \"template_urls\": {\n        \"html\": \"https://url.com/a_terms_schedule_template_token1234.html\"\n      }\n    },\n    \"token\": \"my_document_policy_token_1234\",\n    \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\"\n  },\n  \"document_policy_token\": \"my_document_policy_token_1234\",\n  \"fee_policy_detail\": {\n    \"account\": {\n      \"foreign_transaction_fee\": {\n        \"default_method\": \"PERCENTAGE\",\n        \"default_value\": 12.5\n      },\n      \"late_payment\": {\n        \"default_method\": \"FLAT\",\n        \"default_value\": 10\n      },\n      \"returned_payment\": {\n        \"default_method\": \"FLAT\",\n        \"default_value\": 10\n      }\n    },\n    \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n    \"description\": \"A gold fee policy\",\n    \"name\": \"Gold Fee Policy\",\n    \"token\": \"my_fee_policy_token_1234\",\n    \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\"\n  },\n  \"fee_policy_token\": \"my_fee_policy_token_1234\",\n  \"name\": \"Gold Credit Bundle\",\n  \"offer_policy_detail\": {\n    \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n    \"description\": \"A gold offer policy\",\n    \"name\": \"Gold Offer Policy\",\n    \"token\": \"my_offer_policy_token_1234\",\n    \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\"\n  },\n  \"offer_policy_token\": \"my_offer_policy_token_1234\",\n  \"parent_token\": \"my_parent_token_1234\",\n  \"reward_policy_detail\": {\n    \"accrual_strategy\": \"DEFAULT\",\n    \"conversions\": [\n      {\n        \"conversion_increment\": 10,\n        \"conversion_rate\": 0.001,\n        \"currency\": \"USD\",\n        \"type\": \"STATEMENT_CREDIT\"\n      }\n    ],\n    \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n    \"description\": \"A gold reward policy\",\n    \"exclusions\": {\n      \"custom_exclusions\": [\n        \"2000-2999\",\n        \"4321\"\n      ],\n      \"use_default_exclusions\": false\n    },\n    \"name\": \"Gold Reward Policy\",\n    \"redemption_strategy\": \"MANUAL\",\n    \"rounding_strategy\": \"ROUND_HALF_EVEN\",\n    \"rules\": [\n      {\n        \"amount\": null,\n        \"attributes\": {\n          \"mcc\": [\n            \"0001-1499\",\n            \"1500\"\n          ]\n        },\n        \"calculation_type\": \"PER_TRANSACTION\",\n        \"description\": \"Earn 3x on selected categories.\",\n        \"multiplier\": 3,\n        \"type\": \"MULTIPLIER_PER_TRANSACTION\"\n      }\n    ],\n    \"settlement_strategy\": \"STATEMENT\",\n    \"token\": \"my_reward_policy_token_1234\",\n    \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\"\n  },\n  \"reward_policy_token\": \"my_reward_policy_token_1234\",\n  \"status\": \"DRAFT\",\n  \"token\": \"my_bundle_token_1234\",\n  \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7f3c9d7f-4ce6-4948-8ee9-de51b249f58a",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bundles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"apr_policy_token\": \"my_apr_policy_token_1234\",\n  \"credit_product_policy_token\": \"my_credit_product_policy_token_1234\",\n  \"description\": \"A gold credit bundle policy\",\n  \"document_policy_token\": \"my_document_policy_token_1234\",\n  \"fee_policy_token\": \"my_fee_policy_token_1234\",\n  \"name\": \"Gold Credit Bundle\",\n  \"offer_policy_token\": \"my_offer_policy_token_1234\",\n  \"reward_policy_token\": \"my_reward_policy_token_1234\",\n  \"status\": \"DRAFT\",\n  \"token\": \"my_bundle_token_1234\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 7823,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "de50cc46-c959-45f1-a6b1-b565aa41414c",
+          "name": "Retrieve bundle",
+          "request": {
+            "name": "Retrieve bundle",
+            "description": {
+              "content": "Retrieve a specific bundle.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bundles",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "expand_objects",
+                  "value": "<string>",
+                  "description": "Embeds the associated object of the specified type into the response.\nFor more, see <</core-api/object-expansion, object expansion>>."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand_objects",
+                  "value": "<string>",
+                  "description": "Embeds the associated object of the specified type into the response.\nFor more, see <</core-api/object-expansion, object expansion>>."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Unique identifier of the bundle to retrieve.\n\nSend a `GET` request to `/credit/bundles` to retrieve existing  tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "39354c96-21c8-4ddb-a34b-4251210839fd",
+              "name": "A JSON object containing bundle information",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bundles",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "expand_objects",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand_objects",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the bundle to retrieve.\n\nSend a `GET` request to `/credit/bundles` to retrieve existing  tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"apr_policy_detail\": {\n    \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n    \"description\": \"A gold APR policy\",\n    \"effective_date\": \"2025-05-01\",\n    \"name\": \"Gold APR Policy\",\n    \"purchases\": {\n      \"external_token\": \"my_external_purchase_token1234\",\n      \"name\": \"A purchase at a merchant\",\n      \"tiers\": [\n        {\n          \"apr\": 0,\n          \"margin_rate\": 1\n        },\n        {\n          \"apr\": 0,\n          \"margin_rate\": 5\n        }\n      ]\n    },\n    \"token\": \"my_apr_policy_token_1234\",\n    \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\"\n  },\n  \"apr_policy_token\": \"my_apr_policy_token_1234\",\n  \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n  \"credit_product_policy_detail\": {\n    \"card_products\": [\n      {\n        \"level\": \"TRADITIONAL\",\n        \"network\": \"VISA\",\n        \"token\": \"my_card_product_token1234\"\n      }\n    ],\n    \"classification\": \"CONSUMER\",\n    \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n    \"credit_line\": {\n      \"max\": 3500,\n      \"min\": 50\n    },\n    \"currency_code\": \"USD\",\n    \"description\": \"A gold credit product policy\",\n    \"interest_calculation\": {\n      \"application_of_credits\": {\n        \"cycle_type\": \"END_REVOLVING\",\n        \"day\": 15\n      },\n      \"day_count\": \"ACTUAL\",\n      \"exclude_tran_types\": [\n        \"ANNUAL_FEE\",\n        \"LATE_PAYMENT_FEE\",\n        \"CASH_BACK_STATEMENT_CREDIT\"\n      ],\n      \"grace_days_application\": \"NEXT_CYCLE_DATE\",\n      \"interest_application\": [\n        \"PRINCIPAL\",\n        \"FEES\"\n      ],\n      \"interest_on_grace_reactivation\": \"ACCRUE_PAYMENT_DATE\",\n      \"method\": \"AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS\",\n      \"minimum_interest\": 1\n    },\n    \"name\": \"Gold Credit Product Policy\",\n    \"payments\": {\n      \"allocation_order\": [\n        \"INTEREST\",\n        \"FEES\",\n        \"PRINCIPAL\"\n      ],\n      \"billing_cycle_day\": 1,\n      \"due_day\": 31,\n      \"min_payment_calculation\": {\n        \"include_overlimit_amount\": true,\n        \"include_past_due_amount\": false,\n        \"min_payment_flat_amount\": 20,\n        \"min_payment_percentage\": {\n          \"include_fees_charged\": [\n            \"LATE_PAYMENT_FEE\"\n          ],\n          \"include_interest_charged\": false,\n          \"percentage_of_balance\": 1\n        }\n      }\n    },\n    \"product_sub_type\": \"CREDIT_CARD\",\n    \"product_type\": \"REVOLVING\",\n    \"token\": \"my_credit_product_policy_token_1234\",\n    \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\",\n    \"usage\": [\n      \"PURCHASE\"\n    ]\n  },\n  \"credit_product_policy_token\": \"my_credit_product_policy_token_1234\",\n  \"description\": \"A gold credit bundle\",\n  \"document_policy_detail\": {\n    \"account_statement\": {\n      \"template_token\": \"an_account_statement_template_token1234\",\n      \"template_urls\": {\n        \"html\": \"https://url.com/an_account_statement_template_token1234.html\"\n      }\n    },\n    \"benefits_disclosure\": {\n      \"asset_token\": \"a_benefits_disclosure_asset_token1234\",\n      \"asset_urls\": {\n        \"html\": \"https://url.com/a_benefits_disclosure_asset_token1234.html\",\n        \"pdf\": \"https://url.com/a_benefits_disclosure_asset_token1234.pdf\",\n        \"png\": \"https://url.com/a_benefits_disclosure_asset_token1234.png\"\n      }\n    },\n    \"card_member_agreement\": {\n      \"asset_token\": \"a_card_member_agreement_asset_token1234\",\n      \"asset_urls\": {\n        \"html\": \"https://url.com/a_card_member_agreement_asset_token1234.html\",\n        \"pdf\": \"https://url.com/a_card_member_agreement_asset_token1234.pdf\",\n        \"png\": \"https://url.com/a_card_member_agreement_asset_token1234.png\"\n      }\n    },\n    \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n    \"e_disclosure\": {\n      \"asset_token\": \"a_e_disclosure_asset_token1234\",\n      \"asset_urls\": {\n        \"html\": \"https://url.com/a_e_disclosure_asset_token1234.html\",\n        \"pdf\": \"https://url.com/a_e_disclosure_asset_token1234.pdf\",\n        \"png\": \"https://url.com/a_e_disclosure_asset_token1234.png\"\n      }\n    },\n    \"name\": \"My Document Policy\",\n    \"notice_of_adverse_action\": {\n      \"template_token\": \"a_notice_of_adverse_action_template_token1234\",\n      \"template_urls\": {\n        \"html\": \"https://url.com/a_notice_of_adverse_action_template_token1234.html\"\n      }\n    },\n    \"privacy_policy\": {\n      \"asset_token\": \"a_privacy_policy_asset_token1234\",\n      \"asset_urls\": {\n        \"html\": \"https://url.com/a_privacy_policy_asset_token1234.html\",\n        \"pdf\": \"https://url.com/a_privacy_policy_asset_token1234.pdf\",\n        \"png\": \"https://url.com/a_privacy_policy_asset_token1234.png\"\n      }\n    },\n    \"rewards_disclosure\": {\n      \"asset_token\": \"a_rewards_disclosure_asset_token1234\",\n      \"asset_urls\": {\n        \"html\": \"https://url.com/a_rewards_disclosure_asset_token1234.html\",\n        \"pdf\": \"https://url.com/a_rewards_disclosure_asset_token1234.pdf\",\n        \"png\": \"https://url.com/a_rewards_disclosure_asset_token1234.png\"\n      },\n      \"template_token\": \"a_rewards_disclosure_template_token1234\",\n      \"template_urls\": {\n        \"html\": \"https://url.com/a_rewards_disclosure_template_token1234.html\"\n      }\n    },\n    \"summary_of_credit_terms\": {\n      \"asset_token\": \"a_summary_of_credit_terms_asset_token1234\",\n      \"asset_urls\": {\n        \"html\": \"https://url.com/a_summary_of_credit_terms_asset_token1234.html\",\n        \"pdf\": \"https://url.com/a_summary_of_credit_terms_asset_token1234.pdf\",\n        \"png\": \"https://url.com/a_summary_of_credit_terms_asset_token1234.png\"\n      },\n      \"template_token\": \"a_summary_of_credit_terms_template_token1234\",\n      \"template_urls\": {\n        \"html\": \"https://asset-bucket.s3.amazonaws.com/short_code/a_summary_of_credit_terms_template_token1234/a_summary_of_credit_terms_template_token1234.html\"\n      }\n    },\n    \"terms_schedule\": {\n      \"template_token\": \"a_terms_schedule_template_token1234\",\n      \"template_urls\": {\n        \"html\": \"https://url.com/a_terms_schedule_template_token1234.html\"\n      }\n    },\n    \"token\": \"my_document_policy_token_1234\",\n    \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\"\n  },\n  \"document_policy_token\": \"my_document_policy_token_1234\",\n  \"fee_policy_detail\": {\n    \"account\": {\n      \"foreign_transaction_fee\": {\n        \"default_method\": \"PERCENTAGE\",\n        \"default_value\": 3\n      },\n      \"late_payment\": {\n        \"default_method\": \"FLAT\",\n        \"default_value\": 10\n      },\n      \"returned_payment\": {\n        \"default_method\": \"FLAT\",\n        \"default_value\": 10\n      }\n    },\n    \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n    \"description\": \"A gold fee policy\",\n    \"name\": \"Gold Fee Policy\",\n    \"token\": \"my_fee_policy_token_1234\",\n    \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\"\n  },\n  \"fee_policy_token\": \"my_fee_policy_token_1234\",\n  \"name\": \"Gold Credit Bundle\",\n  \"offer_policy_detail\": {\n    \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n    \"description\": \"A gold offer policy\",\n    \"name\": \"Gold Offer Policy\",\n    \"token\": \"my_offer_policy_token_1234\",\n    \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\"\n  },\n  \"offer_policy_token\": \"my_offer_policy_token_1234\",\n  \"parent_token\": \"my_parent_token_1234\",\n  \"reward_policy_detail\": {\n    \"accrual_strategy\": \"DEFAULT\",\n    \"conversions\": [\n      {\n        \"conversion_increment\": 10,\n        \"conversion_rate\": 0.001,\n        \"currency\": \"USD\",\n        \"type\": \"STATEMENT_CREDIT\"\n      }\n    ],\n    \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n    \"description\": \"A gold reward policy\",\n    \"exclusions\": {\n      \"custom_exclusions\": [\n        \"2000-2999\",\n        \"4321\"\n      ],\n      \"use_default_exclusions\": false\n    },\n    \"name\": \"Gold Reward Policy\",\n    \"redemption_strategy\": \"MANUAL\",\n    \"rounding_strategy\": \"ROUND_HALF_EVEN\",\n    \"rules\": [\n      {\n        \"amount\": null,\n        \"attributes\": {\n          \"mcc\": [\n            \"0001-1499\",\n            \"1500\"\n          ]\n        },\n        \"calculation_type\": \"PER_TRANSACTION\",\n        \"description\": \"Earn 3x on selected categories.\",\n        \"multiplier\": 3,\n        \"type\": \"MULTIPLIER_PER_TRANSACTION\"\n      }\n    ],\n    \"settlement_strategy\": \"STATEMENT\",\n    \"token\": \"my_reward_policy_token_1234\",\n    \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\"\n  },\n  \"reward_policy_token\": \"my_reward_policy_token_1234\",\n  \"status\": \"DRAFT\",\n  \"token\": \"my_bundle_token_1234\",\n  \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fef57ed3-836a-4d53-834d-4e64b8ba8624",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bundles",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "expand_objects",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand_objects",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the bundle to retrieve.\n\nSend a `GET` request to `/credit/bundles` to retrieve existing  tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 7823,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b6ffe70f-75a8-47a2-963f-22593d29cc14",
+          "name": "Update bundle",
+          "request": {
+            "name": "Update bundle",
+            "description": {
+              "content": "Update a specific bundle that is not `ACTIVE` or `ARCHIVED`.\nBundles are created in a `DRAFT` state, and are still modifiable at this point.\nUsing the transitions endpoint, a bundle can be transitioned from `DRAFT`, to `ACTIVE`.\nOnce a bundle is active, it cannot be modified.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bundles",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Token of the bundle to update.\n\nSend a `GET` request to `/credit/bundles` to retrieve existing  tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"apr_policy_token\": \"<string>\",\n  \"credit_product_policy_token\": \"<string>\",\n  \"description\": \"<string>\",\n  \"document_policy_token\": \"<string>\",\n  \"fee_policy_token\": \"<string>\",\n  \"name\": \"<string>\",\n  \"offer_policy_token\": \"<string>\",\n  \"reward_policy_token\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6d22ea21-5791-4972-bdf6-ff4a7d1aa353",
+              "name": "A JSON object containing bundle information.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bundles",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Token of the bundle to update.\n\nSend a `GET` request to `/credit/bundles` to retrieve existing  tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"apr_policy_token\": \"my_apr_policy_token_1234\",\n  \"credit_product_policy_token\": \"my_credit_product_policy_token_1234\",\n  \"description\": \"Description of the renamed bundle\",\n  \"document_policy_token\": \"my_document_policy_token_1234\",\n  \"fee_policy_token\": \"my_fee_policy_token_1234\",\n  \"name\": \"Renamed Bundle\",\n  \"offer_policy_token\": \"my_offer_policy_token_1234\",\n  \"reward_policy_token\": \"my_reward_policy_token_1234\",\n  \"token\": \"my_bundle_token_1234\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"apr_policy_detail\": {\n    \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n    \"description\": \"A gold APR policy\",\n    \"effective_date\": \"2025-05-01\",\n    \"name\": \"Gold APR Policy\",\n    \"purchases\": {\n      \"external_token\": \"my_external_purchase_token1234\",\n      \"name\": \"A purchase at a merchant\",\n      \"tiers\": [\n        {\n          \"apr\": 0,\n          \"margin_rate\": 1\n        },\n        {\n          \"apr\": 0,\n          \"margin_rate\": 5\n        }\n      ]\n    },\n    \"token\": \"my_apr_policy_token_1234\",\n    \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\"\n  },\n  \"apr_policy_token\": \"my_apr_policy_token_1234\",\n  \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n  \"credit_product_policy_detail\": {\n    \"card_products\": [\n      {\n        \"level\": \"TRADITIONAL\",\n        \"network\": \"VISA\",\n        \"token\": \"my_card_product_token1234\"\n      }\n    ],\n    \"classification\": \"CONSUMER\",\n    \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n    \"credit_line\": {\n      \"max\": 3500,\n      \"min\": 50\n    },\n    \"currency_code\": \"USD\",\n    \"description\": \"A gold credit product policy\",\n    \"interest_calculation\": {\n      \"application_of_credits\": {\n        \"cycle_type\": \"END_REVOLVING\",\n        \"day\": 15\n      },\n      \"day_count\": \"ACTUAL\",\n      \"exclude_tran_types\": [\n        \"ANNUAL_FEE\",\n        \"LATE_PAYMENT_FEE\",\n        \"CASH_BACK_STATEMENT_CREDIT\"\n      ],\n      \"grace_days_application\": \"NEXT_CYCLE_DATE\",\n      \"interest_application\": [\n        \"PRINCIPAL\",\n        \"FEES\"\n      ],\n      \"interest_on_grace_reactivation\": \"ACCRUE_PAYMENT_DATE\",\n      \"method\": \"AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS\",\n      \"minimum_interest\": 1\n    },\n    \"name\": \"Gold Credit Product Policy\",\n    \"payments\": {\n      \"allocation_order\": [\n        \"INTEREST\",\n        \"FEES\",\n        \"PRINCIPAL\"\n      ],\n      \"billing_cycle_day\": 1,\n      \"due_day\": 31,\n      \"min_payment_calculation\": {\n        \"include_overlimit_amount\": true,\n        \"include_past_due_amount\": false,\n        \"min_payment_flat_amount\": 20,\n        \"min_payment_percentage\": {\n          \"include_fees_charged\": [\n            \"LATE_PAYMENT_FEE\"\n          ],\n          \"include_interest_charged\": false,\n          \"percentage_of_balance\": 1\n        }\n      }\n    },\n    \"product_sub_type\": \"CREDIT_CARD\",\n    \"product_type\": \"REVOLVING\",\n    \"token\": \"my_credit_product_policy_token_1234\",\n    \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\",\n    \"usage\": [\n      \"PURCHASE\"\n    ]\n  },\n  \"credit_product_policy_token\": \"my_credit_product_policy_token_1234\",\n  \"description\": \"Description of the renamed bundle\",\n  \"document_policy_detail\": {\n    \"account_statement\": {\n      \"template_token\": \"an_account_statement_template_token1234\",\n      \"template_urls\": {\n        \"html\": \"https://url.com/an_account_statement_template_token1234.html\"\n      }\n    },\n    \"benefits_disclosure\": {\n      \"asset_token\": \"a_benefits_disclosure_asset_token1234\",\n      \"asset_urls\": {\n        \"html\": \"https://url.com/a_benefits_disclosure_asset_token1234.html\",\n        \"pdf\": \"https://url.com/a_benefits_disclosure_asset_token1234.pdf\",\n        \"png\": \"https://url.com/a_benefits_disclosure_asset_token1234.png\"\n      }\n    },\n    \"card_member_agreement\": {\n      \"asset_token\": \"a_card_member_agreement_asset_token1234\",\n      \"asset_urls\": {\n        \"html\": \"https://url.com/a_card_member_agreement_asset_token1234.html\",\n        \"pdf\": \"https://url.com/a_card_member_agreement_asset_token1234.pdf\",\n        \"png\": \"https://url.com/a_card_member_agreement_asset_token1234.png\"\n      }\n    },\n    \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n    \"e_disclosure\": {\n      \"asset_token\": \"a_e_disclosure_asset_token1234\",\n      \"asset_urls\": {\n        \"html\": \"https://url.com/a_e_disclosure_asset_token1234.html\",\n        \"pdf\": \"https://url.com/a_e_disclosure_asset_token1234.pdf\",\n        \"png\": \"https://url.com/a_e_disclosure_asset_token1234.png\"\n      }\n    },\n    \"name\": \"My Document Policy\",\n    \"notice_of_adverse_action\": {\n      \"template_token\": \"a_notice_of_adverse_action_template_token1234\",\n      \"template_urls\": {\n        \"html\": \"https://url.com/a_notice_of_adverse_action_template_token1234.html\"\n      }\n    },\n    \"privacy_policy\": {\n      \"asset_token\": \"a_privacy_policy_asset_token1234\",\n      \"asset_urls\": {\n        \"html\": \"https://url.com/a_privacy_policy_asset_token1234.html\",\n        \"pdf\": \"https://url.com/a_privacy_policy_asset_token1234.pdf\",\n        \"png\": \"https://url.com/a_privacy_policy_asset_token1234.png\"\n      }\n    },\n    \"rewards_disclosure\": {\n      \"asset_token\": \"a_rewards_disclosure_asset_token1234\",\n      \"asset_urls\": {\n        \"html\": \"https://url.com/a_rewards_disclosure_asset_token1234.html\",\n        \"pdf\": \"https://url.com/a_rewards_disclosure_asset_token1234.pdf\",\n        \"png\": \"https://url.com/a_rewards_disclosure_asset_token1234.png\"\n      },\n      \"template_token\": \"a_rewards_disclosure_template_token1234\",\n      \"template_urls\": {\n        \"html\": \"https://url.com/a_rewards_disclosure_template_token1234.html\"\n      }\n    },\n    \"summary_of_credit_terms\": {\n      \"asset_token\": \"a_summary_of_credit_terms_asset_token1234\",\n      \"asset_urls\": {\n        \"html\": \"https://url.com/a_summary_of_credit_terms_asset_token1234.html\",\n        \"pdf\": \"https://url.com/a_summary_of_credit_terms_asset_token1234.pdf\",\n        \"png\": \"https://url.com/a_summary_of_credit_terms_asset_token1234.png\"\n      },\n      \"template_token\": \"a_summary_of_credit_terms_template_token1234\",\n      \"template_urls\": {\n        \"html\": \"https://asset-bucket.s3.amazonaws.com/short_code/a_summary_of_credit_terms_template_token1234/a_summary_of_credit_terms_template_token1234.html\"\n      }\n    },\n    \"terms_schedule\": {\n      \"template_token\": \"a_terms_schedule_template_token1234\",\n      \"template_urls\": {\n        \"html\": \"https://url.com/a_terms_schedule_template_token1234.html\"\n      }\n    },\n    \"token\": \"my_document_policy_token_1234\",\n    \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\"\n  },\n  \"document_policy_token\": \"my_document_policy_token_1234\",\n  \"fee_policy_detail\": {\n    \"account\": {\n      \"foreign_transaction_fee\": {\n        \"default_method\": \"PERCENTAGE\",\n        \"default_value\": 3\n      },\n      \"late_payment\": {\n        \"default_method\": \"FLAT\",\n        \"default_value\": 10\n      },\n      \"returned_payment\": {\n        \"default_method\": \"FLAT\",\n        \"default_value\": 10\n      }\n    },\n    \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n    \"description\": \"A gold fee policy\",\n    \"name\": \"Gold Fee Policy\",\n    \"token\": \"my_fee_policy_token_1234\",\n    \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\"\n  },\n  \"fee_policy_token\": \"my_fee_policy_token_1234\",\n  \"name\": \"Renamed Bundle\",\n  \"offer_policy_detail\": {\n    \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n    \"description\": \"A gold offer policy\",\n    \"name\": \"Gold Offer Policy\",\n    \"token\": \"my_offer_policy_token_1234\",\n    \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\"\n  },\n  \"offer_policy_token\": \"my_offer_policy_token_1234\",\n  \"parent_token\": \"my_parent_token_1234\",\n  \"reward_policy_detail\": {\n    \"accrual_strategy\": \"DEFAULT\",\n    \"conversions\": [\n      {\n        \"conversion_increment\": 10,\n        \"conversion_rate\": 0.001,\n        \"currency\": \"USD\",\n        \"type\": \"STATEMENT_CREDIT\"\n      }\n    ],\n    \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n    \"description\": \"A gold reward policy\",\n    \"exclusions\": {\n      \"custom_exclusions\": [\n        \"2000-2999\",\n        \"4321\"\n      ],\n      \"use_default_exclusions\": false\n    },\n    \"name\": \"Gold Reward Policy\",\n    \"redemption_strategy\": \"MANUAL\",\n    \"rounding_strategy\": \"ROUND_HALF_EVEN\",\n    \"rules\": [\n      {\n        \"amount\": null,\n        \"attributes\": {\n          \"mcc\": [\n            \"0001-1499\",\n            \"1500\"\n          ]\n        },\n        \"calculation_type\": \"PER_TRANSACTION\",\n        \"description\": \"Earn 3x on selected categories.\",\n        \"multiplier\": 3,\n        \"type\": \"MULTIPLIER_PER_TRANSACTION\"\n      }\n    ],\n    \"settlement_strategy\": \"STATEMENT\",\n    \"token\": \"my_reward_policy_token_1234\",\n    \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\"\n  },\n  \"reward_policy_token\": \"my_reward_policy_token_1234\",\n  \"status\": \"DRAFT\",\n  \"token\": \"my_bundle_token_1234\",\n  \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "aa8f2485-68b7-442c-8045-0a8d883cda4c",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bundles",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Token of the bundle to update.\n\nSend a `GET` request to `/credit/bundles` to retrieve existing  tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"apr_policy_token\": \"my_apr_policy_token_1234\",\n  \"credit_product_policy_token\": \"my_credit_product_policy_token_1234\",\n  \"description\": \"Description of the renamed bundle\",\n  \"document_policy_token\": \"my_document_policy_token_1234\",\n  \"fee_policy_token\": \"my_fee_policy_token_1234\",\n  \"name\": \"Renamed Bundle\",\n  \"offer_policy_token\": \"my_offer_policy_token_1234\",\n  \"reward_policy_token\": \"my_reward_policy_token_1234\",\n  \"token\": \"my_bundle_token_1234\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 7823,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fa8e3946-0d4c-4327-bf05-b875166ece2c",
+          "name": "Clone bundle",
+          "request": {
+            "name": "Clone bundle",
+            "description": {
+              "content": "Create a new bundle based on an existing bundle.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bundles",
+                ":token",
+                "clone"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Unique identifier of the bundle to clone.\n\nSend a `GET` request to `/bundles` to retrieve existing bundle tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST"
+          },
+          "response": [
+            {
+              "id": "34619715-b5a2-4194-8ecd-0af365bf2938",
+              "name": "Expected response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bundles",
+                    ":token",
+                    "clone"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the bundle to clone.\n\nSend a `GET` request to `/bundles` to retrieve existing bundle tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"apr_policy_detail\": {\n    \"created_time\": \"2025-05-01 23:41:58.802000+00:00\",\n    \"description\": \"A gold APR policy\",\n    \"effective_date\": \"2025-05-01\",\n    \"name\": \"Gold APR Policy\",\n    \"purchases\": {\n      \"external_token\": \"my_external_purchase_token1234\",\n      \"name\": \"A purchase at a merchant\",\n      \"tiers\": [\n        {\n          \"apr\": 0,\n          \"margin_rate\": 1\n        },\n        {\n          \"apr\": 0,\n          \"margin_rate\": 5\n        }\n      ]\n    },\n    \"token\": \"my_apr_policy_token_1234\",\n    \"updated_time\": \"2025-05-05 16:04:48.643000+00:00\"\n  },\n  \"apr_policy_token\": \"my_apr_policy_token_1234\",\n  \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n  \"credit_product_policy_detail\": {\n    \"card_products\": [\n      {\n        \"level\": \"TRADITIONAL\",\n        \"network\": \"VISA\",\n        \"token\": \"my_card_product_token1234\"\n      }\n    ],\n    \"classification\": \"CONSUMER\",\n    \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n    \"credit_line\": {\n      \"max\": 3500,\n      \"min\": 50\n    },\n    \"currency_code\": \"USD\",\n    \"description\": \"A gold credit product policy\",\n    \"interest_calculation\": {\n      \"application_of_credits\": {\n        \"cycle_type\": \"END_REVOLVING\",\n        \"day\": 15\n      },\n      \"day_count\": \"ACTUAL\",\n      \"exclude_tran_types\": [\n        \"ANNUAL_FEE\",\n        \"LATE_PAYMENT_FEE\",\n        \"CASH_BACK_STATEMENT_CREDIT\"\n      ],\n      \"grace_days_application\": \"NEXT_CYCLE_DATE\",\n      \"interest_application\": [\n        \"PRINCIPAL\",\n        \"FEES\"\n      ],\n      \"interest_on_grace_reactivation\": \"ACCRUE_PAYMENT_DATE\",\n      \"method\": \"AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS\",\n      \"minimum_interest\": 1\n    },\n    \"name\": \"Gold Credit Product Policy\",\n    \"payments\": {\n      \"allocation_order\": [\n        \"INTEREST\",\n        \"FEES\",\n        \"PRINCIPAL\"\n      ],\n      \"billing_cycle_day\": 1,\n      \"due_day\": 31,\n      \"min_payment_calculation\": {\n        \"include_overlimit_amount\": true,\n        \"include_past_due_amount\": false,\n        \"min_payment_flat_amount\": 20,\n        \"min_payment_percentage\": {\n          \"include_fees_charged\": [\n            \"LATE_PAYMENT_FEE\"\n          ],\n          \"include_interest_charged\": false,\n          \"percentage_of_balance\": 1\n        }\n      }\n    },\n    \"product_sub_type\": \"CREDIT_CARD\",\n    \"product_type\": \"REVOLVING\",\n    \"token\": \"my_credit_product_policy_token_1234\",\n    \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\",\n    \"usage\": [\n      \"PURCHASE\"\n    ]\n  },\n  \"credit_product_policy_token\": \"my_credit_product_policy_token_1234\",\n  \"description\": \"A gold credit bundle\",\n  \"document_policy_detail\": {\n    \"account_statement\": {\n      \"template_token\": \"an_account_statement_template_token1234\",\n      \"template_urls\": {\n        \"html\": \"https://url.com/an_account_statement_template_token1234.html\"\n      }\n    },\n    \"benefits_disclosure\": {\n      \"asset_token\": \"a_benefits_disclosure_asset_token1234\",\n      \"asset_urls\": {\n        \"html\": \"https://url.com/a_benefits_disclosure_asset_token1234.html\",\n        \"pdf\": \"https://url.com/a_benefits_disclosure_asset_token1234.pdf\",\n        \"png\": \"https://url.com/a_benefits_disclosure_asset_token1234.png\"\n      }\n    },\n    \"card_member_agreement\": {\n      \"asset_token\": \"a_card_member_agreement_asset_token1234\",\n      \"asset_urls\": {\n        \"html\": \"https://url.com/a_card_member_agreement_asset_token1234.html\",\n        \"pdf\": \"https://url.com/a_card_member_agreement_asset_token1234.pdf\",\n        \"png\": \"https://url.com/a_card_member_agreement_asset_token1234.png\"\n      }\n    },\n    \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n    \"e_disclosure\": {\n      \"asset_token\": \"a_e_disclosure_asset_token1234\",\n      \"asset_urls\": {\n        \"html\": \"https://url.com/a_e_disclosure_asset_token1234.html\",\n        \"pdf\": \"https://url.com/a_e_disclosure_asset_token1234.pdf\",\n        \"png\": \"https://url.com/a_e_disclosure_asset_token1234.png\"\n      }\n    },\n    \"name\": \"My Document Policy\",\n    \"notice_of_adverse_action\": {\n      \"template_token\": \"a_notice_of_adverse_action_template_token1234\",\n      \"template_urls\": {\n        \"html\": \"https://url.com/a_notice_of_adverse_action_template_token1234.html\"\n      }\n    },\n    \"privacy_policy\": {\n      \"asset_token\": \"a_privacy_policy_asset_token1234\",\n      \"asset_urls\": {\n        \"html\": \"https://url.com/a_privacy_policy_asset_token1234.html\",\n        \"pdf\": \"https://url.com/a_privacy_policy_asset_token1234.pdf\",\n        \"png\": \"https://url.com/a_privacy_policy_asset_token1234.png\"\n      }\n    },\n    \"rewards_disclosure\": {\n      \"asset_token\": \"a_rewards_disclosure_asset_token1234\",\n      \"asset_urls\": {\n        \"html\": \"https://url.com/a_rewards_disclosure_asset_token1234.html\",\n        \"pdf\": \"https://url.com/a_rewards_disclosure_asset_token1234.pdf\",\n        \"png\": \"https://url.com/a_rewards_disclosure_asset_token1234.png\"\n      },\n      \"template_token\": \"a_rewards_disclosure_template_token1234\",\n      \"template_urls\": {\n        \"html\": \"https://url.com/a_rewards_disclosure_template_token1234.html\"\n      }\n    },\n    \"summary_of_credit_terms\": {\n      \"asset_token\": \"a_summary_of_credit_terms_asset_token1234\",\n      \"asset_urls\": {\n        \"html\": \"https://url.com/a_summary_of_credit_terms_asset_token1234.html\",\n        \"pdf\": \"https://url.com/a_summary_of_credit_terms_asset_token1234.pdf\",\n        \"png\": \"https://url.com/a_summary_of_credit_terms_asset_token1234.png\"\n      },\n      \"template_token\": \"a_summary_of_credit_terms_template_token1234\",\n      \"template_urls\": {\n        \"html\": \"https://asset-bucket.s3.amazonaws.com/short_code/a_summary_of_credit_terms_template_token1234/a_summary_of_credit_terms_template_token1234.html\"\n      }\n    },\n    \"terms_schedule\": {\n      \"template_token\": \"a_terms_schedule_template_token1234\",\n      \"template_urls\": {\n        \"html\": \"https://url.com/a_terms_schedule_template_token1234.html\"\n      }\n    },\n    \"token\": \"my_document_policy_token_1234\",\n    \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\"\n  },\n  \"document_policy_token\": \"my_document_policy_token_1234\",\n  \"fee_policy_detail\": {\n    \"account\": {\n      \"foreign_transaction_fee\": {\n        \"default_method\": \"PERCENTAGE\",\n        \"default_value\": 12.5\n      },\n      \"late_payment\": {\n        \"default_method\": \"FLAT\",\n        \"default_value\": 10\n      },\n      \"returned_payment\": {\n        \"default_method\": \"FLAT\",\n        \"default_value\": 10\n      }\n    },\n    \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n    \"description\": \"A gold fee policy\",\n    \"name\": \"Gold Fee Policy\",\n    \"token\": \"my_fee_policy_token_1234\",\n    \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\"\n  },\n  \"fee_policy_token\": \"my_fee_policy_token_1234\",\n  \"name\": \"Gold Credit Bundle\",\n  \"offer_policy_detail\": {\n    \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n    \"description\": \"A gold offer policy\",\n    \"name\": \"Gold Offer Policy\",\n    \"token\": \"my_offer_policy_token_1234\",\n    \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\"\n  },\n  \"offer_policy_token\": \"my_offer_policy_token_1234\",\n  \"parent_token\": \"my_parent_token_1234\",\n  \"reward_policy_detail\": {\n    \"accrual_strategy\": \"DEFAULT\",\n    \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n    \"description\": \"A gold reward policy\",\n    \"name\": \"Gold Reward Policy\",\n    \"redemption_strategy\": \"MANUAL\",\n    \"rounding_strategy\": \"ROUND_HALF_EVEN\",\n    \"rules\": [\n      {\n        \"amount\": null,\n        \"attributes\": {\n          \"mcc\": [\n            \"0001-1499\",\n            \"1500\"\n          ]\n        },\n        \"calculation_type\": \"PER_TRANSACTION\",\n        \"description\": \"Earn 3x on selected categories.\",\n        \"multiplier\": 3,\n        \"type\": \"MULTIPLIER_PER_TRANSACTION\"\n      }\n    ],\n    \"settlement_strategy\": \"STATEMENT\",\n    \"token\": \"my_reward_policy_token_1234\",\n    \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\"\n  },\n  \"reward_policy_token\": \"my_reward_policy_token_1234\",\n  \"status\": \"DRAFT\",\n  \"token\": \"my_bundle_token_1234\",\n  \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "94e33a6d-82cb-4944-9a77-8cd6ef632dac",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bundles",
+                    ":token",
+                    "clone"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the bundle to clone.\n\nSend a `GET` request to `/bundles` to retrieve existing bundle tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 7823,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "43c80dbf-ed5f-407a-a25e-eb0181700ee1",
+          "name": "List related bundles",
+          "request": {
+            "name": "List related bundles",
+            "description": {
+              "content": "Retrieve an array of related product bundles.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bundles",
+                ":token",
+                "lineage"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "5",
+                  "description": "Number of related bundle product resources to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "Sort order index of the first resource in the returned array."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "-lastModifiedTime",
+                  "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`."
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Array of statuses by which to filter bundles."
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Array of statuses by which to filter bundles."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Unique identifier of the parent product bundle.\n\nSend a `GET` request to `/bundles` to retrieve existing product bundles tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "e7c486d0-3fea-4b02-8867-f28ead82112b",
+              "name": "Expected response to a valid request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bundles",
+                    ":token",
+                    "lineage"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the parent product bundle.\n\nSend a `GET` request to `/bundles` to retrieve existing product bundles tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 4700,\n  \"data\": [\n    {\n      \"apr_policy_detail\": {\n        \"created_time\": \"2020-09-07T05:19:14.353Z\",\n        \"description\": \"string\",\n        \"effective_date\": \"1946-09-18\",\n        \"name\": \"string\",\n        \"purchases\": {\n          \"external_token\": \"Ia30P:3`\",\n          \"name\": \"string\",\n          \"tiers\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"token\": \"8qM0N-c\",\n        \"updated_time\": \"1981-08-06T03:53:37.375Z\"\n      },\n      \"apr_policy_token\": \"Um`\",\n      \"created_time\": \"1962-10-17T05:39:38.772Z\",\n      \"credit_product_policy_detail\": {\n        \"card_products\": [\n          {\n            \"level\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"network\": \"MASTERCARD\",\n            \"token\": \"il f\"\n          }\n        ],\n        \"classification\": \"CONSUMER\",\n        \"created_time\": \"1956-06-25T16:41:54.269Z\",\n        \"credit_line\": {\n          \"max\": 752184935527.5299,\n          \"min\": 323014515213.85236\n        },\n        \"currency_code\": \"USD\",\n        \"description\": \"string\",\n        \"interest_calculation\": {\n          \"day_count\": \"ACTUAL\",\n          \"grace_days_application\": \"NEXT_CYCLE_DATE\",\n          \"interest_application\": [\n            \"PRINCIPAL\",\n            \"FEES\"\n          ],\n          \"interest_on_grace_reactivation\": \"WAIVE\",\n          \"method\": \"AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS\",\n          \"minimum_interest\": 631729881348.5513,\n          \"exclude_tran_types\": [\n            \"ANNUAL_FEE\",\n            \"MONTHLY_FEE\",\n            \"LATE_PAYMENT_FEE\",\n            \"CASH_BACK_STATEMENT_CREDIT\",\n            \"FOREIGN_TRANSACTION_FEE\"\n          ]\n        },\n        \"name\": \"string\",\n        \"payments\": {\n          \"allocation_order\": [\n            \"INTEREST\",\n            \"FEES\",\n            \"PRINCIPAL\"\n          ],\n          \"billing_cycle_day\": 12,\n          \"min_payment_calculation\": {\n            \"include_overlimit_amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"include_past_due_amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"min_payment_flat_amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"min_payment_percentage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"billing_cycle_day_strategy\": \"MANUAL\",\n          \"billing_cycle_frequency\": \"MONTHLY\",\n          \"due_day\": 31,\n          \"payment_due_interval\": -1\n        },\n        \"product_sub_type\": \"CREDIT_CARD\",\n        \"product_type\": \"REVOLVING\",\n        \"token\": \"sK?H/=\",\n        \"updated_time\": \"2006-10-04T19:18:55.958Z\",\n        \"usage\": [\n          \"PURCHASE\"\n        ]\n      },\n      \"credit_product_policy_token\": \"[AB1/p0eyW\",\n      \"description\": \"string\",\n      \"document_policy_detail\": {\n        \"account_statement\": {\n          \"template_created_time\": \"1957-12-03T15:32:13.947Z\",\n          \"template_token\": \"string\",\n          \"template_urls\": {\n            \"html\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"benefits_disclosure_premium\": {\n          \"asset_created_time\": \"1957-05-22T09:42:37.951Z\",\n          \"asset_token\": \"LVuV|4kyw`\",\n          \"asset_urls\": {\n            \"html\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"pdf\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"png\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"benefits_disclosure_traditional\": {\n          \"asset_created_time\": \"2023-06-23T13:37:45.850Z\",\n          \"asset_token\": \"\\\"({$2!/t bS\",\n          \"asset_urls\": {\n            \"html\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"pdf\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"png\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"card_member_agreement\": {\n          \"asset_created_time\": \"1968-07-29T23:35:31.826Z\",\n          \"asset_token\": \"+Bx3Zq\",\n          \"asset_urls\": {\n            \"html\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"pdf\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"png\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"created_time\": \"1971-07-23T09:45:52.701Z\",\n        \"e_disclosure\": {\n          \"asset_created_time\": \"1961-08-26T23:31:33.435Z\",\n          \"asset_token\": \"Gq 5,da*&\",\n          \"asset_urls\": {\n            \"html\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"pdf\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"png\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"name\": \" W%oAx;iz\",\n        \"noaa_multiple_reason_with_dodd_frank\": {\n          \"template_created_time\": \"2025-04-21T04:24:30.216Z\",\n          \"template_token\": \"string\",\n          \"template_urls\": {\n            \"html\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"noaa_single_reason\": {\n          \"template_created_time\": \"1960-04-17T18:16:11.020Z\",\n          \"template_token\": \"string\",\n          \"template_urls\": {\n            \"html\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"noaa_single_reason_with_dodd_frank\": {\n          \"template_created_time\": \"1967-12-20T15:33:31.354Z\",\n          \"template_token\": \"string\",\n          \"template_urls\": {\n            \"html\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"pre_qualification_disclosure\": {\n          \"asset_created_time\": \"1975-07-14T11:39:11.704Z\",\n          \"asset_token\": \"string\",\n          \"asset_urls\": {\n            \"html\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"pdf\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"png\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"template_created_time\": \"1983-05-12T11:46:56.109Z\",\n          \"template_token\": \"string\",\n          \"template_urls\": {\n            \"html\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"privacy_policy\": {\n          \"asset_created_time\": \"1971-03-13T12:14:55.176Z\",\n          \"asset_token\": \"-\",\n          \"asset_urls\": {\n            \"html\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"pdf\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"png\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"rewards_disclosure\": {\n          \"asset_created_time\": \"2019-02-19T07:09:08.128Z\",\n          \"asset_token\": \"string\",\n          \"asset_urls\": {\n            \"html\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"pdf\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"png\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"template_created_time\": \"1953-08-18T01:43:25.745Z\",\n          \"template_token\": \"string\",\n          \"template_urls\": {\n            \"html\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"summary_of_credit_terms\": {\n          \"asset_created_time\": \"2000-06-03T12:57:57.417Z\",\n          \"asset_token\": \"string\",\n          \"asset_urls\": {\n            \"html\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"pdf\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"png\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"template_created_time\": \"1978-07-25T21:49:03.373Z\",\n          \"template_token\": \"string\",\n          \"template_urls\": {\n            \"html\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"terms_schedule\": {\n          \"template_created_time\": \"1989-03-14T05:35:39.818Z\",\n          \"template_token\": \"string\",\n          \"template_urls\": {\n            \"html\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"token\": \"7\",\n        \"updated_time\": \"1963-04-09T14:42:54.670Z\"\n      },\n      \"document_policy_token\": \"uTYK\",\n      \"fee_policy_detail\": {\n        \"account\": {\n          \"annual_fee\": {\n            \"exclude_from_interest_calc\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"fee_amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"number_of_days_post_activation\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"foreign_transaction_fee\": {\n            \"default_method\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"default_value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"late_payment\": {\n            \"default_method\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"default_value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"monthly_fee\": {\n            \"exclude_from_interest_calc\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"fee_amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"number_of_days_post_activation\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"returned_payment\": {\n            \"default_method\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"default_value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"created_time\": \"2011-11-24T04:27:39.845Z\",\n        \"description\": \"string\",\n        \"name\": \"string\",\n        \"token\": \"$\\\"Hz<FDkq\",\n        \"updated_time\": \"2006-10-10T13:40:23.285Z\"\n      },\n      \"fee_policy_token\": \"%B[#)iy[B\",\n      \"name\": \"string\",\n      \"offer_policy_detail\": {\n        \"created_time\": \"1959-02-17T13:15:19.058Z\",\n        \"description\": \"string\",\n        \"name\": \"string\",\n        \"token\": \"'\",\n        \"updated_time\": \"2007-12-19T23:55:04.027Z\"\n      },\n      \"offer_policy_token\": \"' \\\\RN,&&*\",\n      \"reward_policy_detail\": {\n        \"accrual_strategy\": \"DEFAULT\",\n        \"conversions\": [\n          {\n            \"conversion_increment\": 4088,\n            \"conversion_rate\": 4098.350871367613,\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": \"string\"\n          }\n        ],\n        \"created_time\": \"1977-05-08T07:50:53.070Z\",\n        \"description\": \"string\",\n        \"exclusions\": {\n          \"custom_exclusions\": [\n            \"string\",\n            \"string\"\n          ],\n          \"use_default_exclusions\": true\n        },\n        \"name\": \"string\",\n        \"redemption_strategy\": \"MANUAL\",\n        \"rounding_strategy\": \"ROUND_HALF_EVEN\",\n        \"rules\": [\n          {\n            \"description\": \"string\",\n            \"type\": \"SIGNUP_BONUS\",\n            \"amount\": 12.613964088332708,\n            \"attributes\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"calculation_type\": \"SPEND_BALANCE\",\n            \"multiplier\": 9260.519546665933\n          }\n        ],\n        \"settlement_strategy\": \"LIVE\",\n        \"token\": \"}Q_}sGqR4^;\",\n        \"updated_time\": \"2009-04-11T07:15:16.219Z\"\n      },\n      \"reward_policy_token\": \"cI3{E5c\",\n      \"status\": \"<string>\",\n      \"token\": \"string\",\n      \"updated_time\": \"2024-06-18T21:40:20.342Z\"\n    },\n    {\n      \"apr_policy_detail\": {\n        \"created_time\": \"1981-07-07T00:39:30.761Z\",\n        \"description\": \"string\",\n        \"effective_date\": \"1979-11-30\",\n        \"name\": \"string\",\n        \"purchases\": {\n          \"external_token\": \"o'iCqZT~=\\\"\",\n          \"name\": \"string\",\n          \"tiers\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"token\": \"G6q\\\\* *h\",\n        \"updated_time\": \"1974-07-07T09:50:36.449Z\"\n      },\n      \"apr_policy_token\": \"C5Lb\",\n      \"created_time\": \"1952-08-06T23:32:50.299Z\",\n      \"credit_product_policy_detail\": {\n        \"card_products\": [\n          {\n            \"level\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"network\": \"SANDBOX\",\n            \"token\": \"Zl$^ OB?W7\"\n          }\n        ],\n        \"classification\": \"CONSUMER\",\n        \"created_time\": \"1947-05-12T17:25:09.438Z\",\n        \"credit_line\": {\n          \"max\": 922670852709.4137,\n          \"min\": 335494554624.65686\n        },\n        \"currency_code\": \"USD\",\n        \"description\": \"string\",\n        \"interest_calculation\": {\n          \"day_count\": \"ACTUAL\",\n          \"grace_days_application\": \"NEXT_CYCLE_DATE\",\n          \"interest_application\": [\n            \"PRINCIPAL\",\n            \"FEES\"\n          ],\n          \"interest_on_grace_reactivation\": \"ACCRUE_PAYMENT_DATE\",\n          \"method\": \"AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS\",\n          \"minimum_interest\": 81288254396.89577,\n          \"exclude_tran_types\": [\n            \"ANNUAL_FEE\",\n            \"MONTHLY_FEE\",\n            \"LATE_PAYMENT_FEE\",\n            \"CASH_BACK_STATEMENT_CREDIT\",\n            \"FOREIGN_TRANSACTION_FEE\"\n          ]\n        },\n        \"name\": \"string\",\n        \"payments\": {\n          \"allocation_order\": [\n            \"INTEREST\",\n            \"FEES\",\n            \"PRINCIPAL\"\n          ],\n          \"billing_cycle_day\": 16,\n          \"min_payment_calculation\": {\n            \"include_overlimit_amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"include_past_due_amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"min_payment_flat_amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"min_payment_percentage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"billing_cycle_day_strategy\": \"MANUAL\",\n          \"billing_cycle_frequency\": \"MONTHLY\",\n          \"due_day\": 31,\n          \"payment_due_interval\": -1\n        },\n        \"product_sub_type\": \"CREDIT_CARD\",\n        \"product_type\": \"REVOLVING\",\n        \"token\": \"5}JGq0j E%f\",\n        \"updated_time\": \"2008-12-07T06:00:43.221Z\",\n        \"usage\": [\n          \"PURCHASE\"\n        ]\n      },\n      \"credit_product_policy_token\": \"k?pi+[:1j\",\n      \"description\": \"string\",\n      \"document_policy_detail\": {\n        \"account_statement\": {\n          \"template_created_time\": \"1994-08-12T05:28:35.417Z\",\n          \"template_token\": \"string\",\n          \"template_urls\": {\n            \"html\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"benefits_disclosure_premium\": {\n          \"asset_created_time\": \"1957-05-06T20:40:04.522Z\",\n          \"asset_token\": \">D$:\\\"MovO0\",\n          \"asset_urls\": {\n            \"html\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"pdf\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"png\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"benefits_disclosure_traditional\": {\n          \"asset_created_time\": \"1993-03-07T01:39:09.676Z\",\n          \"asset_token\": \"tyxujs(FY\",\n          \"asset_urls\": {\n            \"html\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"pdf\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"png\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"card_member_agreement\": {\n          \"asset_created_time\": \"2023-06-24T13:46:04.823Z\",\n          \"asset_token\": \"x5qV\",\n          \"asset_urls\": {\n            \"html\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"pdf\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"png\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"created_time\": \"2005-06-25T00:52:01.893Z\",\n        \"e_disclosure\": {\n          \"asset_created_time\": \"2014-05-04T20:05:41.823Z\",\n          \"asset_token\": \"J{M^t`\",\n          \"asset_urls\": {\n            \"html\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"pdf\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"png\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"name\": \"I{O\",\n        \"noaa_multiple_reason_with_dodd_frank\": {\n          \"template_created_time\": \"1973-09-06T06:34:30.852Z\",\n          \"template_token\": \"string\",\n          \"template_urls\": {\n            \"html\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"noaa_single_reason\": {\n          \"template_created_time\": \"1974-07-30T01:11:23.671Z\",\n          \"template_token\": \"string\",\n          \"template_urls\": {\n            \"html\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"noaa_single_reason_with_dodd_frank\": {\n          \"template_created_time\": \"1961-07-15T15:42:26.299Z\",\n          \"template_token\": \"string\",\n          \"template_urls\": {\n            \"html\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"pre_qualification_disclosure\": {\n          \"asset_created_time\": \"1946-09-19T10:35:20.653Z\",\n          \"asset_token\": \"string\",\n          \"asset_urls\": {\n            \"html\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"pdf\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"png\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"template_created_time\": \"1997-01-28T15:21:23.278Z\",\n          \"template_token\": \"string\",\n          \"template_urls\": {\n            \"html\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"privacy_policy\": {\n          \"asset_created_time\": \"1999-06-30T12:57:59.312Z\",\n          \"asset_token\": \"J1{z\",\n          \"asset_urls\": {\n            \"html\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"pdf\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"png\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"rewards_disclosure\": {\n          \"asset_created_time\": \"1975-08-13T11:50:04.750Z\",\n          \"asset_token\": \"string\",\n          \"asset_urls\": {\n            \"html\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"pdf\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"png\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"template_created_time\": \"1960-03-17T18:11:36.642Z\",\n          \"template_token\": \"string\",\n          \"template_urls\": {\n            \"html\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"summary_of_credit_terms\": {\n          \"asset_created_time\": \"1954-01-24T18:15:20.028Z\",\n          \"asset_token\": \"string\",\n          \"asset_urls\": {\n            \"html\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"pdf\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"png\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"template_created_time\": \"2011-10-13T13:08:26.919Z\",\n          \"template_token\": \"string\",\n          \"template_urls\": {\n            \"html\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"terms_schedule\": {\n          \"template_created_time\": \"2017-02-21T11:19:51.454Z\",\n          \"template_token\": \"string\",\n          \"template_urls\": {\n            \"html\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"token\": \"9c7GnAI\",\n        \"updated_time\": \"2019-08-12T06:47:31.446Z\"\n      },\n      \"document_policy_token\": \"%eX$b\",\n      \"fee_policy_detail\": {\n        \"account\": {\n          \"annual_fee\": {\n            \"exclude_from_interest_calc\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"fee_amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"number_of_days_post_activation\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"foreign_transaction_fee\": {\n            \"default_method\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"default_value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"late_payment\": {\n            \"default_method\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"default_value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"monthly_fee\": {\n            \"exclude_from_interest_calc\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"fee_amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"number_of_days_post_activation\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"returned_payment\": {\n            \"default_method\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"default_value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"created_time\": \"1972-09-04T12:03:24.379Z\",\n        \"description\": \"string\",\n        \"name\": \"string\",\n        \"token\": \"gJ)j6T+_X6\",\n        \"updated_time\": \"1977-08-29T00:09:21.453Z\"\n      },\n      \"fee_policy_token\": \")eI8pNc\",\n      \"name\": \"string\",\n      \"offer_policy_detail\": {\n        \"created_time\": \"1989-06-10T19:14:09.936Z\",\n        \"description\": \"string\",\n        \"name\": \"string\",\n        \"token\": \"eF\",\n        \"updated_time\": \"1970-09-05T12:10:01.575Z\"\n      },\n      \"offer_policy_token\": \"LCO&Uqb\",\n      \"reward_policy_detail\": {\n        \"accrual_strategy\": \"DEFAULT\",\n        \"conversions\": [\n          {\n            \"conversion_increment\": 5260,\n            \"conversion_rate\": 2223.328236815344,\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": \"string\"\n          }\n        ],\n        \"created_time\": \"2017-01-04T22:27:40.127Z\",\n        \"description\": \"string\",\n        \"exclusions\": {\n          \"custom_exclusions\": [\n            \"string\",\n            \"string\"\n          ],\n          \"use_default_exclusions\": false\n        },\n        \"name\": \"string\",\n        \"redemption_strategy\": \"MANUAL\",\n        \"rounding_strategy\": \"ROUND_HALF_EVEN\",\n        \"rules\": [\n          {\n            \"description\": \"string\",\n            \"type\": \"MULTIPLIER_PER_TRANSACTION\",\n            \"amount\": 6077.804491019837,\n            \"attributes\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"calculation_type\": \"PER_TRANSACTION\",\n            \"multiplier\": 6178.91035346578\n          }\n        ],\n        \"settlement_strategy\": \"LIVE\",\n        \"token\": \"(U`gXoi.6m\",\n        \"updated_time\": \"1984-03-25T01:20:20.491Z\"\n      },\n      \"reward_policy_token\": \"IYF&qbUs^fE\",\n      \"status\": \"<string>\",\n      \"token\": \"string\",\n      \"updated_time\": \"1967-08-10T15:16:42.839Z\"\n    }\n  ],\n  \"end_index\": 4971,\n  \"is_more\": false,\n  \"start_index\": 4659\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2c739601-aa79-454b-8ba6-b135e5049451",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bundles",
+                    ":token",
+                    "lineage"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the parent product bundle.\n\nSend a `GET` request to `/bundles` to retrieve existing product bundles tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 7823,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "213adb0b-d0d0-46ce-a2ba-c68d70915313",
+          "name": "Promote bundle",
+          "request": {
+            "name": "Promote bundle",
+            "description": {
+              "content": "Promote a specific bundle that replaces the current active bundle and activates the promoted bundle.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bundles",
+                ":token",
+                "promote"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Unique identifier of the bundle to promote.\n\nSend a `GET` request to `/bundles` to retrieve existing bundle tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT"
+          },
+          "response": [
+            {
+              "id": "9fe70c56-63c0-4685-af62-d6e88a65ea41",
+              "name": "Expected response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bundles",
+                    ":token",
+                    "promote"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the bundle to promote.\n\nSend a `GET` request to `/bundles` to retrieve existing bundle tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"apr_policy_detail\": {\n    \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n    \"description\": \"A silver APR policy\",\n    \"effective_date\": \"2025-06-01\",\n    \"name\": \"Silver APR Policy\",\n    \"purchases\": {\n      \"external_token\": \"my_external_purchase_token4321\",\n      \"name\": \"A purchase at a merchant\",\n      \"tiers\": [\n        {\n          \"apr\": 0,\n          \"margin_rate\": 3\n        },\n        {\n          \"apr\": 0,\n          \"margin_rate\": 6\n        }\n      ]\n    },\n    \"token\": \"my_apr_policy_token_4321\",\n    \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\"\n  },\n  \"apr_policy_token\": \"my_apr_policy_token_4321\",\n  \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n  \"credit_product_policy_detail\": {\n    \"card_products\": [\n      {\n        \"level\": \"TRADITIONAL\",\n        \"network\": \"VISA\",\n        \"token\": \"my_card_product_token4321\"\n      }\n    ],\n    \"classification\": \"CONSUMER\",\n    \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n    \"credit_line\": {\n      \"max\": 3100,\n      \"min\": 50\n    },\n    \"currency_code\": \"USD\",\n    \"description\": \"A silver credit product policy\",\n    \"interest_calculation\": {\n      \"application_of_credits\": {\n        \"cycle_type\": \"END_REVOLVING\",\n        \"day\": 15\n      },\n      \"day_count\": \"ACTUAL\",\n      \"exclude_tran_types\": [\n        \"ANNUAL_FEE\",\n        \"LATE_PAYMENT_FEE\",\n        \"CASH_BACK_STATEMENT_CREDIT\"\n      ],\n      \"grace_days_application\": \"NEXT_CYCLE_DATE\",\n      \"interest_application\": [\n        \"PRINCIPAL\",\n        \"FEES\"\n      ],\n      \"interest_on_grace_reactivation\": \"ACCRUE_PAYMENT_DATE\",\n      \"method\": \"AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS\",\n      \"minimum_interest\": 1\n    },\n    \"name\": \"Silver Credit Product Policy\",\n    \"payments\": {\n      \"allocation_order\": [\n        \"INTEREST\",\n        \"FEES\",\n        \"PRINCIPAL\"\n      ],\n      \"billing_cycle_day\": 1,\n      \"due_day\": 31,\n      \"min_payment_calculation\": {\n        \"include_overlimit_amount\": true,\n        \"include_past_due_amount\": false,\n        \"min_payment_flat_amount\": 20,\n        \"min_payment_percentage\": {\n          \"include_fees_charged\": [\n            \"LATE_PAYMENT_FEE\"\n          ],\n          \"include_interest_charged\": false,\n          \"percentage_of_balance\": 1\n        }\n      }\n    },\n    \"product_sub_type\": \"CREDIT_CARD\",\n    \"product_type\": \"REVOLVING\",\n    \"token\": \"my_credit_product_policy_token_4321\",\n    \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\",\n    \"usage\": [\n      \"PURCHASE\"\n    ]\n  },\n  \"credit_product_policy_token\": \"my_credit_product_policy_token_4321\",\n  \"description\": \"A silver\",\n  \"document_policy_detail\": {\n    \"account_statement\": {\n      \"template_token\": \"an_account_statement_template_token4321\",\n      \"template_urls\": {\n        \"html\": \"https://url.com/an_account_statement_template_token4321.html\"\n      }\n    },\n    \"benefits_disclosure\": {\n      \"asset_token\": \"a_benefits_disclosure_asset_token4321\",\n      \"asset_urls\": {\n        \"html\": \"https://url.com/a_benefits_disclosure_asset_token4321.html\",\n        \"pdf\": \"https://url.com/a_benefits_disclosure_asset_token4321.pdf\",\n        \"png\": \"https://url.com/a_benefits_disclosure_asset_token4321.png\"\n      }\n    },\n    \"card_member_agreement\": {\n      \"asset_token\": \"a_card_member_agreement_asset_token4321\",\n      \"asset_urls\": {\n        \"html\": \"https://url.com/a_card_member_agreement_asset_token4321.html\",\n        \"pdf\": \"https://url.com/a_card_member_agreement_asset_token4321.pdf\",\n        \"png\": \"https://url.com/a_card_member_agreement_asset_token4321.png\"\n      }\n    },\n    \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n    \"e_disclosure\": {\n      \"asset_token\": \"a_e_disclosure_asset_token4321\",\n      \"asset_urls\": {\n        \"html\": \"https://url.com/a_e_disclosure_asset_token4321.html\",\n        \"pdf\": \"https://url.com/a_e_disclosure_asset_token4321.pdf\",\n        \"png\": \"https://url.com/a_e_disclosure_asset_token4321.png\"\n      }\n    },\n    \"name\": \"My Document Policy\",\n    \"notice_of_adverse_action\": {\n      \"template_token\": \"a_notice_of_adverse_action_template_token4321\",\n      \"template_urls\": {\n        \"html\": \"https://url.com/a_notice_of_adverse_action_template_token4321.html\"\n      }\n    },\n    \"privacy_policy\": {\n      \"asset_token\": \"a_privacy_policy_asset_token4321\",\n      \"asset_urls\": {\n        \"html\": \"https://url.com/a_privacy_policy_asset_token4321.html\",\n        \"pdf\": \"https://url.com/a_privacy_policy_asset_token4321.pdf\",\n        \"png\": \"https://url.com/a_privacy_policy_asset_token4321.png\"\n      }\n    },\n    \"rewards_disclosure\": {\n      \"asset_token\": \"a_rewards_disclosure_asset_token4321\",\n      \"asset_urls\": {\n        \"html\": \"https://url.com/a_rewards_disclosure_asset_token4321.html\",\n        \"pdf\": \"https://url.com/a_rewards_disclosure_asset_token4321.pdf\",\n        \"png\": \"https://url.com/a_rewards_disclosure_asset_token4321.png\"\n      },\n      \"template_token\": \"a_rewards_disclosure_template_token4321\",\n      \"template_urls\": {\n        \"html\": \"https://url.com/a_rewards_disclosure_template_token4321.html\"\n      }\n    },\n    \"summary_of_credit_terms\": {\n      \"asset_token\": \"a_summary_of_credit_terms_asset_token4321\",\n      \"asset_urls\": {\n        \"html\": \"https://url.com/a_summary_of_credit_terms_asset_token4321.html\",\n        \"pdf\": \"https://url.com/a_summary_of_credit_terms_asset_token4321.pdf\",\n        \"png\": \"https://url.com/a_summary_of_credit_terms_asset_token4321.png\"\n      },\n      \"template_token\": \"a_summary_of_credit_terms_template_token4321\",\n      \"template_urls\": {\n        \"html\": \"https://url.com/a_summary_of_credit_terms_template_token4321.html\"\n      }\n    },\n    \"terms_schedule\": {\n      \"template_token\": \"a_terms_schedule_template_token4321\",\n      \"template_urls\": {\n        \"html\": \"https://url.com/a_terms_schedule_template_token4321.html\"\n      }\n    },\n    \"token\": \"my_document_policy_token_4321\",\n    \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\"\n  },\n  \"document_policy_token\": \"my_document_policy_token_4321\",\n  \"fee_policy_detail\": {\n    \"account\": {\n      \"foreign_transaction_fee\": {\n        \"default_method\": \"PERCENTAGE\",\n        \"default_value\": 12.5\n      },\n      \"late_payment\": {\n        \"default_method\": \"FLAT\",\n        \"default_value\": 10\n      },\n      \"returned_payment\": {\n        \"default_method\": \"FLAT\",\n        \"default_value\": 10\n      }\n    },\n    \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n    \"description\": \"A silver fee policy\",\n    \"name\": \"Silver Fee Policy\",\n    \"token\": \"my_fee_policy_token_4321\",\n    \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\"\n  },\n  \"fee_policy_token\": \"my_fee_policy_token_4321\",\n  \"name\": \"Silver Credit Bundle\",\n  \"offer_policy_detail\": {\n    \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n    \"description\": \"A silver offer policy\",\n    \"name\": \"Silver Offer Policy\",\n    \"token\": \"my_offer_policy_token_4321\",\n    \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\"\n  },\n  \"offer_policy_token\": \"my_offer_policy_token_4321\",\n  \"parent_token\": \"my_parent_token_4321\",\n  \"reward_policy_detail\": {\n    \"accrual_strategy\": \"DEFAULT\",\n    \"created_time\": \"2025-04-01 23:41:58.802000+00:00\",\n    \"description\": \"A gold reward policy\",\n    \"name\": \"Gold Reward Policy\",\n    \"redemption_strategy\": \"MANUAL\",\n    \"rounding_strategy\": \"ROUND_HALF_EVEN\",\n    \"rules\": [\n      {\n        \"amount\": null,\n        \"attributes\": {\n          \"mcc\": [\n            \"0001-1499\",\n            \"1500\"\n          ]\n        },\n        \"calculation_type\": \"PER_TRANSACTION\",\n        \"description\": \"Earn 3x on selected categories.\",\n        \"multiplier\": 3,\n        \"type\": \"MULTIPLIER_PER_TRANSACTION\"\n      }\n    ],\n    \"settlement_strategy\": \"STATEMENT\",\n    \"token\": \"my_reward_policy_token_4321\",\n    \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\"\n  },\n  \"reward_policy_token\": \"my_reward_policy_token_4321\",\n  \"status\": \"DRAFT\",\n  \"token\": \"my_bundle_token_4321\",\n  \"updated_time\": \"2025-04-05 16:04:48.643000+00:00\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "040dbaa5-df60-43f0-ab79-b9c8a58835ef",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bundles",
+                    ":token",
+                    "promote"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the bundle to promote.\n\nSend a `GET` request to `/bundles` to retrieve existing bundle tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 7823,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b096d3a7-d29f-4d70-8112-5fe0b125df69",
+          "name": "Transition a bundle",
+          "request": {
+            "name": "Transition a bundle",
+            "description": {
+              "content": "Transition the status of a specific bundle.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bundles",
+                ":token",
+                "transitions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Token of the bundle whose status you want to transition.\n\nSend a `GET` request to `/credit/bundles` to retrieve existing  tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7f75d1c0-63e3-452f-8cdf-09053853bc12",
+              "name": "Expected response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bundles",
+                    ":token",
+                    "transitions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Token of the bundle whose status you want to transition.\n\nSend a `GET` request to `/credit/bundles` to retrieve existing  tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"PENDING_APPROVAL\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"bundle_token\": \"my_bundle_token_1234\",\n  \"created_time\": \"2025-06-04 05:59:14.979000+00:00\",\n  \"original_status\": \"DRAFT\",\n  \"status\": \"PENDING_APPROVAL\",\n  \"token\": \"my_transition_token_1234\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "62f232e2-ddc5-4d89-bbac-c86648ba97ff",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bundles",
+                    ":token",
+                    "transitions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Token of the bundle whose status you want to transition.\n\nSend a `GET` request to `/credit/bundles` to retrieve existing  tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"PENDING_APPROVAL\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 7823,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "f4dfde0d-cbc0-4e5c-9e10-0d2b912a5ddc",
+    "name": "Core accepted countries Bundles API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.\n\nContact Support:\n Name: Marqeta\n Email: support@marqeta.com",
+      "type": "text/plain"
+    }
+  }
+}

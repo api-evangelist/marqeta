@@ -1,0 +1,1203 @@
+{
+  "item": [
+    {
+      "id": "3c621aa6-e912-4bdf-9575-ae1206e2c49c",
+      "name": "Payments",
+      "description": {
+        "content": "// Conditional snippet for beta or internal content\ninclude::../../maturity-admonition-banner.adoc[]\n\nUse the payments endpoints to create and retrieve payments made on a <</core-api/credit-accounts, credit account>>, release payment holds, or transition payment statuses.\n\nA payment is an amount paid toward an account balance to reduce the total amount owed on the account.\nFor more on payments, see <</developer-guides/about-credit-account-payments, About Credit Account Payments>>.\n\nTo receive webhook notifications when ACH payment transition events occur, see <</core-api/event-types#_credit_account_payment_transition_events, Credit account payment transition events>> in Event Types.\n\nCreating a payment triggers the creation of a <</core-api/credit-account-journal-entries, journal entry>> belonging to the `PAYMENT` group.\nFor more on payment journal entries, see <</developer-guides/about-credit-account-journal-entries#_payments, Payments>> in the About Credit Account Journal Entries guide.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "785577a3-ab3d-4e8c-aac4-6f9df6ec8095",
+          "name": "List account payments",
+          "request": {
+            "name": "List account payments",
+            "description": {
+              "content": "Retrieve an array of payments on a credit account.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token",
+                "payments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "start_date",
+                  "value": "<date>",
+                  "description": "Beginning of the date range of the payments to return."
+                },
+                {
+                  "disabled": false,
+                  "key": "end_date",
+                  "value": "<date>",
+                  "description": "End of the date range of the payments to return."
+                },
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "5",
+                  "description": "Number of account payments resources to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "Sort order index of the first resource in the returned array."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "-lastModifiedTime",
+                  "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`."
+                },
+                {
+                  "disabled": false,
+                  "key": "statuses",
+                  "value": "<string>",
+                  "description": "Array of statuses by which to filter payments."
+                },
+                {
+                  "disabled": false,
+                  "key": "statuses",
+                  "value": "<string>",
+                  "description": "Array of statuses by which to filter payments."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account for which to retrieve payments.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "fd615a52-92a0-47cd-a8ab-f486e7f3c032",
+              "name": "Paginated list of payments for the given token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "2024-01-01"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2024-02-01"
+                    },
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which to retrieve payments.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 2,\n  \"data\": [\n    {\n      \"account_token\": \"7d68f45b-1232-4283-a0ea-6b0418d37692\",\n      \"amount\": 2500,\n      \"created_time\": \"2024-01-31 15:03:09.717000+00:00\",\n      \"currency_code\": \"USD\",\n      \"description\": \"Account statement payment\",\n      \"hold_days\": 1,\n      \"hold_end_time\": \"2024-02-03 11:32:24.727000+00:00\",\n      \"is_manually_released\": false,\n      \"metadata\": \"\\\\\\\"bank_account_last_4_digits\\\\\\\":\\\\\\\"7234\\\\\\\\\\\"bank_name\\\\\\\":\\\\\\\"Bank Finance Plus\\\\\\\"\",\n      \"method\": \"ACH\",\n      \"on_hold\": false,\n      \"payment_source_token\": \"4474c16b-7ba7-435b-8854-237d492e3f32\",\n      \"returned_details\": null,\n      \"status\": \"COMPLETED\",\n      \"token\": \"4749ab00-fec1-471c-ac5b-b8d31d06d7e4\",\n      \"transitions\": [\n        {\n          \"account_token\": \"7d68f45b-1232-4283-a0ea-6b0418d37692\",\n          \"created_time\": \"2024-02-01 02:04:11.645000+00:00\",\n          \"payment_token\": \"4749ab00-fec1-471c-ac5b-b8d31d06d7e4\",\n          \"status\": \"PROCESSING\",\n          \"token\": \"b62d45d5-4495-4490-a898-3781229b235d\"\n        },\n        {\n          \"account_token\": \"7d68f45b-1232-4283-a0ea-6b0418d37692\",\n          \"created_time\": \"2024-02-01 03:39:22.505000+00:00\",\n          \"payment_token\": \"4749ab00-fec1-471c-ac5b-b8d31d06d7e4\",\n          \"status\": \"SUBMITTED\",\n          \"token\": \"82d79178-5c97-41c2-80e5-bd99bb6bb61c\"\n        },\n        {\n          \"account_token\": \"7d68f45b-1232-4283-a0ea-6b0418d37692\",\n          \"created_time\": \"2024-01-31 15:30:45.028000+00:00\",\n          \"payment_token\": \"4749ab00-fec1-471c-ac5b-b8d31d06d7e4\",\n          \"status\": \"PENDING\",\n          \"token\": \"c2a83d12-eeff-460a-b88a-bf7a2e40b251\"\n        },\n        {\n          \"account_token\": \"7d68f45b-1232-4283-a0ea-6b0418d37692\",\n          \"created_time\": \"2024-02-02 11:32:24.727000+00:00\",\n          \"payment_token\": \"4749ab00-fec1-471c-ac5b-b8d31d06d7e4\",\n          \"status\": \"COMPLETED\",\n          \"token\": \"156b5134-b37d-49cf-89d5-7123b321ba5c\"\n        },\n        {\n          \"account_token\": \"7d68f45b-1232-4283-a0ea-6b0418d37692\",\n          \"created_time\": \"2024-01-31 15:03:09.723000+00:00\",\n          \"payment_token\": \"4749ab00-fec1-471c-ac5b-b8d31d06d7e4\",\n          \"status\": \"INITIATED\",\n          \"token\": \"64ca6c83-937c-4d37-86ae-14766bf87540\"\n        }\n      ],\n      \"updated_time\": \"2024-02-03 12:00:30.072000+00:00\"\n    },\n    {\n      \"account_token\": \"my_account_token_12\",\n      \"allocations\": [\n        {\n          \"amount\": 25,\n          \"bucket\": \"PRINCIPAL\"\n        },\n        {\n          \"amount\": 15,\n          \"bucket\": \"INTEREST\"\n        },\n        {\n          \"amount\": 5,\n          \"bucket\": \"FEES\"\n        }\n      ],\n      \"amount\": 25,\n      \"created_time\": \"2024-09-03 23:03:05.675000+00:00\",\n      \"currency_code\": \"USD\",\n      \"description\": \"minimum payment\",\n      \"hold_days\": 0,\n      \"is_manually_released\": false,\n      \"method\": \"CHECK\",\n      \"on_hold\": false,\n      \"status\": \"COMPLETED\",\n      \"token\": \"my_payment_25\",\n      \"transitions\": [\n        {\n          \"account_token\": \"my_account_token_12\",\n          \"created_time\": \"2024-09-03 23:03:05.683000+00:00\",\n          \"payment_token\": \"my_payment_25\",\n          \"status\": \"COMPLETED\",\n          \"token\": \"my_transition_token1234\"\n        }\n      ],\n      \"updated_time\": \"2024-09-03 23:03:05.675000+00:00\"\n    }\n  ],\n  \"end_index\": 2,\n  \"is_more\": false,\n  \"start_index\": 0\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dc170898-7869-485b-9e40-356bb1290f7a",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "2024-01-01"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2024-02-01"
+                    },
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which to retrieve payments.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 5325,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0b5a9c4b-6003-4718-8197-8f061ee61eed",
+          "name": "Create account payment",
+          "request": {
+            "name": "Create account payment",
+            "description": {
+              "content": "Create a new payment to apply toward a credit account's balance.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token",
+                "payments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account for which to create a payment.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": \"<number>\",\n  \"currency_code\": \"USD\",\n  \"description\": \"<string>\",\n  \"method\": \"<string>\",\n  \"hold_days\": \"<integer>\",\n  \"impact_time\": \"<dateTime>\",\n  \"metadata\": \"<string>\",\n  \"payment_source_token\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "942682e9-5f2b-4910-bae7-a190676a07f9",
+              "name": "Newly created payment or existing payment with provided payment token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which to create a payment.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": 2500,\n  \"currency_code\": \"USD\",\n  \"description\": \"Account statement payment\",\n  \"method\": \"ACH\",\n  \"payment_source_token\": \"payment_source_token_1112\",\n  \"token\": \"payment_token_1239\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"account_token\": \"7d68f45b-1232-4283-a0ea-6b0418d37692\",\n  \"amount\": 2500,\n  \"created_time\": \"2024-01-31 15:03:09.717000+00:00\",\n  \"currency_code\": \"USD\",\n  \"description\": \"Account statement payment\",\n  \"hold_days\": 1,\n  \"hold_end_time\": \"2024-02-03 11:32:24.727000+00:00\",\n  \"is_manually_released\": false,\n  \"metadata\": \"\\\\\\\"bank_account_last_4_digits\\\\\\\":\\\\\\\"7234\\\\\\\\\\\"bank_name\\\\\\\":\\\\\\\"Bank Finance Plus\\\\\\\"\",\n  \"method\": \"ACH\",\n  \"on_hold\": false,\n  \"payment_source_token\": \"4474c16b-7ba7-435b-8854-237d492e3f32\",\n  \"refund_details\": null,\n  \"returned_details\": null,\n  \"status\": \"COMPLETED\",\n  \"token\": \"4749ab00-fec1-471c-ac5b-b8d31d06d7e4\",\n  \"transitions\": [\n    {\n      \"account_token\": \"7d68f45b-1232-4283-a0ea-6b0418d37692\",\n      \"created_time\": \"2024-02-01 02:04:11.645000+00:00\",\n      \"payment_token\": \"4749ab00-fec1-471c-ac5b-b8d31d06d7e4\",\n      \"status\": \"PROCESSING\",\n      \"token\": \"b62d45d5-4495-4490-a898-3781229b235d\"\n    },\n    {\n      \"account_token\": \"7d68f45b-1232-4283-a0ea-6b0418d37692\",\n      \"created_time\": \"2024-02-01 03:39:22.505000+00:00\",\n      \"payment_token\": \"4749ab00-fec1-471c-ac5b-b8d31d06d7e4\",\n      \"status\": \"SUBMITTED\",\n      \"token\": \"82d79178-5c97-41c2-80e5-bd99bb6bb61c\"\n    },\n    {\n      \"account_token\": \"7d68f45b-1232-4283-a0ea-6b0418d37692\",\n      \"created_time\": \"2024-01-31 15:30:45.028000+00:00\",\n      \"payment_token\": \"4749ab00-fec1-471c-ac5b-b8d31d06d7e4\",\n      \"status\": \"PENDING\",\n      \"token\": \"c2a83d12-eeff-460a-b88a-bf7a2e40b251\"\n    },\n    {\n      \"account_token\": \"7d68f45b-1232-4283-a0ea-6b0418d37692\",\n      \"created_time\": \"2024-02-02 11:32:24.727000+00:00\",\n      \"payment_token\": \"4749ab00-fec1-471c-ac5b-b8d31d06d7e4\",\n      \"status\": \"COMPLETED\",\n      \"token\": \"156b5134-b37d-49cf-89d5-7123b321ba5c\"\n    },\n    {\n      \"account_token\": \"7d68f45b-1232-4283-a0ea-6b0418d37692\",\n      \"created_time\": \"2024-01-31 15:03:09.723000+00:00\",\n      \"payment_token\": \"4749ab00-fec1-471c-ac5b-b8d31d06d7e4\",\n      \"status\": \"INITIATED\",\n      \"token\": \"64ca6c83-937c-4d37-86ae-14766bf87540\"\n    }\n  ],\n  \"updated_time\": \"2024-02-03 12:00:30.072000+00:00\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6a934d47-82da-4f55-b66b-2dea4babac9c",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which to create a payment.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": 2500,\n  \"currency_code\": \"USD\",\n  \"description\": \"Account statement payment\",\n  \"method\": \"ACH\",\n  \"payment_source_token\": \"payment_source_token_1112\",\n  \"token\": \"payment_token_1239\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 5325,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4455067f-23ef-423a-9384-1be14fd40726",
+          "name": "Retrieve account payment",
+          "request": {
+            "name": "Retrieve account payment",
+            "description": {
+              "content": "Retrieve a payment for a credit account.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token",
+                "payments",
+                ":payment_token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account for which to retrieve a payment.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "payment_token",
+                  "description": "(Required) Unique identifier of the payment to retrieve.\n\nSend a `GET` request to `/credit/accounts/{token}/payments` to retrieve existing payment tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "a3ff50f4-a88c-4802-8118-8c6d4c57f891",
+              "name": "Payment object",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "payments",
+                    ":payment_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which to retrieve a payment.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "payment_token",
+                      "description": "(Required) Unique identifier of the payment to retrieve.\n\nSend a `GET` request to `/credit/accounts/{token}/payments` to retrieve existing payment tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"account_token\": \"7d68f45b-1232-4283-a0ea-6b0418d37692\",\n  \"amount\": 2500,\n  \"created_time\": \"2024-01-31 15:03:09.717000+00:00\",\n  \"currency_code\": \"USD\",\n  \"description\": \"Account statement payment\",\n  \"hold_days\": 1,\n  \"hold_end_time\": \"2024-02-03 11:32:24.727000+00:00\",\n  \"is_manually_released\": false,\n  \"metadata\": \"\\\\\\\"bank_account_last_4_digits\\\\\\\":\\\\\\\"7234\\\\\\\\\\\"bank_name\\\\\\\":\\\\\\\"Bank Finance Plus\\\\\\\"\",\n  \"method\": \"ACH\",\n  \"on_hold\": false,\n  \"payment_source_token\": \"4474c16b-7ba7-435b-8854-237d492e3f32\",\n  \"returned_details\": null,\n  \"status\": \"COMPLETED\",\n  \"token\": \"4749ab00-fec1-471c-ac5b-b8d31d06d7e4\",\n  \"transitions\": [\n    {\n      \"account_token\": \"7d68f45b-1232-4283-a0ea-6b0418d37692\",\n      \"created_time\": \"2024-02-01 02:04:11.645000+00:00\",\n      \"payment_token\": \"4749ab00-fec1-471c-ac5b-b8d31d06d7e4\",\n      \"status\": \"PROCESSING\",\n      \"token\": \"b62d45d5-4495-4490-a898-3781229b235d\"\n    },\n    {\n      \"account_token\": \"7d68f45b-1232-4283-a0ea-6b0418d37692\",\n      \"created_time\": \"2024-02-01 03:39:22.505000+00:00\",\n      \"payment_token\": \"4749ab00-fec1-471c-ac5b-b8d31d06d7e4\",\n      \"status\": \"SUBMITTED\",\n      \"token\": \"82d79178-5c97-41c2-80e5-bd99bb6bb61c\"\n    },\n    {\n      \"account_token\": \"7d68f45b-1232-4283-a0ea-6b0418d37692\",\n      \"created_time\": \"2024-01-31 15:30:45.028000+00:00\",\n      \"payment_token\": \"4749ab00-fec1-471c-ac5b-b8d31d06d7e4\",\n      \"status\": \"PENDING\",\n      \"token\": \"c2a83d12-eeff-460a-b88a-bf7a2e40b251\"\n    },\n    {\n      \"account_token\": \"7d68f45b-1232-4283-a0ea-6b0418d37692\",\n      \"created_time\": \"2024-02-02 11:32:24.727000+00:00\",\n      \"payment_token\": \"4749ab00-fec1-471c-ac5b-b8d31d06d7e4\",\n      \"status\": \"COMPLETED\",\n      \"token\": \"156b5134-b37d-49cf-89d5-7123b321ba5c\"\n    },\n    {\n      \"account_token\": \"7d68f45b-1232-4283-a0ea-6b0418d37692\",\n      \"created_time\": \"2024-01-31 15:03:09.723000+00:00\",\n      \"payment_token\": \"4749ab00-fec1-471c-ac5b-b8d31d06d7e4\",\n      \"status\": \"INITIATED\",\n      \"token\": \"64ca6c83-937c-4d37-86ae-14766bf87540\"\n    }\n  ],\n  \"updated_time\": \"2024-02-03 12:00:30.072000+00:00\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8bcfd9bb-865a-4704-ba18-2e0e139bb1f9",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "payments",
+                    ":payment_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which to retrieve a payment.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "payment_token",
+                      "description": "(Required) Unique identifier of the payment to retrieve.\n\nSend a `GET` request to `/credit/accounts/{token}/payments` to retrieve existing payment tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 5325,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7cded028-b803-4a40-ac09-512f579abe09",
+          "name": "Release payment hold",
+          "request": {
+            "name": "Release payment hold",
+            "description": {
+              "content": "Manually release a payment hold on a credit account.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token",
+                "payments",
+                ":payment_token",
+                "releasehold"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account on which a payment hold is being released.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "payment_token",
+                  "description": "(Required) Unique identifier of the payment currently on hold.\n\nSend a `GET` request to `/credit/accounts/{account_token}/payments` to retrieve existing payment tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST"
+          },
+          "response": [
+            {
+              "id": "db46d740-1d43-4415-ba90-1067f0d2488d",
+              "name": "Expected response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "payments",
+                    ":payment_token",
+                    "releasehold"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account on which a payment hold is being released.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "payment_token",
+                      "description": "(Required) Unique identifier of the payment currently on hold.\n\nSend a `GET` request to `/credit/accounts/{account_token}/payments` to retrieve existing payment tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"account_token\": \"my_account_token_12\",\n  \"amount\": 25,\n  \"created_time\": \"2024-09-09 22:42:35.065000+00:00\",\n  \"currency_code\": \"USD\",\n  \"description\": \"minimum payment\",\n  \"hold_days\": 5,\n  \"hold_end_time\": \"2024-09-09 22:48:09.721000+00:00\",\n  \"is_manually_released\": true,\n  \"metadata\": \"check_number123\",\n  \"method\": \"CHECK\",\n  \"on_hold\": false,\n  \"status\": \"COMPLETED\",\n  \"token\": \"my_payment_25\",\n  \"transitions\": [\n    {\n      \"account_token\": \"account-12\",\n      \"created_time\": \"2024-09-09 22:42:35.068000+00:00\",\n      \"payment_token\": \"my_payment_25\",\n      \"status\": \"COMPLETED\",\n      \"token\": \"my_transition_token1234\"\n    }\n  ],\n  \"updated_time\": \"2024-09-09 22:48:09.722000+00:00\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a3c3d555-42ee-4091-b393-547392f8d435",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "payments",
+                    ":payment_token",
+                    "releasehold"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account on which a payment hold is being released.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "payment_token",
+                      "description": "(Required) Unique identifier of the payment currently on hold.\n\nSend a `GET` request to `/credit/accounts/{account_token}/payments` to retrieve existing payment tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 5325,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "07e782f6-2eda-4279-b13b-abd99e2e9afe",
+          "name": "Transition account payment status",
+          "request": {
+            "name": "Transition account payment status",
+            "description": {
+              "content": "Transition a credit account payment's status to a new status.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token",
+                "payments",
+                ":payment_token",
+                "transitions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account for which you want to transition a payment status.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "payment_token",
+                  "description": "(Required) Unique identifier of the payment whose status you want to transition.\n\nSend a `GET` request to `/credit/accounts/{account_token}/payments` endpoint to retrieve existing payment tokens for a given account."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"<string>\",\n  \"refund_details\": {\n    \"description\": \"<string>\",\n    \"method\": \"<string>\"\n  },\n  \"token\": \"<string>\",\n  \"waive_returned_payment_fee\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9d502956-3fab-487a-95a4-1b967cb64a38",
+              "name": "Payment Transition Response object.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "payments",
+                    ":payment_token",
+                    "transitions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to transition a payment status.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "payment_token",
+                      "description": "(Required) Unique identifier of the payment whose status you want to transition.\n\nSend a `GET` request to `/credit/accounts/{account_token}/payments` endpoint to retrieve existing payment tokens for a given account."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"RETURNED\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"account_token\": \"string\",\n  \"payment_token\": \"string\",\n  \"status\": \"<string>\",\n  \"token\": \"string\",\n  \"created_time\": \"1971-04-19T20:24:07.730Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5b001538-5fa6-4f9f-b0bb-84e606b5bd8b",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "payments",
+                    ":payment_token",
+                    "transitions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to transition a payment status.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "payment_token",
+                      "description": "(Required) Unique identifier of the payment whose status you want to transition.\n\nSend a `GET` request to `/credit/accounts/{account_token}/payments` endpoint to retrieve existing payment tokens for a given account."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"RETURNED\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 5325,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "79324138-c11b-4ae8-8a2b-3383501ef17c",
+          "name": "Resend credit event notification",
+          "request": {
+            "name": "Resend credit event notification",
+            "description": {
+              "content": "Resends a credit event notification to your webhook endpoint.\n\nAlthough you send this request as a `POST`, all parameters are passed in the URL and the body is empty.\nThe event notification is resent to your webhook endpoint and also returned in the response to this request.\n\nFor details on how to configure your webhook endpoint, see the About Webhooks <</developer-guides/about-webhooks#_tutorial, tutorial>>.\nFor the complete `/webhooks` endpoint reference, see <</core-api/webhooks, Webhooks>>.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "webhooks",
+                ":event_type",
+                ":resource_token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "event_type",
+                  "description": "(Required) Specifies the type of event you want to resend."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "resource_token",
+                  "description": "(Required) Unique identifier of the resource for which you want to resend a notification.\n\n* Send a `GET` request to `/credit/accounts/{account_token}/journalentries` to retrieve existing journal entry tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/ledgerentries` to retrieve existing ledger entry tokens.\n* Send a `GET` request to `/accounts/{account_token}/accounttransitions` to retrieve existing account transition tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/payments/{payment_token}` to retrieve existing payment transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements` to retrieve existing statement summary tokens.\n* Send a `GET` request to `/accounts/{account_token}/delinquencystate/transitions` to retrieve existing delinquency state transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements/{statement_summary_token}/paymentreminders/{token}` to retrieve existing payment reminder tokens.\n* Send a `GET` request to `/credit/substatuses` to retrieve existing substatus tokens.\n* Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens and identify the specific account for the resend event."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST"
+          },
+          "response": [
+            {
+              "id": "e26e7c6d-6c08-4fc2-b5aa-74f4ddede082",
+              "name": "Event response for which the webhook event was resent",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ":event_type",
+                    ":resource_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "event_type",
+                      "description": "(Required) Specifies the type of event you want to resend."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "resource_token",
+                      "description": "(Required) Unique identifier of the resource for which you want to resend a notification.\n\n* Send a `GET` request to `/credit/accounts/{account_token}/journalentries` to retrieve existing journal entry tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/ledgerentries` to retrieve existing ledger entry tokens.\n* Send a `GET` request to `/accounts/{account_token}/accounttransitions` to retrieve existing account transition tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/payments/{payment_token}` to retrieve existing payment transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements` to retrieve existing statement summary tokens.\n* Send a `GET` request to `/accounts/{account_token}/delinquencystate/transitions` to retrieve existing delinquency state transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements/{statement_summary_token}/paymentreminders/{token}` to retrieve existing payment reminder tokens.\n* Send a `GET` request to `/credit/substatuses` to retrieve existing substatus tokens.\n* Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens and identify the specific account for the resend event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"account_token\": \"my_credit_account_token\",\n  \"available_credit\": 0,\n  \"closing_balance\": 506.41,\n  \"closing_date\": \"2025-04-01 03:59:59.999000+00:00\",\n  \"created_time\": \"2023-08-18 22:04:31.261000+00:00\",\n  \"credit_limit\": 500,\n  \"credits\": 0,\n  \"cycle_type\": \"REVOLVING\",\n  \"days_in_billing_cycle\": 31,\n  \"fees\": 15,\n  \"interest\": 4.96,\n  \"opening_balance\": 496.45,\n  \"opening_date\": \"2025-03-01 05:00:00+00:00\",\n  \"past_due_amount\": 10,\n  \"payments\": 10,\n  \"purchases\": 0,\n  \"token\": \"my_credit_account_statement_token\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "be2d783c-58fc-4aae-8566-ea4566ea9e5c",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ":event_type",
+                    ":resource_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "event_type",
+                      "description": "(Required) Specifies the type of event you want to resend."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "resource_token",
+                      "description": "(Required) Unique identifier of the resource for which you want to resend a notification.\n\n* Send a `GET` request to `/credit/accounts/{account_token}/journalentries` to retrieve existing journal entry tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/ledgerentries` to retrieve existing ledger entry tokens.\n* Send a `GET` request to `/accounts/{account_token}/accounttransitions` to retrieve existing account transition tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/payments/{payment_token}` to retrieve existing payment transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements` to retrieve existing statement summary tokens.\n* Send a `GET` request to `/accounts/{account_token}/delinquencystate/transitions` to retrieve existing delinquency state transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements/{statement_summary_token}/paymentreminders/{token}` to retrieve existing payment reminder tokens.\n* Send a `GET` request to `/credit/substatuses` to retrieve existing substatus tokens.\n* Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens and identify the specific account for the resend event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 5325,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "4f972f3d-dc66-42f7-b78b-587b5ba039d7",
+    "name": "Core accepted countries Payments API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.\n\nContact Support:\n Name: Marqeta\n Email: support@marqeta.com",
+      "type": "text/plain"
+    }
+  }
+}

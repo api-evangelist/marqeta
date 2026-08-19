@@ -1,0 +1,112 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries account holder groups API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "account holder groups",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Lists account holder groups",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accountholdergroups",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of items to retrieve. Count can be between 1 - 10 items."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Indicates from what row to start returning data."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field by which to sort the returned items. Use any field in the model, or system fields lastModifiedTime or createdTime."
+              }
+            ]
+          },
+          "docs": "Lists account holder groups"
+        },
+        {
+          "info": {
+            "name": "Creates an account holder group object",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/accountholdergroups",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates an account holder group object"
+        },
+        {
+          "info": {
+            "name": "Returns a specific account holder group object",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accountholdergroups/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Account holder group token"
+              }
+            ]
+          },
+          "docs": "Returns a specific account holder group object"
+        },
+        {
+          "info": {
+            "name": "Updates an account holder group object",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/accountholdergroups/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates an account holder group object"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

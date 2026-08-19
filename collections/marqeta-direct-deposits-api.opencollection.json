@@ -1,0 +1,239 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries direct deposits API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "direct deposits",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Lists all direct deposits",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/directdeposits",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of direct deposits to retrieve"
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Start index"
+              },
+              {
+                "name": "reversed_after_grace_period",
+                "value": "",
+                "type": "query",
+                "description": "Reversed after grace period"
+              },
+              {
+                "name": "user_token",
+                "value": "",
+                "type": "query",
+                "description": "User token"
+              },
+              {
+                "name": "business_token",
+                "value": "",
+                "type": "query",
+                "description": "Business token"
+              },
+              {
+                "name": "direct_deposit_state",
+                "value": "",
+                "type": "query",
+                "description": "Direct deposit state"
+              },
+              {
+                "name": "start_settlement_date",
+                "value": "",
+                "type": "query",
+                "description": "Start settlement date"
+              },
+              {
+                "name": "end_settlement_date",
+                "value": "",
+                "type": "query",
+                "description": "End settlement date"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              }
+            ]
+          },
+          "docs": "Lists all direct deposits"
+        },
+        {
+          "info": {
+            "name": "Returns an account and routing number which can be used for direct deposit",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/directdeposits/accounts/:user_or_business_token",
+            "params": [
+              {
+                "name": "user_or_business_token",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns an account and routing number which can be used for direct deposit"
+        },
+        {
+          "info": {
+            "name": "Updates a specific direct deposit account",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/directdeposits/accounts/:user_or_business_token",
+            "params": [
+              {
+                "name": "user_or_business_token",
+                "value": "",
+                "type": "path",
+                "description": "User or business token"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a specific direct deposit account"
+        },
+        {
+          "info": {
+            "name": "Returns a list of direct deposit transitions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/directdeposits/transitions",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of direct deposit transitions to retrieve"
+              },
+              {
+                "name": "user_token",
+                "value": "",
+                "type": "query",
+                "description": "User token"
+              },
+              {
+                "name": "business_token",
+                "value": "",
+                "type": "query",
+                "description": "Business token"
+              },
+              {
+                "name": "direct_deposit_token",
+                "value": "",
+                "type": "query",
+                "description": "Direct deposit token"
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Start index"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              },
+              {
+                "name": "states",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of direct deposit states to display e.g. PENDING | REVERSED | APPLIED | REJECTED "
+              }
+            ]
+          },
+          "docs": "Returns a list of direct deposit transitions"
+        },
+        {
+          "info": {
+            "name": "Creates a direct deposit transition",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/directdeposits/transitions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a direct deposit transition"
+        },
+        {
+          "info": {
+            "name": "Returns a direct deposit transition",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/directdeposits/transitions/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns a direct deposit transition"
+        },
+        {
+          "info": {
+            "name": "Returns a direct deposit entry",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/directdeposits/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns a direct deposit entry"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

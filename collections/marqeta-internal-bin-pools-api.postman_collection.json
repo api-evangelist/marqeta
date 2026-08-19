@@ -1,0 +1,495 @@
+{
+  "item": [
+    {
+      "id": "06d0ed46-2bd2-4412-9a13-76892a71fd25",
+      "name": "Internal - BIN Pools",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "b65a3dc3-0fe4-494f-8bd9-4177b5262259",
+          "name": "Get all BIN pools",
+          "request": {
+            "name": "Get all BIN pools",
+            "description": {
+              "content": "Returns a list of all BIN pools",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "internal",
+                "binpools"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "06a26d23-0cf4-48bf-aa39-9432227480b6",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "internal",
+                    "binpools"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e20ad2ea-a853-4f73-93e8-2232b536a258",
+          "name": "Create BIN pool",
+          "request": {
+            "name": "Create BIN pool",
+            "description": {
+              "content": "Creates a new BIN pool",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "internal",
+                "binpools"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"token\": \"<string>\",\n  \"bin_prefixes\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"config\": \"<string>\",\n  \"description\": \"<string>\",\n  \"pool_type\": \"<string>\",\n  \"usage_type\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "32859a7c-9045-43f3-9965-e4a984ddfda6",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "internal",
+                    "binpools"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Standard Visa Pool\",\n  \"token\": \"standard-visa-pool-01\",\n  \"bin_prefixes\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"config\": \"{\\\\\\\"reserved_capacity\\\\\\\": 10, \\\\\\\"min_available_bins\\\\\\\": 2}\",\n  \"description\": \"Primary pool for standard Visa cards\",\n  \"pool_type\": \"STANDARD\",\n  \"usage_type\": \"LEAST_EXHAUSTED\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "95c3f822-d02c-480a-bbb3-22fedd5480fe",
+          "name": "Delete BIN pool",
+          "request": {
+            "name": "Delete BIN pool",
+            "description": {
+              "content": "Soft deletes a BIN pool by setting active=false",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "internal",
+                "binpools",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Pool token"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3b34bd0f-af35-4526-b972-f78b04594166",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "internal",
+                    "binpools",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Pool token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "176677cc-ac68-4fa1-93fe-7cadd44c53ae",
+          "name": "Get BIN pool by token",
+          "request": {
+            "name": "Get BIN pool by token",
+            "description": {
+              "content": "Returns details of a specific BIN pool",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "internal",
+                "binpools",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Pool token"
+                }
+              ]
+            },
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "88562725-77e4-4d46-99c2-1966eafb8cb7",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "internal",
+                    "binpools",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Pool token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "170bccc1-4bcf-43b8-91f3-0722f517e40c",
+          "name": "Update BIN pool",
+          "request": {
+            "name": "Update BIN pool",
+            "description": {
+              "content": "Updates an existing BIN pool",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "internal",
+                "binpools",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Pool token"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"active\": \"<boolean>\",\n  \"config\": \"<string>\",\n  \"description\": \"<string>\",\n  \"name\": \"<string>\",\n  \"usage_type\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "cd313fda-9d07-400a-8010-d3d45f548421",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "internal",
+                    "binpools",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Pool token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"active\": false,\n  \"config\": \"{\\\\\\\"reserved_capacity\\\\\\\": 20, \\\\\\\"min_available_bins\\\\\\\": 5}\",\n  \"description\": \"Updated description\",\n  \"name\": \"Updated Pool Name\",\n  \"usage_type\": \"RANDOM\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "67c3592e-9f41-4312-a422-55af782d402b",
+    "name": "Core accepted countries Internal - BIN Pools API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.\n\nContact Support:\n Name: Marqeta\n Email: support@marqeta.com",
+      "type": "text/plain"
+    }
+  }
+}

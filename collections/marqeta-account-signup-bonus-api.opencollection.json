@@ -1,0 +1,50 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries Account Signup Bonus API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Account Signup Bonus",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Resend credit event notification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/webhooks/:event_type/:resource_token",
+            "params": [
+              {
+                "name": "event_type",
+                "value": "",
+                "type": "path",
+                "description": "Specifies the type of event you want to resend."
+              },
+              {
+                "name": "resource_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the resource for which you want to resend a notification.\n\n* Send a `GET` request to `/credit/accounts/{account_token}/journalentries` to retrieve existing journal entry tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/ledgerentries` to retrieve existing ledger entry tokens.\n* Send a `GET` request to `/accounts/{account_token}/accounttransitions` to retrieve existing account transition tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/payments/{payment_token}` to retrieve existing payment transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements` to retrieve existing statement summary tokens.\n* Send a `GET` request to `/accounts/{account_token}/delinquencystate/transitions` to retrieve existing delinquency state transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements/{statement_summary_token}/paymentreminders/{token}` to retrieve existing payment reminder tokens.\n* Send a `GET` request to `/credit/substatuses` to retrieve existing substatus tokens.\n* Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens and identify the specific account for the resend event."
+              }
+            ]
+          },
+          "docs": "Resends a credit event notification to your webhook endpoint.\n\nAlthough you send this request as a `POST`, all parameters are passed in the URL and the body is empty.\nThe event notification is resent to your webhook endpoint and also returned in the response to this request.\n\nFor details on how to configure your webhook endpoint, see the About Webhooks <</developer-guides/about-webhooks#_tutorial, tutorial>>.\nFor the complete `/webhooks` endpoint reference, see <</core-api/webhooks, Webhooks>>."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

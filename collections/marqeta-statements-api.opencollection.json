@@ -1,0 +1,470 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries Statements API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Statements",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List account statement summaries",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token/statements",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which you want to retrieve statement summaries.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "Returns statements with a matching opening date.\n\nIf both `start_date` and `end_date` are specified, statements whose closing date falls between the start and end dates are returned."
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "Returns statements with a matching closing date.\n\nIf both `start_date` and `end_date` are specified, statements whose closing date falls between the start and end dates are returned."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of account statement resources to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `createdTime`, and not by the field names appearing in response bodies such as `created_time`."
+              }
+            ]
+          },
+          "docs": "Retrieve an array of statement summaries tied to a cardholder's account.\n\nThe statement summary, which is a summary of account activity on a statement, provides account holders with a synopsis of activity that occurred on the account during a specified billing cycle.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>.\nYou can use optional query parameters to return a statement based on its exact opening or closing date, or a statement whose closing date falls wi"
+        },
+        {
+          "info": {
+            "name": "List files for an account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token/statements/files",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which to retrieve statement files.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "Start date of the date range for which to return statement files."
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "End date of the date range for which to return statement files."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of statement file resources to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `createdTime`, and not by the field names appearing in response bodies such as `created_time`."
+              }
+            ]
+          },
+          "docs": "Retrieve an array of statement files for a specific credit account."
+        },
+        {
+          "info": {
+            "name": "Retrieve account statement summary",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token/statements/:statement_summary_token",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which you want to retrieve a statement summary.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "statement_summary_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the statement summary to retrieve.\n\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+              }
+            ]
+          },
+          "docs": "Retrieve a statement summary for a credit account."
+        },
+        {
+          "info": {
+            "name": "List files for a statement summary",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token/statements/:statement_summary_token/files",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which to retrieve statement files for a statement summary.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "statement_summary_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the statement summary whose statement files you want to retrieve.\n\nSend a `GET` request to `/credit/accounts/{token}/statements` to retrieve existing statement summary tokens."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of statement files to return."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index from which to begin returning files."
+              }
+            ]
+          },
+          "docs": "Retrieve an array of statement files for a specific statement summary."
+        },
+        {
+          "info": {
+            "name": "Retrieve account statement interest charges",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token/statements/:statement_summary_token/interestcharges",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which you want to retrieve the statement interest charges.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "statement_summary_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the statement summary from which to retrieve the interest charges.\n\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+              }
+            ]
+          },
+          "docs": "Retrieve the interest charges on a credit account's statement summary."
+        },
+        {
+          "info": {
+            "name": "List account statement journal entries",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token/statements/:statement_summary_token/journalentries",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which to retrieve the statement journal entries.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "statement_summary_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the statement summary from which to retrieve journal entries.\n\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of journal entry resources to return."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "Embeds the specified object into the response."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`."
+              }
+            ]
+          },
+          "docs": "Retrieve an array of journal entries on a credit account's statement summary.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting>>."
+        },
+        {
+          "info": {
+            "name": "List account statement ledger entries",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token/statements/:statement_summary_token/ledgerentries",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which to retrieve the statement ledger entries.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "statement_summary_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the statement summary from which to retrieve ledger entries.\n\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "Embeds the specified object into the response."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`."
+              }
+            ]
+          },
+          "docs": "[IMPORTANT]\nThis feature is being deprecated and replaced by statement journal entries.\nTo list statement journal entries, see <</core-api/credit-account-journal-entries#listStatementJournalEntries, List account statement journal entries>>.\n\nRetrieve an array of ledger entries on a credit account's statement summary.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting>>."
+        },
+        {
+          "info": {
+            "name": "Retrieve account statement payment information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token/statements/:statement_summary_token/paymentinfo",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which you want to retrieve the statement payment information.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "statement_summary_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the statement summary from which to retrieve the payment information.\n\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+              }
+            ]
+          },
+          "docs": "Retrieve the payment information on a credit account's statement summary."
+        },
+        {
+          "info": {
+            "name": "List payment reminders by statement summary",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token/statements/:statement_summary_token/paymentreminders/",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which you want to retrieve the statement payment information.\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "statement_summary_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the statement summary from which to retrieve the payment information.\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of payment reminder resources to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n*NOTE:*\nYou must sort using system field names such as `createdTime`, and not by the field names appearing in response bodies such as `created_time`."
+              }
+            ]
+          },
+          "docs": "Retrieve an array of payment reminder details for a specific statement summary token."
+        },
+        {
+          "info": {
+            "name": "Get payment reminder",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token/statements/:statement_summary_token/paymentreminders/:token",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which you want to retrieve the statement payment reminder.\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "statement_summary_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the statement summary for which you want to retrieve the statement payment reminder.\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the payment reminder you want to retrieve.\nSend a `GET` request to `/credit/accounts/{account_token}/statements/{statement_summary_token}/paymentreminders/{token}` to retrieve existing payment reminder tokens."
+              }
+            ]
+          },
+          "docs": "Retrieve a single payment reminder on a specific statement summary"
+        },
+        {
+          "info": {
+            "name": "Retrieve account statement rewards",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token/statements/:statement_summary_token/rewards",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account from which to retrieve statement rewards.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "statement_summary_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the statement summary from which to retrieve rewards.\n\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+              }
+            ]
+          },
+          "docs": "Retrieve the rewards on a credit account's statement summary."
+        },
+        {
+          "info": {
+            "name": "Retrieve account statement year-to-date totals",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token/statements/:statement_summary_token/yeartodate",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account from which to retrieve statement year-to-date totals.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "statement_summary_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the statement summary from which to retrieve year-to-date totals.\n\nSend a `GET` request to `/credit/accounts/{token}/statements/` to retrieve existing statement summary tokens."
+              }
+            ]
+          },
+          "docs": "Retrieve the year-to-date fee and interest totals on a credit account's statement summary."
+        },
+        {
+          "info": {
+            "name": "Resend credit event notification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/webhooks/:event_type/:resource_token",
+            "params": [
+              {
+                "name": "event_type",
+                "value": "",
+                "type": "path",
+                "description": "Specifies the type of event you want to resend."
+              },
+              {
+                "name": "resource_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the resource for which you want to resend a notification.\n\n* Send a `GET` request to `/credit/accounts/{account_token}/journalentries` to retrieve existing journal entry tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/ledgerentries` to retrieve existing ledger entry tokens.\n* Send a `GET` request to `/accounts/{account_token}/accounttransitions` to retrieve existing account transition tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/payments/{payment_token}` to retrieve existing payment transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements` to retrieve existing statement summary tokens.\n* Send a `GET` request to `/accounts/{account_token}/delinquencystate/transitions` to retrieve existing delinquency state transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements/{statement_summary_token}/paymentreminders/{token}` to retrieve existing payment reminder tokens.\n* Send a `GET` request to `/credit/substatuses` to retrieve existing substatus tokens.\n* Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens and identify the specific account for the resend event."
+              }
+            ]
+          },
+          "docs": "Resends a credit event notification to your webhook endpoint.\n\nAlthough you send this request as a `POST`, all parameters are passed in the URL and the body is empty.\nThe event notification is resent to your webhook endpoint and also returned in the response to this request.\n\nFor details on how to configure your webhook endpoint, see the About Webhooks <</developer-guides/about-webhooks#_tutorial, tutorial>>.\nFor the complete `/webhooks` endpoint reference, see <</core-api/webhooks, Webhooks>>."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

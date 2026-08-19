@@ -1,0 +1,488 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries Transactions API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Transactions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List account transactions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token/transactions",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which you want to retrieve transactions."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of transaction resources to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Starting index for pagination."
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "Start date for transaction filter. Defaults to 30 days ago if not provided."
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "End date for transaction filter. Defaults to current date if not provided."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by transaction status. Allowed values are PENDING, POSTED, DECLINED, and ERROR. When no status is provided, PENDING, POSTED, DECLINED, and ERROR transactions are returned by default."
+              },
+              {
+                "name": "card_token",
+                "value": "",
+                "type": "query",
+                "description": "Filter transactions by card token."
+              },
+              {
+                "name": "user_token",
+                "value": "",
+                "type": "query",
+                "description": "Filter transactions by user token."
+              }
+            ]
+          },
+          "docs": "Retrieve an array of transactions on a credit account."
+        },
+        {
+          "info": {
+            "name": "List transactions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/transactions",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of transactions to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "The sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (`field_1,field_2`, and so on).\nLeave blank to return all fields."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nUse any field in the resource model, or one of the system fields `lastModifiedTime` or `createdTime`.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order."
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "The starting date (or date-time) of a date range from which to return transactions.\nTo return transactions for a single day, enter the same date in both the `start_date` and `end_date` fields."
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "The ending date (or date-time) of a date range from which to return transactions.\nTo return transactions for a single day, enter the same date in both the `end_date` and `start_date` fields."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of transaction types to include."
+              },
+              {
+                "name": "user_token",
+                "value": "",
+                "type": "query",
+                "description": "The unique identifier of the user account holder."
+              },
+              {
+                "name": "business_token",
+                "value": "",
+                "type": "query",
+                "description": "The unique identifier of the business account holder."
+              },
+              {
+                "name": "acting_user_token",
+                "value": "",
+                "type": "query",
+                "description": "The unique identifier of the acting user."
+              },
+              {
+                "name": "card_token",
+                "value": "",
+                "type": "query",
+                "description": "The unique identifier of the card."
+              },
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "query",
+                "description": "Account token"
+              },
+              {
+                "name": "state",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of transaction states to display."
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the API version for the request."
+              },
+              {
+                "name": "start_identifier",
+                "value": "",
+                "type": "query",
+                "description": "Start identifier"
+              }
+            ]
+          },
+          "docs": "List all transactions.\n\nBy default, this endpoint returns transactions conducted within the last 30 days.\nTo return transactions older than 30 days, you must include the `start_date` and `end_date` query parameters in your request.\n\nBy default, `GET /transactions` returns transactions having either `PENDING` or `COMPLETION` states.\n\nThis endpoint supports <</core-api/field-filtering, field filtering>> and <</core-api/sorting-and-pagination, pagination>>."
+        },
+        {
+          "info": {
+            "name": "List transactions for a funding account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/transactions/fundingsource/:funding_source_token",
+            "params": [
+              {
+                "name": "funding_source_token",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the funding account."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of transactions to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "The sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (`field_1,field_2`, and so on).\nLeave blank to return all fields."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nUse any field in the resource model, or one of the system fields `lastModifiedTime` or `createdTime`.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order."
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "The starting date (or date-time) of a date range from which to return transactions.\nTo return transactions for a single day, enter the same date in both the `start_date` and `end_date` fields."
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "The ending date (or date-time) of a date range from which to return transactions.\nTo return transactions for a single day, enter the same date in both the `end_date` and `start_date` fields."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of transaction types to include."
+              },
+              {
+                "name": "polarity",
+                "value": "",
+                "type": "query",
+                "description": "Specifies whether to return credit or debit transactions."
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the API version for the request."
+              }
+            ]
+          },
+          "docs": "List transactions for a specific funding source.\n\nBy default, this endpoint returns transactions conducted within the last 30 days.\nTo return transactions older than 30 days, you must include the `start_date` and `end_date` query parameters in your request.\n\nBy default, `GET /transactions/fundingsource/{funding_source_token}` returns transactions having either `PENDING` or `COMPLETION` states.\n\nThis endpoint supports <</core-api/field-filtering, field filtering>> and <</core-api/sorting-and-pagi"
+        },
+        {
+          "info": {
+            "name": "Retrieve transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/transactions/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the transaction."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (`field_1,field_2`, and so on).\nLeave blank to return all fields."
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the API version for the request."
+              }
+            ]
+          },
+          "docs": "Retrieve a specific transaction.\nInclude the `token` path parameter to identify the transaction.\n\n[NOTE]\nTransactions are not available in real time via this endpoint, and typically appear after 30 seconds.\nOn occasion, a transaction may require up to four hours to appear."
+        },
+        {
+          "info": {
+            "name": "List related transactions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/transactions/:token/related",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the transaction."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of transactions to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "The sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (`field_1,field_2`, and so on).\nLeave blank to return all fields."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nUse any field in the resource model, or one of the system fields `lastModifiedTime` or `createdTime`.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order."
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "The starting date (or date-time) of a date range from which to return transactions.\nTo return transactions for a single day, enter the same date in both the `start_date` and `end_date` fields."
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "The ending date (or date-time) of a date range from which to return transactions.\nTo return transactions for a single day, enter the same date in both the `end_date` and `start_date` fields."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of transaction types to include."
+              },
+              {
+                "name": "state",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of transaction states to display."
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the API version for the request."
+              }
+            ]
+          },
+          "docs": "List all transactions related to the specified transaction.\n\nBy default, this endpoint returns transactions conducted within the last 30 days.\nTo return transactions older than 30 days, you must include the `start_date` and `end_date` query parameters in your request.\n\nBy default, this endpoint returns transactions of any state.\nTo return transactions in specific states, you must include the `state` query parameter in your request.\n\nThis endpoint supports <</core-api/field-filtering, field filte"
+        },
+        {
+          "info": {
+            "name": "Retrieve authorization transaction data",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/views/authorizations/:time_agg",
+            "params": [
+              {
+                "name": "time_agg",
+                "value": "",
+                "type": "path",
+                "description": "Aggregation time level for the data. Use 'day' for daily rollups, 'week' for weekly rollups, 'month' for monthly rollups, or 'detail' for individual record-level data."
+              },
+              {
+                "name": "program",
+                "value": "",
+                "type": "query",
+                "description": "The name of your Marqeta card program. This parameter is required for most DiVA API endpoints to scope the data to your program."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to include in the response. If not specified, all available fields are returned."
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "Start date for filtering data (format YYYY-MM-DD). Returns records on or after this date."
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "End date for filtering data (format YYYY-MM-DD). Returns records on or before this date."
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Response format. Use 'json' for JSON responses or 'csv' for comma-separated bulk file format. Defaults to json."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of records to return per request."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Zero-based offset for pagination."
+              }
+            ]
+          },
+          "docs": "Returns authorization transaction data aggregated over the specified time period. Includes approved and declined authorizations with response codes, merchant details, and transaction amounts. Use the detail aggregation level to retrieve individual authorization records."
+        },
+        {
+          "info": {
+            "name": "Retrieve settlement transaction data",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/views/settlements/:time_agg",
+            "params": [
+              {
+                "name": "time_agg",
+                "value": "",
+                "type": "path",
+                "description": "Aggregation time level for the data. Use 'day' for daily rollups, 'week' for weekly rollups, 'month' for monthly rollups, or 'detail' for individual record-level data."
+              },
+              {
+                "name": "program",
+                "value": "",
+                "type": "query",
+                "description": "The name of your Marqeta card program. This parameter is required for most DiVA API endpoints to scope the data to your program."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to include in the response. If not specified, all available fields are returned."
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "Start date for filtering data (format YYYY-MM-DD). Returns records on or after this date."
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "End date for filtering data (format YYYY-MM-DD). Returns records on or before this date."
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Response format. Use 'json' for JSON responses or 'csv' for comma-separated bulk file format. Defaults to json."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of records to return per request."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Zero-based offset for pagination."
+              }
+            ]
+          },
+          "docs": "Returns settlement transaction data at a specified aggregation level. Settlement data reflects finalized transactions after card network clearing. Use this endpoint to reconcile cleared transactions against your financial records."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,131 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries Delinquency API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Delinquency",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve delinquency state",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token/delinquencystate",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which you want to retrieve delinquency state details.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              }
+            ]
+          },
+          "docs": "Retrieve details of the current delinquency state of a credit account.\n\nAn account is delinquent when it is past due on payments and current when it is up to date on payments."
+        },
+        {
+          "info": {
+            "name": "List delinquency state transitions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token/delinquencystate/transitions",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account whose delinquency state transitions you want to retrieve.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of resources to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `impactTime`, and not by the field names appearing in response bodies such as `impact_time`."
+              }
+            ]
+          },
+          "docs": "Retrieve an array of delinquency state transitions for a credit account.\n\nA delinquency state transition occurs when an account's delinquency state transitions between delinquent and current.\nAn account becomes delinquent when it falls behind on payments and becomes current when payments are made up to date."
+        },
+        {
+          "info": {
+            "name": "Retrieve delinquency state transition",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token/delinquencystate/transitions/:delinquency_transition_token",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account whose delinquency state transition you want to retrieve.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "delinquency_transition_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the delinquency state transition."
+              }
+            ]
+          },
+          "docs": "Retrieve a specific delinquency state transition on a credit account.\n\nA delinquency state transition occurs when an account's delinquency state transitions between delinquent and current.\nAn account becomes delinquent when it falls behind on payments and becomes current when payments are made up to date."
+        },
+        {
+          "info": {
+            "name": "Resend credit event notification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/webhooks/:event_type/:resource_token",
+            "params": [
+              {
+                "name": "event_type",
+                "value": "",
+                "type": "path",
+                "description": "Specifies the type of event you want to resend."
+              },
+              {
+                "name": "resource_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the resource for which you want to resend a notification.\n\n* Send a `GET` request to `/credit/accounts/{account_token}/journalentries` to retrieve existing journal entry tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/ledgerentries` to retrieve existing ledger entry tokens.\n* Send a `GET` request to `/accounts/{account_token}/accounttransitions` to retrieve existing account transition tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/payments/{payment_token}` to retrieve existing payment transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements` to retrieve existing statement summary tokens.\n* Send a `GET` request to `/accounts/{account_token}/delinquencystate/transitions` to retrieve existing delinquency state transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements/{statement_summary_token}/paymentreminders/{token}` to retrieve existing payment reminder tokens.\n* Send a `GET` request to `/credit/substatuses` to retrieve existing substatus tokens.\n* Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens and identify the specific account for the resend event."
+              }
+            ]
+          },
+          "docs": "Resends a credit event notification to your webhook endpoint.\n\nAlthough you send this request as a `POST`, all parameters are passed in the URL and the body is empty.\nThe event notification is resent to your webhook endpoint and also returned in the response to this request.\n\nFor details on how to configure your webhook endpoint, see the About Webhooks <</developer-guides/about-webhooks#_tutorial, tutorial>>.\nFor the complete `/webhooks` endpoint reference, see <</core-api/webhooks, Webhooks>>."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

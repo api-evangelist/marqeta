@@ -1,0 +1,86 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries Loads API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Loads",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve funding load data",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/views/loads/:time_agg",
+            "params": [
+              {
+                "name": "time_agg",
+                "value": "",
+                "type": "path",
+                "description": "Aggregation time level for the data. Use 'day' for daily rollups, 'week' for weekly rollups, 'month' for monthly rollups, or 'detail' for individual record-level data."
+              },
+              {
+                "name": "program",
+                "value": "",
+                "type": "query",
+                "description": "The name of your Marqeta card program. This parameter is required for most DiVA API endpoints to scope the data to your program."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to include in the response. If not specified, all available fields are returned."
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "Start date for filtering data (format YYYY-MM-DD). Returns records on or after this date."
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "End date for filtering data (format YYYY-MM-DD). Returns records on or before this date."
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Response format. Use 'json' for JSON responses or 'csv' for comma-separated bulk file format. Defaults to json."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of records to return per request."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Zero-based offset for pagination."
+              }
+            ]
+          },
+          "docs": "Returns funding load transaction data at a specified aggregation level. When using the detail aggregation level, each row represents a single funding load transaction. Supports daily, weekly, monthly, and detail levels. Covers ACH loads, push-to-card loads, and program transfers."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

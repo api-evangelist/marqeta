@@ -1,0 +1,711 @@
+{
+  "item": [
+    {
+      "id": "6ed06795-6b24-4c06-b545-fb293dc0e530",
+      "name": "PINs",
+      "description": {
+        "content": "// Conditional snippet for beta or internal content\ninclude::../../maturity-admonition-banner.adoc[]\n\nUse the `/pins` endpoint to create, update, or reveal a personal identification number (PIN) for a card.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "4ffd45b4-41d9-4800-9506-607c11e5d9b3",
+          "name": "Create or update PIN",
+          "request": {
+            "name": "Create or update PIN",
+            "description": {
+              "content": "Creates or updates a personal identification number (PIN) for an existing card.\nAlthough cardholders might choose a four-, five-, or six-digit PIN if they set their PIN at an automated teller machine, they can only set a four-digit PIN using Marqeta's Set PIN widget or the create or update PIN endpoint (`PUT /pins`).\nCardholders can update their PIN through the API regardless of its length, but the new PIN value they choose must contain four digits.\n\nIf you want to manage a card's PIN, first create a new control token for the card by sending a `POST` request to `/pins/controltoken`, and then use that token to update the PIN.\nYou must create a card before you can manage a PIN.\n\nUnless PIN reveal functionality has been enabled for your program, you cannot retrieve a PIN that has previously been created.\nIf the PIN has been forgotten, you must either update the card's PIN or create a new card and PIN.\n\nIf you have enabled PIN reveal functionality for your program, you can send a `POST` request to the `/pins/reveal` endpoint to retrieve an existing PIN.\nSee <</core-api/pins#revealPins, Reveal PIN>> on this page for details.\n\n[WARNING]\nSending a request to this endpoint requires PCI DSS compliance.\nYou must comply with PCI DSS data security requirements if you want to store, transmit, or process sensitive card data such as the cardholder's primary account number (PAN), personal identification number (PIN), and card expiration date.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "pins"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"control_token\": \"<string>\",\n  \"pin\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f485dd19-8400-4800-8728-4a23fcac8014",
+              "name": "PIN was successfully set",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pins"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"control_token\": \"b4647c9a-d4b8-4091-a5ff-dd67a7bb9ffc\",\n  \"pin\": \"5678\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3477b4e4-adb4-4083-bc98-22d843b2019e",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pins"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"control_token\": \"b4647c9a-d4b8-4091-a5ff-dd67a7bb9ffc\",\n  \"pin\": \"5678\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "06d6b410-1f3e-48e0-9af3-1a7e64abf8c4",
+              "name": "Weak PIN",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pins"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"control_token\": \"b4647c9a-d4b8-4091-a5ff-dd67a7bb9ffc\",\n  \"pin\": \"5678\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Precondition Failed",
+              "code": 412,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "aade9618-5c07-44e2-a42d-951f7b8dc1d9",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pins"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"control_token\": \"b4647c9a-d4b8-4091-a5ff-dd67a7bb9ffc\",\n  \"pin\": \"5678\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8c2aaac2-c22d-4934-84cf-1451b00a07e7",
+          "name": "Create PIN control token",
+          "request": {
+            "name": "Create PIN control token",
+            "description": {
+              "content": "Creates a control token necessary when creating or updating a card's personal identification number (PIN).\n\nCreating, updating, or revealing a card's PIN is a two-step process.\nYou must first create the control token that is required to create the PIN, and then you create, update, or reveal the PIN itself.\n\nThe lifespan of the control token in a production environment is either five minutes or one hour from creation, depending on the token type.\nIf multiple tokens are requested for a single card, only the most recent one is valid.\nOnce redeemed, a token cannot be reused.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "pins",
+                "controltoken"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"card_token\": \"<string>\",\n  \"controltoken_type\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "eefa092f-9b84-4d6f-902a-3cf23a5da176",
+              "name": "Control token created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pins",
+                    "controltoken"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"card_token\": \"my_card_01\",\n  \"controltoken_type\": \"SET_PIN\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"control_token\": \"b4647c9a-d4b8-4091-a5ff-dd67a7bb9ffc\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6a0c159b-6d4a-47cf-be90-48bd36926726",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pins",
+                    "controltoken"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"card_token\": \"my_card_01\",\n  \"controltoken_type\": \"SET_PIN\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "adbc2cd1-7148-4a06-aeb8-49fa5c31e437",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pins",
+                    "controltoken"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"card_token\": \"my_card_01\",\n  \"controltoken_type\": \"SET_PIN\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ec1e605e-7a61-44b1-96a7-4628d0a63e81",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pins",
+                    "controltoken"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"card_token\": \"my_card_01\",\n  \"controltoken_type\": \"SET_PIN\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1d91ab8a-df62-4456-a7c3-fcc057b35c10",
+          "name": "Reveal PIN",
+          "request": {
+            "name": "Reveal PIN",
+            "description": {
+              "content": "Reveals the personal identification number (PIN) of an existing, active card.\nBe aware that while a cardholder can only set a four-digit PIN using the Marqeta Set PIN widget or `PUT /pins` API, you may see a four-, five-, or six-digit PIN in cases where your cardholders have set a new PIN at an automated teller machine.\n\n[WARNING]\nOnly use this endpoint to access a PIN in order to reveal it to its cardholder.\nDo not use this endpoint for the purpose of storing a PIN at any location.\n\nSending a request to this endpoint requires PCI DSS compliance.\nYou must comply with PCI DSS data security requirements if you want to store, transmit, or process sensitive card data such as the cardholder's primary account number (PAN), personal identification number (PIN), and card expiration date.\n\nIf you want to update a card's PIN instead, send a `PUT` request to the `/pins` endpoint.\nSee <</core-api/pins#putPins, Create or Update PIN>> on this page for details.\n\nRevealing a card's PIN is a two-step process.\nYou must first create a new control token for the card by sending a `POST` request to `/pins/controltoken`, and then use that token to reveal the PIN.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "pins",
+                "reveal"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cardholder_verification_method\": \"<string>\",\n  \"control_token\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "75f7fc02-ac5a-49d2-a924-29108704273a",
+              "name": "PIN was successfully revealed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pins",
+                    "reveal"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cardholder_verification_method\": \"BIOMETRIC_FINGERPRINT\",\n  \"control_token\": \"b4647c9a-d4b8-4091-a5ff-dd67a7bb9ffc\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "796fbb17-ff55-46fd-9247-6ad65dc5be70",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pins",
+                    "reveal"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cardholder_verification_method\": \"BIOMETRIC_FINGERPRINT\",\n  \"control_token\": \"b4647c9a-d4b8-4091-a5ff-dd67a7bb9ffc\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "2b6fe7fc-4d2b-4384-9d7f-7561120ed50f",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pins",
+                    "reveal"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cardholder_verification_method\": \"BIOMETRIC_FINGERPRINT\",\n  \"control_token\": \"b4647c9a-d4b8-4091-a5ff-dd67a7bb9ffc\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "ca59eb66-91b1-44ea-8601-a9c04fcf8de7",
+    "name": "Core accepted countries PINs API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.\n\nContact Support:\n Name: Marqeta\n Email: support@marqeta.com",
+      "type": "text/plain"
+    }
+  }
+}

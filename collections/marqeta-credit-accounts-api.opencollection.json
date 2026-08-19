@@ -1,0 +1,134 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries Credit Accounts API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Credit Accounts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List accounts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts",
+            "params": [
+              {
+                "name": "card_token",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of the credit card associated with the account."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of credit account resources to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`."
+              },
+              {
+                "name": "light_response",
+                "value": "",
+                "type": "query",
+                "description": "If `true`, returns a lightweight response without any balances and usages."
+              },
+              {
+                "name": "secured_account_token",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of an existing secured account.\nThis field is required when policy product subtype is `SECURED`."
+              },
+              {
+                "name": "user_token",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of the user by which to filter accounts."
+              }
+            ]
+          },
+          "docs": "Retrieve an array of credit accounts.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>."
+        },
+        {
+          "info": {
+            "name": "Retrieve account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token",
+            "params": [
+              {
+                "name": "effective_fee_schedule_only",
+                "value": "",
+                "type": "query",
+                "description": "Display the effective fee schedule only."
+              },
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account to retrieve.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "light_response",
+                "value": "",
+                "type": "query",
+                "description": "If true, returns a lightweight response without any balances and usages."
+              }
+            ]
+          },
+          "docs": "Retrieve a credit account."
+        },
+        {
+          "info": {
+            "name": "Update account",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/accounts/:account_token",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account to update.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a credit account."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

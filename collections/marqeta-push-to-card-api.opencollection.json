@@ -1,0 +1,185 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries push to card API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "push to card",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Lists all push-to-card disbursements",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/pushtocards/disburse",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of push-to-card disbursements to retrieve"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Start index"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              }
+            ]
+          },
+          "docs": "Lists all push-to-card disbursements"
+        },
+        {
+          "info": {
+            "name": "Initiates a push-to-card money disbursement",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/pushtocards/disburse",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiates a push-to-card money disbursement"
+        },
+        {
+          "info": {
+            "name": "Returns a specific push-to-card disbursement",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/pushtocards/disburse/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Push-to-card disbursement token"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+              }
+            ]
+          },
+          "docs": "Returns a specific push-to-card disbursement"
+        },
+        {
+          "info": {
+            "name": "Returns all push-to-card payment card details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/pushtocards/paymentcard",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of push-to-card payment cards to retrieve"
+              },
+              {
+                "name": "user_token",
+                "value": "",
+                "type": "query",
+                "description": "User token"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Start index"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              }
+            ]
+          },
+          "docs": "Returns all push-to-card payment card details"
+        },
+        {
+          "info": {
+            "name": "Adds an external card to which funds will be pushed",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/pushtocards/paymentcard",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Adds an external card to which funds will be pushed"
+        },
+        {
+          "info": {
+            "name": "Returns a specific paymentcard object",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/pushtocards/paymentcard/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Push-to-card token"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+              }
+            ]
+          },
+          "docs": "Returns a specific paymentcard object"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

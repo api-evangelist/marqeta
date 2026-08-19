@@ -1,0 +1,229 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries Bundles API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Bundles",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List bundles",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/bundles",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of bundles resources to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `lastModifiedTime`, not by the field names appearing in response bodies: for example, `last_modified_time`."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "An array of statuses by which to filter bundles."
+              }
+            ]
+          },
+          "docs": "Retrieve an array of bundles.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>."
+        },
+        {
+          "info": {
+            "name": "Create bundle",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/bundles",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a bundle."
+        },
+        {
+          "info": {
+            "name": "Retrieve bundle",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/bundles/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the bundle to retrieve.\n\nSend a `GET` request to `/credit/bundles` to retrieve existing  tokens."
+              },
+              {
+                "name": "expand_objects",
+                "value": "",
+                "type": "query",
+                "description": "Embeds the associated object of the specified type into the response.\nFor more, see <</core-api/object-expansion, object expansion>>."
+              }
+            ]
+          },
+          "docs": "Retrieve a specific bundle."
+        },
+        {
+          "info": {
+            "name": "Update bundle",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/bundles/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Token of the bundle to update.\n\nSend a `GET` request to `/credit/bundles` to retrieve existing  tokens."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a specific bundle that is not `ACTIVE` or `ARCHIVED`.\nBundles are created in a `DRAFT` state, and are still modifiable at this point.\nUsing the transitions endpoint, a bundle can be transitioned from `DRAFT`, to `ACTIVE`.\nOnce a bundle is active, it cannot be modified."
+        },
+        {
+          "info": {
+            "name": "Clone bundle",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/bundles/:token/clone",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the bundle to clone.\n\nSend a `GET` request to `/bundles` to retrieve existing bundle tokens."
+              }
+            ]
+          },
+          "docs": "Create a new bundle based on an existing bundle."
+        },
+        {
+          "info": {
+            "name": "List related bundles",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/bundles/:token/lineage",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the parent product bundle.\n\nSend a `GET` request to `/bundles` to retrieve existing product bundles tokens."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of related bundle product resources to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Array of statuses by which to filter bundles."
+              }
+            ]
+          },
+          "docs": "Retrieve an array of related product bundles.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>."
+        },
+        {
+          "info": {
+            "name": "Promote bundle",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/bundles/:token/promote",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the bundle to promote.\n\nSend a `GET` request to `/bundles` to retrieve existing bundle tokens."
+              }
+            ]
+          },
+          "docs": "Promote a specific bundle that replaces the current active bundle and activates the promoted bundle."
+        },
+        {
+          "info": {
+            "name": "Transition a bundle",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/bundles/:token/transitions",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Token of the bundle whose status you want to transition.\n\nSend a `GET` request to `/credit/bundles` to retrieve existing  tokens."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Transition the status of a specific bundle."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

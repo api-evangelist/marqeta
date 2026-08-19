@@ -1,0 +1,620 @@
+{
+  "item": [
+    {
+      "id": "147867e0-2d5a-4877-b4be-787a8dd89ee9",
+      "name": "Credit Accounts",
+      "description": {
+        "content": "// Conditional snippet for beta or internal content\ninclude::../../maturity-admonition-banner.adoc[]\n\nUse the credit accounts endpoints to create and manage accounts on Marqeta's credit platform.\nA credit account centers around a single line of credit that can be accessed by one or more <</core-api/credit-account-cards, cards>>.\nAn account's attributes, such as the credit limit, APR, and fees, are inherited from the <</core-api/credit-policies, policies>> on its associated bundle.\n\nFor more on accounts, see <</developer-guides/about-credit-accounts, About Credit Accounts>>.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "8981b060-7eea-46e2-93ad-a46e71bb2416",
+          "name": "List accounts",
+          "request": {
+            "name": "List accounts",
+            "description": {
+              "content": "Retrieve an array of credit accounts.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "card_token",
+                  "value": "<string>",
+                  "description": "Unique identifier of the credit card associated with the account."
+                },
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "5",
+                  "description": "Number of credit account resources to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "Sort order index of the first resource in the returned array."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "-lastModifiedTime",
+                  "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`."
+                },
+                {
+                  "disabled": false,
+                  "key": "light_response",
+                  "value": "false",
+                  "description": "If `true`, returns a lightweight response without any balances and usages."
+                },
+                {
+                  "disabled": false,
+                  "key": "secured_account_token",
+                  "value": "<string>",
+                  "description": "Unique identifier of an existing secured account.\nThis field is required when policy product subtype is `SECURED`."
+                },
+                {
+                  "disabled": false,
+                  "key": "user_token",
+                  "value": "<string>",
+                  "description": "Unique identifier of the user by which to filter accounts."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "afad285f-71e7-4d4e-a936-a0747a37fd97",
+              "name": "Expected response to a valid request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "card_token",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    },
+                    {
+                      "key": "light_response",
+                      "value": "false"
+                    },
+                    {
+                      "key": "secured_account_token",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_token",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 1,\n  \"data\": [\n    {\n      \"activation_time\": \"2025-08-26 22:55:52.302000+00:00\",\n      \"available_credit\": 3232,\n      \"business_token\": \"business_token123\",\n      \"config\": {\n        \"billing_cycle_day\": 1,\n        \"card_level\": \"TRADITIONAL\",\n        \"e_disclosure_active\": true,\n        \"fees\": [\n          {\n            \"active\": true,\n            \"created_date\": \"2025-08-26 22:55:52.124000+00:00\",\n            \"schedule\": [\n              {\n                \"effective_date\": \"2025-08-26 22:55:52.124000+00:00\",\n                \"method\": \"FLAT\",\n                \"value\": 25\n              }\n            ],\n            \"type\": \"LATE_PAYMENT_FEE\",\n            \"updated_date\": \"2025-08-26 22:55:52.124000+00:00\"\n          },\n          {\n            \"active\": true,\n            \"created_date\": \"2025-09-03 19:06:27.946000+00:00\",\n            \"schedule\": [\n              {\n                \"effective_date\": \"2025-09-03 19:06:27.946000+00:00\",\n                \"method\": \"FLAT\",\n                \"value\": 10\n              }\n            ],\n            \"type\": \"RETURNED_PAYMENT_FEE\",\n            \"updated_date\": \"2025-09-03 19:06:27.946000+00:00\"\n          },\n          {\n            \"active\": true,\n            \"created_date\": \"2025-09-03 19:06:27.946000+00:00\",\n            \"schedule\": [\n              {\n                \"method\": \"PERCENTAGE\",\n                \"value\": 12.5\n              }\n            ],\n            \"type\": \"FOREIGN_TRANSACTION_FEE\",\n            \"updated_date\": \"2025-09-03 19:06:27.946000+00:00\"\n          }\n        ],\n        \"payment_due_day\": 31,\n        \"payment_holds\": {\n          \"ach_hold_days\": 0,\n          \"check_hold_days\": 0\n        },\n        \"rewards\": []\n      },\n      \"created_time\": \"2025-08-26 22:55:52.100000+00:00\",\n      \"credit_limit\": 6000,\n      \"credit_product_token\": \"credit_product_token1234\",\n      \"currency_code\": \"USD\",\n      \"current_balance\": 0,\n      \"description\": \"Consumer credit account for John Jacob\",\n      \"external_offer_id\": \"external-offer-11\",\n      \"latest_statement_cycle_type\": \"TRANSACTING\",\n      \"max_apr_schedules\": [],\n      \"name\": \"John Jacob\",\n      \"remaining_min_payment_due\": 25,\n      \"remaining_statement_balance\": 2768,\n      \"status\": \"ACTIVE\",\n      \"substatuses\": [],\n      \"token\": \"credit_account_token1234\",\n      \"type\": \"CONSUMER\",\n      \"updated_time\": \"2025-08-26 22:55:52.304000+00:00\",\n      \"usages\": [\n        {\n          \"aprs\": [\n            {\n              \"active\": true,\n              \"created_date\": \"2025-08-26 22:55:52.106000+00:00\",\n              \"schedule\": [\n                {\n                  \"effective_date\": \"2025-08-26 22:55:52.106000+00:00\",\n                  \"value\": 14.99\n                }\n              ],\n              \"type\": \"GO_TO\",\n              \"updated_date\": \"2025-08-26 22:55:52.106000+00:00\"\n            }\n          ],\n          \"fees\": [],\n          \"type\": \"PURCHASE\"\n        }\n      ],\n      \"user_substatuses\": [],\n      \"user_token\": \"user_token1234\"\n    }\n  ],\n  \"end_index\": 4,\n  \"is_more\": true,\n  \"start_index\": 0\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "33fc61f6-306a-4ae8-9dab-af8749b11f11",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "card_token",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    },
+                    {
+                      "key": "light_response",
+                      "value": "false"
+                    },
+                    {
+                      "key": "secured_account_token",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_token",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9536,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9c1a43aa-1a8c-4f2c-93d9-9576ecd6f761",
+          "name": "Retrieve account",
+          "request": {
+            "name": "Retrieve account",
+            "description": {
+              "content": "Retrieve a credit account.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "effective_fee_schedule_only",
+                  "value": "false",
+                  "description": "Display the effective fee schedule only."
+                },
+                {
+                  "disabled": false,
+                  "key": "light_response",
+                  "value": "false",
+                  "description": "If true, returns a lightweight response without any balances and usages."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account to retrieve.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "f680314f-7380-4364-9356-b9b3d4c4b2cd",
+              "name": "A JSON object containing account information",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "effective_fee_schedule_only",
+                      "value": "false"
+                    },
+                    {
+                      "key": "light_response",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account to retrieve.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"activation_time\": \"2021-08-26 22:55:52.302000+00:00\",\n  \"available_credit\": 3232,\n  \"config\": {\n    \"billing_cycle_day\": 1,\n    \"card_level\": \"TRADITIONAL\",\n    \"e_disclosure_active\": true,\n    \"fees\": [\n      {\n        \"active\": true,\n        \"created_date\": \"2021-08-26 22:55:52.124000+00:00\",\n        \"schedule\": [\n          {\n            \"effective_date\": \"2021-08-26 22:55:52.124000+00:00\",\n            \"method\": \"FLAT\",\n            \"value\": 25\n          }\n        ],\n        \"type\": \"LATE_PAYMENT_FEE\",\n        \"updated_date\": \"2021-08-26 22:55:52.124000+00:00\"\n      },\n      {\n        \"active\": true,\n        \"created_date\": \"2021-09-03 19:06:27.946000+00:00\",\n        \"schedule\": [\n          {\n            \"effective_date\": \"2021-09-03 19:06:27.946000+00:00\",\n            \"method\": \"FLAT\",\n            \"value\": 10\n          }\n        ],\n        \"type\": \"RETURNED_PAYMENT_FEE\",\n        \"updated_date\": \"2021-09-03 19:06:27.946000+00:00\"\n      },\n      {\n        \"active\": true,\n        \"created_date\": \"2021-09-03 19:06:27.946000+00:00\",\n        \"schedule\": [\n          {\n            \"method\": \"PERCENTAGE\",\n            \"value\": 12.5\n          }\n        ],\n        \"type\": \"FOREIGN_TRANSACTION_FEE\",\n        \"updated_date\": \"2021-09-03 19:06:27.946000+00:00\"\n      }\n    ],\n    \"payment_due_day\": 31,\n    \"payment_holds\": {\n      \"ach_hold_days\": 0,\n      \"check_hold_days\": 0\n    },\n    \"rewards\": []\n  },\n  \"created_time\": \"2021-08-26 22:55:52.100000+00:00\",\n  \"credit_limit\": 6000,\n  \"credit_product_token\": \"credit_product_token1234\",\n  \"currency_code\": \"USD\",\n  \"current_balance\": 0,\n  \"description\": \"Consumer credit account for John Jacob\",\n  \"external_offer_id\": \"external-offer-11\",\n  \"latest_statement_cycle_type\": \"TRANSACTING\",\n  \"name\": \"John Jacob\",\n  \"remaining_min_payment_due\": 25,\n  \"remaining_statement_balance\": 2768,\n  \"status\": \"ACTIVE\",\n  \"token\": \"credit_account_token1234\",\n  \"type\": \"CONSUMER\",\n  \"updated_time\": \"2021-08-26 22:55:52.304000+00:00\",\n  \"usages\": [\n    {\n      \"aprs\": [\n        {\n          \"active\": true,\n          \"created_date\": \"2021-08-26 22:55:52.106000+00:00\",\n          \"schedule\": [\n            {\n              \"effective_date\": \"2021-08-26 22:55:52.106000+00:00\",\n              \"value\": 14.99\n            }\n          ],\n          \"type\": \"GO_TO\",\n          \"updated_date\": \"2021-08-26 22:55:52.106000+00:00\"\n        }\n      ],\n      \"fees\": [],\n      \"type\": \"PURCHASE\"\n    }\n  ],\n  \"user_token\": \"user_token1234\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3a34a0d7-10f9-47e0-b101-1804bcb75002",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "effective_fee_schedule_only",
+                      "value": "false"
+                    },
+                    {
+                      "key": "light_response",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account to retrieve.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9536,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1627d57b-a1f6-4c9a-b678-3f13aeae95ae",
+          "name": "Update account",
+          "request": {
+            "name": "Update account",
+            "description": {
+              "content": "Update a credit account.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account to update.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"apr_upper_limit\": \"<number>\",\n  \"config\": {\n    \"e_disclosure_active\": false,\n    \"fees\": [\n      {\n        \"schedule\": [\n          {\n            \"method\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": \"<number>\",\n            \"effective_date\": \"<dateTime>\"\n          },\n          {\n            \"method\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": \"<number>\",\n            \"effective_date\": \"<dateTime>\"\n          }\n        ],\n        \"type\": \"<string>\"\n      },\n      {\n        \"schedule\": [\n          {\n            \"method\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": \"<number>\",\n            \"effective_date\": \"<dateTime>\"\n          },\n          {\n            \"method\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": \"<number>\",\n            \"effective_date\": \"<dateTime>\"\n          }\n        ],\n        \"type\": \"<string>\"\n      }\n    ],\n    \"min_payment\": {\n      \"active\": \"<boolean>\",\n      \"min_payment_flat_amount\": \"<number>\",\n      \"min_payment_percentage\": \"<number>\",\n      \"override_end_time\": \"<dateTime>\",\n      \"override_start_time\": \"<dateTime>\"\n    },\n    \"payment_due_interval\": \"<integer>\",\n    \"payment_holds\": {\n      \"ach_hold_days\": \"<integer>\",\n      \"check_hold_days\": \"<integer>\"\n    }\n  },\n  \"credit_limit\": {\n    \"value\": \"<number>\"\n  },\n  \"latest_statement_cycle_type\": \"<string>\",\n  \"usages\": [\n    {\n      \"type\": \"<string>\",\n      \"aprs\": [\n        {\n          \"schedule\": [\n            {\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"apply_next_cycle\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"effective_date\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"margin\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"type\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"apply_next_cycle\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"effective_date\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"margin\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"type\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"type\": \"<string>\"\n        },\n        {\n          \"schedule\": [\n            {\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"apply_next_cycle\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"effective_date\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"margin\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"type\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"apply_next_cycle\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"effective_date\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"margin\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"type\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"type\": \"<string>\"\n        }\n      ],\n      \"apr_type\": false\n    },\n    {\n      \"type\": \"<string>\",\n      \"aprs\": [\n        {\n          \"schedule\": [\n            {\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"apply_next_cycle\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"effective_date\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"margin\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"type\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"apply_next_cycle\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"effective_date\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"margin\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"type\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"type\": \"<string>\"\n        },\n        {\n          \"schedule\": [\n            {\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"apply_next_cycle\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"effective_date\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"margin\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"type\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"apply_next_cycle\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"effective_date\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"margin\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"type\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"type\": \"<string>\"\n        }\n      ],\n      \"apr_type\": \"string\"\n    }\n  ],\n  \"user_token\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "827b9f24-cc21-45cf-8ef2-e01df5524551",
+              "name": "A JSON object containing account information.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account to update.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"config\": {\n    \"payment_holds\": {\n      \"ach_hold_days\": 3,\n      \"check_hold_days\": 5\n    }\n  },\n  \"credit_limit\": {\n    \"value\": 6000\n  },\n  \"latest_statement_cycle_type\": \"TRANSACTING\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"activation_time\": \"2021-08-26 22:55:52.302000+00:00\",\n  \"available_credit\": 3232,\n  \"config\": {\n    \"billing_cycle_day\": 1,\n    \"card_level\": \"TRADITIONAL\",\n    \"e_disclosure_active\": true,\n    \"fees\": [\n      {\n        \"active\": true,\n        \"created_date\": \"2021-08-26 22:55:52.124000+00:00\",\n        \"schedule\": [\n          {\n            \"method\": \"FLAT\",\n            \"value\": 25\n          }\n        ],\n        \"type\": \"LATE_PAYMENT_FEE\",\n        \"updated_date\": \"2021-08-26 22:55:52.124000+00:00\"\n      },\n      {\n        \"active\": true,\n        \"created_date\": \"2021-09-03 19:06:27.946000+00:00\",\n        \"schedule\": [\n          {\n            \"effective_date\": \"2021-09-03 19:06:27.946000+00:00\",\n            \"method\": \"FLAT\",\n            \"value\": 10\n          }\n        ],\n        \"type\": \"RETURNED_PAYMENT_FEE\",\n        \"updated_date\": \"2021-09-03 19:06:27.946000+00:00\"\n      },\n      {\n        \"active\": true,\n        \"created_date\": \"2021-09-03 19:06:27.946000+00:00\",\n        \"schedule\": [\n          {\n            \"method\": \"PERCENTAGE\",\n            \"value\": 12.5\n          }\n        ],\n        \"type\": \"FOREIGN_TRANSACTION_FEE\",\n        \"updated_date\": \"2021-09-03 19:06:27.946000+00:00\"\n      }\n    ],\n    \"payment_due_day\": 31,\n    \"payment_holds\": {\n      \"ach_hold_days\": 3,\n      \"check_hold_days\": 5\n    },\n    \"rewards\": []\n  },\n  \"created_time\": \"2021-08-26 22:55:52.100000+00:00\",\n  \"credit_limit\": 6000,\n  \"credit_product_token\": \"credit_product_token1234\",\n  \"currency_code\": \"USD\",\n  \"current_balance\": 0,\n  \"description\": \"Consumer credit account for John Jacob\",\n  \"external_offer_id\": \"external-offer-11\",\n  \"latest_statement_cycle_type\": \"TRANSACTING\",\n  \"max_apr_schedules\": [],\n  \"name\": \"John Jacob\",\n  \"remaining_min_payment_due\": 25,\n  \"remaining_statement_balance\": 2768,\n  \"status\": \"ACTIVE\",\n  \"substatuses\": [],\n  \"token\": \"credit_account_token1234\",\n  \"type\": \"CONSUMER\",\n  \"updated_time\": \"2021-08-26 22:55:52.304000+00:00\",\n  \"usages\": [\n    {\n      \"aprs\": [\n        {\n          \"active\": true,\n          \"created_date\": \"2021-08-26 22:55:52.106000+00:00\",\n          \"schedule\": [\n            {\n              \"effective_date\": \"2021-08-26 22:55:52.106000+00:00\",\n              \"value\": 14.99\n            }\n          ],\n          \"type\": \"GO_TO\",\n          \"updated_date\": \"2021-08-26 22:55:52.106000+00:00\"\n        }\n      ],\n      \"fees\": [],\n      \"type\": \"PURCHASE\"\n    }\n  ],\n  \"user_substatuses\": [],\n  \"user_token\": \"user_token1234\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8e8195b2-0373-49b1-a058-5571190295e3",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account to update.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"config\": {\n    \"payment_holds\": {\n      \"ach_hold_days\": 3,\n      \"check_hold_days\": 5\n    }\n  },\n  \"credit_limit\": {\n    \"value\": 6000\n  },\n  \"latest_statement_cycle_type\": \"TRANSACTING\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9536,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "643636b6-9e9b-4fa8-9f72-e25b741ba076",
+    "name": "Core accepted countries Credit Accounts API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.\n\nContact Support:\n Name: Marqeta\n Email: support@marqeta.com",
+      "type": "text/plain"
+    }
+  }
+}

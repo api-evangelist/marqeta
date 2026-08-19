@@ -1,0 +1,147 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries gpa orders API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "gpa orders",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Funds a user's GPA account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/gpaorders",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Funds a user's GPA account"
+        },
+        {
+          "info": {
+            "name": "Lists all GPA returns",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/gpaorders/unloads",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of GPA unloads to retrieve"
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Start index"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              },
+              {
+                "name": "user_token",
+                "value": "",
+                "type": "query",
+                "description": "User token"
+              },
+              {
+                "name": "business_token",
+                "value": "",
+                "type": "query",
+                "description": "Business token"
+              },
+              {
+                "name": "original_order_token",
+                "value": "",
+                "type": "query",
+                "description": "Original order token"
+              }
+            ]
+          },
+          "docs": "Lists all GPA returns"
+        },
+        {
+          "info": {
+            "name": "Returns a GPA order",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/gpaorders/unloads",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns a GPA order"
+        },
+        {
+          "info": {
+            "name": "Returns a specific GPA return",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/gpaorders/unloads/:unload_token",
+            "params": [
+              {
+                "name": "unload_token",
+                "value": "",
+                "type": "path",
+                "description": "Unload token"
+              }
+            ]
+          },
+          "docs": "Returns a specific GPA return"
+        },
+        {
+          "info": {
+            "name": "Returns a GPA order",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/gpaorders/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns a GPA order"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

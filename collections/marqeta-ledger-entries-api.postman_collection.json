@@ -1,0 +1,739 @@
+{
+  "item": [
+    {
+      "id": "a663887a-fd31-460a-92d6-f6602d27693d",
+      "name": "Ledger Entries",
+      "description": {
+        "content": "// Conditional snippet for beta or internal content\ninclude::../../maturity-admonition-banner.adoc[]\n\n[IMPORTANT]\n====\nThis feature is deprecated and replaced by journal entries.\n\n&#160; +\n\nFor documentation on journal entries, see:\n\n&#160; +\n\n* <</developer-guides/about-credit-account-journal-entries, About Credit Account Journal Entries>> - Developer guide\n* <</core-api/credit-account-journal-entries, Journal Entries>> - API reference\n* <</core-api/event-types#_credit_journal_entry_events, Credit journal entry event types>> - Webhook notifications.\n====\n\nUse the `/credit/accounts/{account_token}/ledgerentries` endpoint to retrieve ledger entries made on an <</core-api/credit-accounts, account>> on Marqeta's credit platform.\n\nA ledger entry is a record of an entry made on an account ledger, such as a purchase transaction, fee, adjustment, and more.\nFor more on the different types of ledger entries, see <</developer-guides/about-credit-account-ledger-entries, About Credit Account Ledger Entries>>.\n\nLedger entries originate when a ledger entry event occurs, such as a cardholder making a purchase or an account holder making a payment.\nTo receive webhook notifications when ledger entry events occur, see <</core-api/event-types#_credit_ledger_entry_events, Credit ledger entry events>> in Event Types.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "908dad8f-896b-4f6d-9280-e5d133c35d8f",
+          "name": "List account ledger entries",
+          "request": {
+            "name": "List account ledger entries",
+            "description": {
+              "content": "Retrieve an array of ledger entries on a credit account.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>> and <</core-api/object-expansion, object expansion>>.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token",
+                "ledgerentries"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "5",
+                  "description": "Number of ledger entry resources to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "Sort order index of the first resource in the returned array."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_date",
+                  "value": "<string>",
+                  "description": "Starting date of the date range from which to return ledger entries."
+                },
+                {
+                  "disabled": false,
+                  "key": "end_date",
+                  "value": "<string>",
+                  "description": "Ending date of the date range from which to return ledger entries."
+                },
+                {
+                  "disabled": false,
+                  "key": "statuses",
+                  "value": "<string>",
+                  "description": "Array of statuses by which to filter ledger entries."
+                },
+                {
+                  "disabled": false,
+                  "key": "statuses",
+                  "value": "<string>",
+                  "description": "Array of statuses by which to filter ledger entries."
+                },
+                {
+                  "disabled": false,
+                  "key": "description",
+                  "value": "<string>",
+                  "description": "Description of the ledger entries to return."
+                },
+                {
+                  "disabled": false,
+                  "key": "detail_token",
+                  "value": "<string>",
+                  "description": "Detail token of the ledger entries to return."
+                },
+                {
+                  "disabled": false,
+                  "key": "groups",
+                  "value": "<string>",
+                  "description": "Array of groups by which to filter ledger entries.\n\nTo return all ledger entry groups, do not include this query parameter."
+                },
+                {
+                  "disabled": false,
+                  "key": "groups",
+                  "value": "<string>",
+                  "description": "Array of groups by which to filter ledger entries.\n\nTo return all ledger entry groups, do not include this query parameter."
+                },
+                {
+                  "disabled": false,
+                  "key": "amount",
+                  "value": "<number>",
+                  "description": "Number of ledger entries to return."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand",
+                  "value": "<string>",
+                  "description": "Embeds the specified object into the response."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand",
+                  "value": "<string>",
+                  "description": "Embeds the specified object into the response."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "-createdTime",
+                  "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `createdTime`, and not by the field names appearing in response bodies such as `created_time`."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account for which you want to retrieve ledger entries.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "40fa484d-5673-4899-8b24-1f1bd16e7792",
+              "name": "Expected response to a valid request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "ledgerentries"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "2024-01-01"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2024-01-01"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "description",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "detail_token",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "groups",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "groups",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "amount",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "expand",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-createdTime"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to retrieve ledger entries.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 3,\n  \"data\": [\n    {\n      \"account_token\": \"my_account_token_12\",\n      \"amount\": 2.31,\n      \"card_token\": \"my_credit_card_token7794\",\n      \"created_time\": \"2023-08-01 07:00:19.756000+00:00\",\n      \"currency_code\": \"USD\",\n      \"detail_object\": {\n        \"account_token\": \"my_account_token_12\",\n        \"average_daily_balance\": 181.67,\n        \"created_date\": \"2023-08-01 07:00:19.755000+00:00\",\n        \"currency_code\": \"USD\",\n        \"daily_periodic_rate\": 0.00041068,\n        \"days_in_billing_cycle\": 31,\n        \"goto_apr\": 14.99,\n        \"interest_amount\": 2.31,\n        \"statement_balance\": 208.93,\n        \"statement_closing_date\": \"2023-08-01 03:59:59.999000+00:00\",\n        \"statement_opening_date\": \"2023-07-01 04:00:00\",\n        \"statement_token\": \"statement_token_75b\",\n        \"token\": \"detail_token_96749\",\n        \"updated_date\": \"2023-08-01 07:00:19.755000+00:00\"\n      },\n      \"detail_token\": \"detail_token_96749\",\n      \"group\": \"INTEREST\",\n      \"id\": \"11112222\",\n      \"impact_time\": \"2023-08-01 03:59:59.999000+00:00\",\n      \"memo\": \"Interest charge on purchases\",\n      \"metadata\": {\n        \"failure_reason\": \"insufficient balance\",\n        \"failure_time\": \"2023-08-01 07:00:19.756000+00:00\"\n      },\n      \"request_time\": \"2023-08-01 03:59:59.999000+00:00\",\n      \"status\": \"POSTED\",\n      \"token\": \"interest_ledger_entry_token1111\",\n      \"type\": \"account.interest\"\n    },\n    {\n      \"account_token\": \"my_account_token_12\",\n      \"amount\": 15,\n      \"card_token\": \"my_credit_card_token7794\",\n      \"created_time\": \"2023-07-01 07:00:24.240000+00:00\",\n      \"currency_code\": \"USD\",\n      \"detail_object\": {\n        \"account_token\": \"my_account_token_12\",\n        \"amount\": 15,\n        \"created\": \"2023-07-01 07:00:24.239000+00:00\",\n        \"currency_code\": \"USD\",\n        \"description\": \"Late Payment Fee\",\n        \"method\": \"FLAT\",\n        \"token\": \"detail_token_11221\",\n        \"type\": \"LATE_PAYMENT_FEE\",\n        \"value\": 25\n      },\n      \"detail_token\": \"detail_token_11221\",\n      \"group\": \"FEE\",\n      \"id\": \"44445678\",\n      \"impact_time\": \"2023-07-01 03:59:59.999000+00:00\",\n      \"memo\": \"Late payment fee\",\n      \"metadata\": {\n        \"network\": \"mastercard\"\n      },\n      \"request_time\": \"2023-07-01 03:59:59.999000+00:00\",\n      \"status\": \"POSTED\",\n      \"token\": \"fee_ledger_entry_token2121\",\n      \"type\": \"account.fee.latepayment\"\n    },\n    {\n      \"account_token\": \"my_account_token_12\",\n      \"amount\": 9.11,\n      \"card_token\": \"my_credit_card_token7794\",\n      \"created_time\": \"2023-09-26 11:53:48.228000+00:00\",\n      \"currency_code\": \"USD\",\n      \"detail_object\": {\n        \"acquirer\": {\n          \"system_trace_audit_number\": 0\n        },\n        \"acquirer_fee_amount\": 0,\n        \"acquirer_reference_data\": 4.355106395860054e+22,\n        \"acting_user_token\": \"user_token4632\",\n        \"amount\": 9.11,\n        \"approval_code\": 946791,\n        \"batch_number\": 2021048291031352,\n        \"card\": {\n          \"last_four\": 4489,\n          \"metadata\": {}\n        },\n        \"card_acceptor\": {\n          \"city\": \"OAKLAND\",\n          \"country_code\": \"US\",\n          \"mcc\": 5814,\n          \"mid\": 555600244811,\n          \"name\": \"SWEET TREATS 0484\",\n          \"postal_code\": 94612,\n          \"state\": \"CA\"\n        },\n        \"card_token\": \"my_credit_card_token7794\",\n        \"clearing_record_sequence_number\": 0,\n        \"created_time\": \"2023-09-26 11:53:46+00:00\",\n        \"currency_code\": \"USD\",\n        \"currency_conversion\": {\n          \"network\": {\n            \"conversion_rate\": 1,\n            \"original_amount\": 9.11,\n            \"original_currency_code\": 840\n          }\n        },\n        \"duration\": 378,\n        \"fees\": {\n          \"amount\": 0.19131,\n          \"credit_debit\": \"C\",\n          \"type\": \"INTERCHANGE_FEE\"\n        },\n        \"gpa\": {\n          \"available_balance\": 0,\n          \"balances\": {\n            \"USD\": {\n              \"available_balance\": 0,\n              \"credit_balance\": 0,\n              \"currency_code\": \"USD\",\n              \"impacted_amount\": -9.11,\n              \"ledger_balance\": 61.7,\n              \"pending_credits\": 0\n            }\n          },\n          \"credit_balance\": 0,\n          \"currency_code\": \"USD\",\n          \"impacted_amount\": -9.11,\n          \"ledger_balance\": 61.7,\n          \"pending_credits\": 0\n        },\n        \"gpa_order\": {\n          \"amount\": 9.11,\n          \"created_time\": \"2023-09-25 20:59:43+00:00\",\n          \"currency_code\": \"USD\",\n          \"funding\": {\n            \"amount\": 9.11,\n            \"source\": {\n              \"active\": true,\n              \"created_time\": \"2023-06-22 18:41:14+00:00\",\n              \"is_default_account\": false,\n              \"last_modified_time\": \"2023-06-22 18:41:14+00:00\",\n              \"name\": \"My Funding Source\",\n              \"token\": \"funding_source_token6789\",\n              \"type\": \"programgateway\"\n            }\n          },\n          \"funding_source_token\": \"funding_source_token6789\",\n          \"jit_funding\": {\n            \"acting_user_token\": \"user_token4632\",\n            \"amount\": 9.11,\n            \"method\": \"pgfs.authorization.capture\",\n            \"original_jit_funding_token\": \"jit_funding_token4be7\",\n            \"token\": \"jit_funding_token43a3\",\n            \"user_token\": \"user_token4632\"\n          },\n          \"last_modified_time\": \"2023-09-26 11:53:47+00:00\",\n          \"response\": {\n            \"code\": 0,\n            \"memo\": \"Approved or completed successfully\"\n          },\n          \"state\": \"COMPLETION\",\n          \"token\": \"gpa_order_token2c2c5\",\n          \"transaction_token\": \"transaction_token42352a\",\n          \"user_token\": \"user_token4632\"\n        },\n        \"identifier\": 6457,\n        \"issuer_interchange_amount\": 0.19131,\n        \"issuer_payment_node\": \"042f97a3458b59e3cce0269f66e864d8\",\n        \"issuer_received_time\": \"2023-09-26 11:53:46.886000+00:00\",\n        \"network\": \"VISA\",\n        \"network_metadata\": {\n          \"product_id\": \"VISA_TRADITIONAL\",\n          \"program_id\": \"\"\n        },\n        \"network_reference_id\": 218552461989029,\n        \"pos\": {\n          \"is_installment\": false,\n          \"is_recurring\": false,\n          \"partial_approval_capable\": false,\n          \"pin_present\": false,\n          \"purchase_amount_only\": false,\n          \"terminal_id\": 101\n        },\n        \"preceding_related_transaction_token\": \"ledger_entry_token2460\",\n        \"request_amount\": 9.11,\n        \"response\": {\n          \"code\": 0,\n          \"memo\": \"Approved or completed successfully\"\n        },\n        \"settlement_date\": \"2023-09-26 00:00:00+00:00\",\n        \"state\": \"COMPLETION\",\n        \"subnetwork\": \"VISANET\",\n        \"token\": \"detail_token_645736\",\n        \"transaction_metadata\": {\n          \"payment_channel\": \"OTHER\"\n        },\n        \"type\": \"authorization.clearing\",\n        \"user\": {\n          \"metadata\": {\n            \"notification_email\": \"hello@myemail.com\"\n          }\n        },\n        \"user_token\": \"user_token4632\",\n        \"user_transaction_time\": \"2023-09-25 20:59:43+00:00\"\n      },\n      \"detail_token\": \"detail_token_645736\",\n      \"group\": \"PURCHASE\",\n      \"id\": \"12345678\",\n      \"impact_time\": \"2023-09-26 11:53:48.228000+00:00\",\n      \"memo\": \"SWEET TREATS 0484\",\n      \"metadata\": {\n        \"network\": \"visa\"\n      },\n      \"original_currency\": {\n        \"amount\": 11.53,\n        \"code\": \"CAD\"\n      },\n      \"related_token\": \"ledger_entry_token2460\",\n      \"request_time\": \"2023-09-25 20:59:43\",\n      \"root_token\": \"ledger_entry_token2460\",\n      \"status\": \"POSTED\",\n      \"token\": \"purchase_ledger_entry_token6789\",\n      \"type\": \"authorization.clearing\"\n    }\n  ],\n  \"end_index\": 4,\n  \"is_more\": true,\n  \"start_index\": 0\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cdf3a23f-0bda-451f-b85c-d6b13ffd3ff6",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "ledgerentries"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "2024-01-01"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2024-01-01"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "description",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "detail_token",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "groups",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "groups",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "amount",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "expand",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-createdTime"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to retrieve ledger entries.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 6118,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0abe41ff-4d27-4aaa-9e48-79702fdb37e7",
+          "name": "Retrieve account ledger entry",
+          "request": {
+            "name": "Retrieve account ledger entry",
+            "description": {
+              "content": "Retrieve a ledger entry for a credit account.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_token",
+                "ledgerentries",
+                ":ledger_entry_token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Unique identifier of the credit account for which you want to retrieve ledger entries.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "ledger_entry_token",
+                  "description": "(Required) Unique identifier of the ledger entry you want to retrieve.\n\nSend a `GET` request to `/credit/accounts/{account_token}/ledgerentries` to retrieve existing ledger entry tokens."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "46a63811-549e-42a4-9f5a-6598abf36b94",
+              "name": "Expected response to a valid request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "ledgerentries",
+                    ":ledger_entry_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to retrieve ledger entries.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "ledger_entry_token",
+                      "description": "(Required) Unique identifier of the ledger entry you want to retrieve.\n\nSend a `GET` request to `/credit/accounts/{account_token}/ledgerentries` to retrieve existing ledger entry tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"account_token\": \"my_account_token_12\",\n  \"amount\": 15,\n  \"card_token\": \"my_credit_card_token7794\",\n  \"created_time\": \"2023-07-01 07:00:24.240000+00:00\",\n  \"currency_code\": \"USD\",\n  \"detail_object\": {\n    \"account_token\": \"my_account_token_12\",\n    \"amount\": 15,\n    \"created\": \"2023-07-01 07:00:24.239000+00:00\",\n    \"currency_code\": \"USD\",\n    \"description\": \"Late Payment Fee\",\n    \"method\": \"FLAT\",\n    \"token\": \"detail_token_11221\",\n    \"type\": \"LATE_PAYMENT_FEE\",\n    \"value\": 25\n  },\n  \"detail_token\": \"detail_token_11221\",\n  \"group\": \"FEE\",\n  \"id\": \"44445678\",\n  \"impact_time\": \"2023-07-01 03:59:59.999000+00:00\",\n  \"memo\": \"Late payment fee\",\n  \"metadata\": {\n    \"network\": \"visa\"\n  },\n  \"request_time\": \"2023-07-01 03:59:59.999000+00:00\",\n  \"status\": \"POSTED\",\n  \"token\": \"fee_ledger_entry_token2121\",\n  \"type\": \"account.fee.latepayment\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b2533840-f131-4c56-af60-72c39c923387",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_token",
+                    "ledgerentries",
+                    ":ledger_entry_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Unique identifier of the credit account for which you want to retrieve ledger entries.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "ledger_entry_token",
+                      "description": "(Required) Unique identifier of the ledger entry you want to retrieve.\n\nSend a `GET` request to `/credit/accounts/{account_token}/ledgerentries` to retrieve existing ledger entry tokens."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 6118,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d15abf2e-d74f-4163-b61a-b539c24d8a80",
+          "name": "Resend credit event notification",
+          "request": {
+            "name": "Resend credit event notification",
+            "description": {
+              "content": "Resends a credit event notification to your webhook endpoint.\n\nAlthough you send this request as a `POST`, all parameters are passed in the URL and the body is empty.\nThe event notification is resent to your webhook endpoint and also returned in the response to this request.\n\nFor details on how to configure your webhook endpoint, see the About Webhooks <</developer-guides/about-webhooks#_tutorial, tutorial>>.\nFor the complete `/webhooks` endpoint reference, see <</core-api/webhooks, Webhooks>>.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "webhooks",
+                ":event_type",
+                ":resource_token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "event_type",
+                  "description": "(Required) Specifies the type of event you want to resend."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "resource_token",
+                  "description": "(Required) Unique identifier of the resource for which you want to resend a notification.\n\n* Send a `GET` request to `/credit/accounts/{account_token}/journalentries` to retrieve existing journal entry tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/ledgerentries` to retrieve existing ledger entry tokens.\n* Send a `GET` request to `/accounts/{account_token}/accounttransitions` to retrieve existing account transition tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/payments/{payment_token}` to retrieve existing payment transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements` to retrieve existing statement summary tokens.\n* Send a `GET` request to `/accounts/{account_token}/delinquencystate/transitions` to retrieve existing delinquency state transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements/{statement_summary_token}/paymentreminders/{token}` to retrieve existing payment reminder tokens.\n* Send a `GET` request to `/credit/substatuses` to retrieve existing substatus tokens.\n* Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens and identify the specific account for the resend event."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST"
+          },
+          "response": [
+            {
+              "id": "3e22178c-4141-4072-a4ed-bfd04c897ed2",
+              "name": "Event response for which the webhook event was resent",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ":event_type",
+                    ":resource_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "event_type",
+                      "description": "(Required) Specifies the type of event you want to resend."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "resource_token",
+                      "description": "(Required) Unique identifier of the resource for which you want to resend a notification.\n\n* Send a `GET` request to `/credit/accounts/{account_token}/journalentries` to retrieve existing journal entry tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/ledgerentries` to retrieve existing ledger entry tokens.\n* Send a `GET` request to `/accounts/{account_token}/accounttransitions` to retrieve existing account transition tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/payments/{payment_token}` to retrieve existing payment transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements` to retrieve existing statement summary tokens.\n* Send a `GET` request to `/accounts/{account_token}/delinquencystate/transitions` to retrieve existing delinquency state transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements/{statement_summary_token}/paymentreminders/{token}` to retrieve existing payment reminder tokens.\n* Send a `GET` request to `/credit/substatuses` to retrieve existing substatus tokens.\n* Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens and identify the specific account for the resend event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"account_token\": \"my_credit_account_token\",\n  \"available_credit\": 0,\n  \"closing_balance\": 506.41,\n  \"closing_date\": \"2025-04-01 03:59:59.999000+00:00\",\n  \"created_time\": \"2023-08-18 22:04:31.261000+00:00\",\n  \"credit_limit\": 500,\n  \"credits\": 0,\n  \"cycle_type\": \"REVOLVING\",\n  \"days_in_billing_cycle\": 31,\n  \"fees\": 15,\n  \"interest\": 4.96,\n  \"opening_balance\": 496.45,\n  \"opening_date\": \"2025-03-01 05:00:00+00:00\",\n  \"past_due_amount\": 10,\n  \"payments\": 10,\n  \"purchases\": 0,\n  \"token\": \"my_credit_account_statement_token\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6f3a8a37-c015-4418-8983-c2f3acfd4bb8",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ":event_type",
+                    ":resource_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "event_type",
+                      "description": "(Required) Specifies the type of event you want to resend."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "resource_token",
+                      "description": "(Required) Unique identifier of the resource for which you want to resend a notification.\n\n* Send a `GET` request to `/credit/accounts/{account_token}/journalentries` to retrieve existing journal entry tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/ledgerentries` to retrieve existing ledger entry tokens.\n* Send a `GET` request to `/accounts/{account_token}/accounttransitions` to retrieve existing account transition tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/payments/{payment_token}` to retrieve existing payment transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements` to retrieve existing statement summary tokens.\n* Send a `GET` request to `/accounts/{account_token}/delinquencystate/transitions` to retrieve existing delinquency state transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements/{statement_summary_token}/paymentreminders/{token}` to retrieve existing payment reminder tokens.\n* Send a `GET` request to `/credit/substatuses` to retrieve existing substatus tokens.\n* Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens and identify the specific account for the resend event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 6118,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "20353b42-5cb1-4a92-946a-71ed78dc54d4",
+    "name": "Core accepted countries Ledger Entries API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.\n\nContact Support:\n Name: Marqeta\n Email: support@marqeta.com",
+      "type": "text/plain"
+    }
+  }
+}

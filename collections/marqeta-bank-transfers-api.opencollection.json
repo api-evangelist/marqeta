@@ -1,0 +1,205 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries bank transfers API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "bank transfers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Lists all bank transfers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/banktransfers/ach",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of users to retrieve"
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Start index"
+              },
+              {
+                "name": "user_token",
+                "value": "",
+                "type": "query",
+                "description": "User token"
+              },
+              {
+                "name": "business_token",
+                "value": "",
+                "type": "query",
+                "description": "Business token"
+              },
+              {
+                "name": "funding_source_token",
+                "value": "",
+                "type": "query",
+                "description": "Funding source token"
+              },
+              {
+                "name": "statuses",
+                "value": "",
+                "type": "query",
+                "description": "A comma-delimited list of bank transfer status(s)"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "Object to expand"
+              },
+              {
+                "name": "funding_source_type",
+                "value": "",
+                "type": "query",
+                "description": "Funding source type"
+              }
+            ]
+          },
+          "docs": "Lists all bank transfers"
+        },
+        {
+          "info": {
+            "name": "Creates an ACH bank transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/banktransfers/ach",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates an ACH bank transfer"
+        },
+        {
+          "info": {
+            "name": "Applies a provisional credit to a bank transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/banktransfers/ach/earlyfunds",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Applies a provisional credit to a bank transfer"
+        },
+        {
+          "info": {
+            "name": "Lists all bank transfer transitions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/banktransfers/ach/transitions",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of bank transfer transitions to retrieve"
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "Bank transfer transition token"
+              },
+              {
+                "name": "bank_transfer_token",
+                "value": "",
+                "type": "query",
+                "description": "Bank transfer token"
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Start index"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              },
+              {
+                "name": "statuses",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of bank transfer states to display e.g. PENDING | PROCESSING | SUBMITTED | RETURNED |  COMPLETED | CANCELLED"
+              }
+            ]
+          },
+          "docs": "Lists all bank transfer transitions"
+        },
+        {
+          "info": {
+            "name": "Creates an ACH bank transfer transition",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/banktransfers/ach/transitions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates an ACH bank transfer transition"
+        },
+        {
+          "info": {
+            "name": "Returns a bank transfer entry",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/banktransfers/ach/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Bank transfer token"
+              }
+            ]
+          },
+          "docs": "Returns a bank transfer entry"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

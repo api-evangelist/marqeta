@@ -1,0 +1,90 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries Card Group API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Card Group",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Card Groups",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/cardgroups",
+            "params": [
+              {
+                "name": "card_tokens",
+                "value": "",
+                "type": "query",
+                "description": "list of unique card identifiers to retrieve."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of card group resources to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              }
+            ]
+          },
+          "docs": "Get a list of all card groups in the program"
+        },
+        {
+          "info": {
+            "name": "Create Card Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/cardgroups",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new card group object"
+        },
+        {
+          "info": {
+            "name": "Retrieve Card Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/cardgroups/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the card group to retrieve"
+              }
+            ]
+          },
+          "docs": "Retrieves the Card Group with the given token"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

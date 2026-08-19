@@ -1,0 +1,104 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries Adjustments API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Adjustments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List account adjustments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token/adjustments",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which you want to retrieve adjustments.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of account adjustment resources to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              }
+            ]
+          },
+          "docs": "Retrieve an array of adjustments for a credit account.\n\nThis endpoint supports <</core-api/sorting-and-pagination, pagination>>."
+        },
+        {
+          "info": {
+            "name": "Create account adjustment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/accounts/:account_token/adjustments",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which you want to create an adjustment.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create an adjustment for an existing credit account."
+        },
+        {
+          "info": {
+            "name": "Retrieve account adjustment",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token/adjustments/:adjustment_token",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which you want to retrieve an adjustment.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "adjustment_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the adjustment to retrieve.\n\nSend a `GET` request to `/credit/accounts/{account_token}/adjustments` to retrieve existing account adjustment tokens."
+              }
+            ]
+          },
+          "docs": "Retrieve an adjustment for a credit account."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

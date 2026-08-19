@@ -1,0 +1,82 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries cardholder balances API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "cardholder balances",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Returns account balance for an account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/balances/account/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "The unique token associated with the user or business account. This token is required to fetch the corresponding account balance."
+              }
+            ]
+          },
+          "docs": "balances/account/{token}"
+        },
+        {
+          "info": {
+            "name": "Returns account balances for a cardholder",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/balances/user/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "The unique token identifying the user or business. This token is required to retrieve the associated account balances."
+              }
+            ]
+          },
+          "docs": "/balances/user/{token}"
+        },
+        {
+          "info": {
+            "name": "Returns account balances for a cardholder",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/balances/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "User or Business token"
+              }
+            ]
+          },
+          "docs": "Returns account balances for a cardholder"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

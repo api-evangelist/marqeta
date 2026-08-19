@@ -1,0 +1,1711 @@
+{
+  "item": [
+    {
+      "id": "9ce38a64-0fa6-4bb5-bf84-8b3c0db6404d",
+      "name": "Velocity Controls",
+      "description": {
+        "content": "// Conditional snippet for beta or internal content\ninclude::../../maturity-admonition-banner.adoc[]\n\nA velocity control limits how much users can spend.\nYou can configure velocity controls to limit how much users can spend and the number of transactions they can make in a given span of time.\nYou can apply velocity controls to a single user, to all users associated with a particular card product, or to all users in your program.\n\nOnly Program Managers can create or modify program-wide velocity controls.\nA `POST` or `PUT` call from a role that does not have Program Manager permissions will receive a 403 error if its `association` field is null, or if it includes all of the fields in the request body.\nAvoid this by passing a valid `user_token` or `card_product_token` in the velocity control's `association` object, indicating that the request is specific to a user or card product, and not program-wide.\nYou should also only include the specific fields you want to update, because a `PUT` or `POST` with values for all fields is interpreted as a change that requires Program Manager permissions.\n\nSee <</developer-guides/controlling-spending, Controlling Spending>> for a tutorial that walks you through the creation of a spend control.\n\n[NOTE]\nEach program supports a maximum of 90 spend controls (velocity controls and <</core-api/authorization-controls, authorization controls>> combined).\nThe limit of 90 spend controls applies at the program level only; it does not affect the number of user-level spend controls you can use.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "b5276cea-4c35-452e-be27-b3a8da62aa01",
+          "name": "List velocity controls",
+          "request": {
+            "name": "List velocity controls",
+            "description": {
+              "content": "Retrieves a list of all the velocity controls associated with a specific user or card product, or lists all the velocity controls defined for your program.\n\nInclude either a `user` or a `card_product` query parameter to indicate the user or card product whose associated velocity controls you want to retrieve (do not include both).\n\nTo list all velocity controls for your program, omit the `user` and `card_product` query parameters from your request.\n\nThis endpoint supports <</core-api/field-filtering, field filtering>> and <</core-api/sorting-and-pagination, pagination>>.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "velocitycontrols"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "card_product",
+                  "value": "<string>",
+                  "description": "Unique identifier of the card product.\nEnter the string `null` to retrieve velocity controls that are not associated with any card product."
+                },
+                {
+                  "disabled": false,
+                  "key": "user",
+                  "value": "<string>",
+                  "description": "Unique identifier of the user.\nEnter the string `null` to retrieve velocity controls that are not associated with any user."
+                },
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "5",
+                  "description": "Number of velocity control resources to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "Sort order index of the first resource in the returned array."
+                },
+                {
+                  "disabled": false,
+                  "key": "fields",
+                  "value": "<string>",
+                  "description": "Comma-delimited list of fields to return (`field_1,field_2`, and so on).\nLeave blank to return all fields."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "-lastModifiedTime",
+                  "description": "Field on which to sort.\nUse any field in the resource model, or one of the system fields `lastModifiedTime` or `createdTime`.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7880a43c-7999-42e9-b47b-a97bccf49b47",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "velocitycontrols"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "card_product",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 1,\n  \"data\": [\n    {\n      \"active\": true,\n      \"amount_limit\": 500.25,\n      \"approvals_only\": true,\n      \"association\": {\n        \"user_token\": \"my_user_04\"\n      },\n      \"currency_code\": \"USD\",\n      \"include_cashback\": true,\n      \"include_credits\": false,\n      \"include_purchases\": true,\n      \"include_transfers\": true,\n      \"include_withdrawals\": true,\n      \"merchant_scope\": {},\n      \"token\": \"my_velocitycontrol_01\",\n      \"usage_limit\": 10,\n      \"velocity_window\": \"DAY\"\n    }\n  ],\n  \"end_index\": 0,\n  \"is_more\": false,\n  \"start_index\": 0\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2453ae06-da90-4ec5-9fd1-c319c54a29d3",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "velocitycontrols"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "card_product",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "07c362a6-c444-4ba0-b50c-38cf70417c48",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "velocitycontrols"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "card_product",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "af7bf9df-7e8a-44f1-b7d3-10ea1133b37e",
+          "name": "Create velocity control",
+          "request": {
+            "name": "Create velocity control",
+            "description": {
+              "content": "Limits how much and how frequently a user can spend funds.\nIf multiple velocity controls apply to the same user, the user cannot exceed any of the defined spending limits.\n\n[TIP]\nYou can create program-level controls in the sandbox environment.\nHowever, you must work with your Marqeta representative to create program-level controls in a production environment.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "velocitycontrols"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount_limit\": \"<number>\",\n  \"currency_code\": \"<string>\",\n  \"velocity_window\": \"<string>\",\n  \"active\": \"<boolean>\",\n  \"approvals_only\": \"<boolean>\",\n  \"association\": {\n    \"account_template_token\": \"<string>\",\n    \"card_product_token\": \"<string>\",\n    \"user_token\": \"<string>\"\n  },\n  \"include_cashback\": \"<boolean>\",\n  \"include_credits\": \"<boolean>\",\n  \"include_purchases\": \"<boolean>\",\n  \"include_transfers\": \"<boolean>\",\n  \"include_withdrawals\": \"<boolean>\",\n  \"merchant_scope\": {\n    \"mcc\": \"<string>\",\n    \"mcc_group\": \"<string>\",\n    \"mid\": \"<string>\"\n  },\n  \"money_in_transaction\": {\n    \"include_credits_types\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"include_network_load_types\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"name\": \"<string>\",\n  \"token\": \"<string>\",\n  \"usage_limit\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "10d2fbbe-5303-4dd6-8285-735413776473",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "velocitycontrols"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount_limit\": 500.25,\n  \"association\": {\n    \"user_token\": \"my_user_04\"\n  },\n  \"currency_code\": \"USD\",\n  \"token\": \"my_velocitycontrol_01\",\n  \"usage_limit\": 10,\n  \"velocity_window\": \"DAY\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"active\": true,\n  \"amount_limit\": 500.25,\n  \"approvals_only\": true,\n  \"association\": {\n    \"user_token\": \"my_user_04\"\n  },\n  \"currency_code\": \"USD\",\n  \"include_cashback\": true,\n  \"include_credits\": false,\n  \"include_purchases\": true,\n  \"include_transfers\": true,\n  \"include_withdrawals\": true,\n  \"merchant_scope\": {},\n  \"token\": \"my_velocitycontrol_01\",\n  \"usage_limit\": 10,\n  \"velocity_window\": \"DAY\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a058fabd-7014-4738-ae48-6eb708df24c5",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "velocitycontrols"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount_limit\": 500.25,\n  \"association\": {\n    \"user_token\": \"my_user_04\"\n  },\n  \"currency_code\": \"USD\",\n  \"token\": \"my_velocitycontrol_01\",\n  \"usage_limit\": 10,\n  \"velocity_window\": \"DAY\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "136c8d27-585e-497c-8ace-0867701d0550",
+              "name": "Token already associated with a different payload",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "velocitycontrols"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount_limit\": 500.25,\n  \"association\": {\n    \"user_token\": \"my_user_04\"\n  },\n  \"currency_code\": \"USD\",\n  \"token\": \"my_velocitycontrol_01\",\n  \"usage_limit\": 10,\n  \"velocity_window\": \"DAY\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "fa0f4473-72da-488c-9926-8bb0df3950f1",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "velocitycontrols"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount_limit\": 500.25,\n  \"association\": {\n    \"user_token\": \"my_user_04\"\n  },\n  \"currency_code\": \"USD\",\n  \"token\": \"my_velocitycontrol_01\",\n  \"usage_limit\": 10,\n  \"velocity_window\": \"DAY\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "732ab421-37d6-4e2b-9d66-e9ba7eb21761",
+          "name": "List user velocity control balances",
+          "request": {
+            "name": "List user velocity control balances",
+            "description": {
+              "content": "Retrieves a list of the available balances of the velocity controls associated with a user.\nThis operation is unavailable for velocity controls with a window of `TRANSACTION`, because available balances do not apply to single-transaction velocity windows.\n\nDepending on the control, the balance can include an available monetary amount, the number of transactions remaining, and the number of days remaining in the time window.\n\nThis endpoint supports <</core-api/field-filtering, field filtering>> and <</core-api/sorting-and-pagination, pagination>>.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "velocitycontrols",
+                "user",
+                ":user_token",
+                "available"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "5",
+                  "description": "Number of available balance resources to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_index",
+                  "value": "0",
+                  "description": "The sort order index of the first resource in the returned array."
+                },
+                {
+                  "disabled": false,
+                  "key": "fields",
+                  "value": "<string>",
+                  "description": "Comma-delimited list of fields to return (`field_1,field_2`, and so on).\nLeave blank to return all fields."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "-lastModifiedTime",
+                  "description": "Field on which to sort.\nUse any field in the resource model, or one of the system fields `lastModifiedTime` or `createdTime`.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "user_token",
+                  "description": "(Required) Unique identifier of the cardholder."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "eec03d42-f7a0-4040-ae57-5610fb743caa",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "velocitycontrols",
+                    "user",
+                    ":user_token",
+                    "available"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "user_token",
+                      "description": "(Required) Unique identifier of the cardholder."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 2,\n  \"data\": [\n    {\n      \"active\": true,\n      \"amount_limit\": 296.25,\n      \"approvals_only\": true,\n      \"association\": {},\n      \"available\": {\n        \"amount\": 296,\n        \"days_remaining\": 1,\n        \"uses\": 1\n      },\n      \"currency_code\": \"USD\",\n      \"include_cashback\": true,\n      \"include_credits\": false,\n      \"include_purchases\": true,\n      \"include_transfers\": true,\n      \"include_withdrawals\": true,\n      \"merchant_scope\": {\n        \"mcc\": \"3058\"\n      },\n      \"name\": \"Jane Doe\",\n      \"token\": \"card_3\",\n      \"usage_limit\": 1,\n      \"velocity_window\": \"DAY\"\n    },\n    {\n      \"active\": true,\n      \"amount_limit\": 500.25,\n      \"approvals_only\": true,\n      \"association\": {},\n      \"available\": {\n        \"amount\": 500.5,\n        \"days_remaining\": 1,\n        \"uses\": 1000\n      },\n      \"currency_code\": \"840\",\n      \"include_cashback\": true,\n      \"include_credits\": false,\n      \"include_purchases\": true,\n      \"include_transfers\": true,\n      \"include_withdrawals\": true,\n      \"merchant_scope\": {\n        \"mcc\": \"1234\"\n      },\n      \"token\": \"card_4\",\n      \"usage_limit\": 1000,\n      \"velocity_window\": \"DAY\"\n    }\n  ],\n  \"end_index\": 1,\n  \"is_more\": false,\n  \"start_index\": 0\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "73b5a70e-2bf7-49d9-8ba6-1e84c718cb87",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "velocitycontrols",
+                    "user",
+                    ":user_token",
+                    "available"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "user_token",
+                      "description": "(Required) Unique identifier of the cardholder."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1d8a7f9a-292d-42b2-b12e-c51ab4dbc85d",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "velocitycontrols",
+                    "user",
+                    ":user_token",
+                    "available"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "start_index",
+                      "value": "0"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "-lastModifiedTime"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "user_token",
+                      "description": "(Required) Unique identifier of the cardholder."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6122fb9b-dcb8-4190-94a1-2d5fc844cbeb",
+          "name": "Returns a specific velocity control",
+          "request": {
+            "name": "Returns a specific velocity control",
+            "description": {
+              "content": "Retrieves a specific velocity control.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "velocitycontrols",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "fields",
+                  "value": "<string>",
+                  "description": "Comma-delimited list of fields to return (`field_1,field_2`, and so on).\nLeave blank to return all fields."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Unique identifier of the velocity control resource."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b9944e8c-43c0-44b6-a68f-13cc8f707851",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "velocitycontrols",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the velocity control resource."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"active\": true,\n  \"amount_limit\": 500.25,\n  \"approvals_only\": true,\n  \"association\": {\n    \"user_token\": \"my_user_04\"\n  },\n  \"currency_code\": \"USD\",\n  \"include_cashback\": true,\n  \"include_credits\": false,\n  \"include_purchases\": true,\n  \"include_transfers\": true,\n  \"include_withdrawals\": true,\n  \"merchant_scope\": {},\n  \"token\": \"my_velocitycontrol_01\",\n  \"usage_limit\": 10,\n  \"velocity_window\": \"DAY\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b21f8604-06ca-46b4-aaa3-a1eb4c863be4",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "velocitycontrols",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the velocity control resource."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4ab1e324-d834-4427-bfb4-233c69a60b6d",
+              "name": "Velocity control not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "velocitycontrols",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the velocity control resource."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "cb188244-e8f1-41c8-9c1c-7eb1b89fd258",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "velocitycontrols",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the velocity control resource."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f3e536c4-25cf-491e-a4d5-b421b5e97b2d",
+          "name": "Update velocity control",
+          "request": {
+            "name": "Update velocity control",
+            "description": {
+              "content": "Updates a specific velocity control.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "velocitycontrols",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Unique identifier of the velocity control resource."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"<string>\",\n  \"active\": \"<boolean>\",\n  \"amount_limit\": \"<number>\",\n  \"approvals_only\": \"<boolean>\",\n  \"association\": {\n    \"account_template_token\": \"<string>\",\n    \"card_product_token\": \"<string>\",\n    \"user_token\": \"<string>\"\n  },\n  \"currency_code\": \"<string>\",\n  \"include_cashback\": \"<boolean>\",\n  \"include_credits\": \"<boolean>\",\n  \"include_purchases\": \"<boolean>\",\n  \"include_transfers\": \"<boolean>\",\n  \"include_withdrawals\": \"<boolean>\",\n  \"merchant_scope\": {\n    \"mcc\": \"<string>\",\n    \"mcc_group\": \"<string>\",\n    \"mid\": \"<string>\"\n  },\n  \"money_in_transaction\": {\n    \"include_credits_types\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"include_network_load_types\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"name\": \"<string>\",\n  \"usage_limit\": \"<integer>\",\n  \"velocity_window\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "5270fba2-b4c9-457c-862c-08ae8a8a42b4",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "velocitycontrols",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the velocity control resource."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount_limit\": 1000.25,\n  \"token\": \"my_velocitycontrol_01\",\n  \"usage_limit\": 20\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"active\": true,\n  \"amount_limit\": 1000.25,\n  \"approvals_only\": true,\n  \"association\": {\n    \"user_token\": \"my_user_04\"\n  },\n  \"currency_code\": \"USD\",\n  \"include_cashback\": true,\n  \"include_credits\": false,\n  \"include_purchases\": true,\n  \"include_transfers\": true,\n  \"include_withdrawals\": true,\n  \"merchant_scope\": {},\n  \"token\": \"my_velocitycontrol_01\",\n  \"usage_limit\": 20,\n  \"velocity_window\": \"DAY\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8cf95fad-7cfc-41cf-b92a-8f2279cc0d7c",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "velocitycontrols",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the velocity control resource."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount_limit\": 1000.25,\n  \"token\": \"my_velocitycontrol_01\",\n  \"usage_limit\": 20\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "85bf928f-6c0d-4be0-bf85-c3146412744e",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "velocitycontrols",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Unique identifier of the velocity control resource."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount_limit\": 1000.25,\n  \"token\": \"my_velocitycontrol_01\",\n  \"usage_limit\": 20\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "09169ad7-a9ff-4bc8-b37a-72026bceca4a",
+          "name": "Sets a specific velocity control to inactive to soft delete it",
+          "request": {
+            "name": "Sets a specific velocity control to inactive to soft delete it",
+            "description": {},
+            "url": {
+              "path": [
+                "velocitycontrols",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) Velocity control token"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "de4dc2f7-eff3-45e5-9423-7b9c94f3ccb2",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "velocitycontrols",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Velocity control token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"amount_limit\": 9954.187111738496,\n  \"currency_code\": \"string\",\n  \"velocity_window\": \"MONTH\",\n  \"active\": true,\n  \"approvals_only\": false,\n  \"association\": {\n    \"account_template_token\": \"<string>\",\n    \"card_product_token\": \"<string>\",\n    \"user_token\": \"<string>\"\n  },\n  \"include_cashback\": true,\n  \"include_credits\": true,\n  \"include_purchases\": true,\n  \"include_transfers\": true,\n  \"include_withdrawals\": true,\n  \"merchant_scope\": {\n    \"mcc\": \"<string>\",\n    \"mcc_group\": \"<string>\",\n    \"mid\": \"<string>\"\n  },\n  \"money_in_transaction\": {\n    \"include_credits_types\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"include_network_load_types\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"name\": \"string\",\n  \"token\": \"string\",\n  \"usage_limit\": 2711\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7dc9d72f-9615-463b-b121-637dcb6e3b86",
+              "name": "Velocity control not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "velocitycontrols",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Velocity control token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "30f86721-2b93-4356-8cf6-3909fb7e0517",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "velocitycontrols",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) Velocity control token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "57e12267-8f43-4a8b-9f51-d823febb8b2b",
+          "name": "Retrieve velocity control available balances for an account token",
+          "request": {
+            "name": "Retrieve velocity control available balances for an account token",
+            "description": {},
+            "url": {
+              "path": [
+                "velocitycontrols",
+                "account",
+                ":account_token",
+                "available"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_token",
+                  "description": "(Required) Account token"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4f6e58f0-5a6b-4443-aeda-d239060dd49c",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "velocitycontrols",
+                    "account",
+                    ":account_token",
+                    "available"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Account token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 2618,\n  \"data\": [\n    {\n      \"amount_limit\": 2991.954194997044,\n      \"available\": {\n        \"amount\": 2129.4547774653074,\n        \"uses\": 0,\n        \"days_remaining\": 7088\n      },\n      \"currency_code\": \"string\",\n      \"velocity_window\": \"DAY\",\n      \"active\": true,\n      \"approvals_only\": true,\n      \"association\": {\n        \"account_template_token\": \"<string>\",\n        \"card_product_token\": \"<string>\",\n        \"user_token\": \"<string>\"\n      },\n      \"include_cashback\": false,\n      \"include_credits\": false,\n      \"include_purchases\": true,\n      \"include_transfers\": true,\n      \"include_withdrawals\": false,\n      \"merchant_scope\": {\n        \"mcc\": \"<string>\",\n        \"mcc_group\": \"<string>\",\n        \"mid\": \"<string>\"\n      },\n      \"money_in_transaction\": {\n        \"include_credits_types\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"include_network_load_types\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      \"name\": \"string\",\n      \"token\": \"string\",\n      \"usage_limit\": 4281\n    },\n    {\n      \"amount_limit\": 8613.097644037834,\n      \"available\": {\n        \"amount\": 1364.7916067919227,\n        \"uses\": 0,\n        \"days_remaining\": 5589\n      },\n      \"currency_code\": \"string\",\n      \"velocity_window\": \"LIFETIME\",\n      \"active\": false,\n      \"approvals_only\": false,\n      \"association\": {\n        \"account_template_token\": \"<string>\",\n        \"card_product_token\": \"<string>\",\n        \"user_token\": \"<string>\"\n      },\n      \"include_cashback\": false,\n      \"include_credits\": false,\n      \"include_purchases\": true,\n      \"include_transfers\": true,\n      \"include_withdrawals\": false,\n      \"merchant_scope\": {\n        \"mcc\": \"<string>\",\n        \"mcc_group\": \"<string>\",\n        \"mid\": \"<string>\"\n      },\n      \"money_in_transaction\": {\n        \"include_credits_types\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"include_network_load_types\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      \"name\": \"string\",\n      \"token\": \"string\",\n      \"usage_limit\": 7296\n    }\n  ],\n  \"end_index\": 5866,\n  \"is_more\": false,\n  \"start_index\": 1791\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1d58257b-b6b3-42c5-9c11-e69a4d7725ed",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "velocitycontrols",
+                    "account",
+                    ":account_token",
+                    "available"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Account token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "2edfb552-1104-44ae-9352-b57379ca0791",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "velocitycontrols",
+                    "account",
+                    ":account_token",
+                    "available"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_token",
+                      "description": "(Required) Account token"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "aa776df3-eb93-4083-a6d8-098a7bf868b0",
+    "name": "Core accepted countries Velocity Controls API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.\n\nContact Support:\n Name: Marqeta\n Email: support@marqeta.com",
+      "type": "text/plain"
+    }
+  }
+}

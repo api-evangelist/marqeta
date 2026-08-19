@@ -1,0 +1,169 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries peer transfers API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "peer transfers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Performs a peer transfer from one user to another",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/peertransfers",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Performs a peer transfer from one user to another"
+        },
+        {
+          "info": {
+            "name": "Returns all peer transfers for a user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/peertransfers/user/:user_or_business_token",
+            "params": [
+              {
+                "name": "user_or_business_token",
+                "value": "",
+                "type": "path",
+                "description": "User or business token"
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of transfers to retrieve"
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Start index"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+              }
+            ]
+          },
+          "docs": "Returns all peer transfers for a user"
+        },
+        {
+          "info": {
+            "name": "Returns received peer transfers for a user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/peertransfers/user/:user_or_business_token/recipient",
+            "params": [
+              {
+                "name": "user_or_business_token",
+                "value": "",
+                "type": "path",
+                "description": "User or business token"
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of transfers to retrieve"
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Start index"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+              }
+            ]
+          },
+          "docs": "Returns received peer transfers for a user"
+        },
+        {
+          "info": {
+            "name": "Returns sent peer transfers for a user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/peertransfers/user/:user_or_business_token/sender",
+            "params": [
+              {
+                "name": "user_or_business_token",
+                "value": "",
+                "type": "path",
+                "description": "User or business token"
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of transfers to retrieve"
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Start index"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+              }
+            ]
+          },
+          "docs": "Returns sent peer transfers for a user"
+        },
+        {
+          "info": {
+            "name": "Returns details of a previous transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/peertransfers/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns details of a previous transfer"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

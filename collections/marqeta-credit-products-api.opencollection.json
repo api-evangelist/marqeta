@@ -1,0 +1,139 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries Credit Products API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Credit Products",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List credit products",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/products",
+            "params": [
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "An array of statuses by which to filter credit products."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of credit product resources to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`."
+              }
+            ]
+          },
+          "docs": "Retrieve an array of credit products.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>."
+        },
+        {
+          "info": {
+            "name": "Create credit product",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/products",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a credit product."
+        },
+        {
+          "info": {
+            "name": "Retrieve credit product",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/products/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit product to retrieve.\n\nSend a `GET` request to `/credit/products` to retrieve existing credit product tokens."
+              }
+            ]
+          },
+          "docs": "Retrieve a credit product."
+        },
+        {
+          "info": {
+            "name": "Retrieve credit product lineage",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/products/:token/lineage",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit product whose lineage you want to retrieve.\n\nSend a `GET` request to `/credit/products` to retrieve existing credit product tokens."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "An array of statuses by which to filter credit products."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of credit product resources to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `lastModifiedTime`, and not by the field names appearing in response bodies such as `last_modified_time`."
+              }
+            ]
+          },
+          "docs": "Retrieve the lineage of a credit product, which is an array of related credit products whose lineage can be traced back to the same original credit product.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

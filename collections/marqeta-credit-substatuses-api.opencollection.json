@@ -1,0 +1,162 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries Credit Substatuses API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Credit Substatuses",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List substatuses",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/substatuses",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of the account for which to retrieve substatuses.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing account tokens."
+              },
+              {
+                "name": "user_token",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of the user for which to retrieve substatuses.\n\nSend a `GET` request to `/users` to retrieve existing user tokens."
+              },
+              {
+                "name": "is_active",
+                "value": "",
+                "type": "query",
+                "description": "Denotes whether a substatus is active."
+              },
+              {
+                "name": "substatuses",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of substatus types to include.\nAllowable values:\n`HARDSHIP`, `FRAUD`, `MLA`, `SCRA`, `DECEASED`, `BANKRUPTCY`, `POWER_OF_ATTORNEY`, `BLOCKED`, `CEASE_AND_DESIST`, `OPT_OUT`"
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of resources to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order."
+              }
+            ]
+          },
+          "docs": "Retrieve an array of substatuses.\nThis endpoint supports <</core-api/sorting-and-pagination,sorting and pagination>>."
+        },
+        {
+          "info": {
+            "name": "Create substatus",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/substatuses",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new substatus for a credit account, user, or business."
+        },
+        {
+          "info": {
+            "name": "Retrieve substatus",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/substatuses/:substatus_token",
+            "params": [
+              {
+                "name": "substatus_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the substatus to retrieve.\n\nSend a `GET` request to `/credit/substatuses` to retrieve existing substatus tokens."
+              }
+            ]
+          },
+          "docs": "Retrieve a user or account substatus."
+        },
+        {
+          "info": {
+            "name": "Update substatus",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/substatuses/:substatus_token",
+            "params": [
+              {
+                "name": "substatus_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the account substatus resource to retrieve.\n\nSend a `GET` request to `/credit/substatuses` to retrieve existing substatus tokens."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updating a substatus registers a new event that changes the substatus' state."
+        },
+        {
+          "info": {
+            "name": "Resend credit event notification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/webhooks/:event_type/:resource_token",
+            "params": [
+              {
+                "name": "event_type",
+                "value": "",
+                "type": "path",
+                "description": "Specifies the type of event you want to resend."
+              },
+              {
+                "name": "resource_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the resource for which you want to resend a notification.\n\n* Send a `GET` request to `/credit/accounts/{account_token}/journalentries` to retrieve existing journal entry tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/ledgerentries` to retrieve existing ledger entry tokens.\n* Send a `GET` request to `/accounts/{account_token}/accounttransitions` to retrieve existing account transition tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/payments/{payment_token}` to retrieve existing payment transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements` to retrieve existing statement summary tokens.\n* Send a `GET` request to `/accounts/{account_token}/delinquencystate/transitions` to retrieve existing delinquency state transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements/{statement_summary_token}/paymentreminders/{token}` to retrieve existing payment reminder tokens.\n* Send a `GET` request to `/credit/substatuses` to retrieve existing substatus tokens.\n* Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens and identify the specific account for the resend event."
+              }
+            ]
+          },
+          "docs": "Resends a credit event notification to your webhook endpoint.\n\nAlthough you send this request as a `POST`, all parameters are passed in the URL and the body is empty.\nThe event notification is resent to your webhook endpoint and also returned in the response to this request.\n\nFor details on how to configure your webhook endpoint, see the About Webhooks <</developer-guides/about-webhooks#_tutorial, tutorial>>.\nFor the complete `/webhooks` endpoint reference, see <</core-api/webhooks, Webhooks>>."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,531 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries cards API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "cards",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Lists cards by the last 4 digits",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/cards",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of cards to retrieve"
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Start index"
+              },
+              {
+                "name": "last_four",
+                "value": "",
+                "type": "query",
+                "description": "Last four digits of card number"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              }
+            ]
+          },
+          "docs": "Lists cards by the last 4 digits"
+        },
+        {
+          "info": {
+            "name": "Creates a card",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/cards",
+            "params": [
+              {
+                "name": "show_cvv_number",
+                "value": "",
+                "type": "query",
+                "description": "Show CVV"
+              },
+              {
+                "name": "show_pan",
+                "value": "",
+                "type": "query",
+                "description": "Show PAN"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a card"
+        },
+        {
+          "info": {
+            "name": "Returns a card's metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/cards/barcode/:barcode",
+            "params": [
+              {
+                "name": "barcode",
+                "value": "",
+                "type": "path",
+                "description": "Barcode"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+              }
+            ]
+          },
+          "docs": "Returns a card's metadata"
+        },
+        {
+          "info": {
+            "name": "Returns user and card tokens for the specified PAN",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/cards/getbypan",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns user and card tokens for the specified PAN"
+        },
+        {
+          "info": {
+            "name": "Lists all cards for a specific user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/cards/user/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "User token"
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of items to retrieve"
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Start index"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              }
+            ]
+          },
+          "docs": "Lists all cards for a specific user"
+        },
+        {
+          "info": {
+            "name": "Returns a specific card",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/cards/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Card token"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "Object to expand"
+              }
+            ]
+          },
+          "docs": "Returns a specific card"
+        },
+        {
+          "info": {
+            "name": "Updates a specific card",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/cards/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Card token"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a specific card"
+        },
+        {
+          "info": {
+            "name": "Returns a specific card - PAN visible",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/cards/:token/showpan",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Card token"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to return (e.g. field_1,field_2,..). Leave blank to return all fields."
+              },
+              {
+                "name": "show_cvv_number",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns a specific card - PAN visible"
+        },
+        {
+          "info": {
+            "name": "Lists all stop orders for a card",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/cards/:token/stoporders",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Card token"
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of stop orders to retrieve"
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Start index"
+              }
+            ]
+          },
+          "docs": "Lists all stop orders for a card"
+        },
+        {
+          "info": {
+            "name": "Creates a stop order for a card transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/cards/:token/stoporders",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Card token"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a stop order for a card transaction"
+        },
+        {
+          "info": {
+            "name": "Retrieves a specific stop order",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/cards/:token/stoporders/:stop_order_token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Card token"
+              },
+              {
+                "name": "stop_order_token",
+                "value": "",
+                "type": "path",
+                "description": "Stop order token"
+              }
+            ]
+          },
+          "docs": "Retrieves a specific stop order"
+        },
+        {
+          "info": {
+            "name": "Updates a stop order by token",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v3/cards/:token/stoporders/:stop_order_token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Card token"
+              },
+              {
+                "name": "stop_order_token",
+                "value": "",
+                "type": "path",
+                "description": "Stop order token"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a stop order by token"
+        },
+        {
+          "info": {
+            "name": "Returns transactions for a specific card",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/cards/:token/transactions",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of transactions to retrieve"
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Start index"
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "path",
+                "description": "Card token"
+              },
+              {
+                "name": "user_token",
+                "value": "",
+                "type": "query",
+                "description": "User token"
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "Start date (yyyy-MM-dd | yyyy-MM-ddTHH:mm:ss.SS)"
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "End date (yyyy-MM-dd | yyyy-MM-ddTHH:mm:ss.SS)"
+              },
+              {
+                "name": "is_recurring",
+                "value": "",
+                "type": "query",
+                "description": "Filter by recurring transaction flag"
+              }
+            ]
+          },
+          "docs": "Returns transactions for a specific card"
+        },
+        {
+          "info": {
+            "name": "Retrieve card state and history data",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/views/cards/:time_agg",
+            "params": [
+              {
+                "name": "time_agg",
+                "value": "",
+                "type": "path",
+                "description": "Aggregation time level for the data. Use 'day' for daily rollups, 'week' for weekly rollups, 'month' for monthly rollups, or 'detail' for individual record-level data."
+              },
+              {
+                "name": "program",
+                "value": "",
+                "type": "query",
+                "description": "The name of your Marqeta card program. This parameter is required for most DiVA API endpoints to scope the data to your program."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to include in the response. If not specified, all available fields are returned."
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "Start date for filtering data (format YYYY-MM-DD). Returns records on or after this date."
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "End date for filtering data (format YYYY-MM-DD). Returns records on or before this date."
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Response format. Use 'json' for JSON responses or 'csv' for comma-separated bulk file format. Defaults to json."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of records to return per request."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Zero-based offset for pagination."
+              }
+            ]
+          },
+          "docs": "Returns card state and history data aggregated at card level or by time period. Use this endpoint to report on card issuance volume, card state distribution, and card activity across your program."
+        },
+        {
+          "info": {
+            "name": "Retrieve detailed card information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/views/cards/detail",
+            "params": [
+              {
+                "name": "program",
+                "value": "",
+                "type": "query",
+                "description": "The name of your Marqeta card program. This parameter is required for most DiVA API endpoints to scope the data to your program."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-delimited list of fields to include in the response. If not specified, all available fields are returned."
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Response format. Use 'json' for JSON responses or 'csv' for comma-separated bulk file format. Defaults to json."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of records to return per request."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Zero-based offset for pagination."
+              }
+            ]
+          },
+          "docs": "Returns detailed information for each card in your program, including the full card lifecycle history, current state, expiration, and associated user. Use this endpoint for granular card-level reporting and auditing."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,190 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core accepted countries Journal Entries API",
+    "version": "3.0.39"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Journal Entries",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List account journal entries",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token/journalentries",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which you want to retrieve journal entries.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of journal entry resources to retrieve."
+              },
+              {
+                "name": "start_index",
+                "value": "",
+                "type": "query",
+                "description": "Sort order index of the first resource in the returned array."
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "Starting date of the date range from which to return journal entries."
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "Ending date of the date range from which to return journal entries."
+              },
+              {
+                "name": "start_impact_time",
+                "value": "",
+                "type": "query",
+                "description": "Starting `impact_time` of the date range from which to return journal entries."
+              },
+              {
+                "name": "end_impact_time",
+                "value": "",
+                "type": "query",
+                "description": "Ending `impact_time` of the date range from which to return journal entries."
+              },
+              {
+                "name": "start_created_time",
+                "value": "",
+                "type": "query",
+                "description": "Starting `created_date` of the date range from which to return journal entries."
+              },
+              {
+                "name": "end_created_time",
+                "value": "",
+                "type": "query",
+                "description": "Ending `created_date` of the date range from which to return journal entries."
+              },
+              {
+                "name": "statuses",
+                "value": "",
+                "type": "query",
+                "description": "Array of statuses by which to filter journal entries."
+              },
+              {
+                "name": "detail_token",
+                "value": "",
+                "type": "query",
+                "description": "Detail token of the journal entries to return."
+              },
+              {
+                "name": "groups",
+                "value": "",
+                "type": "query",
+                "description": "Array of groups by which to filter journal entries.\n\nTo return all journal entry groups, do not include this query parameter."
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "Embeds the specified object into the response."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field on which to sort.\nPrefix the field name with a hyphen (`-`) to sort in descending order.\nOmit the hyphen to sort in ascending order.\n\n*NOTE:*\nYou must sort using system field names such as `createdTime`, and not by the field names appearing in response bodies such as `created_time`."
+              },
+              {
+                "name": "card_tokens",
+                "value": "",
+                "type": "query",
+                "description": "Array of card tokens by which to filter journal entries.\nReturns journal entries associated with the specified card tokens.\n\nSend a `GET` request to `/credit/accounts/{account_token}/cards/` to retrieve existing card tokens."
+              },
+              {
+                "name": "user_tokens",
+                "value": "",
+                "type": "query",
+                "description": "Array of user tokens by which to filter journal entries.\nReturns journal entries associated with the specified user tokens.\n\nSend a `GET` request to `/users` to retrieve existing user tokens."
+              },
+              {
+                "name": "types",
+                "value": "",
+                "type": "query",
+                "description": "Array of <</core-api/event-types#_credit_journal_entry_events, event types>> by which to filter journal entries.\n\nTo return all event types, do not include this query parameter."
+              }
+            ]
+          },
+          "docs": "Retrieve an array of journal entries on a credit account.\n\nThis endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>> and <</core-api/object-expansion, object expansion>>."
+        },
+        {
+          "info": {
+            "name": "Retrieve account journal entry",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v3/accounts/:account_token/journalentries/:journal_entry_token",
+            "params": [
+              {
+                "name": "account_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the credit account for which you want to retrieve journal entries.\n\nSend a `GET` request to `/credit/accounts` to retrieve existing credit account tokens."
+              },
+              {
+                "name": "journal_entry_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the journal entry you want to retrieve.\n\nSend a `GET` request to `/credit/accounts/{account_token}/journalentries` to retrieve existing journal entry tokens."
+              }
+            ]
+          },
+          "docs": "Retrieve a journal entry for a credit account."
+        },
+        {
+          "info": {
+            "name": "Resend credit event notification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v3/webhooks/:event_type/:resource_token",
+            "params": [
+              {
+                "name": "event_type",
+                "value": "",
+                "type": "path",
+                "description": "Specifies the type of event you want to resend."
+              },
+              {
+                "name": "resource_token",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the resource for which you want to resend a notification.\n\n* Send a `GET` request to `/credit/accounts/{account_token}/journalentries` to retrieve existing journal entry tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/ledgerentries` to retrieve existing ledger entry tokens.\n* Send a `GET` request to `/accounts/{account_token}/accounttransitions` to retrieve existing account transition tokens.\n* Send a `GET` request to `/credit/accounts/{account_token}/payments/{payment_token}` to retrieve existing payment transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements` to retrieve existing statement summary tokens.\n* Send a `GET` request to `/accounts/{account_token}/delinquencystate/transitions` to retrieve existing delinquency state transition tokens.\n* Send a `GET` request to `/accounts/{account_token}/statements/{statement_summary_token}/paymentreminders/{token}` to retrieve existing payment reminder tokens.\n* Send a `GET` request to `/credit/substatuses` to retrieve existing substatus tokens.\n* Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens and identify the specific account for the resend event."
+              }
+            ]
+          },
+          "docs": "Resends a credit event notification to your webhook endpoint.\n\nAlthough you send this request as a `POST`, all parameters are passed in the URL and the body is empty.\nThe event notification is resent to your webhook endpoint and also returned in the response to this request.\n\nFor details on how to configure your webhook endpoint, see the About Webhooks <</developer-guides/about-webhooks#_tutorial, tutorial>>.\nFor the complete `/webhooks` endpoint reference, see <</core-api/webhooks, Webhooks>>."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
