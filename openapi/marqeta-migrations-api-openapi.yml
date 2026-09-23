@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries Migrations API
+  title: Core Migrations API
   version: 3.0.39
 servers:
 - url: /v3
@@ -16,9 +16,7 @@ tags:
 paths:
   /migrations/accounts/{account_token}/finalize:
     get:
-      description: 'Called to retrieve the finalize status of a migrated account
-
-        '
+      description: Called to retrieve the finalize status of a migrated account
       operationId: getFinalizeAccountMigrationStatus
       parameters:
       - description: 'Unique identifier of the credit account for which you want to get the finalize status.
@@ -147,24 +145,6 @@ components:
           description: the latest balance of the account from the migrated program
           type: number
       type: object
-    SyncStatementAssetReq:
-      properties:
-        asset_token:
-          description: Unique identifier of the statement asset in Credit File Template.
-          format: uuid
-          type: string
-        short_code:
-          description: Unique identifier of the program.
-          type: string
-      required:
-      - asset_token
-      - short_code
-      type: object
-    MigrationResponse:
-      properties:
-        success:
-          type: boolean
-      type: object
     Error:
       properties:
         code:
@@ -220,6 +200,24 @@ components:
           description: Unique user token tied to the credit account.
           maxLength: 36
           type: string
+      type: object
+    MigrationResponse:
+      properties:
+        success:
+          type: boolean
+      type: object
+    SyncStatementAssetReq:
+      properties:
+        asset_token:
+          description: Unique identifier of the statement asset in Credit File Template.
+          format: uuid
+          type: string
+        short_code:
+          description: Unique identifier of the program.
+          type: string
+      required:
+      - asset_token
+      - short_code
       type: object
   securitySchemes:
     mqAppAndAccessToken:

@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries Delinquency API
+  title: Core Delinquency API
   version: 3.0.39
 servers:
 - url: /v3
@@ -23,7 +23,7 @@ tags:
     An account''s delinquency state reflects whether an account is delinquent and past due on its payments or current and up to date on its payments.
 
 
-    To receive webhook notifications when an account transitions between delinquent and current, see <</core-api/event-types#_credit_account_delinquency_state_transition_events, Credit account delinquency state transition events>> in Event Types.'
+    To receive webhook notifications when an account transitions between delinquent and current, see > in Event Types.'
   name: Delinquency
 paths:
   /accounts/{account_token}/delinquencystate:
@@ -299,9 +299,9 @@ paths:
         The event notification is resent to your webhook endpoint and also returned in the response to this request.
 
 
-        For details on how to configure your webhook endpoint, see the About Webhooks <</developer-guides/about-webhooks#_tutorial, tutorial>>.
+        For details on how to configure your webhook endpoint, see the About Webhooks >.
 
-        For the complete `/webhooks` endpoint reference, see <</core-api/webhooks, Webhooks>>.'
+        For the complete `/webhooks` endpoint reference, see >.'
       operationId: resendWebhookEvent
       parameters:
       - description: Specifies the type of event you want to resend.
@@ -719,6 +719,67 @@ paths:
       - Delinquency
 components:
   schemas:
+    DelinquencyStateResponse:
+      description: Contains details of the delinquency state of an account.
+      properties:
+        account_token:
+          description: Unique identifier of the credit account.
+          format: string
+          type: string
+        buckets:
+          description: 'One or more delinquency buckets for an account.
+
+            Each delinquency bucket represents a billing cycle during which the account was delinquent.'
+          items:
+            $ref: '#/components/schemas/DelinquencyBucketResponse'
+          type: array
+        current_due:
+          description: Amount that is due for the current billing cycle.
+          type: number
+        date_account_current:
+          description: 'Date and time when the account was last made current on the Marqeta platform, in UTC.
+
+
+            If the account was never delinquent, this field returns the date and time the account was created on the Marqeta platform, in UTC.
+
+
+            If `is_delinquent` is `true`, a null value is returned.'
+          format: date-time
+          type:
+          - string
+          - 'null'
+        date_account_delinquent:
+          description: 'Date and time when the account last fell delinquent on the Marqeta platform, in UTC.
+
+
+            If `is_delinquent` is `false`, a null value is returned.'
+          format: date-time
+          type:
+          - string
+          - 'null'
+        delinquent_days_past_statement_end_date:
+          description: Total number of days that the account is past the oldest bucket's statement end date.
+          type: integer
+        is_delinquent:
+          description: A value of `true` indicates that the account is currently delinquent.
+          type: boolean
+        total_days_past_due:
+          description: Total number of days that the account is past due.
+          type: integer
+        total_due:
+          description: Total amount that is due for the current billing cycle; the sum of `total_past_due_amount` and `current_due_amount`.
+          type: number
+        total_past_due:
+          description: Total amount that is past due.
+          type: number
+      required:
+      - account_token
+      - current_due
+      - is_delinquent
+      - total_days_past_due
+      - total_due
+      - total_past_due
+      type: object
     DelinquencyTransitionTriggerReason:
       description: Event that triggered an update to the account's delinquency state.
       enum:
@@ -731,6 +792,54 @@ components:
       - REAGE
       - PAST_MIN_PAYMENT_DUE
       type: string
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    DelinquencyBucketResponse:
+      description: 'One or more delinquency buckets for an account.
+
+        Each delinquency bucket represents a billing cycle during which the account was delinquent.'
+      properties:
+        bucket_number:
+          description: 'Delinquency bucket number in the returned array.
+
+            Delinquency buckets are returned from most recent to least; the most recent delinquency bucket is `1`.'
+          type: integer
+        current_due:
+          description: Current amount that is due for this delinquency bucket.
+          type: number
+        days_past_due:
+          description: Total number of days that the payment is past due for this delinquency bucket.
+          type: integer
+        past_due_carried_forward:
+          description: Amount that is past due and carried forward from previous delinquency buckets.
+          type: number
+        payment_due_date:
+          description: Date that the payment was due for this delinquency bucket.
+          format: date-time
+          type: string
+        total_due:
+          description: Total amount that is due for this delinquency bucket; the sum of `past_due_carried_forward` and `current_due`.
+          type: number
+      required:
+      - bucket_number
+      - current_due
+      - days_past_due
+      - past_due_carried_forward
+      - payment_due_date
+      - total_due
+      type: object
+    WebhookEventResendContainerResponse:
+      description: Contains information about a webhook event.
+      properties:
+        unused:
+          description: Event notification that was resent to your webhook endpoint.
+          type: string
+      type: object
     DelinquencyTransitionResponse:
       description: Contains details of the account's delinquency state transition.
       properties:
@@ -832,12 +941,6 @@ components:
       - transition_trigger_reason
       - transition_trigger_time
       type: object
-    DelinquencyStatus:
-      description: Delinquency status of an account.
-      enum:
-      - CURRENT
-      - DELINQUENT
-      type: string
     DelinquencyTransitionsResponsePage:
       description: Returns paginated information for multiple delinquency state transitions.
       properties:
@@ -865,113 +968,12 @@ components:
       - is_more
       - start_index
       type: object
-    WebhookEventResendContainerResponse:
-      description: Contains information about a webhook event.
-      properties:
-        unused:
-          description: Event notification that was resent to your webhook endpoint.
-          type: string
-      type: object
-    DelinquencyBucketResponse:
-      description: 'One or more delinquency buckets for an account.
-
-        Each delinquency bucket represents a billing cycle during which the account was delinquent.'
-      properties:
-        bucket_number:
-          description: 'Delinquency bucket number in the returned array.
-
-            Delinquency buckets are returned from most recent to least; the most recent delinquency bucket is `1`.'
-          type: integer
-        current_due:
-          description: Current amount that is due for this delinquency bucket.
-          type: number
-        days_past_due:
-          description: Total number of days that the payment is past due for this delinquency bucket.
-          type: integer
-        past_due_carried_forward:
-          description: Amount that is past due and carried forward from previous delinquency buckets.
-          type: number
-        payment_due_date:
-          description: Date that the payment was due for this delinquency bucket.
-          format: date-time
-          type: string
-        total_due:
-          description: Total amount that is due for this delinquency bucket; the sum of `past_due_carried_forward` and `current_due`.
-          type: number
-      required:
-      - bucket_number
-      - current_due
-      - days_past_due
-      - past_due_carried_forward
-      - payment_due_date
-      - total_due
-      type: object
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-      type: object
-    DelinquencyStateResponse:
-      description: Contains details of the delinquency state of an account.
-      properties:
-        account_token:
-          description: Unique identifier of the credit account.
-          format: string
-          type: string
-        buckets:
-          description: 'One or more delinquency buckets for an account.
-
-            Each delinquency bucket represents a billing cycle during which the account was delinquent.'
-          items:
-            $ref: '#/components/schemas/DelinquencyBucketResponse'
-          type: array
-        current_due:
-          description: Amount that is due for the current billing cycle.
-          type: number
-        date_account_current:
-          description: 'Date and time when the account was last made current on the Marqeta platform, in UTC.
-
-
-            If the account was never delinquent, this field returns the date and time the account was created on the Marqeta platform, in UTC.
-
-
-            If `is_delinquent` is `true`, a null value is returned.'
-          format: date-time
-          nullable: true
-          type: string
-        date_account_delinquent:
-          description: 'Date and time when the account last fell delinquent on the Marqeta platform, in UTC.
-
-
-            If `is_delinquent` is `false`, a null value is returned.'
-          format: date-time
-          nullable: true
-          type: string
-        delinquent_days_past_statement_end_date:
-          description: Total number of days that the account is past the oldest bucket's statement end date.
-          type: integer
-        is_delinquent:
-          description: A value of `true` indicates that the account is currently delinquent.
-          type: boolean
-        total_days_past_due:
-          description: Total number of days that the account is past due.
-          type: integer
-        total_due:
-          description: Total amount that is due for the current billing cycle; the sum of `total_past_due_amount` and `current_due_amount`.
-          type: number
-        total_past_due:
-          description: Total amount that is past due.
-          type: number
-      required:
-      - account_token
-      - current_due
-      - is_delinquent
-      - total_days_past_due
-      - total_due
-      - total_past_due
-      type: object
+    DelinquencyStatus:
+      description: Delinquency status of an account.
+      enum:
+      - CURRENT
+      - DELINQUENT
+      type: string
   securitySchemes:
     mqAppAndAccessToken:
       scheme: basic

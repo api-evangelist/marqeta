@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries Feedback API
+  title: Core Feedback API
   version: 3.0.39
 servers:
 - url: /v3
@@ -59,53 +59,10 @@ paths:
       summary: Creates a fraud feedback
       tags:
       - Feedback
+      operationId: postFeedbackFraud
+      x-operation-id-source: derived
 components:
   schemas:
-    ForbiddenError:
-      properties:
-        error_code:
-          enum:
-          - '403'
-          type: string
-        error_message:
-          type: string
-      required:
-      - error_code
-      - error_message
-      type: object
-    BadRequestError:
-      properties:
-        error_code:
-          enum:
-          - '400'
-          type: string
-        error_message:
-          type: string
-      required:
-      - error_code
-      - error_message
-      type: object
-    InternalServerError:
-      properties:
-        error_code:
-          enum:
-          - '500'
-          type: string
-        error_message:
-          type: string
-      required:
-      - error_code
-      - error_message
-      type: object
-    FraudFeedbackResponse:
-      description: of the fraudfeedback response object
-      properties:
-        message:
-          maxLength: 256
-          type: string
-      required:
-      - message
-      type: object
     UnauthorizedError:
       properties:
         error_code:
@@ -148,6 +105,51 @@ components:
       - is_fraud
       - status
       - transaction_token
+      type: object
+    InternalServerError:
+      properties:
+        error_code:
+          enum:
+          - '500'
+          type: string
+        error_message:
+          type: string
+      required:
+      - error_code
+      - error_message
+      type: object
+    FraudFeedbackResponse:
+      description: of the fraudfeedback response object
+      properties:
+        message:
+          maxLength: 256
+          type: string
+      required:
+      - message
+      type: object
+    BadRequestError:
+      properties:
+        error_code:
+          enum:
+          - '400'
+          type: string
+        error_message:
+          type: string
+      required:
+      - error_code
+      - error_message
+      type: object
+    ForbiddenError:
+      properties:
+        error_code:
+          enum:
+          - '403'
+          type: string
+        error_message:
+          type: string
+      required:
+      - error_code
+      - error_message
       type: object
   securitySchemes:
     mqAppAndAccessToken:

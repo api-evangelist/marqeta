@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries push to card API
+  title: Core push to card API
   version: 3.0.39
 servers:
 - url: /v3
@@ -305,38 +305,24 @@ components:
       - payment_instrument_token
       - token
       type: object
-    PTCAddress:
+    PushToCardDisburseListResponse:
       properties:
-        city:
-          maxLength: 40
-          minLength: 1
-          type: string
-        country:
-          maxLength: 3
-          minLength: 3
-          type: string
-        county:
-          maxLength: 3
-          minLength: 3
-          type: string
-        line1:
-          maxLength: 255
-          minLength: 1
-          type: string
-        line2:
-          maxLength: 255
-          minLength: 0
-          type: string
-        postal_code:
-          type: string
-        state:
-          type: string
-      required:
-      - city
-      - county
-      - line1
-      - postal_code
-      - state
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/push_to_card_disbursement_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
       type: object
     push_to_card_disbursement_response:
       properties:
@@ -373,6 +359,121 @@ components:
       required:
       - created_time
       - last_modified_time
+      type: object
+    push_to_card_request:
+      properties:
+        address_1:
+          maxLength: 255
+          minLength: 1
+          type: string
+        address_2:
+          maxLength: 255
+          minLength: 1
+          type: string
+        city:
+          maxLength: 40
+          minLength: 1
+          type: string
+        country:
+          type: string
+        cvv:
+          type: string
+        exp_date:
+          type: string
+        name_on_card:
+          maxLength: 50
+          minLength: 1
+          type: string
+        pan:
+          type: string
+        postal_code:
+          maxLength: 10
+          minLength: 1
+          type: string
+        state:
+          maxLength: 2
+          minLength: 1
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        user_token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - address_1
+      - city
+      - country
+      - cvv
+      - exp_date
+      - name_on_card
+      - pan
+      - postal_code
+      - state
+      - token
+      - user_token
+      type: object
+    PTCAddress:
+      properties:
+        city:
+          maxLength: 40
+          minLength: 1
+          type: string
+        country:
+          maxLength: 3
+          minLength: 3
+          type: string
+        county:
+          maxLength: 3
+          minLength: 3
+          type: string
+        line1:
+          maxLength: 255
+          minLength: 1
+          type: string
+        line2:
+          maxLength: 255
+          minLength: 0
+          type: string
+        postal_code:
+          type: string
+        state:
+          type: string
+      required:
+      - city
+      - county
+      - line1
+      - postal_code
+      - state
+      type: object
+    PTCSoftDescriptor:
+      properties:
+        address:
+          $ref: '#/components/schemas/PTCAddress'
+        email:
+          type: string
+        name:
+          maxLength: 50
+          minLength: 0
+          type: string
+        phone:
+          $ref: '#/components/schemas/PTCPhone'
+      required:
+      - address
+      - name
+      type: object
+    PTCPhone:
+      properties:
+        country_code:
+          type: string
+        number:
+          maxLength: 14
+          minLength: 4
+          type: string
+      required:
+      - number
       type: object
     push_to_card_response:
       properties:
@@ -447,107 +548,6 @@ components:
         start_index:
           format: int32
           type: integer
-      type: object
-    push_to_card_request:
-      properties:
-        address_1:
-          maxLength: 255
-          minLength: 1
-          type: string
-        address_2:
-          maxLength: 255
-          minLength: 1
-          type: string
-        city:
-          maxLength: 40
-          minLength: 1
-          type: string
-        country:
-          type: string
-        cvv:
-          type: string
-        exp_date:
-          type: string
-        name_on_card:
-          maxLength: 50
-          minLength: 1
-          type: string
-        pan:
-          type: string
-        postal_code:
-          maxLength: 10
-          minLength: 1
-          type: string
-        state:
-          maxLength: 2
-          minLength: 1
-          type: string
-        token:
-          maxLength: 36
-          minLength: 1
-          type: string
-        user_token:
-          maxLength: 36
-          minLength: 1
-          type: string
-      required:
-      - address_1
-      - city
-      - country
-      - cvv
-      - exp_date
-      - name_on_card
-      - pan
-      - postal_code
-      - state
-      - token
-      - user_token
-      type: object
-    PushToCardDisburseListResponse:
-      properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/push_to_card_disbursement_response'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
-      type: object
-    PTCPhone:
-      properties:
-        country_code:
-          type: string
-        number:
-          maxLength: 14
-          minLength: 4
-          type: string
-      required:
-      - number
-      type: object
-    PTCSoftDescriptor:
-      properties:
-        address:
-          $ref: '#/components/schemas/PTCAddress'
-        email:
-          type: string
-        name:
-          maxLength: 50
-          minLength: 0
-          type: string
-        phone:
-          $ref: '#/components/schemas/PTCPhone'
-      required:
-      - address
-      - name
       type: object
   securitySchemes:
     mqAppAndAccessToken:

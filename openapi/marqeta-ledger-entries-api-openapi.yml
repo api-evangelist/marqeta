@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries Ledger Entries API
+  title: Core Ledger Entries API
   version: 3.0.39
 servers:
 - url: /v3
@@ -21,38 +21,7 @@ tags:
 
     ====
 
-    This feature is deprecated and replaced by journal entries.
-
-
-    &#160; +
-
-
-    For documentation on journal entries, see:
-
-
-    &#160; +
-
-
-    * <</developer-guides/about-credit-account-journal-entries, About Credit Account Journal Entries>> - Developer guide
-
-    * <</core-api/credit-account-journal-entries, Journal Entries>> - API reference
-
-    * <</core-api/event-types#_credit_journal_entry_events, Credit journal entry event types>> - Webhook notifications.
-
-    ====
-
-
-    Use the `/credit/accounts/{account_token}/ledgerentries` endpoint to retrieve ledger entries made on an <</core-api/credit-accounts, account>> on Marqeta''s credit platform.
-
-
-    A ledger entry is a record of an entry made on an account ledger, such as a purchase transaction, fee, adjustment, and more.
-
-    For more on the different types of ledger entries, see <</developer-guides/about-credit-account-ledger-entries, About Credit Account Ledger Entries>>.
-
-
-    Ledger entries originate when a ledger entry event occurs, such as a cardholder making a purchase or an account holder making a payment.
-
-    To receive webhook notifications when ledger entry events occur, see <</core-api/event-types#_credit_ledger_entry_events, Credit ledger entry events>> in Event Types.'
+    This feature is deprecated and replaced by journal entries.'
   name: Ledger Entries
 paths:
   /accounts/{account_token}/ledgerentries:
@@ -61,7 +30,7 @@ paths:
       description: 'Retrieve an array of ledger entries on a credit account.
 
 
-        This endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>> and <</core-api/object-expansion, object expansion>>.'
+        This endpoint supports > and >.'
       operationId: ListAccountLedgerEntries
       parameters:
       - description: 'Unique identifier of the credit account for which you want to retrieve ledger entries.
@@ -677,9 +646,9 @@ paths:
         The event notification is resent to your webhook endpoint and also returned in the response to this request.
 
 
-        For details on how to configure your webhook endpoint, see the About Webhooks <</developer-guides/about-webhooks#_tutorial, tutorial>>.
+        For details on how to configure your webhook endpoint, see the About Webhooks >.
 
-        For the complete `/webhooks` endpoint reference, see <</core-api/webhooks, Webhooks>>.'
+        For the complete `/webhooks` endpoint reference, see >.'
       operationId: resendWebhookEvent
       parameters:
       - description: Specifies the type of event you want to resend.
@@ -1097,12 +1066,13 @@ paths:
       - Ledger Entries
 components:
   schemas:
-    CurrencyCode:
-      default: USD
-      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
-      enum:
-      - USD
-      type: string
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
     OriginalCurrency:
       description: Original Currency
       properties:
@@ -1112,6 +1082,19 @@ components:
           type: number
         code:
           description: Currency code, such as EUR or USD.
+          type: string
+      type: object
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
+      type: string
+    WebhookEventResendContainerResponse:
+      description: Contains information about a webhook event.
+      properties:
+        unused:
+          description: Event notification that was resent to your webhook endpoint.
           type: string
       type: object
     LedgerEntry:
@@ -1226,8 +1209,9 @@ components:
 
 
             This field is `null` for successful transactions with `PENDING` or `POSTED` status.'
-          nullable: true
-          type: object
+          type:
+          - object
+          - 'null'
         original_currency:
           $ref: '#/components/schemas/OriginalCurrency'
         related_token:
@@ -1328,20 +1312,6 @@ components:
       - end_index
       - is_more
       - start_index
-      type: object
-    WebhookEventResendContainerResponse:
-      description: Contains information about a webhook event.
-      properties:
-        unused:
-          description: Event notification that was resent to your webhook endpoint.
-          type: string
-      type: object
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
       type: object
   securitySchemes:
     mqAppAndAccessToken:

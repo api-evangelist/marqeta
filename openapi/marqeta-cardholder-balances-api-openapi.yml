@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries cardholder balances API
+  title: Core cardholder balances API
   version: 3.0.39
 servers:
 - url: /v3
@@ -111,36 +111,18 @@ paths:
       - cardholder balances
 components:
   schemas:
-    account_balance:
+    cardholder_balances:
       properties:
-        balances:
-          additionalProperties:
-            $ref: '#/components/schemas/CurrencyBalance'
-          type: object
-        default_currency_code:
-          type: string
-        description:
-          type: string
-        impacted_amount:
-          type: number
-        last_updated_time:
-          format: date-time
-          type: string
-        token:
-          type: string
-        type:
-          type: string
-      type: object
-    user_accounts_balance_response:
-      properties:
-        account_balances:
+        gpa:
+          $ref: '#/components/schemas/cardholder_balance'
+        links:
           items:
-            $ref: '#/components/schemas/account_balance'
+            $ref: '#/components/schemas/link'
           type: array
-        user_token:
-          type: string
+          uniqueItems: true
       required:
-      - account_balances
+      - gpa
+      - links
       type: object
     cardholder_balance:
       description: Returns general purpose account (GPA) balances for a user or business.
@@ -205,18 +187,41 @@ components:
         pending_credits:
           type: number
       type: object
-    cardholder_balances:
+    account_balance_response:
       properties:
-        gpa:
-          $ref: '#/components/schemas/cardholder_balance'
-        links:
+        account_balance:
+          $ref: '#/components/schemas/account_balance'
+      type: object
+    account_balance:
+      properties:
+        balances:
+          additionalProperties:
+            $ref: '#/components/schemas/CurrencyBalance'
+          type: object
+        default_currency_code:
+          type: string
+        description:
+          type: string
+        impacted_amount:
+          type: number
+        last_updated_time:
+          format: date-time
+          type: string
+        token:
+          type: string
+        type:
+          type: string
+      type: object
+    user_accounts_balance_response:
+      properties:
+        account_balances:
           items:
-            $ref: '#/components/schemas/link'
+            $ref: '#/components/schemas/account_balance'
           type: array
-          uniqueItems: true
+        user_token:
+          type: string
       required:
-      - gpa
-      - links
+      - account_balances
       type: object
     link:
       properties:
@@ -231,11 +236,6 @@ components:
       - href
       - method
       - rel
-      type: object
-    account_balance_response:
-      properties:
-        account_balance:
-          $ref: '#/components/schemas/account_balance'
       type: object
   securitySchemes:
     mqAppAndAccessToken:

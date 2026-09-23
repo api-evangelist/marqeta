@@ -1,18 +1,18 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries ping API
+  title: Core Ping API
   version: 3.0.39
 servers:
 - url: /v3
 security:
 - mqAppAndAccessToken: []
 tags:
-- name: ping
+- name: Ping
 paths:
   /ping:
     get:
@@ -30,7 +30,7 @@ paths:
           description: Server error
       summary: Returns a heartbeat to the consumer
       tags:
-      - ping
+      - Ping
     post:
       operationId: postPing
       requestBody:
@@ -51,18 +51,9 @@ paths:
           description: Server error
       summary: Echo test for sending payload to server
       tags:
-      - ping
+      - Ping
 components:
   schemas:
-    echo_ping_request:
-      properties:
-        payload:
-          description: Payload of the ping request.
-          type: string
-        token:
-          description: Unique identifier of the ping request.
-          type: string
-      type: object
     ping_response:
       properties:
         env:
@@ -87,6 +78,15 @@ components:
         success:
           default: false
           type: boolean
+      type: object
+    echo_ping_request:
+      properties:
+        payload:
+          description: Payload of the ping request.
+          type: string
+        token:
+          description: Unique identifier of the ping request.
+          type: string
       type: object
   securitySchemes:
     mqAppAndAccessToken:

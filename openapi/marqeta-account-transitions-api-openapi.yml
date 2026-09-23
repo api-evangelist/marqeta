@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries Account Transitions API
+  title: Core Account Transitions API
   version: 3.0.39
 servers:
 - url: /v3
@@ -19,10 +19,10 @@ tags:
 
     Use the account transitions endpoints to create and retrieve account transitions on Marqeta''s credit platform.
 
-    An account transition occurs when a <</core-api/credit-accounts, credit account>> transitions to a new status.
+    An account transition occurs when a > transitions to a new status.
 
 
-    To receive webhook notifications when account transition events occur, see <</core-api/event-types#_credit_account_transition_events, Credit account transition events>> in Event Types.'
+    To receive webhook notifications when account transition events occur, see > in Event Types.'
   name: Account Transitions
 paths:
   /accounts/{account_token}/accounttransitions:
@@ -30,7 +30,7 @@ paths:
       description: 'Retrieve an array of transitions on a credit account.
 
 
-        This endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>.'
+        This endpoint supports >.'
       operationId: listAccountTransitions
       parameters:
       - description: 'Unique identifier of the credit account for which you want to retrieve transitions.
@@ -227,9 +227,9 @@ paths:
         The event notification is resent to your webhook endpoint and also returned in the response to this request.
 
 
-        For details on how to configure your webhook endpoint, see the About Webhooks <</developer-guides/about-webhooks#_tutorial, tutorial>>.
+        For details on how to configure your webhook endpoint, see the About Webhooks >.
 
-        For the complete `/webhooks` endpoint reference, see <</core-api/webhooks, Webhooks>>.'
+        For the complete `/webhooks` endpoint reference, see >.'
       operationId: resendWebhookEvent
       parameters:
       - description: Specifies the type of event you want to resend.
@@ -647,6 +647,43 @@ paths:
       - Account Transitions
 components:
   schemas:
+    AccountStatusEnum:
+      description: 'Status of the credit account.
+
+
+        *NOTE* `CHARGE_OFF` is not an allowable value for `original_status`.'
+      enum:
+      - UNACTIVATED
+      - ACTIVE
+      - SUSPENDED
+      - TERMINATED
+      - CHARGE_OFF
+      type: string
+    AccountTransitionReq:
+      description: Information on the credit account transition.
+      properties:
+        status:
+          $ref: '#/components/schemas/AccountStatusEnum'
+        token:
+          description: Unique identifier of the credit account transition.
+          type: string
+      required:
+      - status
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    WebhookEventResendContainerResponse:
+      description: Contains information about a webhook event.
+      properties:
+        unused:
+          description: Event notification that was resent to your webhook endpoint.
+          type: string
+      type: object
     AccountTransitionsPage:
       description: Return paginated account transitions.
       properties:
@@ -674,24 +711,6 @@ components:
       - is_more
       - start_index
       type: object
-    AccountTransitionReq:
-      description: Information on the credit account transition.
-      properties:
-        status:
-          $ref: '#/components/schemas/AccountStatusEnum'
-        token:
-          description: Unique identifier of the credit account transition.
-          type: string
-      required:
-      - status
-      type: object
-    WebhookEventResendContainerResponse:
-      description: Contains information about a webhook event.
-      properties:
-        unused:
-          description: Event notification that was resent to your webhook endpoint.
-          type: string
-      type: object
     AccountTransitionResponse:
       description: Information on the credit account transition.
       properties:
@@ -716,25 +735,6 @@ components:
       - original_status
       - status
       - token
-      type: object
-    AccountStatusEnum:
-      description: 'Status of the credit account.
-
-
-        *NOTE* `CHARGE_OFF` is not an allowable value for `original_status`.'
-      enum:
-      - UNACTIVATED
-      - ACTIVE
-      - SUSPENDED
-      - TERMINATED
-      - CHARGE_OFF
-      type: string
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
       type: object
   securitySchemes:
     mqAppAndAccessToken:

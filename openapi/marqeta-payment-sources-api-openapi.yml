@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries Payment Sources API
+  title: Core Payment Sources API
   version: 3.0.39
 servers:
 - url: /v3
@@ -17,7 +17,7 @@ tags:
     include::../../maturity-admonition-banner.adoc[]
 
 
-    Use the payment sources endpoint to link an external payment source to an <</core-api/credit-accounts, account>> on Marqeta''s credit platform.
+    Use the payment sources endpoint to link an external payment source to an > on Marqeta''s credit platform.
 
     This enables account holders to use the linked payment source to make payments toward their account balance.'
   name: Payment Sources
@@ -27,7 +27,7 @@ paths:
       description: 'Retrieve an array of payment sources.
 
 
-        This endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>.'
+        This endpoint supports >.'
       operationId: listPaymentSources
       parameters:
       - description: Unique identifier of the credit account associated with the payment source.
@@ -301,6 +301,101 @@ paths:
       - Payment Sources
 components:
   schemas:
+    PaymentSourceUpdateReq:
+      description: Request used to update the status of a payment source.
+      properties:
+        status:
+          $ref: '#/components/schemas/PaymentSourceStatusEnum'
+      required:
+      - status
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    PaymentSourceCreateReq:
+      description: Contains information about a payment source.
+      properties:
+        account_number:
+          description: Account number of the payment source. For Secured Card, this is the secured card account number.
+          maxLength: 255
+          type: string
+        account_token:
+          description: Unique identifier of the credit account receiving the payment.
+          maxLength: 36
+          type: string
+        bank_name:
+          description: Name of the bank associated with the routing number.
+          maxLength: 255
+          type:
+          - string
+          - 'null'
+        business_token:
+          description: Unique identifier of the business making the payment.
+          maxLength: 36
+          type: string
+        metadata:
+          additionalProperties:
+            type: string
+          description: Optional key-value pairs for storing additional information about the payment source.
+          type: object
+        name:
+          description: Name of the individual or business who owns the payment source.
+          maxLength: 255
+          type: string
+        owner:
+          description: Type of payment source owner.
+          enum:
+          - INDIVIDUAL
+          - BUSINESS
+          type: string
+        routing_number:
+          description: 'Routing number of the payment source.
+
+            This field is only optional when the value for `source_type` is `SECURED_ACCOUNT_FUND`.'
+          maxLength: 255
+          type: string
+        source_type:
+          description: Type of payment source.
+          enum:
+          - CHECKING
+          - SAVINGS
+          - SECURED_ACCOUNT_FUND
+          - OTHER
+          - EXTERNAL
+          type: string
+        token:
+          description: Unique identifier of the payment source.
+          pattern: (?!^ +$)^.+$
+          type: string
+        user_token:
+          description: Unique identifier of the user making the payment.
+          maxLength: 36
+          type: string
+        verification_notes:
+          description: Additional information on the verification.
+          maxLength: 255
+          type: string
+        verification_override:
+          description: Whether to override the verification process.
+          type: boolean
+      required:
+      - account_number
+      - account_token
+      - name
+      - source_type
+      - verification_override
+      type: object
+    PaymentSourceStatusEnum:
+      description: Current status of the payment source.
+      enum:
+      - ACTIVE
+      - PENDING
+      - INACTIVE
+      type: string
     PaymentSourceResponse:
       description: Contains information about a payment source.
       properties:
@@ -314,8 +409,9 @@ components:
           type: string
         bank_name:
           description: Name of the bank associated with the routing number.
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         business_token:
           description: Unique identifier of the business making the payment.
           type: string
@@ -397,100 +493,6 @@ components:
       - end_index
       - is_more
       - start_index
-      type: object
-    PaymentSourceCreateReq:
-      description: Contains information about a payment source.
-      properties:
-        account_number:
-          description: Account number of the payment source. For Secured Card, this is the secured card account number.
-          maxLength: 255
-          type: string
-        account_token:
-          description: Unique identifier of the credit account receiving the payment.
-          maxLength: 36
-          type: string
-        bank_name:
-          description: Name of the bank associated with the routing number.
-          maxLength: 255
-          nullable: true
-          type: string
-        business_token:
-          description: Unique identifier of the business making the payment.
-          maxLength: 36
-          type: string
-        metadata:
-          additionalProperties:
-            type: string
-          description: Optional key-value pairs for storing additional information about the payment source.
-          type: object
-        name:
-          description: Name of the individual or business who owns the payment source.
-          maxLength: 255
-          type: string
-        owner:
-          description: Type of payment source owner.
-          enum:
-          - INDIVIDUAL
-          - BUSINESS
-          type: string
-        routing_number:
-          description: 'Routing number of the payment source.
-
-            This field is only optional when the value for `source_type` is `SECURED_ACCOUNT_FUND`.'
-          maxLength: 255
-          type: string
-        source_type:
-          description: Type of payment source.
-          enum:
-          - CHECKING
-          - SAVINGS
-          - SECURED_ACCOUNT_FUND
-          - OTHER
-          - EXTERNAL
-          type: string
-        token:
-          description: Unique identifier of the payment source.
-          pattern: (?!^ +$)^.+$
-          type: string
-        user_token:
-          description: Unique identifier of the user making the payment.
-          maxLength: 36
-          type: string
-        verification_notes:
-          description: Additional information on the verification.
-          maxLength: 255
-          type: string
-        verification_override:
-          description: Whether to override the verification process.
-          type: boolean
-      required:
-      - account_number
-      - account_token
-      - name
-      - source_type
-      - verification_override
-      type: object
-    PaymentSourceUpdateReq:
-      description: Request used to update the status of a payment source.
-      properties:
-        status:
-          $ref: '#/components/schemas/PaymentSourceStatusEnum'
-      required:
-      - status
-      type: object
-    PaymentSourceStatusEnum:
-      description: Current status of the payment source.
-      enum:
-      - ACTIVE
-      - PENDING
-      - INACTIVE
-      type: string
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
       type: object
   securitySchemes:
     mqAppAndAccessToken:

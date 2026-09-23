@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries auto reloads API
+  title: Core auto reloads API
   version: 3.0.39
 servers:
 - url: /v3
@@ -197,6 +197,168 @@ paths:
       - auto reloads
 components:
   schemas:
+    auto_reload_update_model:
+      properties:
+        active:
+          default: true
+          type: boolean
+        association:
+          $ref: '#/components/schemas/auto_reload_association'
+        currency_code:
+          type: string
+        funding_source_address_token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        funding_source_token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        order_scope:
+          $ref: '#/components/schemas/OrderScope'
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      type: object
+    gpa:
+      description: Defines the type of order.
+      properties:
+        reload_amount:
+          description: 'Available balance on the card after the reload has completed.
+
+
+            This value must be greater than or equal to the value of `trigger_amount`.
+
+            Note that this is not the same as the amount added to the card, which will vary from reload to reload.'
+          minimum: 0.01
+          type: number
+        trigger_amount:
+          description: 'Threshold that determines when the reload happens.
+
+
+            The reload is triggered when the card balance falls below this amount.'
+          minimum: 0.01
+          type: number
+      required:
+      - reload_amount
+      - trigger_amount
+      type: object
+    auto_reload_response_model:
+      properties:
+        active:
+          default: true
+          type: boolean
+        association:
+          $ref: '#/components/schemas/auto_reload_association'
+        created_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        currency_code:
+          type: string
+        funding_source_address_token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        funding_source_token:
+          description: Required when order scope is GPA
+          maxLength: 36
+          minLength: 1
+          type: string
+        last_modified_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        order_scope:
+          $ref: '#/components/schemas/OrderScope'
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - created_time
+      - currency_code
+      - last_modified_time
+      - order_scope
+      type: object
+    msa:
+      properties:
+        campaign_token:
+          type: string
+        reload_amount:
+          minimum: 0.01
+          type: number
+        trigger_amount:
+          minimum: 0.01
+          type: number
+      required:
+      - campaign_token
+      - reload_amount
+      - trigger_amount
+      type: object
+    order_scope:
+      description: Defines the balance threshold and reload amounts.
+      properties:
+        gpa:
+          $ref: '#/components/schemas/gpa'
+      type: object
+    auto_reload_association:
+      description: 'Specifies the scope of the auto reload.
+
+
+        Input no more than one field.
+
+        If no value is supplied, the auto reload applies at the program level.'
+      properties:
+        account_template_token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        business_token:
+          description: 'Unique identifier of the business for which the auto reload is configured.
+
+
+            Send a `GET` request to `/businesses` to retrieve business tokens.'
+          maxLength: 36
+          minLength: 1
+          type: string
+        card_product_token:
+          description: 'Unique identifier of the card product for which the auto reload is configured.
+
+
+            Send a `GET` request to `/cardproducts` to retrieve card product tokens.'
+          maxLength: 36
+          minLength: 1
+          type: string
+        user_token:
+          description: 'Unique identifier of the user for which the auto reload is configured.
+
+
+            Send a `GET` request to `/users` to retrieve user tokens.'
+          maxLength: 36
+          minLength: 1
+          type: string
+      type: object
+    AutoReloadListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/auto_reload_response_model'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
     auto_reload_model:
       description: 'Contains information about an auto reload.
 
@@ -269,172 +431,6 @@ components:
           $ref: '#/components/schemas/gpa'
         msa:
           $ref: '#/components/schemas/msa'
-      type: object
-    auto_reload_response_model:
-      properties:
-        active:
-          default: true
-          type: boolean
-        association:
-          $ref: '#/components/schemas/auto_reload_association'
-        created_time:
-          description: yyyy-MM-ddTHH:mm:ssZ
-          format: date-time
-          type: string
-        currency_code:
-          type: string
-        funding_source_address_token:
-          maxLength: 36
-          minLength: 1
-          type: string
-        funding_source_token:
-          description: Required when order scope is GPA
-          maxLength: 36
-          minLength: 1
-          type: string
-        last_modified_time:
-          description: yyyy-MM-ddTHH:mm:ssZ
-          format: date-time
-          type: string
-        order_scope:
-          $ref: '#/components/schemas/OrderScope'
-        token:
-          maxLength: 36
-          minLength: 1
-          type: string
-      required:
-      - created_time
-      - currency_code
-      - last_modified_time
-      - order_scope
-      type: object
-    auto_reload_update_model:
-      properties:
-        active:
-          default: true
-          type: boolean
-        association:
-          $ref: '#/components/schemas/auto_reload_association'
-        currency_code:
-          type: string
-        funding_source_address_token:
-          maxLength: 36
-          minLength: 1
-          type: string
-        funding_source_token:
-          maxLength: 36
-          minLength: 1
-          type: string
-        order_scope:
-          $ref: '#/components/schemas/OrderScope'
-        token:
-          maxLength: 36
-          minLength: 1
-          type: string
-      type: object
-    auto_reload_association:
-      description: 'Specifies the scope of the auto reload.
-
-
-        Input no more than one field.
-
-        If no value is supplied, the auto reload applies at the program level.'
-      properties:
-        account_template_token:
-          maxLength: 36
-          minLength: 1
-          type: string
-        business_token:
-          description: 'Unique identifier of the business for which the auto reload is configured.
-
-
-            Send a `GET` request to `/businesses` to retrieve business tokens.'
-          maxLength: 36
-          minLength: 1
-          type: string
-        card_product_token:
-          description: 'Unique identifier of the card product for which the auto reload is configured.
-
-
-            Send a `GET` request to `/cardproducts` to retrieve card product tokens.'
-          maxLength: 36
-          minLength: 1
-          type: string
-        user_token:
-          description: 'Unique identifier of the user for which the auto reload is configured.
-
-
-            Send a `GET` request to `/users` to retrieve user tokens.'
-          maxLength: 36
-          minLength: 1
-          type: string
-      type: object
-    msa:
-      properties:
-        campaign_token:
-          type: string
-        reload_amount:
-          exclusiveMinimum: false
-          minimum: 0.01
-          type: number
-        trigger_amount:
-          exclusiveMinimum: false
-          minimum: 0.01
-          type: number
-      required:
-      - campaign_token
-      - reload_amount
-      - trigger_amount
-      type: object
-    AutoReloadListResponse:
-      properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/auto_reload_response_model'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
-      type: object
-    gpa:
-      description: Defines the type of order.
-      properties:
-        reload_amount:
-          description: 'Available balance on the card after the reload has completed.
-
-
-            This value must be greater than or equal to the value of `trigger_amount`.
-
-            Note that this is not the same as the amount added to the card, which will vary from reload to reload.'
-          exclusiveMinimum: false
-          minimum: 0.01
-          type: number
-        trigger_amount:
-          description: 'Threshold that determines when the reload happens.
-
-
-            The reload is triggered when the card balance falls below this amount.'
-          exclusiveMinimum: false
-          minimum: 0.01
-          type: number
-      required:
-      - reload_amount
-      - trigger_amount
-      type: object
-    order_scope:
-      description: Defines the balance threshold and reload amounts.
-      properties:
-        gpa:
-          $ref: '#/components/schemas/gpa'
       type: object
   securitySchemes:
     mqAppAndAccessToken:

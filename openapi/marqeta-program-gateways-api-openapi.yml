@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries Program Gateways API
+  title: Core Program Gateways API
   version: 3.0.39
 servers:
 - url: /v3
@@ -22,7 +22,7 @@ tags:
     A Program Gateway allows you to exchange messages with Marqeta''s credit platform regarding decisions on transaction authorizations.
 
 
-    For more on Program Gateways, see <</developer-guides/about-credit-program-gateways, About Credit Program Gateways>>.'
+    For more on Program Gateways, see >.'
   name: Program Gateways
 paths:
   /programgateways:
@@ -30,7 +30,7 @@ paths:
       description: 'Retrieve an array of existing Credit Program Gateways.
 
 
-        This endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>.'
+        This endpoint supports >.'
       operationId: listProgramGateways
       parameters:
       - description: Number of Program Gateway resources to retrieve.
@@ -224,6 +224,124 @@ paths:
       - Program Gateways
 components:
   schemas:
+    ProgramGatewayCustomHeaderCreateReq:
+      additionalProperties:
+        type: string
+      description: 'Additional custom information included in the HTTP header.
+
+        For example, this might contain security information, along with Basic Authentication, when making a Program Gateway request.
+
+        Custom headers also appear in the associated webhook''s notifications.'
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    ProgramGatewayUpdateReq:
+      description: Contains information relevant to updating a Program Gateway.
+      properties:
+        active:
+          default: true
+          description: Indicates whether the Program Gateway is active.
+          type: boolean
+        basic_auth_password:
+          description: Basic Authentication password for authenticating your environment.
+          maxLength: 50
+          minLength: 20
+          pattern: (?!^ +$)^.+$
+          type: string
+        basic_auth_username:
+          description: Basic Authentication username for authenticating your environment.
+          maxLength: 50
+          pattern: (?!^ +$)^.+$
+          type: string
+        custom_header:
+          $ref: '#/components/schemas/ProgramGatewayCustomHeaderCreateReq'
+        mtls:
+          default: false
+          description: Indicates whether the Program Gateway uses mutual Transport Layer Security (mTLS).
+          type: boolean
+        name:
+          description: Name of the Program Gateway.
+          maxLength: 255
+          type: string
+        timeout_millis:
+          description: Total timeout for Program Gateway calls, in milliseconds.
+          maximum: 2000
+          type: integer
+        token:
+          description: Unique identifier of the Program Gateway.
+          maxLength: 36
+          type: string
+        url:
+          description: 'URL of the Program Gateway endpoint hosted in your environment and configured to receive authorization requests made by the Marqeta platform.
+
+            Must be HTTPS.'
+          maxLength: 250
+          pattern: (?!^ +$)^.+$
+          type: string
+      type: object
+    ProgramGatewayCreateReq:
+      description: Contains information relevant to creating a Credit Program Gateway.
+      properties:
+        active:
+          default: true
+          description: Indicates whether the Program Gateway is active.
+          type: boolean
+        basic_auth_password:
+          description: Basic Authentication password for authenticating your environment.
+          maxLength: 50
+          minLength: 20
+          pattern: (?!^ +$)^.+$
+          type: string
+        basic_auth_username:
+          description: Basic Authentication username for authenticating your environment.
+          maxLength: 50
+          pattern: (?!^ +$)^.+$
+          type: string
+        custom_header:
+          $ref: '#/components/schemas/ProgramGatewayCustomHeaderCreateReq'
+        mtls:
+          default: false
+          description: Indicates whether the Program Gateway uses mutual Transport Layer Security (mTLS).
+          type: boolean
+        name:
+          description: Name of the Program Gateway.
+          maxLength: 255
+          type: string
+        timeout_millis:
+          default: 2000
+          description: Total timeout for Program Gateway calls, in milliseconds.
+          maximum: 2000
+          minimum: 1
+          type: integer
+        token:
+          description: 'Unique identifier of the Program Gateway.
+
+
+            If you do not include a token, the system generates one automatically.
+
+            As this token is necessary for use in other calls, it is recommended that you define a simple and easy to remember string rather than letting the system generate a token for you.
+
+            This value cannot be updated.'
+          maxLength: 36
+          type: string
+        url:
+          description: 'URL of the Program Gateway endpoint hosted in your environment and configured to receive authorization requests made by the Marqeta platform.
+
+            Must be HTTPS.'
+          maxLength: 250
+          pattern: (?!^ +$)^.+$
+          type: string
+      required:
+      - basic_auth_password
+      - basic_auth_username
+      - name
+      - url
+      type: object
     ProgramGatewayPage:
       description: Returns paginated Program Gateways.
       properties:
@@ -291,126 +409,8 @@ components:
           description: URL of the Program Gateway endpoint hosted in your environment and configured to receive authorization requests made by the Marqeta platform.
           type: string
       type: object
-    ProgramGatewayCreateReq:
-      description: Contains information relevant to creating a Credit Program Gateway.
-      properties:
-        active:
-          default: true
-          description: Indicates whether the Program Gateway is active.
-          type: boolean
-        basic_auth_password:
-          description: Basic Authentication password for authenticating your environment.
-          maxLength: 50
-          minLength: 20
-          pattern: (?!^ +$)^.+$
-          type: string
-        basic_auth_username:
-          description: Basic Authentication username for authenticating your environment.
-          maxLength: 50
-          pattern: (?!^ +$)^.+$
-          type: string
-        custom_header:
-          $ref: '#/components/schemas/ProgramGatewayCustomHeaderCreateReq'
-        mtls:
-          default: false
-          description: Indicates whether the Program Gateway uses mutual Transport Layer Security (mTLS).
-          type: boolean
-        name:
-          description: Name of the Program Gateway.
-          maxLength: 255
-          type: string
-        timeout_millis:
-          default: 2000
-          description: Total timeout for Program Gateway calls, in milliseconds.
-          maximum: 2000
-          minimum: 1
-          type: integer
-        token:
-          description: 'Unique identifier of the Program Gateway.
-
-
-            If you do not include a token, the system generates one automatically.
-
-            As this token is necessary for use in other calls, it is recommended that you define a simple and easy to remember string rather than letting the system generate a token for you.
-
-            This value cannot be updated.'
-          maxLength: 36
-          type: string
-        url:
-          description: 'URL of the Program Gateway endpoint hosted in your environment and configured to receive authorization requests made by the Marqeta platform.
-
-            Must be HTTPS.'
-          maxLength: 250
-          pattern: (?!^ +$)^.+$
-          type: string
-      required:
-      - basic_auth_password
-      - basic_auth_username
-      - name
-      - url
-      type: object
-    ProgramGatewayCustomHeaderCreateReq:
-      additionalProperties:
-        type: string
-      description: 'Additional custom information included in the HTTP header.
-
-        For example, this might contain security information, along with Basic Authentication, when making a Program Gateway request.
-
-        Custom headers also appear in the associated webhook''s notifications.'
-      type: object
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-      type: object
     ProgramGatewayCustomHeaderResponse:
       description: Additional custom information included in the HTTP header.
-      type: object
-    ProgramGatewayUpdateReq:
-      description: Contains information relevant to updating a Program Gateway.
-      properties:
-        active:
-          default: true
-          description: Indicates whether the Program Gateway is active.
-          type: boolean
-        basic_auth_password:
-          description: Basic Authentication password for authenticating your environment.
-          maxLength: 50
-          minLength: 20
-          pattern: (?!^ +$)^.+$
-          type: string
-        basic_auth_username:
-          description: Basic Authentication username for authenticating your environment.
-          maxLength: 50
-          pattern: (?!^ +$)^.+$
-          type: string
-        custom_header:
-          $ref: '#/components/schemas/ProgramGatewayCustomHeaderCreateReq'
-        mtls:
-          default: false
-          description: Indicates whether the Program Gateway uses mutual Transport Layer Security (mTLS).
-          type: boolean
-        name:
-          description: Name of the Program Gateway.
-          maxLength: 255
-          type: string
-        timeout_millis:
-          description: Total timeout for Program Gateway calls, in milliseconds.
-          maximum: 2000
-          type: integer
-        token:
-          description: Unique identifier of the Program Gateway.
-          maxLength: 36
-          type: string
-        url:
-          description: 'URL of the Program Gateway endpoint hosted in your environment and configured to receive authorization requests made by the Marqeta platform.
-
-            Must be HTTPS.'
-          maxLength: 250
-          pattern: (?!^ +$)^.+$
-          type: string
       type: object
   securitySchemes:
     mqAppAndAccessToken:

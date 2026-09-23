@@ -1,18 +1,18 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries bank transfers API
+  title: Core bank transfers API
   version: 3.0.39
 servers:
 - url: /v3
 security:
 - mqAppAndAccessToken: []
 tags:
-- name: bank transfers
+- name: Bank Transfers
 paths:
   /banktransfers/ach:
     get:
@@ -110,7 +110,7 @@ paths:
           description: Server error
       summary: Lists all bank transfers
       tags:
-      - bank transfers
+      - Bank Transfers
     post:
       operationId: postBanktransfersAch
       requestBody:
@@ -135,7 +135,7 @@ paths:
           description: Server error
       summary: Creates an ACH bank transfer
       tags:
-      - bank transfers
+      - Bank Transfers
   /banktransfers/ach/earlyfunds:
     post:
       operationId: postApplyProvisionalCreditToBankTransfer
@@ -161,7 +161,7 @@ paths:
           description: Server error
       summary: Applies a provisional credit to a bank transfer
       tags:
-      - bank transfers
+      - Bank Transfers
   /banktransfers/ach/transitions:
     get:
       operationId: getBanktransfersAchTransitions
@@ -235,7 +235,7 @@ paths:
           description: Server error
       summary: Lists all bank transfer transitions
       tags:
-      - bank transfers
+      - Bank Transfers
     post:
       operationId: postBanktransfersAchTransitions
       requestBody:
@@ -260,7 +260,7 @@ paths:
           description: Server error
       summary: Creates an ACH bank transfer transition
       tags:
-      - bank transfers
+      - Bank Transfers
   /banktransfers/ach/{token}:
     get:
       operationId: getBanktransfersAchToken
@@ -288,60 +288,9 @@ paths:
           description: Server error
       summary: Returns a bank transfer entry
       tags:
-      - bank transfers
+      - Bank Transfers
 components:
   schemas:
-    bank_transfer_transition_request_model:
-      properties:
-        amount:
-          exclusiveMinimum: false
-          minimum: 0
-          type: number
-        bank_transfer_token:
-          maxLength: 36
-          minLength: 0
-          type: string
-        batch_number:
-          type: string
-        channel:
-          enum:
-          - API
-          - SYSTEM
-          - ADMIN
-          type: string
-        effective_date:
-          format: date-time
-          type: string
-        program_reserve_token:
-          maxLength: 36
-          minLength: 0
-          type: string
-        reason:
-          type: string
-        return_code:
-          type: string
-        reversal_after_45_days:
-          type: boolean
-        status:
-          enum:
-          - PENDING
-          - PROCESSING
-          - SUBMITTED
-          - RETURNED
-          - COMPLETED
-          - CANCELLED
-          - REVERSAL_PEND
-          - REVERSAL_COMP
-          type: string
-        token:
-          maxLength: 36
-          minLength: 0
-          type: string
-      required:
-      - bank_transfer_token
-      - channel
-      - status
-      type: object
     BankTransferTransitionListResponse:
       properties:
         count:
@@ -361,155 +310,9 @@ components:
           format: int32
           type: integer
       type: object
-    bank_transfer_request_model:
-      properties:
-        amount:
-          exclusiveMinimum: false
-          minimum: 0.01
-          type: number
-        channel:
-          description: default = API
-          enum:
-          - API
-          - SYSTEM
-          - ADMIN
-          type: string
-        created_by:
-          maxLength: 255
-          minLength: 0
-          type: string
-        currency_code:
-          description: default = USD
-          type: string
-        funding_source_token:
-          maxLength: 36
-          minLength: 0
-          type: string
-        memo:
-          type: string
-        standard_entry_class_code:
-          enum:
-          - WEB
-          - PPD
-          - CCD
-          type: string
-        statement_descriptor:
-          maxLength: 10
-          minLength: 0
-          type: string
-        token:
-          maxLength: 36
-          minLength: 0
-          type: string
-        transfer_speed:
-          description: default = STANDARD
-          enum:
-          - STANDARD
-          - SAME_DAY
-          type: string
-        type:
-          enum:
-          - PUSH
-          - PULL
-          type: string
-      required:
-      - amount
-      - funding_source_token
-      - type
-      type: object
-    BankTransferListResponse:
-      properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/bank_transfer_response_model'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
-      type: object
-    early_funds_request_model:
-      properties:
-        bank_transfer_token:
-          maxLength: 36
-          minLength: 0
-          type: string
-      type: object
-    bank_transfer_transition_response_model:
-      properties:
-        amount:
-          exclusiveMinimum: false
-          minimum: 0
-          type: number
-        bank_transfer_token:
-          maxLength: 36
-          minLength: 0
-          type: string
-        batch_number:
-          type: string
-        channel:
-          enum:
-          - API
-          - SYSTEM
-          - ADMIN
-          type: string
-        created_time:
-          format: date-time
-          type: string
-        effective_date:
-          format: date-time
-          type: string
-        last_modified_time:
-          format: date-time
-          type: string
-        program_reserve_token:
-          maxLength: 36
-          minLength: 0
-          type: string
-        reason:
-          type: string
-        return_code:
-          type: string
-        return_reason:
-          type: string
-        reversal_after_45_days:
-          type: boolean
-        status:
-          enum:
-          - PENDING
-          - PROCESSING
-          - SUBMITTED
-          - RETURNED
-          - COMPLETED
-          - CANCELLED
-          - REVERSAL_PEND
-          - REVERSAL_COMP
-          type: string
-        token:
-          maxLength: 36
-          minLength: 0
-          type: string
-        transaction_jit_token:
-          type: string
-        transaction_token:
-          type: string
-      required:
-      - bank_transfer_token
-      - channel
-      - status
-      type: object
     bank_transfer_response_model:
       properties:
         amount:
-          exclusiveMinimum: false
           minimum: 0.01
           type: number
         batch_number:
@@ -593,6 +396,199 @@ components:
       - amount
       - funding_source_token
       - type
+      type: object
+    BankTransferListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/bank_transfer_response_model'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    bank_transfer_transition_response_model:
+      properties:
+        amount:
+          minimum: 0
+          type: number
+        bank_transfer_token:
+          maxLength: 36
+          minLength: 0
+          type: string
+        batch_number:
+          type: string
+        channel:
+          enum:
+          - API
+          - SYSTEM
+          - ADMIN
+          type: string
+        created_time:
+          format: date-time
+          type: string
+        effective_date:
+          format: date-time
+          type: string
+        last_modified_time:
+          format: date-time
+          type: string
+        program_reserve_token:
+          maxLength: 36
+          minLength: 0
+          type: string
+        reason:
+          type: string
+        return_code:
+          type: string
+        return_reason:
+          type: string
+        reversal_after_45_days:
+          type: boolean
+        status:
+          enum:
+          - PENDING
+          - PROCESSING
+          - SUBMITTED
+          - RETURNED
+          - COMPLETED
+          - CANCELLED
+          - REVERSAL_PEND
+          - REVERSAL_COMP
+          type: string
+        token:
+          maxLength: 36
+          minLength: 0
+          type: string
+        transaction_jit_token:
+          type: string
+        transaction_token:
+          type: string
+      required:
+      - bank_transfer_token
+      - channel
+      - status
+      type: object
+    bank_transfer_transition_request_model:
+      properties:
+        amount:
+          minimum: 0
+          type: number
+        bank_transfer_token:
+          maxLength: 36
+          minLength: 0
+          type: string
+        batch_number:
+          type: string
+        channel:
+          enum:
+          - API
+          - SYSTEM
+          - ADMIN
+          type: string
+        effective_date:
+          format: date-time
+          type: string
+        program_reserve_token:
+          maxLength: 36
+          minLength: 0
+          type: string
+        reason:
+          type: string
+        return_code:
+          type: string
+        reversal_after_45_days:
+          type: boolean
+        status:
+          enum:
+          - PENDING
+          - PROCESSING
+          - SUBMITTED
+          - RETURNED
+          - COMPLETED
+          - CANCELLED
+          - REVERSAL_PEND
+          - REVERSAL_COMP
+          type: string
+        token:
+          maxLength: 36
+          minLength: 0
+          type: string
+      required:
+      - bank_transfer_token
+      - channel
+      - status
+      type: object
+    bank_transfer_request_model:
+      properties:
+        amount:
+          minimum: 0.01
+          type: number
+        channel:
+          description: default = API
+          enum:
+          - API
+          - SYSTEM
+          - ADMIN
+          type: string
+        created_by:
+          maxLength: 255
+          minLength: 0
+          type: string
+        currency_code:
+          description: default = USD
+          type: string
+        funding_source_token:
+          maxLength: 36
+          minLength: 0
+          type: string
+        memo:
+          type: string
+        standard_entry_class_code:
+          enum:
+          - WEB
+          - PPD
+          - CCD
+          type: string
+        statement_descriptor:
+          maxLength: 10
+          minLength: 0
+          type: string
+        token:
+          maxLength: 36
+          minLength: 0
+          type: string
+        transfer_speed:
+          description: default = STANDARD
+          enum:
+          - STANDARD
+          - SAME_DAY
+          type: string
+        type:
+          enum:
+          - PUSH
+          - PULL
+          type: string
+      required:
+      - amount
+      - funding_source_token
+      - type
+      type: object
+    early_funds_request_model:
+      properties:
+        bank_transfer_token:
+          maxLength: 36
+          minLength: 0
+          type: string
       type: object
   securitySchemes:
     mqAppAndAccessToken:

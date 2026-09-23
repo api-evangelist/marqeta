@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries PINs API
+  title: Core PI Ns API
   version: 3.0.39
 servers:
 - url: /v3
@@ -18,7 +18,7 @@ tags:
 
 
     Use the `/pins` endpoint to create, update, or reveal a personal identification number (PIN) for a card.'
-  name: PINs
+  name: Pins
 paths:
   /pins:
     put:
@@ -41,7 +41,7 @@ paths:
 
         If you have enabled PIN reveal functionality for your program, you can send a `POST` request to the `/pins/reveal` endpoint to retrieve an existing PIN.
 
-        See <</core-api/pins#revealPins, Reveal PIN>> on this page for details.
+        See > on this page for details.
 
 
         [WARNING]
@@ -74,7 +74,7 @@ paths:
           description: Server error
       summary: Create or update PIN
       tags:
-      - PINs
+      - Pins
   /pins/controltoken:
     post:
       description: 'Creates a control token necessary when creating or updating a card''s personal identification number (PIN).
@@ -120,7 +120,7 @@ paths:
           description: Server error
       summary: Create PIN control token
       tags:
-      - PINs
+      - Pins
   /pins/reveal:
     post:
       description: 'Reveals the personal identification number (PIN) of an existing, active card.
@@ -142,7 +142,7 @@ paths:
 
         If you want to update a card''s PIN instead, send a `PUT` request to the `/pins` endpoint.
 
-        See <</core-api/pins#putPins, Create or Update PIN>> on this page for details.
+        See > on this page for details.
 
 
         Revealing a card''s PIN is a two-step process.
@@ -170,25 +170,9 @@ paths:
           description: Server error
       summary: Reveal PIN
       tags:
-      - PINs
+      - Pins
 components:
   schemas:
-    pin_request:
-      properties:
-        control_token:
-          description: 'Unique value generated as a result of issuing a `POST` request to the `/pins/controltoken` endpoint.
-
-            This value cannot be updated.'
-          maxLength: 36
-          minLength: 1
-          type: string
-        pin:
-          description: Four-digit number to associate with the card.
-          type: string
-      required:
-      - control_token
-      - pin
-      type: object
     pin_reveal_request:
       properties:
         cardholder_verification_method:
@@ -257,6 +241,22 @@ components:
           type: string
       required:
       - card_token
+      type: object
+    pin_request:
+      properties:
+        control_token:
+          description: 'Unique value generated as a result of issuing a `POST` request to the `/pins/controltoken` endpoint.
+
+            This value cannot be updated.'
+          maxLength: 36
+          minLength: 1
+          type: string
+        pin:
+          description: Four-digit number to associate with the card.
+          type: string
+      required:
+      - control_token
+      - pin
       type: object
     control_token_response:
       properties:

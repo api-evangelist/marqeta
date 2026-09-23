@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries mcc groups API
+  title: Core mcc groups API
   version: 3.0.39
 servers:
 - url: /v3
@@ -165,14 +165,44 @@ paths:
       - mcc groups
 components:
   schemas:
-    AuthControls:
+    MCCGroupListResponse:
       properties:
-        hold_expiration_days:
-          default: 7
+        count:
           format: int32
           type: integer
-        hold_increase:
-          $ref: '#/components/schemas/hold_increase'
+        data:
+          items:
+            $ref: '#/components/schemas/mcc_group_model'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    MCCConfig:
+      properties:
+        authorization_controls:
+          $ref: '#/components/schemas/AuthControls'
+      type: object
+    hold_increase:
+      properties:
+        type:
+          default: AMOUNT
+          enum:
+          - AMOUNT
+          - PERCENT
+          - UP_TO_LIMIT
+          type: string
+        value:
+          type: number
+      required:
+      - type
+      - value
       type: object
     mcc_group_model:
       properties:
@@ -200,39 +230,14 @@ components:
       - mccs
       - name
       type: object
-    MCCGroupListResponse:
+    AuthControls:
       properties:
-        count:
+        hold_expiration_days:
+          default: 7
           format: int32
           type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/mcc_group_model'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
-      type: object
-    hold_increase:
-      properties:
-        type:
-          default: AMOUNT
-          enum:
-          - AMOUNT
-          - PERCENT
-          - UP_TO_LIMIT
-          type: string
-        value:
-          type: number
-      required:
-      - type
-      - value
+        hold_increase:
+          $ref: '#/components/schemas/hold_increase'
       type: object
     mcc_group_update_model:
       properties:
@@ -249,11 +254,6 @@ components:
           type: array
         name:
           type: string
-      type: object
-    MCCConfig:
-      properties:
-        authorization_controls:
-          $ref: '#/components/schemas/AuthControls'
       type: object
   securitySchemes:
     mqAppAndAccessToken:

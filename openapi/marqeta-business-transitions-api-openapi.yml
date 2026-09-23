@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries business transitions API
+  title: Core business transitions API
   version: 3.0.39
 servers:
 - url: /v3
@@ -151,6 +151,25 @@ paths:
       - business transitions
 components:
   schemas:
+    BusinessTransitionListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/BusinessTransitionResponse'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
     BusinessTransitionResponse:
       properties:
         business_token:
@@ -231,25 +250,6 @@ components:
       - reason_code
       - status
       - token
-      type: object
-    BusinessTransitionListResponse:
-      properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/BusinessTransitionResponse'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
       type: object
     BusinessTransitionRequest:
       properties:

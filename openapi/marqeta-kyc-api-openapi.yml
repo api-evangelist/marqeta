@@ -1,18 +1,18 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries kyc API
+  title: Core Kyc API
   version: 3.0.39
 servers:
 - url: /v3
 security:
 - mqAppAndAccessToken: []
 tags:
-- name: kyc
+- name: KYC
 paths:
   /kyc:
     post:
@@ -41,7 +41,7 @@ paths:
           description: Server error
       summary: Performs a KYC
       tags:
-      - kyc
+      - KYC
   /kyc/business/{business_token}:
     get:
       operationId: getKycBusinessBusinesstoken
@@ -106,7 +106,7 @@ paths:
           description: Server error
       summary: Lists all KYC results for a business
       tags:
-      - kyc
+      - KYC
   /kyc/user/{user_token}:
     get:
       operationId: getKycUserUsertoken
@@ -171,7 +171,7 @@ paths:
           description: Server error
       summary: Lists all KYC results for a user
       tags:
-      - kyc
+      - KYC
   /kyc/{token}:
     get:
       operationId: getKycToken
@@ -202,14 +202,16 @@ paths:
           description: Server error
       summary: Returns a specific KYC result
       tags:
-      - kyc
+      - KYC
 components:
   schemas:
-    result_code:
+    result:
       properties:
-        code:
-          type: string
-        message:
+        codes:
+          items:
+            $ref: '#/components/schemas/result_code'
+          type: array
+        status:
           type: string
       type: object
     kyc_response:
@@ -243,15 +245,6 @@ components:
       - created_time
       - last_modified_time
       type: object
-    result:
-      properties:
-        codes:
-          items:
-            $ref: '#/components/schemas/result_code'
-          type: array
-        status:
-          type: string
-      type: object
     KYCListResponse:
       properties:
         count:
@@ -270,6 +263,13 @@ components:
         start_index:
           format: int32
           type: integer
+      type: object
+    result_code:
+      properties:
+        code:
+          type: string
+        message:
+          type: string
       type: object
     kyc_request:
       properties:

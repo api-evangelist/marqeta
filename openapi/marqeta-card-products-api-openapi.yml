@@ -1,18 +1,18 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries card products API
+  title: Core card products API
   version: 3.0.39
 servers:
 - url: /v3
 security:
 - mqAppAndAccessToken: []
 tags:
-- name: card products
+- name: Card Products
 paths:
   /cardproducts:
     get:
@@ -62,7 +62,7 @@ paths:
           description: Server error
       summary: Lists all card products
       tags:
-      - card products
+      - Card Products
     post:
       operationId: postCardproducts
       requestBody:
@@ -90,7 +90,7 @@ paths:
           description: Server error
       summary: Creates a card product
       tags:
-      - card products
+      - Card Products
   /cardproducts/{token}:
     get:
       operationId: getCardproductsToken
@@ -121,7 +121,7 @@ paths:
           description: Server error
       summary: Returns a specific card product
       tags:
-      - card products
+      - Card Products
     put:
       operationId: putCardproductsToken
       parameters:
@@ -155,110 +155,9 @@ paths:
           description: Server error
       summary: Updates a specific card product
       tags:
-      - card products
+      - Card Products
 components:
   schemas:
-    text:
-      description: Specifies personalized text that appears on the card.
-      properties:
-        name_line_1:
-          $ref: '#/components/schemas/text_value'
-        name_line_2:
-          $ref: '#/components/schemas/text_value'
-        name_line_3:
-          $ref: '#/components/schemas/text_value'
-      required:
-      - name_line_1
-      type: object
-    jit_funding_paymentcard_funding_source:
-      properties:
-        enabled:
-          default: false
-          type: boolean
-        refunds_destination:
-          description: 'Valid values: GATEWAY, GPA, WATERFALL'
-          maxLength: 50
-          minLength: 0
-          type: string
-      type: object
-    ExpirationOffset:
-      properties:
-        min_offset:
-          $ref: '#/components/schemas/MinOffset'
-        unit:
-          description: specify if a value is provided; default is YEARS
-          enum:
-          - YEARS
-          - MONTHS
-          - DAYS
-          - HOURS
-          - MINUTES
-          - SECONDS
-          type: string
-        value:
-          description: specify if unit is provided; default is 4
-          format: int32
-          type: integer
-      type: object
-    card_personalization:
-      description: Specifies personalized attributes to be added to the card.
-      properties:
-        carrier:
-          $ref: '#/components/schemas/carrier'
-        images:
-          $ref: '#/components/schemas/images'
-        perso_type:
-          description: Specifies the type of card personalization.
-          enum:
-          - EMBOSS
-          - LASER
-          - FLAT
-          type: string
-        text:
-          $ref: '#/components/schemas/text'
-      required:
-      - text
-      type: object
-    jit_funding_programgateway_funding_source:
-      properties:
-        always_fund:
-          default: false
-          type: boolean
-        enabled:
-          default: false
-          type: boolean
-        funding_source_token:
-          description: Required if enabled
-          maxLength: 36
-          minLength: 0
-          type: string
-        refunds_destination:
-          description: 'Valid values: GATEWAY, GPA, WATERFALL'
-          maxLength: 50
-          minLength: 0
-          type: string
-      type: object
-    wallet_provider_card_on_file:
-      properties:
-        address_verification:
-          $ref: '#/components/schemas/digital_wallet_token_address_verification'
-        enabled:
-          default: false
-          description: Specifies if the card on file is enabled.
-          type: boolean
-      type: object
-    clearing_and_settlement:
-      properties:
-        overdraft_destination:
-          default: GPA
-          description: Default value of GPA does not apply when JIT funding is enabled
-          enum:
-          - GPA
-          - MSA
-          - MERCHANT_CAMPAIGN_ACCOUNT
-          - GLOBAL_OVERDRAFT_ACCOUNT
-          type: string
-      type: object
     card_product_request:
       properties:
         active:
@@ -286,6 +185,42 @@ components:
       - name
       - start_date
       type: object
+    images:
+      description: Specifies personalized images that appear on the card.
+      properties:
+        card:
+          $ref: '#/components/schemas/images_card'
+        carrier:
+          $ref: '#/components/schemas/ImagesCarrier'
+        carrier_return_window:
+          $ref: '#/components/schemas/images_carrier_return_window'
+        signature:
+          $ref: '#/components/schemas/images_signature'
+      type: object
+    selective_auth:
+      properties:
+        dmd_location_sensitivity:
+          default: 0
+          enum:
+          - 0
+          - 1
+          - 2
+          - 3
+          - 4
+          format: int32
+          type: integer
+        enable_regex_search_chain:
+          default: false
+          type: boolean
+        sa_mode:
+          default: 1
+          enum:
+          - 0
+          - 1
+          - 2
+          format: int32
+          type: integer
+      type: object
     CardProductListResponse:
       properties:
         count:
@@ -305,63 +240,49 @@ components:
           format: int32
           type: integer
       type: object
-    Special:
+    card_product_response:
       properties:
-        merchant_on_boarding:
+        active:
           default: false
           type: boolean
+        config:
+          $ref: '#/components/schemas/card_product_config'
+        created_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        end_date:
+          description: yyyy-MM-dd
+          format: date
+          type: string
+        last_modified_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        name:
+          maxLength: 40
+          minLength: 1
+          type: string
+        start_date:
+          description: yyyy-MM-dd
+          format: date
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - created_time
+      - last_modified_time
+      - name
+      - start_date
       type: object
-    text_value:
+    images_signature:
+      description: Specifies an image of the cardholder's signature.
       properties:
-        value:
-          description: Line of personalized text printed on the card.
+        name:
+          description: Specifies a PNG image of the cardholder's signature.
           type: string
-      type: object
-    carrier:
-      description: Specifies attributes of the card carrier.
-      properties:
-        logo_file:
-          description: Specifies an image to display on the card carrier.
-          type: string
-        logo_thumbnail_file:
-          description: Specifies a thumbnail-sized rendering of the image specified in the `logo_file` field.
-          type: string
-        message_file:
-          description: Specifies a text file containing a custom message to print on the card carrier.
-          type: string
-        message_line:
-          description: Specifies a custom message that appears on the card carrier.
-          type: string
-        message_line_2:
-          description: Specifies the second line of a custom message that appears on the card carrier.
-          type: string
-        template_id:
-          description: Specifies the card carrier template to use.
-          type: string
-      type: object
-    poi:
-      properties:
-        atm:
-          default: false
-          description: Default = false
-          type: boolean
-        ecommerce:
-          default: true
-          type: boolean
-        other:
-          $ref: '#/components/schemas/other_poi'
-      type: object
-    images:
-      description: Specifies personalized images that appear on the card.
-      properties:
-        card:
-          $ref: '#/components/schemas/images_card'
-        carrier:
-          $ref: '#/components/schemas/ImagesCarrier'
-        carrier_return_window:
-          $ref: '#/components/schemas/images_carrier_return_window'
-        signature:
-          $ref: '#/components/schemas/images_signature'
       type: object
     shipping:
       properties:
@@ -390,12 +311,26 @@ components:
         return_address:
           $ref: '#/components/schemas/fulfillment_address_request'
       type: object
-    avs_controls:
+    wallet_provider_card_on_file:
       properties:
-        auth_messages:
-          $ref: '#/components/schemas/avs_control_options'
-        av_messages:
-          $ref: '#/components/schemas/avs_control_options'
+        address_verification:
+          $ref: '#/components/schemas/digital_wallet_token_address_verification'
+        enabled:
+          default: false
+          description: Specifies if the card on file is enabled.
+          type: boolean
+      type: object
+    web_push_provisioning:
+      properties:
+        wpp_apple_card_template_id:
+          description: Identifier that Apple uses to identify the program to process the request for.
+          type: string
+        wpp_apple_partner_id:
+          description: Identifier that Apple uses to identify the program to provide the correct card art for.
+          type: string
+        wpp_google_piaid:
+          description: Identifier that Google uses to identify the program to process the request for and to provide the correct card art for.
+          type: string
       type: object
     transaction_controls:
       properties:
@@ -458,170 +393,12 @@ components:
         strong_customer_authentication_limits:
           $ref: '#/components/schemas/strong_customer_authentication_limits'
       type: object
-    avs_control_options:
-      properties:
-        decline_on_address_number_mismatch:
-          default: false
-          type: boolean
-        decline_on_postal_code_mismatch:
-          default: true
-          type: boolean
-        validate:
-          default: true
-          type: boolean
-      type: object
-    ImagesCarrier:
-      description: Specifies personalized images that appear on the card carrier.
-      properties:
-        message_1:
-          description: Specifies a custom message that appears on the card carrier.
-          type: string
-        name:
-          description: Specifies a PNG image to display on the card carrier.
-          type: string
-      type: object
-    card_product_update_model:
-      properties:
-        active:
-          default: false
-          type: boolean
-        config:
-          $ref: '#/components/schemas/card_product_config'
-        end_date:
-          description: yyyy-MM-dd
-          format: date
-          type: string
-        name:
-          maxLength: 40
-          minLength: 0
-          type: string
-        start_date:
-          description: yyyy-MM-dd
-          format: date
-          type: string
-      type: object
-    MinOffset:
-      properties:
-        unit:
-          description: specify if a value is provided; default is expiration_offset.unit
-          enum:
-          - YEARS
-          - MONTHS
-          - DAYS
-          - HOURS
-          - MINUTES
-          - SECONDS
-          type: string
-        value:
-          description: specify if unit is provided; default is expiration_offset.value
-          format: int32
-          type: integer
-      type: object
-    jit_funding_program_funding_source:
-      properties:
-        enabled:
-          default: false
-          type: boolean
-        funding_source_token:
-          description: required if enabled
-          maxLength: 36
-          minLength: 0
-          type: string
-        refunds_destination:
-          description: 'Valid values: PROGRAM_FUNDING_SOURCE, GPA, WATERFALL'
-          maxLength: 50
-          minLength: 0
-          type: string
-      type: object
     digital_wallet_token_address_verification:
       properties:
         validate:
           default: true
           description: Specifies whether or not the address used for address verification is valid.
           type: boolean
-      type: object
-    images_signature:
-      description: Specifies an image of the cardholder's signature.
-      properties:
-        name:
-          description: Specifies a PNG image of the cardholder's signature.
-          type: string
-      type: object
-    card_product_response:
-      properties:
-        active:
-          default: false
-          type: boolean
-        config:
-          $ref: '#/components/schemas/card_product_config'
-        created_time:
-          description: yyyy-MM-ddTHH:mm:ssZ
-          format: date-time
-          type: string
-        end_date:
-          description: yyyy-MM-dd
-          format: date
-          type: string
-        last_modified_time:
-          description: yyyy-MM-ddTHH:mm:ssZ
-          format: date-time
-          type: string
-        name:
-          maxLength: 40
-          minLength: 1
-          type: string
-        start_date:
-          description: yyyy-MM-dd
-          format: date
-          type: string
-        token:
-          maxLength: 36
-          minLength: 1
-          type: string
-      required:
-      - created_time
-      - last_modified_time
-      - name
-      - start_date
-      type: object
-    images_card:
-      description: Specifies personalized images that appear on the card.
-      properties:
-        name:
-          description: Specifies a PNG image to display on the card.
-          type: string
-        thermal_color:
-          description: Specifies the color of the image displayed on the card.
-          type: string
-      type: object
-    in_app_provisioning:
-      properties:
-        address_verification:
-          $ref: '#/components/schemas/digital_wallet_token_address_verification'
-        enabled:
-          default: false
-          description: Specifies if in-app provisioning is enabled.
-          type: boolean
-      type: object
-    BinPrefixRequest:
-      properties:
-        bin_prefix:
-          description: 6-14 digit BIN prefix
-          example: '411111111'
-          maxLength: 14
-          minLength: 6
-          pattern: ^\d+$
-          type: string
-        status:
-          description: Status of this BIN prefix
-          enum:
-          - ACTIVE
-          - INACTIVE
-          example: ACTIVE
-          type: string
-      required:
-      - bin_prefix
-      - status
       type: object
     jit_funding:
       properties:
@@ -631,6 +408,50 @@ components:
           $ref: '#/components/schemas/jit_funding_program_funding_source'
         programgateway_funding_source:
           $ref: '#/components/schemas/jit_funding_programgateway_funding_source'
+      type: object
+    strong_customer_authentication_limits:
+      properties:
+        cavv_authentication_amount_incremental_percentage:
+          readOnly: true
+          type: string
+        enable_biometric_bypass_sca_contactless:
+          readOnly: true
+          type: boolean
+        enable_cavv_authentication_amount_validation:
+          readOnly: true
+          type: boolean
+        enable_issuer_tra_exemption:
+          readOnly: true
+          type: boolean
+        sca_contactless_cumulative_amount_limit:
+          readOnly: true
+          type: number
+        sca_contactless_transaction_limit:
+          readOnly: true
+          type: number
+        sca_contactless_transactions_count_limit:
+          format: int32
+          readOnly: true
+          type: integer
+        sca_contactless_transactions_currency:
+          readOnly: true
+          type: string
+        sca_lvp_cumulative_amount_limit:
+          readOnly: true
+          type: number
+        sca_lvp_transaction_limit:
+          readOnly: true
+          type: number
+        sca_lvp_transactions_count_limit:
+          format: int32
+          readOnly: true
+          type: integer
+        sca_lvp_transactions_currency:
+          readOnly: true
+          type: string
+        sca_tra_exemption_amount_limit:
+          readOnly: true
+          type: number
       type: object
     card_life_cycle:
       properties:
@@ -653,24 +474,83 @@ components:
           default: false
           type: boolean
       type: object
-    other_poi:
+    BinPrefixRequest:
       properties:
-        allow:
-          default: true
-          type: boolean
-        card_presence_required:
-          default: false
-          description: Default = false
-          type: boolean
-        cardholder_presence_required:
-          default: false
-          description: Default = false
-          type: boolean
-        track1_discretionary_data:
+        bin_prefix:
+          description: 6-14 digit BIN prefix
+          example: '411111111'
+          maxLength: 14
+          minLength: 6
+          pattern: ^\d+$
           type: string
-        track2_discretionary_data:
+        status:
+          description: Status of this BIN prefix
+          enum:
+          - ACTIVE
+          - INACTIVE
+          example: ACTIVE
           type: string
-        use_static_pin:
+      required:
+      - bin_prefix
+      - status
+      type: object
+    ExpirationOffset:
+      properties:
+        min_offset:
+          $ref: '#/components/schemas/MinOffset'
+        unit:
+          description: specify if a value is provided; default is YEARS
+          enum:
+          - YEARS
+          - MONTHS
+          - DAYS
+          - HOURS
+          - MINUTES
+          - SECONDS
+          type: string
+        value:
+          description: specify if unit is provided; default is 4
+          format: int32
+          type: integer
+      type: object
+    jit_funding_program_funding_source:
+      properties:
+        enabled:
+          default: false
+          type: boolean
+        funding_source_token:
+          description: required if enabled
+          maxLength: 36
+          minLength: 0
+          type: string
+        refunds_destination:
+          description: 'Valid values: PROGRAM_FUNDING_SOURCE, GPA, WATERFALL'
+          maxLength: 50
+          minLength: 0
+          type: string
+      type: object
+    avs_controls:
+      properties:
+        auth_messages:
+          $ref: '#/components/schemas/avs_control_options'
+        av_messages:
+          $ref: '#/components/schemas/avs_control_options'
+      type: object
+    clearing_and_settlement:
+      properties:
+        overdraft_destination:
+          default: GPA
+          description: Default value of GPA does not apply when JIT funding is enabled
+          enum:
+          - GPA
+          - MSA
+          - MERCHANT_CAMPAIGN_ACCOUNT
+          - GLOBAL_OVERDRAFT_ACCOUNT
+          type: string
+      type: object
+    Special:
+      properties:
+        merchant_on_boarding:
           default: false
           type: boolean
       type: object
@@ -682,6 +562,40 @@ components:
           default: false
           description: Specifies if manual entry is enabled.
           type: boolean
+      type: object
+    poi:
+      properties:
+        atm:
+          default: false
+          description: Default = false
+          type: boolean
+        ecommerce:
+          default: true
+          type: boolean
+        other:
+          $ref: '#/components/schemas/other_poi'
+      type: object
+    carrier:
+      description: Specifies attributes of the card carrier.
+      properties:
+        logo_file:
+          description: Specifies an image to display on the card carrier.
+          type: string
+        logo_thumbnail_file:
+          description: Specifies a thumbnail-sized rendering of the image specified in the `logo_file` field.
+          type: string
+        message_file:
+          description: Specifies a text file containing a custom message to print on the card carrier.
+          type: string
+        message_line:
+          description: Specifies a custom message that appears on the card carrier.
+          type: string
+        message_line_2:
+          description: Specifies the second line of a custom message that appears on the card carrier.
+          type: string
+        template_id:
+          description: Specifies the card carrier template to use.
+          type: string
       type: object
     card_product_fulfillment:
       properties:
@@ -751,12 +665,86 @@ components:
       required:
       - card_personalization
       type: object
-    images_carrier_return_window:
-      description: Specifies a custom image to display in the return address window of the card carrier envelope.
+    other_poi:
       properties:
-        name:
-          description: Specifies a PNG image to display in the return address window of envelopes used for sending cards to cardholders.
+        allow:
+          default: true
+          type: boolean
+        card_presence_required:
+          default: false
+          description: Default = false
+          type: boolean
+        cardholder_presence_required:
+          default: false
+          description: Default = false
+          type: boolean
+        track1_discretionary_data:
           type: string
+        track2_discretionary_data:
+          type: string
+        use_static_pin:
+          default: false
+          type: boolean
+      type: object
+    in_app_provisioning:
+      properties:
+        address_verification:
+          $ref: '#/components/schemas/digital_wallet_token_address_verification'
+        enabled:
+          default: false
+          description: Specifies if in-app provisioning is enabled.
+          type: boolean
+      type: object
+    card_product_update_model:
+      properties:
+        active:
+          default: false
+          type: boolean
+        config:
+          $ref: '#/components/schemas/card_product_config'
+        end_date:
+          description: yyyy-MM-dd
+          format: date
+          type: string
+        name:
+          maxLength: 40
+          minLength: 0
+          type: string
+        start_date:
+          description: yyyy-MM-dd
+          format: date
+          type: string
+      type: object
+    text:
+      description: Specifies personalized text that appears on the card.
+      properties:
+        name_line_1:
+          $ref: '#/components/schemas/text_value'
+        name_line_2:
+          $ref: '#/components/schemas/text_value'
+        name_line_3:
+          $ref: '#/components/schemas/text_value'
+      required:
+      - name_line_1
+      type: object
+    card_personalization:
+      description: Specifies personalized attributes to be added to the card.
+      properties:
+        carrier:
+          $ref: '#/components/schemas/carrier'
+        images:
+          $ref: '#/components/schemas/images'
+        perso_type:
+          description: Specifies the type of card personalization.
+          enum:
+          - EMBOSS
+          - LASER
+          - FLAT
+          type: string
+        text:
+          $ref: '#/components/schemas/text'
+      required:
+      - text
       type: object
     fulfillment_address_request:
       properties:
@@ -805,73 +793,95 @@ components:
           minLength: 0
           type: string
       type: object
-    selective_auth:
+    jit_funding_paymentcard_funding_source:
       properties:
-        dmd_location_sensitivity:
-          default: 0
-          enum:
-          - 0
-          - 1
-          - 2
-          - 3
-          - 4
-          format: int32
-          type: integer
-        enable_regex_search_chain:
+        enabled:
           default: false
           type: boolean
-        sa_mode:
-          default: 1
+        refunds_destination:
+          description: 'Valid values: GATEWAY, GPA, WATERFALL'
+          maxLength: 50
+          minLength: 0
+          type: string
+      type: object
+    card_product_config:
+      properties:
+        card_life_cycle:
+          $ref: '#/components/schemas/card_life_cycle'
+        clearing_and_settlement:
+          $ref: '#/components/schemas/clearing_and_settlement'
+        digital_wallet_tokenization:
+          $ref: '#/components/schemas/DigitalWalletTokenization'
+        fulfillment:
+          $ref: '#/components/schemas/card_product_fulfillment'
+        jit_funding:
+          $ref: '#/components/schemas/jit_funding'
+        poi:
+          $ref: '#/components/schemas/poi'
+        selective_auth:
+          $ref: '#/components/schemas/selective_auth'
+        special:
+          $ref: '#/components/schemas/Special'
+        transaction_controls:
+          $ref: '#/components/schemas/transaction_controls'
+      type: object
+    images_card:
+      description: Specifies personalized images that appear on the card.
+      properties:
+        name:
+          description: Specifies a PNG image to display on the card.
+          type: string
+        thermal_color:
+          description: Specifies the color of the image displayed on the card.
+          type: string
+      type: object
+    MinOffset:
+      properties:
+        unit:
+          description: specify if a value is provided; default is expiration_offset.unit
           enum:
-          - 0
-          - 1
-          - 2
+          - YEARS
+          - MONTHS
+          - DAYS
+          - HOURS
+          - MINUTES
+          - SECONDS
+          type: string
+        value:
+          description: specify if unit is provided; default is expiration_offset.value
           format: int32
           type: integer
       type: object
-    strong_customer_authentication_limits:
+    jit_funding_programgateway_funding_source:
       properties:
-        cavv_authentication_amount_incremental_percentage:
-          readOnly: true
-          type: string
-        enable_biometric_bypass_sca_contactless:
-          readOnly: true
+        always_fund:
+          default: false
           type: boolean
-        enable_cavv_authentication_amount_validation:
-          readOnly: true
+        enabled:
+          default: false
           type: boolean
-        enable_issuer_tra_exemption:
-          readOnly: true
+        funding_source_token:
+          description: Required if enabled
+          maxLength: 36
+          minLength: 0
+          type: string
+        refunds_destination:
+          description: 'Valid values: GATEWAY, GPA, WATERFALL'
+          maxLength: 50
+          minLength: 0
+          type: string
+      type: object
+    avs_control_options:
+      properties:
+        decline_on_address_number_mismatch:
+          default: false
           type: boolean
-        sca_contactless_cumulative_amount_limit:
-          readOnly: true
-          type: number
-        sca_contactless_transaction_limit:
-          readOnly: true
-          type: number
-        sca_contactless_transactions_count_limit:
-          format: int32
-          readOnly: true
-          type: integer
-        sca_contactless_transactions_currency:
-          readOnly: true
-          type: string
-        sca_lvp_cumulative_amount_limit:
-          readOnly: true
-          type: number
-        sca_lvp_transaction_limit:
-          readOnly: true
-          type: number
-        sca_lvp_transactions_count_limit:
-          format: int32
-          readOnly: true
-          type: integer
-        sca_lvp_transactions_currency:
-          readOnly: true
-          type: string
-        sca_tra_exemption_amount_limit:
-          readOnly: true
-          type: number
+        decline_on_postal_code_mismatch:
+          default: true
+          type: boolean
+        validate:
+          default: true
+          type: boolean
       type: object
     provisioning_controls:
       properties:
@@ -897,16 +907,20 @@ components:
         web_push_provisioning:
           $ref: '#/components/schemas/web_push_provisioning'
       type: object
-    web_push_provisioning:
+    text_value:
       properties:
-        wpp_apple_card_template_id:
-          description: Identifier that Apple uses to identify the program to process the request for.
+        value:
+          description: Line of personalized text printed on the card.
           type: string
-        wpp_apple_partner_id:
-          description: Identifier that Apple uses to identify the program to provide the correct card art for.
+      type: object
+    ImagesCarrier:
+      description: Specifies personalized images that appear on the card carrier.
+      properties:
+        message_1:
+          description: Specifies a custom message that appears on the card carrier.
           type: string
-        wpp_google_piaid:
-          description: Identifier that Google uses to identify the program to process the request for and to provide the correct card art for.
+        name:
+          description: Specifies a PNG image to display on the card carrier.
           type: string
       type: object
     DigitalWalletTokenization:
@@ -916,26 +930,12 @@ components:
         provisioning_controls:
           $ref: '#/components/schemas/provisioning_controls'
       type: object
-    card_product_config:
+    images_carrier_return_window:
+      description: Specifies a custom image to display in the return address window of the card carrier envelope.
       properties:
-        card_life_cycle:
-          $ref: '#/components/schemas/card_life_cycle'
-        clearing_and_settlement:
-          $ref: '#/components/schemas/clearing_and_settlement'
-        digital_wallet_tokenization:
-          $ref: '#/components/schemas/DigitalWalletTokenization'
-        fulfillment:
-          $ref: '#/components/schemas/card_product_fulfillment'
-        jit_funding:
-          $ref: '#/components/schemas/jit_funding'
-        poi:
-          $ref: '#/components/schemas/poi'
-        selective_auth:
-          $ref: '#/components/schemas/selective_auth'
-        special:
-          $ref: '#/components/schemas/Special'
-        transaction_controls:
-          $ref: '#/components/schemas/transaction_controls'
+        name:
+          description: Specifies a PNG image to display in the return address window of envelopes used for sending cards to cardholders.
+          type: string
       type: object
   securitySchemes:
     mqAppAndAccessToken:

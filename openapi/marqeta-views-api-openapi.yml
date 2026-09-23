@@ -1,16 +1,18 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
+  title: Marqeta DiVA Views API
+  description: The Marqeta DiVA (Data Insights, Visualization, and Analytics) API is a RESTful interface that provides programmatic access to production data from a Marqeta card program.
+  version: '2'
   contact:
+    name: Marqeta Support
+    url: https://www.marqeta.com/company/contact
     email: support@marqeta.com
-    name: Marqeta
-  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries Views API
-  version: 3.0.39
 servers:
-- url: /v3
+- url: https://diva-api.marqeta.com/data/v2
+  description: Production Server
 security:
-- mqAppAndAccessToken: []
+- basicAuth: []
 tags:
 - name: Views
   description: View endpoints provide programmatic access to aggregated platform data derived from card program activity. Each view represents a specific dataset such as transactions, balances, or card states, aggregated at a configurable time level.
@@ -36,6 +38,27 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
+  responses:
+    Unauthorized:
+      description: Unauthorized. The provided application token and access token credentials are invalid or missing.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Bad request. One or more required query parameters are missing or contain invalid values.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  parameters:
+    program:
+      name: program
+      in: query
+      required: true
+      description: The name of your Marqeta card program. This parameter is required for most DiVA API endpoints to scope the data to your program.
+      schema:
+        type: string
   schemas:
     ViewsListResponse:
       type: object
@@ -71,28 +94,11 @@ components:
         error_message:
           type: string
           description: Human-readable error description.
-  responses:
-    Unauthorized:
-      description: Unauthorized. The provided application token and access token credentials are invalid or missing.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: Bad request. One or more required query parameters are missing or contain invalid values.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-  parameters:
-    program:
-      name: program
-      in: query
-      required: true
-      description: The name of your Marqeta card program. This parameter is required for most DiVA API endpoints to scope the data to your program.
-      schema:
-        type: string
   securitySchemes:
-    mqAppAndAccessToken:
-      scheme: basic
+    basicAuth:
       type: http
+      scheme: basic
+      description: HTTP Basic Authentication. Use your application token as the username and your access token as the password. Contact your Marqeta representative to obtain DiVA API credentials.
+externalDocs:
+  description: Marqeta DiVA API Documentation
+  url: https://www.marqeta.com/docs/diva-api/introduction

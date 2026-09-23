@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries Account Documents API
+  title: Core Account Documents API
   version: 3.0.39
 servers:
 - url: /v3
@@ -174,55 +174,6 @@ paths:
       - Account Documents
 components:
   schemas:
-    AccountDocumentsResponse:
-      description: Account documents response.
-      properties:
-        account_statement:
-          $ref: '#/components/schemas/AccountDocumentResponse'
-        benefits_disclosure:
-          $ref: '#/components/schemas/AccountDocumentResponse'
-        card_member_agreement:
-          $ref: '#/components/schemas/AccountDocumentResponse'
-        e_disclosure:
-          $ref: '#/components/schemas/AccountDocumentResponse'
-        privacy_policy:
-          $ref: '#/components/schemas/AccountDocumentResponse'
-        rewards_disclosure:
-          $ref: '#/components/schemas/AccountDocumentResponse'
-        summary_of_credit_terms:
-          $ref: '#/components/schemas/AccountDocumentResponse'
-        terms_schedule:
-          $ref: '#/components/schemas/AccountDocumentResponse'
-      type: object
-    AccountAndDocumentAssetType:
-      description: Type of document.
-      enum:
-      - TERMS_SCHEDULE
-      - ACCOUNT_STATEMENT
-      - SUMMARY_OF_CREDIT_TERMS
-      - REWARDS_DISCLOSURE
-      - PRIVACY_POLICY
-      - E_DISCLOSURE
-      - BENEFITS_DISCLOSURE
-      - CARD_MEMBER_AGREEMENT
-      type: string
-    PolicyDocumentAssetURLs:
-      description: Contains one or more URLs for an asset.
-      properties:
-        html:
-          description: URL to the HTML version of the asset.
-          type: string
-        pdf:
-          description: URL to the PDF version of the asset.
-          type: string
-        png:
-          description: URL to the PNG version of the asset.
-          type: string
-      required:
-      - html
-      - pdf
-      - png
-      type: object
     AccountDocumentResponse:
       description: Account document response.
       properties:
@@ -240,6 +191,25 @@ components:
           format: date-time
           type: string
       type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    AccountAndDocumentAssetType:
+      description: Type of document.
+      enum:
+      - TERMS_SCHEDULE
+      - ACCOUNT_STATEMENT
+      - SUMMARY_OF_CREDIT_TERMS
+      - REWARDS_DISCLOSURE
+      - PRIVACY_POLICY
+      - E_DISCLOSURE
+      - BENEFITS_DISCLOSURE
+      - CARD_MEMBER_AGREEMENT
+      type: string
     AccountDocumentsPage:
       description: Account document response.
       properties:
@@ -267,12 +237,42 @@ components:
       - is_more
       - start_index
       type: object
-    Error:
+    AccountDocumentsResponse:
+      description: Account documents response.
       properties:
-        code:
-          type: integer
-        message:
+        account_statement:
+          $ref: '#/components/schemas/AccountDocumentResponse'
+        benefits_disclosure:
+          $ref: '#/components/schemas/AccountDocumentResponse'
+        card_member_agreement:
+          $ref: '#/components/schemas/AccountDocumentResponse'
+        e_disclosure:
+          $ref: '#/components/schemas/AccountDocumentResponse'
+        privacy_policy:
+          $ref: '#/components/schemas/AccountDocumentResponse'
+        rewards_disclosure:
+          $ref: '#/components/schemas/AccountDocumentResponse'
+        summary_of_credit_terms:
+          $ref: '#/components/schemas/AccountDocumentResponse'
+        terms_schedule:
+          $ref: '#/components/schemas/AccountDocumentResponse'
+      type: object
+    PolicyDocumentAssetURLs:
+      description: Contains one or more URLs for an asset.
+      properties:
+        html:
+          description: URL to the HTML version of the asset.
           type: string
+        pdf:
+          description: URL to the PDF version of the asset.
+          type: string
+        png:
+          description: URL to the PNG version of the asset.
+          type: string
+      required:
+      - html
+      - pdf
+      - png
       type: object
   securitySchemes:
     mqAppAndAccessToken:

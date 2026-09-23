@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries Account Signup Bonus API
+  title: Core Account Signup Bonus API
   version: 3.0.39
 servers:
 - url: /v3
@@ -24,9 +24,9 @@ paths:
         The event notification is resent to your webhook endpoint and also returned in the response to this request.
 
 
-        For details on how to configure your webhook endpoint, see the About Webhooks <</developer-guides/about-webhooks#_tutorial, tutorial>>.
+        For details on how to configure your webhook endpoint, see the About Webhooks >.
 
-        For the complete `/webhooks` endpoint reference, see <</core-api/webhooks, Webhooks>>.'
+        For the complete `/webhooks` endpoint reference, see >.'
       operationId: resendWebhookEvent
       parameters:
       - description: Specifies the type of event you want to resend.
@@ -444,18 +444,18 @@ paths:
       - Account Signup Bonus
 components:
   schemas:
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-      type: object
     WebhookEventResendContainerResponse:
       description: Contains information about a webhook event.
       properties:
         unused:
           description: Event notification that was resent to your webhook endpoint.
+          type: string
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
           type: string
       type: object
   securitySchemes:

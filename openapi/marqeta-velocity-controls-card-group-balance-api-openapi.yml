@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries Velocity Controls Card Group Balance API
+  title: Core Velocity Controls Card Group Balance API
   version: 3.0.39
 servers:
 - url: /v3
@@ -45,36 +45,18 @@ paths:
       - Velocity Controls Card Group Balance
 components:
   schemas:
-    VelocityControlBalance:
-      allOf:
-      - $ref: '#/components/schemas/VelocityControlResponse'
-      - properties:
-          available:
-            properties:
-              amount:
-                description: 'Amount of money remaining for the user.
+    VelocityWindow:
+      description: 'Defines the time period to which the `amount_limit` and `usage_limit` fields apply:
 
-                  This value is returned only if the user has a limit on the amount of money.'
-                type: number
-              days_remaining:
-                description: 'Number of days remaining for the user.
-
-                  This value is returned only if the user has a limit on the number of days.'
-                type: integer
-              uses:
-                description: 'Number of uses remaining for the user.
-
-                  This value is returned only if the user has a limit on the number of uses.'
-                type: integer
-            type: object
-        type: object
-    Association:
-      description: Defines to which the velocity control applies.
+        * *MONTH* – one month; months begin on the first day of month at 00:00:00 ET.'
+      enum:
+      - MONTH
+      type: string
+    Error:
       properties:
-        card_group_token:
-          description: Unique identifier of the card group.
-          maxLength: 36
-          minLength: 1
+        code:
+          type: integer
+        message:
           type: string
       type: object
     MerchantScope:
@@ -109,59 +91,13 @@ components:
           - mcc_group
           type: string
       type: object
-    VelocityWindow:
-      description: 'Defines the time period to which the `amount_limit` and `usage_limit` fields apply:
-
-        * *MONTH* – one month; months begin on the first day of month at 00:00:00 ET.'
-      enum:
-      - MONTH
-      type: string
-    VelocityControlBalancePage:
+    Association:
+      description: Defines to which the velocity control applies.
       properties:
-        count:
-          description: 'Number of resources retrieved.
-
-
-            This field is returned if there are resources in your returned array.'
-          format: int32
-          type: integer
-        data:
-          description: 'Array of Card Group objects.
-
-
-            Objects are returned as appropriate to your query.'
-          items:
-            $ref: '#/components/schemas/VelocityControlBalance'
-          type: array
-        end_index:
-          description: 'Sort order index of the last resource in the returned array.
-
-
-            This field is returned if there are resources in your returned array.'
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          description: 'A value of `true` indicates that more unreturned resources exist.
-
-            A value of `false` indicates that no more unreturned resources exist.
-
-
-            This field is returned if there are resources in your returned array.'
-          type: boolean
-        start_index:
-          description: 'Sort order index of the first resource in the returned array.
-
-
-            This field is returned if there are resources in your returned array.'
-          format: int32
-          type: integer
-      type: object
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
+        card_group_token:
+          description: Unique identifier of the card group.
+          maxLength: 36
+          minLength: 1
           type: string
       type: object
     VelocityControlResponse:
@@ -214,6 +150,70 @@ components:
       - amount_limit
       - currency_code
       type: object
+    VelocityControlBalancePage:
+      properties:
+        count:
+          description: 'Number of resources retrieved.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+        data:
+          description: 'Array of Card Group objects.
+
+
+            Objects are returned as appropriate to your query.'
+          items:
+            $ref: '#/components/schemas/VelocityControlBalance'
+          type: array
+        end_index:
+          description: 'Sort order index of the last resource in the returned array.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          description: 'A value of `true` indicates that more unreturned resources exist.
+
+            A value of `false` indicates that no more unreturned resources exist.
+
+
+            This field is returned if there are resources in your returned array.'
+          type: boolean
+        start_index:
+          description: 'Sort order index of the first resource in the returned array.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+      type: object
+    VelocityControlBalance:
+      allOf:
+      - $ref: '#/components/schemas/VelocityControlResponse'
+      - properties:
+          available:
+            properties:
+              amount:
+                description: 'Amount of money remaining for the user.
+
+                  This value is returned only if the user has a limit on the amount of money.'
+                type: number
+              days_remaining:
+                description: 'Number of days remaining for the user.
+
+                  This value is returned only if the user has a limit on the number of days.'
+                type: integer
+              uses:
+                description: 'Number of uses remaining for the user.
+
+                  This value is returned only if the user has a limit on the number of uses.'
+                type: integer
+            type: object
+        type: object
   securitySchemes:
     mqAppAndAccessToken:
       scheme: basic

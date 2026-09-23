@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries Program Transfers API
+  title: Core Program Transfers API
   version: 3.0.39
 servers:
 - url: /v3
@@ -17,18 +17,7 @@ tags:
     include::../../maturity-admonition-banner.adoc[]
 
 
-    A program transfer moves funds from an account holder''s general purpose account (GPA) to a program funding source.
-
-    In contrast to a fee transfer, the program transfer amount is specified by the transfer itself and can therefore be set dynamically.
-
-    An auto reload is triggered if the GPA has insufficient funds to cover the transfer amount and auto reload is enabled.
-
-
-    [NOTE]
-
-    The `/programtransfers` endpoint is only available for specific, pre-approved use cases.
-
-    For more information about this endpoint, contact your Marqeta representative.'
+    A program transfer moves funds from an account holder''s general purpose account (GPA) to a program funding source.'
   name: Program Transfers
 paths:
   /programtransfers:
@@ -38,7 +27,7 @@ paths:
 
         To narrow your result set to program transfers of a particular type or that are associated with a particular account holder, include the appropriate parameters from the following URL Query Parameters table.
 
-        This endpoint also supports <</core-api/field-filtering, field filtering>>, <</core-api/sorting-and-pagination, pagination>>, and <</core-api/sorting-and-pagination, sorting>>.'
+        This endpoint also supports >, >, and >.'
       operationId: getProgramtransfers
       parameters:
       - description: Number of program transfers to retrieve.
@@ -217,7 +206,7 @@ paths:
       description: 'Use this endpoint to list all program transfer types.
 
 
-        This endpoint supports <</core-api/field-filtering, field filtering>>, <</core-api/sorting-and-pagination, pagination>>, and <</core-api/sorting-and-pagination, sorting>>.'
+        This endpoint supports >, >, and >.'
       operationId: getProgramtransfersTypes
       parameters:
       - description: Number of program transfer types to retrieve.
@@ -483,6 +472,132 @@ paths:
       - Program Transfers
 components:
   schemas:
+    program_transfer_response:
+      description: Contains information about a program transfer, which moves funds from an account holder's GPA to a program funding source.
+      properties:
+        amount:
+          description: Amount of program transfer.
+          type: number
+        business_token:
+          description: 'Unique identifier of the business account holder.
+
+            Returned if `user_token` is not specified.'
+          maxLength: 36
+          minLength: 1
+          type: string
+        created_time:
+          description: Date and time when the program transfer object was created, in UTC.
+          format: date-time
+          type: string
+        currency_code:
+          description: Three-digit ISO 4217 currency code.
+          type: string
+        fees:
+          description: Contains attributes that define characteristics of one or more fees.
+          items:
+            $ref: '#/components/schemas/fee_detail'
+          type: array
+        jit_funding:
+          $ref: '#/components/schemas/jit_funding_api'
+        memo:
+          description: Additional description of the program transfer.
+          maxLength: 99
+          minLength: 1
+          type: string
+        tags:
+          description: Comma-delimited list of tags describing the program transfer.
+          maxLength: 255
+          minLength: 1
+          type: string
+        token:
+          description: Unique identifier of the program transfer.
+          maxLength: 36
+          minLength: 1
+          type: string
+        transaction_token:
+          description: Unique identifier of the transaction.
+          type: string
+        type_token:
+          description: Unique identifier of the program transfer type.
+          maxLength: 36
+          minLength: 1
+          type: string
+        user_token:
+          description: 'Unique identifier of the user account holder.
+
+            Returned if `business_token` is not specified.'
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - amount
+      - currency_code
+      - transaction_token
+      - type_token
+      type: object
+    account_name_verification_source:
+      description: Contains account name verification data used to make JIT Funding decisions.
+      properties:
+        first_name:
+          description: First or given name of the cardholder.
+          type: string
+        last_name:
+          description: Last or family name of the cardholder.
+          type: string
+        middle_name:
+          description: Middle name of the cardholder.
+          type: string
+        on_file:
+          $ref: '#/components/schemas/ani_information'
+        response:
+          $ref: '#/components/schemas/response'
+      type: object
+    program_transfer_type_request:
+      properties:
+        memo:
+          description: Memo or note describing the program transfer type.
+          maxLength: 99
+          minLength: 1
+          type: string
+        program_funding_source_token:
+          description: 'Unique identifier of the program funding source to which program transfers will be credited.
+
+
+            Send a `GET` request to `/fundingsources/program` to retrieve program funding source tokens.'
+          maxLength: 36
+          minLength: 1
+          type: string
+        tags:
+          description: Comma-delimited list of tags describing the program transfer type.
+          maxLength: 255
+          minLength: 1
+          type: string
+        token:
+          description: 'Unique identifier of the program transfer type.
+
+
+            If you do not include a token, the system will generate one automatically.
+
+            This token is necessary for use in other API calls, so we recommend that rather than let the system generate one, you use a simple string that is easy to remember.
+
+            This value cannot be updated.'
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - memo
+      - program_funding_source_token
+      type: object
+    jit_address_verification:
+      description: Contains address verification data used to make JIT Funding decisions.
+      properties:
+        gateway:
+          $ref: '#/components/schemas/address_verification_source'
+        issuer:
+          $ref: '#/components/schemas/address_verification_source'
+        request:
+          $ref: '#/components/schemas/avs_information'
+      type: object
     fee:
       description: Contains details about the fee.
       properties:
@@ -520,116 +635,46 @@ components:
       - name
       - token
       type: object
-    program_transfer:
+    ProgramTransferTypeListResponse:
       properties:
-        amount:
-          description: Amount of program transfer.
-          type: number
-        business_token:
-          description: 'Unique identifier of the business.
-
-            Pass either a `business_token` or a `user_token`, not both.
+        count:
+          description: 'Number of program transfer resources to retrieve.
 
 
-            Send a `GET` request to `/businesses` to retrieve business tokens.'
-          maxLength: 36
-          minLength: 1
-          type: string
-        currency_code:
-          description: Three-digit ISO 4217 currency code.
-          type: string
-        fees:
-          description: 'Contains attributes that define characteristics of one or more fees.
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+        data:
+          description: 'Array of program transfer types.
 
-            This array is returned in the response when it is included in the request.'
+
+            Objects are returned as appropriate to your query.'
           items:
-            $ref: '#/components/schemas/fee_model'
+            $ref: '#/components/schemas/program_transfer_type_response'
           type: array
-        memo:
-          description: Memo or note describing the program transfer.
-          maxLength: 99
-          minLength: 1
-          type: string
-        tags:
-          description: Comma-delimited list of tags describing the program transfer.
-          maxLength: 255
-          minLength: 1
-          type: string
-        token:
-          description: 'Unique identifier of the program transfer.
+        end_index:
+          description: 'Sort order index of the last resource in the returned array.
 
 
-            If you do not include a token, the system will generate one automatically.
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          description: 'A value of `true` indicates that more unreturned resources exist.
 
-            This token is necessary for use in other API calls, so we recommend that rather than let the system generate one, you use a simple string that is easy to remember.
-
-            This value cannot be updated.'
-          maxLength: 36
-          minLength: 1
-          type: string
-        type_token:
-          description: 'Unique identifier of the program transfer type.
+            A value of `false` indicates that no more unreturned resources exist.
 
 
-            Send a `GET` request to `/programtransfers/types` to retrieve program transfer type tokens.'
-          maxLength: 36
-          minLength: 1
-          type: string
-        user_token:
-          description: 'Unique identifier of the user.
-
-            Pass either a `user_token` or a `business_token`, not both.
+            This field is returned if there are resources in your returned array.'
+          type: boolean
+        start_index:
+          description: 'Sort order index of the first resource in the returned array.
 
 
-            Send a `GET` request to `/users` to retrieve business tokens.'
-          maxLength: 36
-          minLength: 1
-          type: string
-      required:
-      - amount
-      - currency_code
-      - type_token
-      type: object
-    fee_model:
-      description: 'Contains attributes that define characteristics of one or more fees.
-
-        This array is returned in the response when it is included in the request.'
-      properties:
-        memo:
-          description: Additional text describing the fee.
-          maxLength: 99
-          minLength: 1
-          type: string
-        overrideAmount:
-          description: Dynamic fee amount that overrides the `fee.amount` field value.
-          type: number
-        tags:
-          description: Descriptive metadata about the fee.
-          maxLength: 255
-          minLength: 0
-          type: string
-        token:
-          description: Unique identifier of the fee.
-          maxLength: 36
-          minLength: 1
-          type: string
-      required:
-      - token
-      type: object
-    ani_information:
-      description: Contains account name verification data used to make JIT Funding decisions.
-      properties:
-        card_name:
-          type: string
-        first_name:
-          description: First or given name of the cardholder.
-          type: string
-        last_name:
-          description: Last or family name of the cardholder.
-          type: string
-        middle_name:
-          description: Middle name of the cardholder.
-          type: string
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
       type: object
     cardholder_balance:
       description: Returns general purpose account (GPA) balances for a user or business.
@@ -678,6 +723,81 @@ components:
       - last_updated_time
       - ledger_balance
       - pending_credits
+      type: object
+    address_verification_source:
+      description: Contains address verification data consisting of address data entered by the cardholder, address data held by the Marqeta platform, and an assertion by the Marqeta platform as to whether the two sets of data match.
+      properties:
+        on_file:
+          $ref: '#/components/schemas/avs_information'
+        response:
+          $ref: '#/components/schemas/response'
+      type: object
+    program_transfer_type_response:
+      properties:
+        created_time:
+          description: The date and time when the program transfer type object was created, in UTC.
+          format: date-time
+          type: string
+        last_modified_time:
+          description: Date and time when the program transfer type object was last modified, in UTC.
+          format: date-time
+          type: string
+        memo:
+          description: Memo or note describing the program transfer type.
+          type: string
+        program_funding_source_token:
+          description: Unique identifier of the program funding source to which program transfers will be credited.
+          type: string
+        tags:
+          description: Comma-delimited list of tags describing the program transfer type.
+          type: string
+        token:
+          description: Unique identifier of the program transfer type request object.
+          type: string
+      required:
+      - program_funding_source_token
+      - token
+      type: object
+    ProgramTransferListResponse:
+      properties:
+        count:
+          description: 'Number of program transfer resources to retrieve.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+        data:
+          description: 'Array of program transfer objects.
+
+
+            Objects are returned as appropriate to your query.'
+          items:
+            $ref: '#/components/schemas/program_transfer_response'
+          type: array
+        end_index:
+          description: 'Sort order index of the last resource in the returned array.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          description: 'A value of `true` indicates that more unreturned resources exist.
+
+            A value of `false` indicates that no more unreturned resources exist.
+
+
+            This field is returned if there are resources in your returned array.'
+          type: boolean
+        start_index:
+          description: 'Sort order index of the first resource in the returned array.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
       type: object
     response:
       description: Response codes and memos for account name verification, address verification, card security verification, and transactions.
@@ -855,278 +975,6 @@ components:
       required:
       - code
       type: object
-    program_transfer_response:
-      description: Contains information about a program transfer, which moves funds from an account holder's GPA to a program funding source.
-      properties:
-        amount:
-          description: Amount of program transfer.
-          type: number
-        business_token:
-          description: 'Unique identifier of the business account holder.
-
-            Returned if `user_token` is not specified.'
-          maxLength: 36
-          minLength: 1
-          type: string
-        created_time:
-          description: Date and time when the program transfer object was created, in UTC.
-          format: date-time
-          type: string
-        currency_code:
-          description: Three-digit ISO 4217 currency code.
-          type: string
-        fees:
-          description: Contains attributes that define characteristics of one or more fees.
-          items:
-            $ref: '#/components/schemas/fee_detail'
-          type: array
-        jit_funding:
-          $ref: '#/components/schemas/jit_funding_api'
-        memo:
-          description: Additional description of the program transfer.
-          maxLength: 99
-          minLength: 1
-          type: string
-        tags:
-          description: Comma-delimited list of tags describing the program transfer.
-          maxLength: 255
-          minLength: 1
-          type: string
-        token:
-          description: Unique identifier of the program transfer.
-          maxLength: 36
-          minLength: 1
-          type: string
-        transaction_token:
-          description: Unique identifier of the transaction.
-          type: string
-        type_token:
-          description: Unique identifier of the program transfer type.
-          maxLength: 36
-          minLength: 1
-          type: string
-        user_token:
-          description: 'Unique identifier of the user account holder.
-
-            Returned if `business_token` is not specified.'
-          maxLength: 36
-          minLength: 1
-          type: string
-      required:
-      - amount
-      - currency_code
-      - transaction_token
-      - type_token
-      type: object
-    program_transfer_type_request:
-      properties:
-        memo:
-          description: Memo or note describing the program transfer type.
-          maxLength: 99
-          minLength: 1
-          type: string
-        program_funding_source_token:
-          description: 'Unique identifier of the program funding source to which program transfers will be credited.
-
-
-            Send a `GET` request to `/fundingsources/program` to retrieve program funding source tokens.'
-          maxLength: 36
-          minLength: 1
-          type: string
-        tags:
-          description: Comma-delimited list of tags describing the program transfer type.
-          maxLength: 255
-          minLength: 1
-          type: string
-        token:
-          description: 'Unique identifier of the program transfer type.
-
-
-            If you do not include a token, the system will generate one automatically.
-
-            This token is necessary for use in other API calls, so we recommend that rather than let the system generate one, you use a simple string that is easy to remember.
-
-            This value cannot be updated.'
-          maxLength: 36
-          minLength: 1
-          type: string
-      required:
-      - memo
-      - program_funding_source_token
-      type: object
-    jit_account_name_verification:
-      description: 'Contains account name verification data used to make JIT Funding decisions from one of the following objects:
-
-
-        * The `gateway` object, which contains account name verification data from your JIT Funding gateway.
-
-        * The `issuer` object, which contains account name verification data from the Marqeta platform.
-
-        * The `request` object, which contains account name verification data as it appears in a JIT Funding request.'
-      properties:
-        gateway:
-          $ref: '#/components/schemas/account_name_verification_source'
-        issuer:
-          $ref: '#/components/schemas/account_name_verification_source'
-        request:
-          $ref: '#/components/schemas/ani_information'
-      type: object
-    account_name_verification_source:
-      description: Contains account name verification data used to make JIT Funding decisions.
-      properties:
-        first_name:
-          description: First or given name of the cardholder.
-          type: string
-        last_name:
-          description: Last or family name of the cardholder.
-          type: string
-        middle_name:
-          description: Middle name of the cardholder.
-          type: string
-        on_file:
-          $ref: '#/components/schemas/ani_information'
-        response:
-          $ref: '#/components/schemas/response'
-      type: object
-    jit_address_verification:
-      description: Contains address verification data used to make JIT Funding decisions.
-      properties:
-        gateway:
-          $ref: '#/components/schemas/address_verification_source'
-        issuer:
-          $ref: '#/components/schemas/address_verification_source'
-        request:
-          $ref: '#/components/schemas/avs_information'
-      type: object
-    program_transfer_type_response:
-      properties:
-        created_time:
-          description: The date and time when the program transfer type object was created, in UTC.
-          format: date-time
-          type: string
-        last_modified_time:
-          description: Date and time when the program transfer type object was last modified, in UTC.
-          format: date-time
-          type: string
-        memo:
-          description: Memo or note describing the program transfer type.
-          type: string
-        program_funding_source_token:
-          description: Unique identifier of the program funding source to which program transfers will be credited.
-          type: string
-        tags:
-          description: Comma-delimited list of tags describing the program transfer type.
-          type: string
-        token:
-          description: Unique identifier of the program transfer type request object.
-          type: string
-      required:
-      - program_funding_source_token
-      - token
-      type: object
-    ProgramTransferTypeListResponse:
-      properties:
-        count:
-          description: 'Number of program transfer resources to retrieve.
-
-
-            This field is returned if there are resources in your returned array.'
-          format: int32
-          type: integer
-        data:
-          description: 'Array of program transfer types.
-
-
-            Objects are returned as appropriate to your query.'
-          items:
-            $ref: '#/components/schemas/program_transfer_type_response'
-          type: array
-        end_index:
-          description: 'Sort order index of the last resource in the returned array.
-
-
-            This field is returned if there are resources in your returned array.'
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          description: 'A value of `true` indicates that more unreturned resources exist.
-
-            A value of `false` indicates that no more unreturned resources exist.
-
-
-            This field is returned if there are resources in your returned array.'
-          type: boolean
-        start_index:
-          description: 'Sort order index of the first resource in the returned array.
-
-
-            This field is returned if there are resources in your returned array.'
-          format: int32
-          type: integer
-      type: object
-    ProgramTransferListResponse:
-      properties:
-        count:
-          description: 'Number of program transfer resources to retrieve.
-
-
-            This field is returned if there are resources in your returned array.'
-          format: int32
-          type: integer
-        data:
-          description: 'Array of program transfer objects.
-
-
-            Objects are returned as appropriate to your query.'
-          items:
-            $ref: '#/components/schemas/program_transfer_response'
-          type: array
-        end_index:
-          description: 'Sort order index of the last resource in the returned array.
-
-
-            This field is returned if there are resources in your returned array.'
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          description: 'A value of `true` indicates that more unreturned resources exist.
-
-            A value of `false` indicates that no more unreturned resources exist.
-
-
-            This field is returned if there are resources in your returned array.'
-          type: boolean
-        start_index:
-          description: 'Sort order index of the first resource in the returned array.
-
-
-            This field is returned if there are resources in your returned array.'
-          format: int32
-          type: integer
-      type: object
-    avs_information:
-      description: Contains address verification information.
-      properties:
-        postal_code:
-          description: Postal code of the address.
-          type: string
-        street_address:
-          description: Street name and number of the address.
-          type: string
-        zip:
-          description: United States ZIP code of the address.
-          type: string
-      type: object
-    address_verification_source:
-      description: Contains address verification data consisting of address data entered by the cardholder, address data held by the Marqeta platform, and an assertion by the Marqeta platform as to whether the two sets of data match.
-      properties:
-        on_file:
-          $ref: '#/components/schemas/avs_information'
-        response:
-          $ref: '#/components/schemas/response'
-      type: object
     jit_funding_api:
       description: 'Contains information about the JIT Funding load event, in which funds are loaded into an account.
 
@@ -1147,7 +995,6 @@ components:
           $ref: '#/components/schemas/jit_address_verification'
         amount:
           description: Requested amount of funding.
-          exclusiveMinimum: false
           minimum: 0
           type: number
         anticipated_amount_supported:
@@ -1297,6 +1144,147 @@ components:
       - method
       - token
       - user_token
+      type: object
+    fee_model:
+      description: 'Contains attributes that define characteristics of one or more fees.
+
+        This array is returned in the response when it is included in the request.'
+      properties:
+        memo:
+          description: Additional text describing the fee.
+          maxLength: 99
+          minLength: 1
+          type: string
+        overrideAmount:
+          description: Dynamic fee amount that overrides the `fee.amount` field value.
+          type: number
+        tags:
+          description: Descriptive metadata about the fee.
+          maxLength: 255
+          minLength: 0
+          type: string
+        token:
+          description: Unique identifier of the fee.
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - token
+      type: object
+    jit_account_name_verification:
+      description: 'Contains account name verification data used to make JIT Funding decisions from one of the following objects:
+
+
+        * The `gateway` object, which contains account name verification data from your JIT Funding gateway.
+
+        * The `issuer` object, which contains account name verification data from the Marqeta platform.
+
+        * The `request` object, which contains account name verification data as it appears in a JIT Funding request.'
+      properties:
+        gateway:
+          $ref: '#/components/schemas/account_name_verification_source'
+        issuer:
+          $ref: '#/components/schemas/account_name_verification_source'
+        request:
+          $ref: '#/components/schemas/ani_information'
+      type: object
+    program_transfer:
+      properties:
+        amount:
+          description: Amount of program transfer.
+          type: number
+        business_token:
+          description: 'Unique identifier of the business.
+
+            Pass either a `business_token` or a `user_token`, not both.
+
+
+            Send a `GET` request to `/businesses` to retrieve business tokens.'
+          maxLength: 36
+          minLength: 1
+          type: string
+        currency_code:
+          description: Three-digit ISO 4217 currency code.
+          type: string
+        fees:
+          description: 'Contains attributes that define characteristics of one or more fees.
+
+            This array is returned in the response when it is included in the request.'
+          items:
+            $ref: '#/components/schemas/fee_model'
+          type: array
+        memo:
+          description: Memo or note describing the program transfer.
+          maxLength: 99
+          minLength: 1
+          type: string
+        tags:
+          description: Comma-delimited list of tags describing the program transfer.
+          maxLength: 255
+          minLength: 1
+          type: string
+        token:
+          description: 'Unique identifier of the program transfer.
+
+
+            If you do not include a token, the system will generate one automatically.
+
+            This token is necessary for use in other API calls, so we recommend that rather than let the system generate one, you use a simple string that is easy to remember.
+
+            This value cannot be updated.'
+          maxLength: 36
+          minLength: 1
+          type: string
+        type_token:
+          description: 'Unique identifier of the program transfer type.
+
+
+            Send a `GET` request to `/programtransfers/types` to retrieve program transfer type tokens.'
+          maxLength: 36
+          minLength: 1
+          type: string
+        user_token:
+          description: 'Unique identifier of the user.
+
+            Pass either a `user_token` or a `business_token`, not both.
+
+
+            Send a `GET` request to `/users` to retrieve business tokens.'
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - amount
+      - currency_code
+      - type_token
+      type: object
+    avs_information:
+      description: Contains address verification information.
+      properties:
+        postal_code:
+          description: Postal code of the address.
+          type: string
+        street_address:
+          description: Street name and number of the address.
+          type: string
+        zip:
+          description: United States ZIP code of the address.
+          type: string
+      type: object
+    ani_information:
+      description: Contains account name verification data used to make JIT Funding decisions.
+      properties:
+        card_name:
+          type: string
+        first_name:
+          description: First or given name of the cardholder.
+          type: string
+        last_name:
+          description: Last or family name of the cardholder.
+          type: string
+        middle_name:
+          description: Middle name of the cardholder.
+          type: string
       type: object
     fee_detail:
       description: Contains details about a fee.

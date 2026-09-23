@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries Account API
+  title: Core Account API
   version: 3.0.39
 servers:
 - url: /v3
@@ -53,7 +53,6 @@ paths:
       - Account
   /accounts/{account_token}/periodicfeeschedules:
     get:
-      description: Get all active and upcoming periodic fee schedules of an account
       operationId: getPeriodicFeeSchedules
       parameters:
       - description: account token
@@ -105,6 +104,59 @@ paths:
       - Account
 components:
   schemas:
+    AccountBillingCycleResponse:
+      description: Details of a billing cycle.
+      properties:
+        account_token:
+          description: Token of the associated account.
+          type: string
+        created_time:
+          description: Date and time when the Billing Cycle was created on Marqeta's credit platform
+          format: date-time
+          type: string
+        current_end_time:
+          description: End time of the current billing cycle.
+          format: date-time
+          type: string
+        current_payment_due_date:
+          description: Payment due date for the current billing cycle.
+          format: date-time
+          type: string
+        current_start_time:
+          description: Start time of the current billing cycle.
+          format: date-time
+          type: string
+        next_end_time:
+          description: End time of the next billing cycle.
+          format: date-time
+          type: string
+        next_payment_due_date:
+          description: Payment due date for the next billing cycle.
+          format: date-time
+          type: string
+        next_start_time:
+          description: Start time of the next billing cycle.
+          format: date-time
+          type: string
+        short_code:
+          description: Unique identifier of the billing cycle's short code.
+          type: string
+        updated_time:
+          description: Date and time when the BillingCycle was last updated on Marqeta's credit platform
+          format: date-time
+          type: string
+      required:
+      - account_token
+      - created_time
+      - current_end_time
+      - current_payment_due_date
+      - current_start_time
+      - next_end_time
+      - next_payment_due_date
+      - next_start_time
+      - short_code
+      - updated_time
+      type: object
     Error:
       properties:
         code:
@@ -159,59 +211,6 @@ components:
           - ANNUAL_FEE
           - MONTHLY_FEE
           type: string
-      type: object
-    AccountBillingCycleResponse:
-      description: Details of a billing cycle.
-      properties:
-        account_token:
-          description: Token of the associated account.
-          type: string
-        created_time:
-          description: Date and time when the Billing Cycle was created on Marqeta's credit platform
-          format: date-time
-          type: string
-        current_end_time:
-          description: End time of the current billing cycle.
-          format: date-time
-          type: string
-        current_payment_due_date:
-          description: Payment due date for the current billing cycle.
-          format: date-time
-          type: string
-        current_start_time:
-          description: Start time of the current billing cycle.
-          format: date-time
-          type: string
-        next_end_time:
-          description: End time of the next billing cycle.
-          format: date-time
-          type: string
-        next_payment_due_date:
-          description: Payment due date for the next billing cycle.
-          format: date-time
-          type: string
-        next_start_time:
-          description: Start time of the next billing cycle.
-          format: date-time
-          type: string
-        short_code:
-          description: Unique identifier of the billing cycle's short code.
-          type: string
-        updated_time:
-          description: Date and time when the BillingCycle was last updated on Marqeta's credit platform
-          format: date-time
-          type: string
-      required:
-      - account_token
-      - created_time
-      - current_end_time
-      - current_payment_due_date
-      - current_start_time
-      - next_end_time
-      - next_payment_due_date
-      - next_start_time
-      - short_code
-      - updated_time
       type: object
   securitySchemes:
     mqAppAndAccessToken:

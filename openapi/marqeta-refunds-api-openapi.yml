@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries Refunds API
+  title: Core Refunds API
   version: 3.0.39
 servers:
 - url: /v3
@@ -84,36 +84,6 @@ paths:
       - Refunds
 components:
   schemas:
-    RefundType:
-      description: Type of refund.
-      enum:
-      - PAYMENT_REFUND
-      - CREDIT_BALANCE_REFUND
-      type: string
-    SimulateRefundTransitionRequest:
-      description: Specifies the details of simulate refund transition request .
-      properties:
-        status:
-          $ref: '#/components/schemas/RefundStatus'
-        token:
-          description: Unique identifier for the refund.
-          type: string
-      required:
-      - status
-      - token
-      type: object
-    CurrencyCode:
-      default: USD
-      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
-      enum:
-      - USD
-      type: string
-    RefundMethod:
-      description: Payment instrument used to issue the refund.
-      enum:
-      - ACH
-      - CHECK
-      type: string
     RefundStatus:
       description: Current status of the refund.
       enum:
@@ -132,6 +102,36 @@ components:
         message:
           type: string
       type: object
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
+      type: string
+    SimulateRefundTransitionRequest:
+      description: Specifies the details of simulate refund transition request .
+      properties:
+        status:
+          $ref: '#/components/schemas/RefundStatus'
+        token:
+          description: Unique identifier for the refund.
+          type: string
+      required:
+      - status
+      - token
+      type: object
+    RefundType:
+      description: Type of refund.
+      enum:
+      - PAYMENT_REFUND
+      - CREDIT_BALANCE_REFUND
+      type: string
+    RefundMethod:
+      description: Payment instrument used to issue the refund.
+      enum:
+      - ACH
+      - CHECK
+      type: string
     RefundResponse:
       description: Detailed refund response object.
       properties:

@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries Program Reserve API
+  title: Core Program Reserve API
   version: 3.0.39
 servers:
 - url: /v3
@@ -56,7 +56,7 @@ paths:
       description: 'Use this endpoint to return a list of credits and debits made to your program reserve account.
 
 
-        This endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>.'
+        This endpoint supports >.'
       operationId: getProgramreserveTransactions
       parameters:
       - description: Number of resources to retrieve.
@@ -174,6 +174,8 @@ paths:
           description: successful operation
       tags:
       - Program Reserve
+      summary: Get program reserve deposits
+      x-summary-source: derived
     post:
       deprecated: true
       operationId: deposit
@@ -189,68 +191,10 @@ paths:
           description: successful operation
       tags:
       - Program Reserve
+      summary: Deposit
+      x-summary-source: derived
 components:
   schemas:
-    program_reserve_account_balance:
-      properties:
-        available_balance:
-          description: 'Ledger balance, minus any authorized transactions that have not yet cleared.
-
-            When using JIT Funding, this balance is usually equal to $0.00.'
-          readOnly: true
-          type: number
-        balances:
-          additionalProperties:
-            $ref: '#/components/schemas/program_reserve_account_balance'
-          description: 'Contains program reserve account balance information, organized by currency code.
-
-            Sometimes referred to as a _program funding account_.'
-          type: object
-        credit_balance:
-          description: Not currently in use.
-          readOnly: true
-          type: number
-        currency_code:
-          description: Three-digit ISO 4217 currency code.
-          type: string
-        ledger_balance:
-          description: 'When using standard funding: The funds that are available to spend immediately, including funds from any authorized transactions that have not yet cleared.
-
-            When using Just-in-Time (JIT) Funding: Authorized funds that are currently on hold, but not yet cleared.'
-          readOnly: true
-          type: number
-        pending_credits:
-          description: ACH loads that have been accepted, but for which the funding time has not yet elapsed.
-          readOnly: true
-          type: number
-      type: object
-    program_reserve_deposit_request:
-      properties:
-        amount:
-          description: Amount of the deposit.
-          type: number
-        currency_code:
-          description: Three-digit ISO 4217 currency code.
-          type: string
-        idempotentHash:
-          description: Idempotent hash value associated with the deposit request.
-          type: string
-        is_collateral:
-          type: boolean
-        memo:
-          description: Memo or note describing the deposit request.
-          type: string
-        tags:
-          description: Comma-delimited list of tags describing the deposit request.
-          type: string
-        token:
-          description: Unique identifier of the deposit request.
-          type: string
-      required:
-      - amount
-      - currency_code
-      - token
-      type: object
     program_reserve_transaction_response:
       properties:
         amount:
@@ -301,6 +245,39 @@ components:
       - created_time
       - last_modified_time
       type: object
+    program_reserve_account_balance:
+      properties:
+        available_balance:
+          description: 'Ledger balance, minus any authorized transactions that have not yet cleared.
+
+            When using JIT Funding, this balance is usually equal to $0.00.'
+          readOnly: true
+          type: number
+        balances:
+          additionalProperties:
+            $ref: '#/components/schemas/program_reserve_account_balance'
+          description: 'Contains program reserve account balance information, organized by currency code.
+
+            Sometimes referred to as a _program funding account_.'
+          type: object
+        credit_balance:
+          description: Not currently in use.
+          readOnly: true
+          type: number
+        currency_code:
+          description: Three-digit ISO 4217 currency code.
+          type: string
+        ledger_balance:
+          description: 'When using standard funding: The funds that are available to spend immediately, including funds from any authorized transactions that have not yet cleared.
+
+            When using Just-in-Time (JIT) Funding: Authorized funds that are currently on hold, but not yet cleared.'
+          readOnly: true
+          type: number
+        pending_credits:
+          description: ACH loads that have been accepted, but for which the funding time has not yet elapsed.
+          readOnly: true
+          type: number
+      type: object
     ProgramReserveTransactionListResponse:
       properties:
         count:
@@ -341,6 +318,33 @@ components:
             This field is returned if there are resources in your returned array.'
           format: int32
           type: integer
+      type: object
+    program_reserve_deposit_request:
+      properties:
+        amount:
+          description: Amount of the deposit.
+          type: number
+        currency_code:
+          description: Three-digit ISO 4217 currency code.
+          type: string
+        idempotentHash:
+          description: Idempotent hash value associated with the deposit request.
+          type: string
+        is_collateral:
+          type: boolean
+        memo:
+          description: Memo or note describing the deposit request.
+          type: string
+        tags:
+          description: Comma-delimited list of tags describing the deposit request.
+          type: string
+        token:
+          description: Unique identifier of the deposit request.
+          type: string
+      required:
+      - amount
+      - currency_code
+      - token
       type: object
   securitySchemes:
     mqAppAndAccessToken:

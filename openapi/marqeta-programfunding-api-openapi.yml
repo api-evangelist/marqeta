@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries ProgramFunding API
+  title: Core Program Funding API
   version: 3.0.39
 servers:
 - url: /v3
@@ -192,12 +192,32 @@ paths:
       - ProgramFunding
 components:
   schemas:
-    Error:
+    ProgramFundingPage:
+      description: Returns paginated program fundings.
       properties:
-        code:
+        count:
+          description: Number of resources returned.
           type: integer
-        message:
-          type: string
+        data:
+          description: Contains one or more program fundings.
+          items:
+            $ref: '#/components/schemas/ProgramFundingResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
       type: object
     ProgramFundingResponse:
       description: Returns details of a program funding entry.
@@ -241,39 +261,19 @@ components:
       - token
       - updated_time
       type: object
-    ProgramFundingPage:
-      description: Returns paginated program fundings.
-      properties:
-        count:
-          description: Number of resources returned.
-          type: integer
-        data:
-          description: Contains one or more program fundings.
-          items:
-            $ref: '#/components/schemas/ProgramFundingResponse'
-          type: array
-        end_index:
-          description: Sort order index of the last resource in the returned array.
-          type: integer
-        is_more:
-          description: A value of `true` indicates that more unreturned resources exist.
-          type: boolean
-        start_index:
-          description: Sort order index of the first resource in the returned array.
-          type: integer
-      required:
-      - count
-      - data
-      - end_index
-      - is_more
-      - start_index
-      type: object
     CurrencyCode:
       default: USD
       description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
       enum:
       - USD
       type: string
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
   securitySchemes:
     mqAppAndAccessToken:
       scheme: basic

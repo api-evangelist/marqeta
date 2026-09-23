@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries account holder groups API
+  title: Core account holder groups API
   version: 3.0.39
 servers:
 - url: /v3
@@ -157,26 +157,6 @@ paths:
       - account holder groups
 components:
   schemas:
-    pre_kyc_controls:
-      properties:
-        balance_max:
-          description: Minimum is 0
-          exclusiveMinimum: false
-          minimum: 0
-          type: number
-        cash_access_enabled:
-          default: false
-          type: boolean
-        enable_non_program_loads:
-          default: false
-          type: boolean
-        international_enabled:
-          default: false
-          type: boolean
-        is_reloadable_pre_kyc:
-          default: false
-          type: boolean
-      type: object
     account_holder_group_config:
       properties:
         is_reloadable:
@@ -194,6 +174,58 @@ components:
           maxLength: 36
           minLength: 0
           type: string
+      type: object
+    account_holder_group_update_request:
+      properties:
+        config:
+          $ref: '#/components/schemas/account_holder_group_config'
+        name:
+          maxLength: 40
+          minLength: 1
+          type: string
+      type: object
+    account_holder_group_response:
+      properties:
+        config:
+          $ref: '#/components/schemas/account_holder_group_config'
+        name:
+          description: 40 char max
+          type: string
+        token:
+          description: 36 char max
+          type: string
+      type: object
+    account_holder_group_request:
+      properties:
+        config:
+          $ref: '#/components/schemas/account_holder_group_config'
+        name:
+          maxLength: 40
+          minLength: 1
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      type: object
+    pre_kyc_controls:
+      properties:
+        balance_max:
+          description: Minimum is 0
+          minimum: 0
+          type: number
+        cash_access_enabled:
+          default: false
+          type: boolean
+        enable_non_program_loads:
+          default: false
+          type: boolean
+        international_enabled:
+          default: false
+          type: boolean
+        is_reloadable_pre_kyc:
+          default: false
+          type: boolean
       type: object
     AccountHolderGroupListResponse:
       properties:
@@ -213,39 +245,6 @@ components:
         start_index:
           format: int32
           type: integer
-      type: object
-    account_holder_group_request:
-      properties:
-        config:
-          $ref: '#/components/schemas/account_holder_group_config'
-        name:
-          maxLength: 40
-          minLength: 1
-          type: string
-        token:
-          maxLength: 36
-          minLength: 1
-          type: string
-      type: object
-    account_holder_group_response:
-      properties:
-        config:
-          $ref: '#/components/schemas/account_holder_group_config'
-        name:
-          description: 40 char max
-          type: string
-        token:
-          description: 36 char max
-          type: string
-      type: object
-    account_holder_group_update_request:
-      properties:
-        config:
-          $ref: '#/components/schemas/account_holder_group_config'
-        name:
-          maxLength: 40
-          minLength: 1
-          type: string
       type: object
   securitySchemes:
     mqAppAndAccessToken:

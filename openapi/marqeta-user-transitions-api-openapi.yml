@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries User Transitions API
+  title: Core User Transitions API
   version: 3.0.39
 servers:
 - url: /v3
@@ -48,14 +48,14 @@ paths:
         | Initial status of a new user belonging to an account holder group where KYC is always required.
 
 
-        *Allowable Transitions:*  +
+        *Allowable Transitions:* +
 
         `ACTIVE`, `CLOSED`, `TERMINATED`
 
         | Cannot activate cards or load funds.
 
 
-        *user.active Field:*  +
+        *user.active Field:* +
 
         `false`
 
@@ -65,14 +65,14 @@ paths:
         | Initial status of a new user belonging to an account holder group where KYC is conditionally required.
 
 
-        *Allowable Transitions:*  +
+        *Allowable Transitions:* +
 
         `ACTIVE`, `SUSPENDED`, `CLOSED`
 
         | Restricted by rules in `accountholdergroups.pre_kyc_controls`.
 
 
-        *user.active Field:*  +
+        *user.active Field:* +
 
         `true`
 
@@ -82,14 +82,14 @@ paths:
         | Status of a user who has passed KYC, or initial status of a new user belonging to an account holder group where KYC is never required.
 
 
-        *Allowable Transitions:*  +
+        *Allowable Transitions:* +
 
         `SUSPENDED`, `CLOSED`, `UNVERIFIED`
 
         | None.
 
 
-        *user.active Field:*  +
+        *user.active Field:* +
 
         `true`
 
@@ -102,14 +102,14 @@ paths:
         Transitioning a suspended user to the `ACTIVE` status is restricted, based on your role and the details of the previous status change.
 
 
-        *Allowable Transitions:*  +
+        *Allowable Transitions:* +
 
         `ACTIVE`, `LIMITED`, `UNVERIFIED`, `CLOSED`, `TERMINATED`
 
         | Cannot activate cards, load funds, or transact.
 
 
-        *user.active Field:*  +
+        *user.active Field:* +
 
         `false`
 
@@ -126,14 +126,14 @@ paths:
         Contact your Marqeta representative for more information.
 
 
-        *Allowable Transitions:*  +
+        *Allowable Transitions:* +
 
         `ACTIVE`, `LIMITED`, `UNVERIFIED`, `SUSPENDED`, `TERMINATED`
 
         | Cannot activate cards, load funds, or transact.
 
 
-        *user.active Field:*  +
+        *user.active Field:* +
 
         `false`
 
@@ -154,14 +154,14 @@ paths:
         Contact your Marqeta representative for more information.
 
 
-        *Allowable Transitions:*   +
+        *Allowable Transitions:* +
 
         None
 
         | Cannot load funds, activate cards, or transact.
 
 
-        *The user.active field:*   +
+        *The user.active field:* +
 
         `false`
 
@@ -366,47 +366,6 @@ paths:
       - User Transitions
 components:
   schemas:
-    UserTransitionListResponse:
-      properties:
-        count:
-          description: 'Number of resources retrieved.
-
-
-            This field is returned if there are resources in your returned array.'
-          format: int32
-          type: integer
-        data:
-          description: 'Array of user transition resources.
-
-
-            Resources are returned as appropriate to your query.'
-          items:
-            $ref: '#/components/schemas/UserTransitionResponse'
-          type: array
-        end_index:
-          description: 'Sort order index of the last resource in the returned array.
-
-
-            This field is returned if there are resources in your returned array.'
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          description: 'A value of `true` indicates that more unreturned resources exist.
-
-            A value of `false` indicates that no more unreturned resources exist.
-
-
-            This field is returned if there are resources in your returned array.'
-          type: boolean
-        start_index:
-          description: 'Sort order index of the first resource in the returned array.
-
-
-            This field is returned if there are resources in your returned array.'
-          format: int32
-          type: integer
-      type: object
     UserTransitionResponse:
       properties:
         channel:
@@ -785,6 +744,47 @@ components:
       - reason_code
       - status
       - user_token
+      type: object
+    UserTransitionListResponse:
+      properties:
+        count:
+          description: 'Number of resources retrieved.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+        data:
+          description: 'Array of user transition resources.
+
+
+            Resources are returned as appropriate to your query.'
+          items:
+            $ref: '#/components/schemas/UserTransitionResponse'
+          type: array
+        end_index:
+          description: 'Sort order index of the last resource in the returned array.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          description: 'A value of `true` indicates that more unreturned resources exist.
+
+            A value of `false` indicates that no more unreturned resources exist.
+
+
+            This field is returned if there are resources in your returned array.'
+          type: boolean
+        start_index:
+          description: 'Sort order index of the first resource in the returned array.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
       type: object
   securitySchemes:
     mqAppAndAccessToken:

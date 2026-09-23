@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries commando modes API
+  title: Core commando modes API
   version: 3.0.39
 servers:
 - url: /v3
@@ -180,48 +180,24 @@ paths:
       - commando modes
 components:
   schemas:
-    commando_mode_response:
+    commando_mode_nested_transition:
       properties:
-        commando_mode_enables:
-          $ref: '#/components/schemas/commando_mode_enables'
-        created_time:
-          description: yyyy-MM-ddTHH:mm:ssZ
-          format: date-time
+        channel:
+          enum:
+          - API
+          - SYSTEM
+          - ADMIN
           type: string
-        current_state:
-          $ref: '#/components/schemas/commando_mode_nested_transition'
-        last_modified_time:
-          description: yyyy-MM-ddTHH:mm:ssZ
-          format: date-time
-          type: string
-        program_gateway_funding_source_token:
-          type: string
-        real_time_standin_criteria:
-          $ref: '#/components/schemas/real_time_standin_criteria'
-        token:
-          type: string
-      required:
-      - created_time
-      - last_modified_time
-      type: object
-    CommandoModeTransitionListResponse:
-      properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/commando_mode_transition_response'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
+        commando_enabled:
           default: false
           type: boolean
-        start_index:
-          format: int32
-          type: integer
+        reason:
+          type: string
+        username:
+          type: string
+      required:
+      - channel
+      - commando_enabled
       type: object
     commando_mode_transition_response:
       properties:
@@ -241,6 +217,25 @@ components:
           type: string
       required:
       - created_time
+      type: object
+    CommandoModeTransitionListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/commando_mode_transition_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
       type: object
     CommandoModeListResponse:
       properties:
@@ -284,24 +279,29 @@ components:
       required:
       - program_funding_source
       type: object
-    commando_mode_nested_transition:
+    commando_mode_response:
       properties:
-        channel:
-          enum:
-          - API
-          - SYSTEM
-          - ADMIN
+        commando_mode_enables:
+          $ref: '#/components/schemas/commando_mode_enables'
+        created_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
           type: string
-        commando_enabled:
-          default: false
-          type: boolean
-        reason:
+        current_state:
+          $ref: '#/components/schemas/commando_mode_nested_transition'
+        last_modified_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
           type: string
-        username:
+        program_gateway_funding_source_token:
+          type: string
+        real_time_standin_criteria:
+          $ref: '#/components/schemas/real_time_standin_criteria'
+        token:
           type: string
       required:
-      - channel
-      - commando_enabled
+      - created_time
+      - last_modified_time
       type: object
     real_time_standin_criteria:
       properties:

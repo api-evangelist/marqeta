@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries direct deposits API
+  title: Core direct deposits API
   version: 3.0.39
 servers:
 - url: /v3
@@ -345,63 +345,49 @@ paths:
       - direct deposits
 components:
   schemas:
-    DepositAccountResponse:
+    DirectDepositTransitionListResponse:
       properties:
-        account_number:
-          type: string
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/DirectDepositTransitionResponse'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    DirectDepositListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/DepositDepositResponse'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    DepositAccountUpdateRequest:
+      properties:
         allow_immediate_credit:
           default: false
           type: boolean
-        business_token:
-          type: string
-        routing_number:
-          type: string
-        token:
-          type: string
-        user_token:
-          type: string
-      required:
-      - account_number
-      - routing_number
-      - token
-      type: object
-    DirectDepositTransitionResponse:
-      properties:
-        channel:
-          enum:
-          - API
-          - IVR
-          - FRAUD
-          - ADMIN
-          - SYSTEM
-          - NETWORK
-          - PROD_SUPPORT
-          - UNSUPPORTED
-          type: string
-        created_time:
-          format: date-time
-          type: string
-        direct_deposit_account_token:
-          type: string
-        direct_deposit_token:
-          type: string
-        reason:
-          type: string
-        reason_code:
-          type: string
-        state:
-          enum:
-          - PENDING
-          - APPLIED
-          - REVERSED
-          - REJECTED
-          type: string
-        token:
-          type: string
-        transaction_token:
-          type: string
-        type:
-          type: string
       type: object
     DirectDepositTransitionRequest:
       properties:
@@ -455,43 +441,43 @@ components:
       - reason
       - state
       type: object
-    DirectDepositTransitionListResponse:
+    DirectDepositTransitionResponse:
       properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/DirectDepositTransitionResponse'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
-      type: object
-    DirectDepositListResponse:
-      properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/DepositDepositResponse'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
+        channel:
+          enum:
+          - API
+          - IVR
+          - FRAUD
+          - ADMIN
+          - SYSTEM
+          - NETWORK
+          - PROD_SUPPORT
+          - UNSUPPORTED
+          type: string
+        created_time:
+          format: date-time
+          type: string
+        direct_deposit_account_token:
+          type: string
+        direct_deposit_token:
+          type: string
+        reason:
+          type: string
+        reason_code:
+          type: string
+        state:
+          enum:
+          - PENDING
+          - APPLIED
+          - REVERSED
+          - REJECTED
+          type: string
+        token:
+          type: string
+        transaction_token:
+          type: string
+        type:
+          type: string
       type: object
     DepositDepositResponse:
       description: Contains information about a direct deposit.
@@ -565,11 +551,25 @@ components:
           description: The unique identifier of the user account holder.
           type: string
       type: object
-    DepositAccountUpdateRequest:
+    DepositAccountResponse:
       properties:
+        account_number:
+          type: string
         allow_immediate_credit:
           default: false
           type: boolean
+        business_token:
+          type: string
+        routing_number:
+          type: string
+        token:
+          type: string
+        user_token:
+          type: string
+      required:
+      - account_number
+      - routing_number
+      - token
       type: object
   securitySchemes:
     mqAppAndAccessToken:

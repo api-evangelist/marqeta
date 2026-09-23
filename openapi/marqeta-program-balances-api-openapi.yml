@@ -1,16 +1,18 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
+  title: Marqeta DiVA Program Balances API
+  description: The Marqeta DiVA (Data Insights, Visualization, and Analytics) API is a RESTful interface that provides programmatic access to production data from a Marqeta card program.
+  version: '2'
   contact:
+    name: Marqeta Support
+    url: https://www.marqeta.com/company/contact
     email: support@marqeta.com
-    name: Marqeta
-  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries Program Balances API
-  version: 3.0.39
 servers:
-- url: /v3
+- url: https://diva-api.marqeta.com/data/v2
+  description: Production Server
 security:
-- mqAppAndAccessToken: []
+- basicAuth: []
 tags:
 - name: Program Balances
   description: Retrieve program funding balance data for financial reconciliation. Includes beginning and ending bank balances, amounts to send, and settlement details aggregated over configurable time periods.
@@ -110,30 +112,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   parameters:
-    offset:
-      name: offset
-      in: query
-      description: Zero-based offset for pagination.
-      schema:
-        type: integer
-        minimum: 0
-        default: 0
-    fields:
-      name: fields
-      in: query
-      description: Comma-delimited list of fields to include in the response. If not specified, all available fields are returned.
-      schema:
-        type: string
-    format:
-      name: format
-      in: query
-      description: Response format. Use 'json' for JSON responses or 'csv' for comma-separated bulk file format. Defaults to json.
-      schema:
-        type: string
-        enum:
-        - json
-        - csv
-        default: json
     time_agg:
       name: time_agg
       in: path
@@ -146,6 +124,14 @@ components:
         - week
         - month
         - detail
+    offset:
+      name: offset
+      in: query
+      description: Zero-based offset for pagination.
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
     end_date:
       name: end_date
       in: query
@@ -153,6 +139,12 @@ components:
       schema:
         type: string
         format: date
+    fields:
+      name: fields
+      in: query
+      description: Comma-delimited list of fields to include in the response. If not specified, all available fields are returned.
+      schema:
+        type: string
     start_date:
       name: start_date
       in: query
@@ -160,6 +152,23 @@ components:
       schema:
         type: string
         format: date
+    program:
+      name: program
+      in: query
+      required: true
+      description: The name of your Marqeta card program. This parameter is required for most DiVA API endpoints to scope the data to your program.
+      schema:
+        type: string
+    format:
+      name: format
+      in: query
+      description: Response format. Use 'json' for JSON responses or 'csv' for comma-separated bulk file format. Defaults to json.
+      schema:
+        type: string
+        enum:
+        - json
+        - csv
+        default: json
     limit:
       name: limit
       in: query
@@ -169,45 +178,20 @@ components:
         minimum: 1
         maximum: 10000
         default: 1000
-    program:
-      name: program
-      in: query
-      required: true
-      description: The name of your Marqeta card program. This parameter is required for most DiVA API endpoints to scope the data to your program.
-      schema:
-        type: string
+  responses:
+    Unauthorized:
+      description: Unauthorized. The provided application token and access token credentials are invalid or missing.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Bad request. One or more required query parameters are missing or contain invalid values.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   schemas:
-    ProgramBalancesResponse:
-      type: object
-      description: Program funding balance data response.
-      properties:
-        meta:
-          $ref: '#/components/schemas/DivaResponseMeta'
-        data:
-          type: array
-          description: Array of program balance records.
-          items:
-            type: object
-            properties:
-              date:
-                type: string
-                format: date
-                description: Date of the balance record.
-              program:
-                type: string
-                description: Program identifier.
-              beginning_bank_balance:
-                type: number
-                description: Opening bank balance for the period.
-              ending_bank_balance:
-                type: number
-                description: Closing bank balance for the period.
-              amount_to_send:
-                type: number
-                description: Net amount to send to or receive from the bank.
-              currency_code:
-                type: string
-                description: ISO 4217 currency code for the balance figures.
     SettlementBalancesResponse:
       type: object
       description: Program settlement balance data response.
@@ -285,6 +269,37 @@ components:
         has_more:
           type: boolean
           description: Whether additional pages of data are available.
+    ProgramBalancesResponse:
+      type: object
+      description: Program funding balance data response.
+      properties:
+        meta:
+          $ref: '#/components/schemas/DivaResponseMeta'
+        data:
+          type: array
+          description: Array of program balance records.
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                format: date
+                description: Date of the balance record.
+              program:
+                type: string
+                description: Program identifier.
+              beginning_bank_balance:
+                type: number
+                description: Opening bank balance for the period.
+              ending_bank_balance:
+                type: number
+                description: Closing bank balance for the period.
+              amount_to_send:
+                type: number
+                description: Net amount to send to or receive from the bank.
+              currency_code:
+                type: string
+                description: ISO 4217 currency code for the balance figures.
     ErrorResponse:
       type: object
       description: Standard error response returned by the Marqeta DiVA API.
@@ -295,20 +310,11 @@ components:
         error_message:
           type: string
           description: Human-readable error description.
-  responses:
-    Unauthorized:
-      description: Unauthorized. The provided application token and access token credentials are invalid or missing.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: Bad request. One or more required query parameters are missing or contain invalid values.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
   securitySchemes:
-    mqAppAndAccessToken:
-      scheme: basic
+    basicAuth:
       type: http
+      scheme: basic
+      description: HTTP Basic Authentication. Use your application token as the username and your access token as the password. Contact your Marqeta representative to obtain DiVA API credentials.
+externalDocs:
+  description: Marqeta DiVA API Documentation
+  url: https://www.marqeta.com/docs/diva-api/introduction

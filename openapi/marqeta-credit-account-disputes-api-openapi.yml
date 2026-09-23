@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries Credit Account Disputes API
+  title: Core Credit Account Disputes API
   version: 3.0.39
 servers:
 - url: /v3
@@ -17,15 +17,15 @@ tags:
     include::../../maturity-admonition-banner.adoc[]
 
 
-    Use the credit account disputes endpoints to create and manage disputes on a <</core-api/credit-accounts, credit account>>.
+    Use the credit account disputes endpoints to create and manage disputes on a >.
 
 
-    For more on disputes, see <</developer-guides/about-credit-account-disputes, About Credit Account Disputes>>.
+    For more on disputes, see >.
 
 
-    Creating a dispute triggers the creation of a <</core-api/credit-account-journal-entries, journal entry>> belonging to the `DISPUTE` group.
+    Creating a dispute triggers the creation of a > belonging to the `DISPUTE` group.
 
-    For more on dispute journal entries, see <</developer-guides/about-credit-account-journal-entries#_disputes, Disputes>> in the About Credit Account Journal Entries guide.'
+    For more on dispute journal entries, see > in the About Credit Account Journal Entries guide.'
   name: Credit Account Disputes
 paths:
   /accounts/{account_token}/disputes:
@@ -33,7 +33,7 @@ paths:
       description: 'Retrieve an array of disputes on a credit account.
 
 
-        This endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>.'
+        This endpoint supports >.'
       operationId: getDisputesByAccount
       parameters:
       - description: 'Unique identifier of the credit account for which to retrieve the disputes.
@@ -325,112 +325,12 @@ paths:
       - Credit Account Disputes
 components:
   schemas:
-    DisputeResponsePage:
-      description: Return paginated disputes.
+    Error:
       properties:
-        count:
-          description: Number of resources returned.
+        code:
           type: integer
-        data:
-          description: Contains one or more disputes on a credit account.
-          items:
-            $ref: '#/components/schemas/DisputeResponse'
-          type: array
-        end_index:
-          description: Sort order index of the last resource in the returned array.
-          type: integer
-        is_more:
-          description: A value of `true` indicates that more unreturned resources exist.
-          type: boolean
-        start_index:
-          description: Sort order index of the first resource in the returned array.
-          type: integer
-      required:
-      - count
-      - data
-      - end_index
-      - is_more
-      - start_index
-      type: object
-    DisputeStatus:
-      description: 'Status of the dispute.
-
-
-        * `ACTIVE` - The dispute is active and awaiting resolution.
-
-        * `REVERSED` - The dispute has been reversed and is no longer active.
-
-        * `AH_WON` - The account holder won the dispute.
-
-        * `AH_LOST` - The account holder lost the dispute.'
-      enum:
-      - ACTIVE
-      - REVERSED
-      - AH_WON
-      - AH_LOST
-      - REFUNDED
-      type: string
-    DisputeTransitionResponse:
-      description: Information about a transaction dispute update request.
-      properties:
-        account_token:
-          description: Unique identifier of the credit account on which the dispute was updated.
+        message:
           type: string
-        amount:
-          description: Amount of the updated dispute, based on the resolution.
-          type: number
-        created_time:
-          description: Date and time when the dispute update was created on Marqeta's credit platform, in UTC.
-          format: date-time
-          type: string
-        notes:
-          description: Additional information on the dispute update (for example, a reason for the dispute update).
-          format: string
-          maxLength: 750
-          type: string
-        status:
-          $ref: '#/components/schemas/DisputeStatus'
-        token:
-          description: Unique identifier of the dispute update.
-          type: string
-      required:
-      - account_token
-      - amount
-      - created_time
-      - status
-      - token
-      type: object
-    DisputeTransitionReq:
-      description: Information about a transaction dispute update request.
-      properties:
-        amount:
-          description: Updated amount of the dispute, based on the resolution.
-          type: number
-        interest_adjustments:
-          description: 'List of interest adjustments and their effective times, if applicable.
-
-            Note that this typically only applies for a cross-cycle activity, such as a dispute or payment.'
-          items:
-            $ref: '#/components/schemas/MigrateDisputeInterestAdjustment'
-          type: array
-        notes:
-          description: Additional information on the dispute update (for example, a reason for the dispute update).
-          format: string
-          maxLength: 750
-          type: string
-        source_created_time:
-          description: Date and time when the dispute occurred.
-          format: date-time
-          type: string
-        status:
-          $ref: '#/components/schemas/DisputeStatus'
-        token:
-          description: Unique identifier of the dispute update.
-          maxLength: 36
-          type: string
-      required:
-      - amount
-      - status
       type: object
     MigrateDisputeInterestAdjustment:
       description: Represents an interest charge associated with (as of this writing) either a payment or dispute
@@ -453,14 +353,6 @@ components:
       - currency_code
       - effective_date
       type: object
-    DisputeCategory:
-      description: Category to which the dispute belongs.
-      enum:
-      - FRAUD
-      - AUTH
-      - PROCESSING_ERROR
-      - CONSUMER_DISPUTE
-      type: string
     DisputeCreateReq:
       description: Information about a transaction dispute creation request.
       properties:
@@ -492,13 +384,6 @@ components:
       - amount
       - category
       - ledger_entry_token
-      type: object
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
       type: object
     DisputeResponse:
       description: Information about a transaction dispute response.
@@ -549,6 +434,121 @@ components:
       - token
       - updated_time
       type: object
+    DisputeTransitionReq:
+      description: Information about a transaction dispute update request.
+      properties:
+        amount:
+          description: Updated amount of the dispute, based on the resolution.
+          type: number
+        interest_adjustments:
+          description: 'List of interest adjustments and their effective times, if applicable.
+
+            Note that this typically only applies for a cross-cycle activity, such as a dispute or payment.'
+          items:
+            $ref: '#/components/schemas/MigrateDisputeInterestAdjustment'
+          type: array
+        notes:
+          description: Additional information on the dispute update (for example, a reason for the dispute update).
+          format: string
+          maxLength: 750
+          type: string
+        source_created_time:
+          description: Date and time when the dispute occurred.
+          format: date-time
+          type: string
+        status:
+          $ref: '#/components/schemas/DisputeStatus'
+        token:
+          description: Unique identifier of the dispute update.
+          maxLength: 36
+          type: string
+      required:
+      - amount
+      - status
+      type: object
+    DisputeTransitionResponse:
+      description: Information about a transaction dispute update request.
+      properties:
+        account_token:
+          description: Unique identifier of the credit account on which the dispute was updated.
+          type: string
+        amount:
+          description: Amount of the updated dispute, based on the resolution.
+          type: number
+        created_time:
+          description: Date and time when the dispute update was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        notes:
+          description: Additional information on the dispute update (for example, a reason for the dispute update).
+          format: string
+          maxLength: 750
+          type: string
+        status:
+          $ref: '#/components/schemas/DisputeStatus'
+        token:
+          description: Unique identifier of the dispute update.
+          type: string
+      required:
+      - account_token
+      - amount
+      - created_time
+      - status
+      - token
+      type: object
+    DisputeResponsePage:
+      description: Return paginated disputes.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: Contains one or more disputes on a credit account.
+          items:
+            $ref: '#/components/schemas/DisputeResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    DisputeStatus:
+      description: 'Status of the dispute.
+
+
+        * `ACTIVE` - The dispute is active and awaiting resolution.
+
+        * `REVERSED` - The dispute has been reversed and is no longer active.
+
+        * `AH_WON` - The account holder won the dispute.
+
+        * `AH_LOST` - The account holder lost the dispute.'
+      enum:
+      - ACTIVE
+      - REVERSED
+      - AH_WON
+      - AH_LOST
+      - REFUNDED
+      type: string
+    DisputeCategory:
+      description: Category to which the dispute belongs.
+      enum:
+      - FRAUD
+      - AUTH
+      - PROCESSING_ERROR
+      - CONSUMER_DISPUTE
+      type: string
   securitySchemes:
     mqAppAndAccessToken:
       scheme: basic

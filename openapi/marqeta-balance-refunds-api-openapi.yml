@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries Balance Refunds API
+  title: Core Balance Refunds API
   version: 3.0.39
 servers:
 - url: /v3
@@ -17,14 +17,14 @@ tags:
     include::../../maturity-admonition-banner.adoc[]
 
 
-    Use the credit balance refunds endpoint to issue a credit balance refund on <</core-api/credit-accounts, credit account>>.
+    Use the credit balance refunds endpoint to issue a credit balance refund on >.
 
     When an account balance is negative, a balance refund can be issued to bring the balance closer to 0.
 
 
-    Creating a balance refund triggers the creation of a <</core-api/credit-account-journal-entries, journal entry>> belonging to the `BALANCE_REFUND` group.
+    Creating a balance refund triggers the creation of a > belonging to the `BALANCE_REFUND` group.
 
-    For more on balance refund journal entries, see <</developer-guides/about-credit-account-journal-entries#_credit_balance_refunds, Balance refunds>> in the <</developer-guides/about-credit-account-journal-entries,About Credit Account Journal Entries>> guide.'
+    For more on balance refund journal entries, see > in the > guide.'
   name: Balance Refunds
 paths:
   /accounts/{account_token}/creditbalancerefunds:
@@ -84,33 +84,26 @@ paths:
       - Balance Refunds
 components:
   schemas:
-    AccountCreditBalanceRefundReq:
-      description: Contains details on a credit balance refund.
+    PaymentStatus:
+      description: Current status of the payment or refund.
+      enum:
+      - INITIATED
+      - PENDING
+      - PROCESSING
+      - SUBMITTED
+      - CANCELLED
+      - COMPLETED
+      - RETURNED
+      - REFUNDED
+      - SYS_ERROR
+      - ACH_ERROR
+      type: string
+    Error:
       properties:
-        amount:
-          description: 'Amount of the credit balance refund.
-
-
-            The maximum refund amount is the amount that brings the account balance to $0.
-
-            For example, $4000 is the maximum refund amount for a -$4000 account balance.'
-          minimum: 0.01
-          type: number
-        currency_code:
-          $ref: '#/components/schemas/CurrencyCode'
-        description:
-          description: Description for the credit balance refund.
+        code:
+          type: integer
+        message:
           type: string
-        method:
-          $ref: '#/components/schemas/RefundMethod'
-        token:
-          description: Unique identifier of the credit balance refund.
-          type: string
-      required:
-      - amount
-      - currency_code
-      - description
-      - method
       type: object
     AccountCreditBalanceRefundResponse:
       description: Contains details on a credit balance refund.
@@ -164,33 +157,40 @@ components:
       enum:
       - USD
       type: string
+    AccountCreditBalanceRefundReq:
+      description: Contains details on a credit balance refund.
+      properties:
+        amount:
+          description: 'Amount of the credit balance refund.
+
+
+            The maximum refund amount is the amount that brings the account balance to $0.
+
+            For example, $4000 is the maximum refund amount for a -$4000 account balance.'
+          minimum: 0.01
+          type: number
+        currency_code:
+          $ref: '#/components/schemas/CurrencyCode'
+        description:
+          description: Description for the credit balance refund.
+          type: string
+        method:
+          $ref: '#/components/schemas/RefundMethod'
+        token:
+          description: Unique identifier of the credit balance refund.
+          type: string
+      required:
+      - amount
+      - currency_code
+      - description
+      - method
+      type: object
     RefundMethod:
       description: Payment instrument used to issue the refund.
       enum:
       - ACH
       - CHECK
       type: string
-    PaymentStatus:
-      description: Current status of the payment or refund.
-      enum:
-      - INITIATED
-      - PENDING
-      - PROCESSING
-      - SUBMITTED
-      - CANCELLED
-      - COMPLETED
-      - RETURNED
-      - REFUNDED
-      - SYS_ERROR
-      - ACH_ERROR
-      type: string
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-      type: object
   securitySchemes:
     mqAppAndAccessToken:
       scheme: basic

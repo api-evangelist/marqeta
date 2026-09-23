@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries Adjustments API
+  title: Core Adjustments API
   version: 3.0.39
 servers:
 - url: /v3
@@ -19,12 +19,12 @@ tags:
 
     Use the adjustments endpoints to create and retrieve account adjustments on Marqeta''s credit platform.
 
-    An account adjustment adjusts the amount of a <</core-api/credit-account-journal-entries, journal entry>> or account balance.
+    An account adjustment adjusts the amount of a > or account balance.
 
 
-    Creating an adjustment triggers the creation of a <</core-api/credit-account-journal-entries, journal entry>> belonging to the `ADJUSTMENT` group.
+    Creating an adjustment triggers the creation of a > belonging to the `ADJUSTMENT` group.
 
-    For more on adjustment journal entries, see <</developer-guides/about-credit-account-journal-entries#_adjustments, Adjustments>> in the About Credit Account Journal Entries guide.'
+    For more on adjustment journal entries, see > in the About Credit Account Journal Entries guide.'
   name: Adjustments
 paths:
   /accounts/{account_token}/adjustments:
@@ -32,7 +32,7 @@ paths:
       description: 'Retrieve an array of adjustments for a credit account.
 
 
-        This endpoint supports <</core-api/sorting-and-pagination, pagination>>.'
+        This endpoint supports >.'
       operationId: getAdjustmentsByAccount
       parameters:
       - description: 'Unique identifier of the credit account for which you want to retrieve adjustments.
@@ -270,6 +270,33 @@ paths:
       - Adjustments
 components:
   schemas:
+    AccountAdjustmentPage:
+      description: Returns paginated account adjustments.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: Contains one or more account adjustments.
+          items:
+            $ref: '#/components/schemas/AccountAdjustmentResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
     AccountAdjustmentReq:
       description: Contains information relevant to creating an account adjustment.
       properties:
@@ -336,6 +363,13 @@ components:
       - currency_code
       - description
       type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
     CurrencyCode:
       default: USD
       description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
@@ -364,8 +398,9 @@ components:
             Disputes return dispute details.
 
             For the specific fields returned, see the <</core-api/credit-account-disputes#retrieveDispute, dispute response fields>>.'
-          nullable: true
-          type: object
+          type:
+          - object
+          - 'null'
         amount:
           description: Amount of the adjustment.
           type: number
@@ -387,17 +422,20 @@ components:
 
             Returned when the system automatically applies an adjustment.'
           maxLength: 36
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         external_adjustment_id:
           description: Unique identifier you provide of an associated external adjustment that exists outside Marqeta's credit platform.
           format: uuid
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         note:
           description: Additional information on the adjustment.
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         original_ledger_entry_token:
           description: Unique identifier of the original journal entry needing the adjustment.
           format: uuid
@@ -435,16 +473,18 @@ components:
 
 
             This field is returned for interest adjustments only.'
-          nullable: true
-          type: object
+          type:
+          - object
+          - 'null'
         related_detail_token:
           description: 'Unique identifier of the dispute or returned payment that prompted the interest adjustment.
 
 
             This field is returned for interest adjustments only.'
           maxLength: 36
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         source_account_type:
           description: The source account type.
           enum:
@@ -482,40 +522,6 @@ components:
       - source_account_type
       - token
       - type
-      type: object
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-      type: object
-    AccountAdjustmentPage:
-      description: Returns paginated account adjustments.
-      properties:
-        count:
-          description: Number of resources returned.
-          type: integer
-        data:
-          description: Contains one or more account adjustments.
-          items:
-            $ref: '#/components/schemas/AccountAdjustmentResponse'
-          type: array
-        end_index:
-          description: Sort order index of the last resource in the returned array.
-          type: integer
-        is_more:
-          description: A value of `true` indicates that more unreturned resources exist.
-          type: boolean
-        start_index:
-          description: Sort order index of the first resource in the returned array.
-          type: integer
-      required:
-      - count
-      - data
-      - end_index
-      - is_more
-      - start_index
       type: object
   securitySchemes:
     mqAppAndAccessToken:

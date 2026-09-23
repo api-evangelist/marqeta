@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries merchantgroups API
+  title: Core Merchantgroups API
   version: 3.0.39
 servers:
 - url: /v3
@@ -164,6 +164,25 @@ paths:
       - merchantgroups
 components:
   schemas:
+    MerchantGroupListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/merchant_group_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
     merchant_group_update_request:
       properties:
         active:
@@ -221,25 +240,6 @@ components:
           type: string
       required:
       - name
-      type: object
-    MerchantGroupListResponse:
-      properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/merchant_group_response'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
       type: object
   securitySchemes:
     mqAppAndAccessToken:

@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries Card Group API
+  title: Core Card Group API
   version: 3.0.39
 servers:
 - url: /v3
@@ -122,12 +122,16 @@ paths:
       - Card Group
 components:
   schemas:
-    Error:
+    CardGroupReq:
+      description: Request body for creating a new Card Group object
       properties:
-        code:
-          type: integer
-        message:
+        card_token:
+          description: Unique identifier token of the card token to be associated with the group.
+          maxLength: 36
+          minLength: 1
           type: string
+      required:
+      - card_token
       type: object
     CardGroup:
       description: Request body for a Card Group object
@@ -182,6 +186,13 @@ components:
       - source_card_token
       - token
       type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
     CardGroupPage:
       properties:
         count:
@@ -222,17 +233,6 @@ components:
             This field is returned if there are resources in your returned array.'
           format: int32
           type: integer
-      type: object
-    CardGroupReq:
-      description: Request body for creating a new Card Group object
-      properties:
-        card_token:
-          description: Unique identifier token of the card token to be associated with the group.
-          maxLength: 36
-          minLength: 1
-          type: string
-      required:
-      - card_token
       type: object
   securitySchemes:
     mqAppAndAccessToken:

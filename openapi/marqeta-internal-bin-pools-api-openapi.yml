@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries Internal - BIN Pools API
+  title: Core Internal - BIN Pools API
   version: 3.0.39
 servers:
 - url: /v3
@@ -109,34 +109,6 @@ paths:
       - Internal - BIN Pools
 components:
   schemas:
-    BinPoolUpdateRequest:
-      description: Request to update a BIN pool
-      properties:
-        active:
-          description: Whether the pool is active
-          example: false
-          type: boolean
-        config:
-          description: JSON configuration object
-          example: '{\"reserved_capacity\": 20, \"min_available_bins\": 5}'
-          type: string
-        description:
-          description: Description of the BIN pool
-          example: Updated description
-          type: string
-        name:
-          description: Name of the BIN pool
-          example: Updated Pool Name
-          type: string
-        usage_type:
-          description: BIN selection strategy
-          enum:
-          - RANDOM
-          - LEAST_EXHAUSTED
-          - SEQUENTIAL
-          example: RANDOM
-          type: string
-      type: object
     BinPoolCreateRequest:
       description: Request to create a new BIN pool
       properties:
@@ -179,6 +151,34 @@ components:
       required:
       - name
       - token
+      type: object
+    BinPoolUpdateRequest:
+      description: Request to update a BIN pool
+      properties:
+        active:
+          description: Whether the pool is active
+          example: false
+          type: boolean
+        config:
+          description: JSON configuration object
+          example: '{\"reserved_capacity\": 20, \"min_available_bins\": 5}'
+          type: string
+        description:
+          description: Description of the BIN pool
+          example: Updated description
+          type: string
+        name:
+          description: Name of the BIN pool
+          example: Updated Pool Name
+          type: string
+        usage_type:
+          description: BIN selection strategy
+          enum:
+          - RANDOM
+          - LEAST_EXHAUSTED
+          - SEQUENTIAL
+          example: RANDOM
+          type: string
       type: object
   securitySchemes:
     mqAppAndAccessToken:

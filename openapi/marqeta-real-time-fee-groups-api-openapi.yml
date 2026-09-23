@@ -1,39 +1,18 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries Real-Time Fee Groups API
+  title: Core Real-Time Fee Groups API
   version: 3.0.39
 servers:
 - url: /v3
 security:
 - mqAppAndAccessToken: []
 tags:
-- description: 'Marqeta enables you to assess fees in real time through the use of real-time fee groups.
-
-    A real-time fee group is a collection of fees associated with an account holder group (and thereby associated with the users and businesses that are part of that account holder group).
-
-    Real-time fee assessment ensures that associated accounts have sufficient funds available to cover both the transaction amount and the fee before authorization of a transaction.
-
-
-    Before you create a real-time fee group, you must create the individual fees (using the `/fees` endpoint) and the account holder group with which you will associate the real-time fee group (using the `/accountholdergroups` endpoint).
-
-    Each fee in the group must be applicable to a different transaction type.
-
-    For example, one fee could assess $1 on authorization transactions while another assesses $2 on PIN-debit transactions.
-
-
-    Use of real-time fee groups requires prior approval by Marqeta.
-
-    If you are interested in using this feature for your card program, contact your Marqeta representative for more information.
-
-
-    [NOTE]
-
-    If your program uses Gateway JIT Funding, you cannot assess fees.'
+- description: Marqeta enables you to assess fees in real time through the use of real-time fee groups.
   name: Real-Time Fee Groups
 paths:
   /realtimefeegroups:
@@ -41,7 +20,7 @@ paths:
       description: 'Use this endpoint to list existing real-time fee groups.
 
 
-        This endpoint supports <</core-api/field-filtering, field filtering>> and <</core-api/sorting-and-pagination, pagination>>.'
+        This endpoint supports > and >.'
       operationId: getRealtimefeegroups
       parameters:
       - description: Number of real-time fee groups to retrieve.
@@ -242,38 +221,6 @@ paths:
       - Real-Time Fee Groups
 components:
   schemas:
-    real_time_fee_group:
-      description: Contains information about a real-time fee group.
-      properties:
-        active:
-          default: false
-          description: Indicates whether the real-time fee group is active.
-          type: boolean
-        created_time:
-          description: Date and time when the real-time fee group was created, in UTC.
-          format: date-time
-          type: string
-        fee_tokens:
-          description: Specifies the fees in this real-time fee group.
-          items:
-            type: string
-          type: array
-          uniqueItems: true
-        last_modified_time:
-          description: Date and time when the real-time fee group was last modified, in UTC.
-          format: date-time
-          type: string
-        name:
-          description: Descriptive name for the real-time fee group.
-          type: string
-        token:
-          description: Unique identifier of the real-time fee group.
-          type: string
-      required:
-      - active
-      - name
-      - token
-      type: object
     real_time_fee_group_request:
       properties:
         active:
@@ -333,6 +280,38 @@ components:
           type: string
       required:
       - name
+      type: object
+    real_time_fee_group:
+      description: Contains information about a real-time fee group.
+      properties:
+        active:
+          default: false
+          description: Indicates whether the real-time fee group is active.
+          type: boolean
+        created_time:
+          description: Date and time when the real-time fee group was created, in UTC.
+          format: date-time
+          type: string
+        fee_tokens:
+          description: Specifies the fees in this real-time fee group.
+          items:
+            type: string
+          type: array
+          uniqueItems: true
+        last_modified_time:
+          description: Date and time when the real-time fee group was last modified, in UTC.
+          format: date-time
+          type: string
+        name:
+          description: Descriptive name for the real-time fee group.
+          type: string
+        token:
+          description: Unique identifier of the real-time fee group.
+          type: string
+      required:
+      - active
+      - name
+      - token
       type: object
     RealTimeFeeGroupListResponse:
       properties:

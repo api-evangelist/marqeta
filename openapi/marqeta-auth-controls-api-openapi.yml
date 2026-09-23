@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries auth controls API
+  title: Core auth controls API
   version: 3.0.39
 servers:
 - url: /v3
@@ -378,6 +378,68 @@ components:
       required:
       - token
       type: object
+    auth_control_exempt_mids_response:
+      properties:
+        active:
+          default: false
+          type: boolean
+        association:
+          $ref: '#/components/schemas/spend_control_association'
+        created:
+          format: date-time
+          type: string
+        end_time:
+          format: date-time
+          type: string
+        last_updated:
+          format: date-time
+          type: string
+        merchant_group_token:
+          description: 36 char max
+          maxLength: 36
+          minLength: 1
+          type: string
+        mid:
+          maxLength: 36
+          minLength: 1
+          type: string
+        name:
+          maxLength: 255
+          minLength: 0
+          type: string
+        start_time:
+          format: date-time
+          type: string
+        token:
+          type: string
+      required:
+      - name
+      type: object
+    AuthControlListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/auth_control_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    auth_control_exempt_mids_update_request:
+      properties:
+        active:
+          default: false
+          type: boolean
+      type: object
     AuthControlExemptMidsListResponse:
       properties:
         count:
@@ -397,31 +459,44 @@ components:
           format: int32
           type: integer
       type: object
-    auth_control_request:
+    merchant_scope:
+      description: 'Defines the group of merchants to which the velocity control applies.
+
+
+        Populate no more than one field of the `merchant_scope` object.
+
+        If no fields are populated, the velocity control applies to all merchants.'
       properties:
-        active:
-          default: true
-          type: boolean
-        association:
-          $ref: '#/components/schemas/spend_control_association'
-        end_time:
-          format: date-time
+        mcc:
+          description: 'Merchant Category Code (MCC).
+
+            Identifies the type of products or services provided by the merchant.
+
+
+            Enter a value to control spending on a particular type of product or service.'
+          maxLength: 4
+          minLength: 1
           type: string
-        merchant_scope:
-          $ref: '#/components/schemas/auth_control_merchant_scope'
-        name:
-          maxLength: 255
-          minLength: 0
-          type: string
-        start_time:
-          format: date-time
-          type: string
-        token:
+        mcc_group:
+          description: 'Token identifying a group of MCCs.
+
+            Enter a value to control spending on a group of product or service types.
+
+
+            Send a `GET` request to `/mccgroups` to retrieve MCC group tokens.'
           maxLength: 36
           minLength: 1
           type: string
-      required:
-      - name
+        mid:
+          description: 'Merchant identifier (MID).
+
+            Identifies a specific merchant.
+
+
+            Enter a value to control spending with a particular merchant.'
+          maxLength: 36
+          minLength: 1
+          type: string
       type: object
     spend_control_association:
       description: Defines the group of users to which the velocity control applies.
@@ -475,13 +550,7 @@ components:
       required:
       - name
       type: object
-    auth_control_exempt_mids_update_request:
-      properties:
-        active:
-          default: false
-          type: boolean
-      type: object
-    auth_control_response:
+    auth_control_request:
       properties:
         active:
           default: true
@@ -503,43 +572,6 @@ components:
         token:
           maxLength: 36
           minLength: 1
-          type: string
-      required:
-      - name
-      type: object
-    auth_control_exempt_mids_response:
-      properties:
-        active:
-          default: false
-          type: boolean
-        association:
-          $ref: '#/components/schemas/spend_control_association'
-        created:
-          format: date-time
-          type: string
-        end_time:
-          format: date-time
-          type: string
-        last_updated:
-          format: date-time
-          type: string
-        merchant_group_token:
-          description: 36 char max
-          maxLength: 36
-          minLength: 1
-          type: string
-        mid:
-          maxLength: 36
-          minLength: 1
-          type: string
-        name:
-          maxLength: 255
-          minLength: 0
-          type: string
-        start_time:
-          format: date-time
-          type: string
-        token:
           type: string
       required:
       - name
@@ -567,63 +599,31 @@ components:
           minLength: 1
           type: string
       type: object
-    merchant_scope:
-      description: 'Defines the group of merchants to which the velocity control applies.
-
-
-        Populate no more than one field of the `merchant_scope` object.
-
-        If no fields are populated, the velocity control applies to all merchants.'
+    auth_control_response:
       properties:
-        mcc:
-          description: 'Merchant Category Code (MCC).
-
-            Identifies the type of products or services provided by the merchant.
-
-
-            Enter a value to control spending on a particular type of product or service.'
-          maxLength: 4
-          minLength: 1
-          type: string
-        mcc_group:
-          description: 'Token identifying a group of MCCs.
-
-            Enter a value to control spending on a group of product or service types.
-
-
-            Send a `GET` request to `/mccgroups` to retrieve MCC group tokens.'
-          maxLength: 36
-          minLength: 1
-          type: string
-        mid:
-          description: 'Merchant identifier (MID).
-
-            Identifies a specific merchant.
-
-
-            Enter a value to control spending with a particular merchant.'
-          maxLength: 36
-          minLength: 1
-          type: string
-      type: object
-    AuthControlListResponse:
-      properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/auth_control_response'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
+        active:
+          default: true
           type: boolean
-        start_index:
-          format: int32
-          type: integer
+        association:
+          $ref: '#/components/schemas/spend_control_association'
+        end_time:
+          format: date-time
+          type: string
+        merchant_scope:
+          $ref: '#/components/schemas/auth_control_merchant_scope'
+        name:
+          maxLength: 255
+          minLength: 0
+          type: string
+        start_time:
+          format: date-time
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - name
       type: object
   securitySchemes:
     mqAppAndAccessToken:

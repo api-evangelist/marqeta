@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries Payments API
+  title: Core Payments API
   version: 3.0.39
 servers:
 - url: /v3
@@ -17,20 +17,7 @@ tags:
     include::../../maturity-admonition-banner.adoc[]
 
 
-    Use the payments endpoints to create and retrieve payments made on a <</core-api/credit-accounts, credit account>>, release payment holds, or transition payment statuses.
-
-
-    A payment is an amount paid toward an account balance to reduce the total amount owed on the account.
-
-    For more on payments, see <</developer-guides/about-credit-account-payments, About Credit Account Payments>>.
-
-
-    To receive webhook notifications when ACH payment transition events occur, see <</core-api/event-types#_credit_account_payment_transition_events, Credit account payment transition events>> in Event Types.
-
-
-    Creating a payment triggers the creation of a <</core-api/credit-account-journal-entries, journal entry>> belonging to the `PAYMENT` group.
-
-    For more on payment journal entries, see <</developer-guides/about-credit-account-journal-entries#_payments, Payments>> in the About Credit Account Journal Entries guide.'
+    Use the payments endpoints to create and retrieve payments made on a >, release payment holds, or transition payment statuses.'
   name: Payments
 paths:
   /accounts/{account_token}/payments:
@@ -38,7 +25,7 @@ paths:
       description: 'Retrieve an array of payments on a credit account.
 
 
-        This endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>.'
+        This endpoint supports >.'
       operationId: listPayments
       parameters:
       - description: 'Unique identifier of the credit account for which to retrieve payments.
@@ -530,9 +517,9 @@ paths:
         The event notification is resent to your webhook endpoint and also returned in the response to this request.
 
 
-        For details on how to configure your webhook endpoint, see the About Webhooks <</developer-guides/about-webhooks#_tutorial, tutorial>>.
+        For details on how to configure your webhook endpoint, see the About Webhooks >.
 
-        For the complete `/webhooks` endpoint reference, see <</core-api/webhooks, Webhooks>>.'
+        For the complete `/webhooks` endpoint reference, see >.'
       operationId: resendWebhookEvent
       parameters:
       - description: Specifies the type of event you want to resend.
@@ -950,72 +937,6 @@ paths:
       - Payments
 components:
   schemas:
-    PaymentsPage:
-      description: Returns paginated payments
-      properties:
-        count:
-          description: Number of resources returned.
-          type: integer
-        data:
-          description: Contains one or more payments on a credit account.
-          items:
-            $ref: '#/components/schemas/PaymentDetailResponse'
-          type: array
-        end_index:
-          description: Sort order index of the last resource in the returned array.
-          type: integer
-        is_more:
-          description: A value of `true` indicates that more unreturned resources exist.
-          type: boolean
-        start_index:
-          description: Sort order index of the first resource in the returned array.
-          type: integer
-      required:
-      - count
-      - data
-      - end_index
-      - is_more
-      - start_index
-      type: object
-    RefundDetailsResponse:
-      description: Contains details for a refund.
-      nullable: true
-      properties:
-        description:
-          description: Description of the refund.
-          type: string
-        method:
-          $ref: '#/components/schemas/RefundMethod'
-        status:
-          $ref: '#/components/schemas/RefundStatus'
-      required:
-      - description
-      - method
-      - status
-      type: object
-    PaymentTransitionReq:
-      description: Request used to transition the status of a payment.
-      properties:
-        refund_details:
-          $ref: '#/components/schemas/RefundDetails'
-        status:
-          $ref: '#/components/schemas/PaymentStatus'
-        token:
-          description: Unique identifier of the payment status transition.
-          maxLength: 36
-          type: string
-        waive_returned_payment_fee:
-          description: A value of `true` indicates that a returned payment fee should not be applied if one is applicable. This is false by default. This field is only considered during a transition to either `REFUNDED` or `RETURNED`
-          type: boolean
-      required:
-      - status
-      type: object
-    CurrencyCode:
-      default: USD
-      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
-      enum:
-      - USD
-      type: string
     PaymentDetailResponse:
       description: Response containing payment details with transition history.
       properties:
@@ -1127,8 +1048,8 @@ components:
       - transitions
       - updated_time
       type: object
-    PaymentStatus:
-      description: Current status of the payment or refund.
+    RefundStatus:
+      description: Current status of the refund.
       enum:
       - INITIATED
       - PENDING
@@ -1137,13 +1058,9 @@ components:
       - CANCELLED
       - COMPLETED
       - RETURNED
-      - REFUNDED
-      - SYS_ERROR
-      - ACH_ERROR
       type: string
     ReturnedDetails:
       description: Contains information on a returned payment.
-      nullable: true
       properties:
         return_code:
           description: 'Return code for the returned payment.
@@ -1158,61 +1075,9 @@ components:
       required:
       - return_code
       - return_reason
-      type: object
-    PaymentAllocationResponse:
-      description: Object containing payment allocation information.
-      properties:
-        amount:
-          description: Total amount of the payment allocation.
-          minimum: 0
-          type: number
-        bucket:
-          description: Category to which a portion of the payment is allocated.
-          enum:
-          - PRINCIPAL
-          - INTEREST
-          - FEES
-          type: string
-      required:
-      - amount
-      - bucket
-      type: object
-    WebhookEventResendContainerResponse:
-      description: Contains information about a webhook event.
-      properties:
-        unused:
-          description: Event notification that was resent to your webhook endpoint.
-          type: string
-      type: object
-    RefundMethod:
-      description: Payment instrument used to issue the refund.
-      enum:
-      - ACH
-      - CHECK
-      type: string
-    RefundStatus:
-      description: Current status of the refund.
-      enum:
-      - INITIATED
-      - PENDING
-      - PROCESSING
-      - SUBMITTED
-      - CANCELLED
-      - COMPLETED
-      - RETURNED
-      type: string
-    RefundDetails:
-      description: Contains details for a refund.
-      properties:
-        description:
-          description: Description of the refund.
-          type: string
-        method:
-          $ref: '#/components/schemas/RefundMethod'
-      required:
-      - description
-      - method
-      type: object
+      type:
+      - object
+      - 'null'
     PaymentCreateReq:
       description: 'Object that is created when a user pays a portion or all of their statement balance.
 
@@ -1268,12 +1133,136 @@ components:
       - description
       - method
       type: object
+    PaymentStatus:
+      description: Current status of the payment or refund.
+      enum:
+      - INITIATED
+      - PENDING
+      - PROCESSING
+      - SUBMITTED
+      - CANCELLED
+      - COMPLETED
+      - RETURNED
+      - REFUNDED
+      - SYS_ERROR
+      - ACH_ERROR
+      type: string
+    PaymentAllocationResponse:
+      description: Object containing payment allocation information.
+      properties:
+        amount:
+          description: Total amount of the payment allocation.
+          minimum: 0
+          type: number
+        bucket:
+          description: Category to which a portion of the payment is allocated.
+          enum:
+          - PRINCIPAL
+          - INTEREST
+          - FEES
+          type: string
+      required:
+      - amount
+      - bucket
+      type: object
     Error:
       properties:
         code:
           type: integer
         message:
           type: string
+      type: object
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
+      type: string
+    WebhookEventResendContainerResponse:
+      description: Contains information about a webhook event.
+      properties:
+        unused:
+          description: Event notification that was resent to your webhook endpoint.
+          type: string
+      type: object
+    RefundDetails:
+      description: Contains details for a refund.
+      properties:
+        description:
+          description: Description of the refund.
+          type: string
+        method:
+          $ref: '#/components/schemas/RefundMethod'
+      required:
+      - description
+      - method
+      type: object
+    RefundDetailsResponse:
+      description: Contains details for a refund.
+      properties:
+        description:
+          description: Description of the refund.
+          type: string
+        method:
+          $ref: '#/components/schemas/RefundMethod'
+        status:
+          $ref: '#/components/schemas/RefundStatus'
+      required:
+      - description
+      - method
+      - status
+      type:
+      - object
+      - 'null'
+    PaymentsPage:
+      description: Returns paginated payments
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: Contains one or more payments on a credit account.
+          items:
+            $ref: '#/components/schemas/PaymentDetailResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    RefundMethod:
+      description: Payment instrument used to issue the refund.
+      enum:
+      - ACH
+      - CHECK
+      type: string
+    PaymentTransitionReq:
+      description: Request used to transition the status of a payment.
+      properties:
+        refund_details:
+          $ref: '#/components/schemas/RefundDetails'
+        status:
+          $ref: '#/components/schemas/PaymentStatus'
+        token:
+          description: Unique identifier of the payment status transition.
+          maxLength: 36
+          type: string
+        waive_returned_payment_fee:
+          description: A value of `true` indicates that a returned payment fee should not be applied if one is applicable. This is false by default. This field is only considered during a transition to either `REFUNDED` or `RETURNED`
+          type: boolean
+      required:
+      - status
       type: object
     PaymentTransitionResponse:
       description: Response containing payment transition information.

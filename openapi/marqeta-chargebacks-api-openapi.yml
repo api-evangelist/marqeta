@@ -1,18 +1,15 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  contact:
-    email: support@marqeta.com
-    name: Marqeta
-  description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
+  title: Marqeta Chargebacks API
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries chargebacks API
-  version: 3.0.39
+  version: '1.0'
+  description: 'Operations tagged chargebacks across 2 of this provider''s published API definitions: marqeta-core-api-openapi.yml, marqeta-diva-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: /v3
-security:
-- mqAppAndAccessToken: []
+- url: https://diva-api.marqeta.com/data/v2
+  description: Production Server
 tags:
-- name: chargebacks
+- name: Chargebacks
 paths:
   /chargebacks:
     get:
@@ -101,7 +98,9 @@ paths:
           description: Server error
       summary: List all chargebacks
       tags:
-      - chargebacks
+      - Chargebacks
+      security:
+      - mqAppAndAccessToken: []
     post:
       operationId: postChargebacks
       requestBody:
@@ -134,7 +133,11 @@ paths:
           description: Server error
       summary: Creates a chargeback
       tags:
-      - chargebacks
+      - Chargebacks
+      security:
+      - mqAppAndAccessToken: []
+    servers:
+    - url: /v3
   /chargebacks/allocationacknowledgement:
     post:
       operationId: postChargebackAllocationAcknowledgment
@@ -162,7 +165,11 @@ paths:
           description: Server error
       summary: Creates a chargeback allocation acknowledgement
       tags:
-      - chargebacks
+      - Chargebacks
+      security:
+      - mqAppAndAccessToken: []
+    servers:
+    - url: /v3
   /chargebacks/transitions:
     post:
       operationId: postChargebacksTransitions
@@ -193,7 +200,11 @@ paths:
           description: Server error
       summary: Creates a chargeback transition
       tags:
-      - chargebacks
+      - Chargebacks
+      security:
+      - mqAppAndAccessToken: []
+    servers:
+    - url: /v3
   /chargebacks/transitions/{token}:
     get:
       operationId: getChargebacksTransitionsToken
@@ -224,7 +235,11 @@ paths:
           description: Server error
       summary: Returns a specific chargeback transition
       tags:
-      - chargebacks
+      - Chargebacks
+      security:
+      - mqAppAndAccessToken: []
+    servers:
+    - url: /v3
   /chargebacks/{chargeback_token}/transitions:
     get:
       operationId: getChargebacksChargebacktokenTransitions
@@ -281,7 +296,11 @@ paths:
           description: Server error
       summary: Lists all chargeback transitions that are related to a chargeback
       tags:
-      - chargebacks
+      - Chargebacks
+      security:
+      - mqAppAndAccessToken: []
+    servers:
+    - url: /v3
   /chargebacks/{token}:
     get:
       operationId: getChargebacksToken
@@ -308,7 +327,9 @@ paths:
           description: Server error
       summary: Returns a specific chargeback
       tags:
-      - chargebacks
+      - Chargebacks
+      security:
+      - mqAppAndAccessToken: []
     put:
       operationId: putChargebacksToken
       parameters:
@@ -343,7 +364,11 @@ paths:
           description: Server error
       summary: Updates chargeback data
       tags:
-      - chargebacks
+      - Chargebacks
+      security:
+      - mqAppAndAccessToken: []
+    servers:
+    - url: /v3
   /chargebacks/{token}/grantprovisionalcredit:
     put:
       operationId: putChargebacksTokenGrantprovisionalcredit
@@ -373,7 +398,11 @@ paths:
           description: Server error
       summary: Grants provisional credit
       tags:
-      - chargebacks
+      - Chargebacks
+      security:
+      - mqAppAndAccessToken: []
+    servers:
+    - url: /v3
   /chargebacks/{token}/reverseprovisionalcredit:
     put:
       operationId: putChargebacksTokenReverseprovisionalcredit
@@ -403,14 +432,18 @@ paths:
           description: Server error
       summary: Reverses provisional credit
       tags:
-      - chargebacks
+      - Chargebacks
+      security:
+      - mqAppAndAccessToken: []
+    servers:
+    - url: /v3
   /views/chargebacks/{time_agg}:
     get:
       operationId: getChargebacks
       summary: Retrieve chargeback data
       description: Returns chargeback data aggregated by transaction or time period. Includes dispute status, amounts, reason codes, and resolution details for tracking chargeback activity and financial exposure.
       tags:
-      - chargebacks
+      - Chargebacks
       parameters:
       - $ref: '#/components/parameters/time_agg'
       - $ref: '#/components/parameters/program'
@@ -435,14 +468,312 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+      security:
+      - basicAuth: []
+    servers:
+    - url: https://diva-api.marqeta.com/data/v2
+      description: Production Server
 components:
   schemas:
+    ChargebackTransitionListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/chargeback_transition_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    ChargebackUpdateRequest:
+      properties:
+        reason_code:
+          description: Either 'reason_code' or 'reason_description' is required
+          type: string
+        reason_description:
+          description: Either 'reason_description' or 'reason_code' is required
+          enum:
+          - SERVICE_NOT_PROVIDED_MERCHANDISE_NOT_RECEIVED
+          - CANCELLED_RECURRING_TRANSACTION
+          - NOT_AS_DESCRIBED_OR_DEFECTIVE_MERCHANDISE
+          - FRAUD_MULTIPLE_TRANSACTIONS
+          - FRAUD_TRANSACTION
+          - NO_AUTHORIZATION
+          - LATE_PRESENTMENT
+          - TRANSACTION_NOT_RECOGNIZED
+          - INCORRECT_CURRENCY
+          - INCORRECT_TRANSACTION_CODE
+          - INCORRECT_CURRENCY_OR_TRANSACTION_CODE
+          - INCORRECT_TRANSACTION_AMOUNT
+          - INCORRECT_ACCOUNT_NUMBER
+          - INCORRECT_TRANSACTION_AMOUNT_OR_ACCOUNT_NUMBER
+          - NOT_AUTHORIZED_CARD_PRESENT
+          - NOT_AUTHORIZED_CARD_ABSENT
+          - CREDIT_NOT_PROCESSED
+          - NON_RECEIPT_OF_CASH_OR_LOAD_TRANSACTION_VALUE_AT_ATM
+          - DUPLICATE_PROCESSING_OR_PAID_BY_OTHER_MEANS
+          type: string
+        status:
+          enum:
+          - ARBITRATION
+          - CASE_LOST
+          - CASE_WON
+          - INITIATED
+          - NETWORK_REJECTED
+          - PREARBITRATION
+          - PRE_INITIATED
+          - REPRESENTMENT
+          - WITHDRAWN
+          - WRITTEN_OFF_ISSUER
+          - WRITTEN_OFF_PROGRAM
+          type: string
+      type: object
+    chargeback_request:
+      properties:
+        amount:
+          minimum: 0.01
+          type: number
+        channel:
+          enum:
+          - GATEWAY
+          - GATEWAY_AUTOMATED
+          - ISSUER
+          - ISSUER_AUTOMATED
+          type: string
+        credit_user:
+          default: true
+          type: boolean
+        currency_code:
+          type: string
+        memo:
+          maxLength: 1024
+          minLength: 1
+          type: string
+        pre_initiated:
+          type: boolean
+        reason_code:
+          description: Either 'reason_code' or 'reason_description' is required
+          type: string
+        reason_description:
+          description: Either 'reason_description' or 'reason_code' is required
+          enum:
+          - SERVICE_NOT_PROVIDED_MERCHANDISE_NOT_RECEIVED
+          - CANCELLED_RECURRING_TRANSACTION
+          - NOT_AS_DESCRIBED_OR_DEFECTIVE_MERCHANDISE
+          - FRAUD_MULTIPLE_TRANSACTIONS
+          - FRAUD_TRANSACTION
+          - NO_AUTHORIZATION
+          - LATE_PRESENTMENT
+          - TRANSACTION_NOT_RECOGNIZED
+          - INCORRECT_CURRENCY
+          - INCORRECT_TRANSACTION_CODE
+          - INCORRECT_CURRENCY_OR_TRANSACTION_CODE
+          - INCORRECT_TRANSACTION_AMOUNT
+          - INCORRECT_ACCOUNT_NUMBER
+          - INCORRECT_TRANSACTION_AMOUNT_OR_ACCOUNT_NUMBER
+          - NOT_AUTHORIZED_CARD_PRESENT
+          - NOT_AUTHORIZED_CARD_ABSENT
+          - CREDIT_NOT_PROCESSED
+          - NON_RECEIPT_OF_CASH_OR_LOAD_TRANSACTION_VALUE_AT_ATM
+          - DUPLICATE_PROCESSING_OR_PAID_BY_OTHER_MEANS
+          type: string
+        regulation_type:
+          type: string
+        status:
+          enum:
+          - ARBITRATION
+          - CASE_LOST
+          - CASE_WON
+          - INITIATED
+          - NETWORK_REJECTED
+          - PREARBITRATION
+          - PRE_INITIATED
+          - REPRESENTMENT
+          - WITHDRAWN
+          - WRITTEN_OFF_ISSUER
+          - WRITTEN_OFF_PROGRAM
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        transaction_token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - amount
+      - channel
+      - transaction_token
+      type: object
+    chargeback_transition_request:
+      properties:
+        amount:
+          description: Representment or prearbitration amount; this is for transitioning to Representment or Prearbitration only
+          minimum: 0.01
+          type: number
+        chargeback_token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        reason:
+          maxLength: 3000
+          minLength: 1
+          type: string
+        regulation_type:
+          type: string
+        state:
+          enum:
+          - REPRESENTMENT
+          - PREARBITRATION
+          - PREARB_RESPONDED
+          - ARBITRATION
+          - CASE_WON
+          - CASE_LOST
+          - WRITTEN_OFF_ISSUER
+          - WRITTEN_OFF_PROGRAM
+          - ARBITRATION_RESPONSE
+          - ARBITRATION_DECISION
+          - RETRIEVAL_REQUEST
+          - RETRIEVAL_RESPONSE
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        type:
+          type: string
+      required:
+      - chargeback_token
+      - state
+      type: object
+    chargeback_transition_response:
+      properties:
+        amount:
+          type: number
+        channel:
+          enum:
+          - GATEWAY
+          - GATEWAY_AUTOMATED
+          - ISSUER
+          - ISSUER_AUTOMATED
+          type: string
+        chargeback_token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        created_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        last_modified_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        previous_state:
+          enum:
+          - INITIATED
+          - REPRESENTMENT
+          - PREARBITRATION
+          - ARBITRATION
+          - CASE_WON
+          - CASE_LOST
+          - NETWORK_REJECTED
+          - WITHDRAWN
+          - ARBITRATION_RESPONSE
+          - ARBITRATION_DECISION
+          type: string
+        reason:
+          maxLength: 1024
+          minLength: 0
+          type: string
+        state:
+          enum:
+          - INITIATED
+          - REPRESENTMENT
+          - PREARBITRATION
+          - ARBITRATION
+          - CASE_WON
+          - CASE_LOST
+          - NETWORK_REJECTED
+          - WITHDRAWN
+          - WRITTEN_OFF_ISSUER
+          - WRITTEN_OFF_PROGRAM
+          - ARBITRATION_RESPONSE
+          - ARBITRATION_DECISION
+          type: string
+        token:
+          maxLength: 36
+          minLength: 0
+          type: string
+        transaction_token:
+          maxLength: 36
+          minLength: 0
+          type: string
+        type:
+          enum:
+          - initiated
+          - representment
+          - prearbitration
+          - arbitration
+          - case.won
+          - case.lost
+          - network.rejected
+          - written.off.issuer
+          - written.off.program
+          type: string
+      required:
+      - channel
+      - chargeback_token
+      - created_time
+      - last_modified_time
+      - previous_state
+      - state
+      - token
+      - type
+      type: object
+    ChargebackListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/chargeback_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    chargeback_allocation_ack_request:
+      properties:
+        chargeback_token:
+          type: string
+        token:
+          type: string
+      required:
+      - chargeback_token
+      type: object
     chargeback_response:
       description: Contains the chargeback object associated with this transaction if a chargeback has been initiated.
       properties:
         amount:
           description: Amount of the chargeback.
-          exclusiveMinimum: false
           minimum: 0.01
           type: number
         channel:
@@ -531,157 +862,6 @@ components:
       - token
       - transaction_token
       type: object
-    chargeback_request:
-      properties:
-        amount:
-          exclusiveMinimum: false
-          minimum: 0.01
-          type: number
-        channel:
-          enum:
-          - GATEWAY
-          - GATEWAY_AUTOMATED
-          - ISSUER
-          - ISSUER_AUTOMATED
-          type: string
-        credit_user:
-          default: true
-          type: boolean
-        currency_code:
-          type: string
-        memo:
-          maxLength: 1024
-          minLength: 1
-          type: string
-        pre_initiated:
-          type: boolean
-        reason_code:
-          description: Either 'reason_code' or 'reason_description' is required
-          type: string
-        reason_description:
-          description: Either 'reason_description' or 'reason_code' is required
-          enum:
-          - SERVICE_NOT_PROVIDED_MERCHANDISE_NOT_RECEIVED
-          - CANCELLED_RECURRING_TRANSACTION
-          - NOT_AS_DESCRIBED_OR_DEFECTIVE_MERCHANDISE
-          - FRAUD_MULTIPLE_TRANSACTIONS
-          - FRAUD_TRANSACTION
-          - NO_AUTHORIZATION
-          - LATE_PRESENTMENT
-          - TRANSACTION_NOT_RECOGNIZED
-          - INCORRECT_CURRENCY
-          - INCORRECT_TRANSACTION_CODE
-          - INCORRECT_CURRENCY_OR_TRANSACTION_CODE
-          - INCORRECT_TRANSACTION_AMOUNT
-          - INCORRECT_ACCOUNT_NUMBER
-          - INCORRECT_TRANSACTION_AMOUNT_OR_ACCOUNT_NUMBER
-          - NOT_AUTHORIZED_CARD_PRESENT
-          - NOT_AUTHORIZED_CARD_ABSENT
-          - CREDIT_NOT_PROCESSED
-          - NON_RECEIPT_OF_CASH_OR_LOAD_TRANSACTION_VALUE_AT_ATM
-          - DUPLICATE_PROCESSING_OR_PAID_BY_OTHER_MEANS
-          type: string
-        regulation_type:
-          type: string
-        status:
-          enum:
-          - ARBITRATION
-          - CASE_LOST
-          - CASE_WON
-          - INITIATED
-          - NETWORK_REJECTED
-          - PREARBITRATION
-          - PRE_INITIATED
-          - REPRESENTMENT
-          - WITHDRAWN
-          - WRITTEN_OFF_ISSUER
-          - WRITTEN_OFF_PROGRAM
-          type: string
-        token:
-          maxLength: 36
-          minLength: 1
-          type: string
-        transaction_token:
-          maxLength: 36
-          minLength: 1
-          type: string
-      required:
-      - amount
-      - channel
-      - transaction_token
-      type: object
-    ErrorResponse:
-      type: object
-      description: Standard error response returned by the Marqeta DiVA API.
-      properties:
-        error_code:
-          type: string
-          description: Machine-readable error code.
-        error_message:
-          type: string
-          description: Human-readable error description.
-    ChargebackUpdateRequest:
-      properties:
-        reason_code:
-          description: Either 'reason_code' or 'reason_description' is required
-          type: string
-        reason_description:
-          description: Either 'reason_description' or 'reason_code' is required
-          enum:
-          - SERVICE_NOT_PROVIDED_MERCHANDISE_NOT_RECEIVED
-          - CANCELLED_RECURRING_TRANSACTION
-          - NOT_AS_DESCRIBED_OR_DEFECTIVE_MERCHANDISE
-          - FRAUD_MULTIPLE_TRANSACTIONS
-          - FRAUD_TRANSACTION
-          - NO_AUTHORIZATION
-          - LATE_PRESENTMENT
-          - TRANSACTION_NOT_RECOGNIZED
-          - INCORRECT_CURRENCY
-          - INCORRECT_TRANSACTION_CODE
-          - INCORRECT_CURRENCY_OR_TRANSACTION_CODE
-          - INCORRECT_TRANSACTION_AMOUNT
-          - INCORRECT_ACCOUNT_NUMBER
-          - INCORRECT_TRANSACTION_AMOUNT_OR_ACCOUNT_NUMBER
-          - NOT_AUTHORIZED_CARD_PRESENT
-          - NOT_AUTHORIZED_CARD_ABSENT
-          - CREDIT_NOT_PROCESSED
-          - NON_RECEIPT_OF_CASH_OR_LOAD_TRANSACTION_VALUE_AT_ATM
-          - DUPLICATE_PROCESSING_OR_PAID_BY_OTHER_MEANS
-          type: string
-        status:
-          enum:
-          - ARBITRATION
-          - CASE_LOST
-          - CASE_WON
-          - INITIATED
-          - NETWORK_REJECTED
-          - PREARBITRATION
-          - PRE_INITIATED
-          - REPRESENTMENT
-          - WITHDRAWN
-          - WRITTEN_OFF_ISSUER
-          - WRITTEN_OFF_PROGRAM
-          type: string
-      type: object
-    ChargebackListResponse:
-      properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/chargeback_response'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
-      type: object
     ChargebacksResponse:
       type: object
       description: Chargeback data response.
@@ -712,161 +892,6 @@ components:
               status:
                 type: string
                 description: Current status of the chargeback.
-    ChargebackTransitionListResponse:
-      properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/chargeback_transition_response'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
-      type: object
-    chargeback_transition_response:
-      properties:
-        amount:
-          type: number
-        channel:
-          enum:
-          - GATEWAY
-          - GATEWAY_AUTOMATED
-          - ISSUER
-          - ISSUER_AUTOMATED
-          type: string
-        chargeback_token:
-          maxLength: 36
-          minLength: 1
-          type: string
-        created_time:
-          description: yyyy-MM-ddTHH:mm:ssZ
-          format: date-time
-          type: string
-        last_modified_time:
-          description: yyyy-MM-ddTHH:mm:ssZ
-          format: date-time
-          type: string
-        previous_state:
-          enum:
-          - INITIATED
-          - REPRESENTMENT
-          - PREARBITRATION
-          - ARBITRATION
-          - CASE_WON
-          - CASE_LOST
-          - NETWORK_REJECTED
-          - WITHDRAWN
-          - ARBITRATION_RESPONSE
-          - ARBITRATION_DECISION
-          type: string
-        reason:
-          maxLength: 1024
-          minLength: 0
-          type: string
-        state:
-          enum:
-          - INITIATED
-          - REPRESENTMENT
-          - PREARBITRATION
-          - ARBITRATION
-          - CASE_WON
-          - CASE_LOST
-          - NETWORK_REJECTED
-          - WITHDRAWN
-          - WRITTEN_OFF_ISSUER
-          - WRITTEN_OFF_PROGRAM
-          - ARBITRATION_RESPONSE
-          - ARBITRATION_DECISION
-          type: string
-        token:
-          maxLength: 36
-          minLength: 0
-          type: string
-        transaction_token:
-          maxLength: 36
-          minLength: 0
-          type: string
-        type:
-          enum:
-          - initiated
-          - representment
-          - prearbitration
-          - arbitration
-          - case.won
-          - case.lost
-          - network.rejected
-          - written.off.issuer
-          - written.off.program
-          type: string
-      required:
-      - channel
-      - chargeback_token
-      - created_time
-      - last_modified_time
-      - previous_state
-      - state
-      - token
-      - type
-      type: object
-    chargeback_transition_request:
-      properties:
-        amount:
-          description: Representment or prearbitration amount; this is for transitioning to Representment or Prearbitration only
-          exclusiveMinimum: false
-          minimum: 0.01
-          type: number
-        chargeback_token:
-          maxLength: 36
-          minLength: 1
-          type: string
-        reason:
-          maxLength: 3000
-          minLength: 1
-          type: string
-        regulation_type:
-          type: string
-        state:
-          enum:
-          - REPRESENTMENT
-          - PREARBITRATION
-          - PREARB_RESPONDED
-          - ARBITRATION
-          - CASE_WON
-          - CASE_LOST
-          - WRITTEN_OFF_ISSUER
-          - WRITTEN_OFF_PROGRAM
-          - ARBITRATION_RESPONSE
-          - ARBITRATION_DECISION
-          - RETRIEVAL_REQUEST
-          - RETRIEVAL_RESPONSE
-          type: string
-        token:
-          maxLength: 36
-          minLength: 1
-          type: string
-        type:
-          type: string
-      required:
-      - chargeback_token
-      - state
-      type: object
-    chargeback_allocation_ack_request:
-      properties:
-        chargeback_token:
-          type: string
-        token:
-          type: string
-      required:
-      - chargeback_token
-      type: object
     DivaResponseMeta:
       type: object
       description: Metadata included in DiVA API paginated responses.
@@ -883,15 +908,17 @@ components:
         has_more:
           type: boolean
           description: Whether additional pages of data are available.
+    ErrorResponse:
+      type: object
+      description: Standard error response returned by the Marqeta DiVA API.
+      properties:
+        error_code:
+          type: string
+          description: Machine-readable error code.
+        error_message:
+          type: string
+          description: Human-readable error description.
   parameters:
-    offset:
-      name: offset
-      in: query
-      description: Zero-based offset for pagination.
-      schema:
-        type: integer
-        minimum: 0
-        default: 0
     time_agg:
       name: time_agg
       in: path
@@ -904,6 +931,41 @@ components:
         - week
         - month
         - detail
+    offset:
+      name: offset
+      in: query
+      description: Zero-based offset for pagination.
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+    end_date:
+      name: end_date
+      in: query
+      description: End date for filtering data (format YYYY-MM-DD). Returns records on or before this date.
+      schema:
+        type: string
+        format: date
+    fields:
+      name: fields
+      in: query
+      description: Comma-delimited list of fields to include in the response. If not specified, all available fields are returned.
+      schema:
+        type: string
+    start_date:
+      name: start_date
+      in: query
+      description: Start date for filtering data (format YYYY-MM-DD). Returns records on or after this date.
+      schema:
+        type: string
+        format: date
+    program:
+      name: program
+      in: query
+      required: true
+      description: The name of your Marqeta card program. This parameter is required for most DiVA API endpoints to scope the data to your program.
+      schema:
+        type: string
     format:
       name: format
       in: query
@@ -914,13 +976,6 @@ components:
         - json
         - csv
         default: json
-    start_date:
-      name: start_date
-      in: query
-      description: Start date for filtering data (format YYYY-MM-DD). Returns records on or after this date.
-      schema:
-        type: string
-        format: date
     limit:
       name: limit
       in: query
@@ -930,26 +985,6 @@ components:
         minimum: 1
         maximum: 10000
         default: 1000
-    program:
-      name: program
-      in: query
-      required: true
-      description: The name of your Marqeta card program. This parameter is required for most DiVA API endpoints to scope the data to your program.
-      schema:
-        type: string
-    fields:
-      name: fields
-      in: query
-      description: Comma-delimited list of fields to include in the response. If not specified, all available fields are returned.
-      schema:
-        type: string
-    end_date:
-      name: end_date
-      in: query
-      description: End date for filtering data (format YYYY-MM-DD). Returns records on or before this date.
-      schema:
-        type: string
-        format: date
   responses:
     Unauthorized:
       description: Unauthorized. The provided application token and access token credentials are invalid or missing.
@@ -967,3 +1002,13 @@ components:
     mqAppAndAccessToken:
       scheme: basic
       type: http
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic Authentication. Use your application token as the username and your access token as the password. Contact your Marqeta representative to obtain DiVA API credentials.
+externalDocs:
+  description: Marqeta DiVA API Documentation
+  url: https://www.marqeta.com/docs/diva-api/introduction
+x-refined-from:
+- marqeta-core-api-openapi.yml
+- marqeta-diva-api-openapi.yml

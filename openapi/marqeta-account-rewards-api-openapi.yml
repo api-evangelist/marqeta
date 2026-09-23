@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries Account Rewards API
+  title: Core Account Rewards API
   version: 3.0.39
 servers:
 - url: /v3
@@ -17,15 +17,15 @@ tags:
     include::../../maturity-admonition-banner.adoc[]
 
 
-    Use the `/credit/accounts/{account_token}/rewards` endpoint to create a one-time reward on a <</core-api/credit-accounts, credit account>>.
+    Use the `/credit/accounts/{account_token}/rewards` endpoint to create a one-time reward on a >.
 
 
-    Creating a reward triggers the creation of a <</core-api/credit-account-journal-entries, journal entry>> belonging to the `REWARD` group.
+    Creating a reward triggers the creation of a > belonging to the `REWARD` group.
 
-    For more on reward journal entries, see <</developer-guides/about-credit-account-journal-entries#_rewards, Rewards>> in the About Credit Account Journal Entries guide.
+    For more on reward journal entries, see > in the About Credit Account Journal Entries guide.
 
 
-    For the reward programs that are associated with a reward policy on a bundle, see <</developer-guides/about-credit-reward-accounts/, About Credit Reward Accounts>> and <</core-api/credit-reward-global-configurations/, Reward Global Configurations>>.'
+    For the reward programs that are associated with a reward policy on a bundle, see > and >.'
   name: Account Rewards
 paths:
   /accounts/{account_token}/rewards:
@@ -89,6 +89,46 @@ paths:
       - Account Rewards
 components:
   schemas:
+    RewardCreateReq:
+      properties:
+        amount:
+          description: Amount of the reward.
+          type: number
+          exclusiveMinimum: 0
+        currency_code:
+          $ref: '#/components/schemas/CurrencyCode'
+        description:
+          description: Description of the reward.
+          maxLength: 255
+          type: string
+        forced:
+          description: 'Allows you to force the creation of a reward on an account.
+
+
+            By default, reward creation is not permitted for accounts with a status of `SUSPENDED` or `TERMINATED` if more than 90 days have passed since the status transition.'
+          type: boolean
+        note:
+          description: Additional information about the reward.
+          maxLength: 255
+          type: string
+        token:
+          description: Unique identifier of the reward.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+      required:
+      - amount
+      - currency_code
+      - description
+      - type
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
     RewardResponse:
       properties:
         account_token:
@@ -149,6 +189,12 @@ components:
       - type
       - updated_time
       type: object
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
+      type: string
     Method:
       description: 'Method, either a flat amount or a percentage.
 
@@ -160,46 +206,6 @@ components:
       - PERCENTAGE
       - FLAT
       type: string
-    RewardCreateReq:
-      properties:
-        amount:
-          description: Amount of the reward.
-          exclusiveMinimum: true
-          minimum: 0
-          type: number
-        currency_code:
-          $ref: '#/components/schemas/CurrencyCode'
-        description:
-          description: Description of the reward.
-          maxLength: 255
-          type: string
-        forced:
-          description: 'Allows you to force the creation of a reward on an account.
-
-
-            By default, reward creation is not permitted for accounts with a status of `SUSPENDED` or `TERMINATED` if more than 90 days have passed since the status transition.'
-          type: boolean
-        note:
-          description: Additional information about the reward.
-          maxLength: 255
-          type: string
-        token:
-          description: Unique identifier of the reward.
-          maxLength: 36
-          pattern: (?!^ +$)^.+$
-          type: string
-      required:
-      - amount
-      - currency_code
-      - description
-      - type
-      type: object
-    CurrencyCode:
-      default: USD
-      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
-      enum:
-      - USD
-      type: string
     RewardType:
       description: Type of reward.
       enum:
@@ -207,13 +213,6 @@ components:
       - CASH_BACK
       - STATEMENT_CREDIT
       type: string
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-      type: object
   securitySchemes:
     mqAppAndAccessToken:
       scheme: basic

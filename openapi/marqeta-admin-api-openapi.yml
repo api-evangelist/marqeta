@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries Admin API
+  title: Core Admin API
   version: 3.0.39
 servers:
 - url: /v3
@@ -16,7 +16,6 @@ tags:
 paths:
   /admin/replayfailedstatements:
     post:
-      description: Replays all failed statement from statement error processing table
       operationId: replayFailedStatements
       responses:
         '200':
@@ -64,12 +63,11 @@ paths:
           description: Unexpected error
       security:
       - nileToken: []
-      summary: Replays all failed statements by short code from statement error processing table
+      summary: Replays all failed statements by short code from statement error processing…
       tags:
       - Admin
   /admin/schedulestatements:
     post:
-      description: Schedules statements for applicable accounts
       operationId: scheduleStatements
       responses:
         '200':
@@ -125,7 +123,7 @@ paths:
           description: Unexpected error
       security:
       - nileToken: []
-      summary: Replays single failed statement by short code  and account token from statement error processing table
+      summary: Replays single failed statement by short code and account token from statement…
       tags:
       - Admin
   /admin/{short_code}/retryachpayments:
@@ -179,19 +177,19 @@ components:
       - new_acho_ach_transfer_token
       - payment_token
       type: object
-    Success:
-      description: Successful response for operation
-      properties:
-        success:
-          description: Denotes whether the operation is successful or not
-          type: boolean
-      type: object
     Error:
       properties:
         code:
           type: integer
         message:
           type: string
+      type: object
+    Success:
+      description: Successful response for operation
+      properties:
+        success:
+          description: Denotes whether the operation is successful or not
+          type: boolean
       type: object
   securitySchemes:
     mqAppAndAccessToken:

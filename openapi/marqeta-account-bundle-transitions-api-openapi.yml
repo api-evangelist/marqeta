@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries Account Bundle Transitions API
+  title: Core Account Bundle Transitions API
   version: 3.0.39
 servers:
 - url: /v3
@@ -19,7 +19,7 @@ paths:
       description: 'Retrieve an array of bundle transitions on a credit account.
 
 
-        This endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>.'
+        This endpoint supports >.'
       operationId: listAccountBundleTransitions
       parameters:
       - description: 'Unique identifier of the credit account for which you want to retrieve bundle transitions.
@@ -180,33 +180,6 @@ paths:
       - Account Bundle Transitions
 components:
   schemas:
-    AccountBundleTransitionsPage:
-      description: Return paginated account bundle transitions.
-      properties:
-        count:
-          description: Number of resources returned.
-          type: integer
-        data:
-          description: Contains one or more account bundle transitions.
-          items:
-            $ref: '#/components/schemas/AccountBundleTransitionResponse'
-          type: array
-        end_index:
-          description: Sort order index of the last resource in the returned array.
-          type: integer
-        is_more:
-          description: A value of `true` indicates that more unreturned resources exist.
-          type: boolean
-        start_index:
-          description: Sort order index of the first resource in the returned array.
-          type: integer
-      required:
-      - count
-      - data
-      - end_index
-      - is_more
-      - start_index
-      type: object
     AccountBundleTransitionResponse:
       description: The credit account bundle transition.
       properties:
@@ -244,13 +217,6 @@ components:
       - transition_state
       - updated_time
       type: object
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-      type: object
     AccountBundleTransitionReq:
       description: Information on the credit account bundle transition request.
       properties:
@@ -263,6 +229,40 @@ components:
           type: string
       required:
       - new_bundle_token
+      type: object
+    AccountBundleTransitionsPage:
+      description: Return paginated account bundle transitions.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: Contains one or more account bundle transitions.
+          items:
+            $ref: '#/components/schemas/AccountBundleTransitionResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
       type: object
   securitySchemes:
     mqAppAndAccessToken:

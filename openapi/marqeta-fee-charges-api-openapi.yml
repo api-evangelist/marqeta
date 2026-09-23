@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries fee charges API
+  title: Core fee charges API
   version: 3.0.39
 servers:
 - url: /v3
@@ -105,6 +105,15 @@ paths:
       - fee charges
 components:
   schemas:
+    realtime_fee_transfer_request:
+      properties:
+        fee:
+          $ref: '#/components/schemas/fee_model'
+        original_transaction_token:
+          type: string
+        token:
+          type: string
+      type: object
     fee:
       description: Contains details about the fee.
       properties:
@@ -184,32 +193,6 @@ components:
       - token
       - user_token
       type: object
-    fee_model:
-      description: 'Contains attributes that define characteristics of one or more fees.
-
-        This array is returned in the response when it is included in the request.'
-      properties:
-        memo:
-          description: Additional text describing the fee.
-          maxLength: 99
-          minLength: 1
-          type: string
-        overrideAmount:
-          description: Dynamic fee amount that overrides the `fee.amount` field value.
-          type: number
-        tags:
-          description: Descriptive metadata about the fee.
-          maxLength: 255
-          minLength: 0
-          type: string
-        token:
-          description: Unique identifier of the fee.
-          maxLength: 36
-          minLength: 1
-          type: string
-      required:
-      - token
-      type: object
     fee_transfer_request:
       properties:
         business_token:
@@ -238,6 +221,32 @@ components:
       - business_token
       - fees
       - user_token
+      type: object
+    fee_model:
+      description: 'Contains attributes that define characteristics of one or more fees.
+
+        This array is returned in the response when it is included in the request.'
+      properties:
+        memo:
+          description: Additional text describing the fee.
+          maxLength: 99
+          minLength: 1
+          type: string
+        overrideAmount:
+          description: Dynamic fee amount that overrides the `fee.amount` field value.
+          type: number
+        tags:
+          description: Descriptive metadata about the fee.
+          maxLength: 255
+          minLength: 0
+          type: string
+        token:
+          description: Unique identifier of the fee.
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - token
       type: object
     fee_detail:
       description: Contains details about a fee.
@@ -269,15 +278,6 @@ components:
       - fee
       - token
       - transaction_token
-      type: object
-    realtime_fee_transfer_request:
-      properties:
-        fee:
-          $ref: '#/components/schemas/fee_model'
-        original_transaction_token:
-          type: string
-        token:
-          type: string
       type: object
   securitySchemes:
     mqAppAndAccessToken:

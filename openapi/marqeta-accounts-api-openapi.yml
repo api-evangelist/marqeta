@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries Accounts API
+  title: Core Accounts API
   version: 3.0.39
 servers:
 - url: /v3
@@ -98,6 +98,17 @@ paths:
       - Accounts
 components:
   schemas:
+    RefundStatus:
+      description: Current status of the refund.
+      enum:
+      - INITIATED
+      - PENDING
+      - PROCESSING
+      - SUBMITTED
+      - CANCELLED
+      - COMPLETED
+      - RETURNED
+      type: string
     RefundTransitionsPage:
       description: Return paginated refund transition response.
       properties:
@@ -157,17 +168,6 @@ components:
         message:
           type: string
       type: object
-    RefundStatus:
-      description: Current status of the refund.
-      enum:
-      - INITIATED
-      - PENDING
-      - PROCESSING
-      - SUBMITTED
-      - CANCELLED
-      - COMPLETED
-      - RETURNED
-      type: string
   securitySchemes:
     mqAppAndAccessToken:
       scheme: basic

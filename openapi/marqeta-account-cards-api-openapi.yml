@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries Account Cards API
+  title: Core Account Cards API
   version: 3.0.39
 servers:
 - url: /v3
@@ -17,13 +17,13 @@ tags:
     include::../../maturity-admonition-banner.adoc[]
 
 
-    Use the account cards endpoints to create and retrieve credit cards that can access the credit line on a <</core-api/credit-accounts, credit account>>.
+    Use the account cards endpoints to create and retrieve credit cards that can access the credit line on a >.
 
 
-    Once a credit card is created, you can use the `/cards` endpoint to <</core-api/cards#putCardsToken, update the card>> or <</developer-guides/managing-lost-stolen-or-damaged-cards, manage lost, stolen, or damaged cards>>.
+    Once a credit card is created, you can use the `/cards` endpoint to > or >.
 
 
-    To receive webhook notifications when card transition or card action events occur, see <</core-api/event-types#_card_transition_events, Card transition events>> and <</core-api/event-types#_card_action_events, Card action events>> in Event Types.'
+    To receive webhook notifications when card transition or card action events occur, see > and > in Event Types.'
   name: Account Cards
 paths:
   /accounts/{account_token}/cards:
@@ -31,7 +31,7 @@ paths:
       description: 'Retrieve an array of cards for a credit account.
 
 
-        This endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>.'
+        This endpoint supports >.'
       operationId: getCardsByAccount
       parameters:
       - description: 'Unique identifier of the credit account for which to retrieve credit cards.
@@ -137,11 +137,11 @@ paths:
 
         [NOTE]
 
-        You can ship cards to an address different from the <</core-api/users, user>> address.
+        You can ship cards to an address different from the > address.
 
         After creating a card, send a `PUT` request to the `/cards` endpoint with the new address in the `fulfillment.shipping` object.
 
-        For more, see <</core-api/cards#putCardsToken, Update card>>.'
+        For more, see >.'
       operationId: createCardForAccount
       parameters:
       - description: 'Unique identifier of the credit account for which to create a credit card.
@@ -247,12 +247,33 @@ paths:
       - Account Cards
 components:
   schemas:
-    Error:
+    CardResponse:
+      description: Information about a credit card.
       properties:
-        code:
-          type: integer
-        message:
+        account_token:
+          description: Unique identifier of the associated credit account.
+          maxLength: 36
           type: string
+        created_time:
+          description: Date and time when the card was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        token:
+          description: Unique identifier of the credit card.
+          type: string
+        updated_time:
+          description: Date and time when the card was last modified on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        user_token:
+          description: Unique identifier of the credit cardholder.
+          type: string
+      required:
+      - account_token
+      - created_time
+      - token
+      - updated_time
+      - user_token
       type: object
     AccountCardsPage:
       description: Returns paginated account cards.
@@ -281,33 +302,12 @@ components:
       - is_more
       - start_index
       type: object
-    CardResponse:
-      description: Information about a credit card.
+    Error:
       properties:
-        account_token:
-          description: Unique identifier of the associated credit account.
-          maxLength: 36
+        code:
+          type: integer
+        message:
           type: string
-        created_time:
-          description: Date and time when the card was created on Marqeta's credit platform, in UTC.
-          format: date-time
-          type: string
-        token:
-          description: Unique identifier of the credit card.
-          type: string
-        updated_time:
-          description: Date and time when the card was last modified on Marqeta's credit platform, in UTC.
-          format: date-time
-          type: string
-        user_token:
-          description: Unique identifier of the credit cardholder.
-          type: string
-      required:
-      - account_token
-      - created_time
-      - token
-      - updated_time
-      - user_token
       type: object
   securitySchemes:
     mqAppAndAccessToken:

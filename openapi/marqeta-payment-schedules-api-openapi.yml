@@ -1,11 +1,11 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   contact:
     email: support@marqeta.com
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core accepted countries Payment Schedules API
+  title: Core Payment Schedules API
   version: 3.0.39
 servers:
 - url: /v3
@@ -17,20 +17,7 @@ tags:
     include::../../maturity-admonition-banner.adoc[]
 
 
-    Use the payment schedule endpoints to create and retrieve payment schedules and payment schedule transitions on a <</core-api/credit-accounts, credit account>>.
-
-
-    A payment schedule allows you to schedule a one-time or recurring payment on a credit account.
-
-    For more on payments, see <</developer-guides/about-credit-account-payments, About Credit Account Payments>>.
-
-
-    To receive webhook notifications when ACH payment transition events occur, see <</core-api/event-types#_credit_account_payment_transition_events, Credit account payment transition events>> in Event Types.
-
-
-    Making a payment on a payment schedule triggers the creation of a <</core-api/credit-account-journal-entries, journal entry>> belonging to the `PAYMENT` group.
-
-    For more on payment journal entries, see <</developer-guides/about-credit-account-journal-entries#_payments, Payments>> in the About Credit Account Journal Entries guide.'
+    Use the payment schedule endpoints to create and retrieve payment schedules and payment schedule transitions on a >.'
   name: Payment Schedules
 paths:
   /accounts/{account_token}/paymentschedules:
@@ -38,7 +25,7 @@ paths:
       description: 'Retrieve an array of payment schedules on a specific credit account.
 
 
-        This endpoint supports <</core-api/sorting-and-pagination, sorting and pagination>>.'
+        This endpoint supports >.'
       operationId: retrievePaymentSchedules
       parameters:
       - description: 'Unique identifier of the credit account for which you want to retrieve payment schedules.
@@ -528,25 +515,6 @@ components:
       - REMAINING_STATEMENT_BALANCE
       - CURRENT_BALANCE
       type: string
-    PaymentScheduleFrequency:
-      description: Defines how often to make a scheduled payment.
-      enum:
-      - ONCE
-      - MONTHLY
-      type: string
-    PaymentScheduleStatus:
-      description: Status of the payment schedule.
-      enum:
-      - ACTIVE
-      - COMPLETED
-      - TERMINATED
-      type: string
-    CurrencyCode:
-      default: USD
-      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
-      enum:
-      - USD
-      type: string
     PaymentSchedulePage:
       description: Returns paginated information for multiple payment schedules.
       properties:
@@ -574,17 +542,12 @@ components:
       - is_more
       - start_index
       type: object
-    PaymentScheduleTransitionCreateReq:
-      description: Details to create a payment schedule transition
+    Error:
       properties:
-        status:
-          $ref: '#/components/schemas/PaymentScheduleStatus'
-        token:
-          description: Unique identifier of the payment schedule transition.
-          maxLength: 36
+        code:
+          type: integer
+        message:
           type: string
-      required:
-      - status
       type: object
     PaymentScheduleTransitionPage:
       description: Returns paginated information for multiple payment schedule transitions.
@@ -613,35 +576,25 @@ components:
       - is_more
       - start_index
       type: object
-    PaymentScheduleTransitionResponse:
-      description: A payment schedule transition on a credit account.
-      properties:
-        account_token:
-          description: 'Unique identifier of the credit account on which to transition a payment schedule.
-
-
-            Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
-          type: string
-        created_time:
-          description: Date and time when the payment schedule transition was created on Marqeta's credit platform, in UTC.
-          format: date-time
-          type: string
-        payment_schedule_token:
-          description: 'Unique identifier of the payment schedule whose status is to transition.
-
-
-            Send a `GET` request to `/credit/accounts/{account_token}/paymentschedules` to retrieve existing payment schedule tokens.'
-          type: string
-        status:
-          $ref: '#/components/schemas/PaymentScheduleStatus'
-        token:
-          description: Unique identifier of the payment schedule transition.
-          type: string
-        updated_time:
-          description: Date and time when the payment schedule transition was last updated on Marqeta's credit platform, in UTC.
-          format: date-time
-          type: string
-      type: object
+    PaymentScheduleStatus:
+      description: Status of the payment schedule.
+      enum:
+      - ACTIVE
+      - COMPLETED
+      - TERMINATED
+      type: string
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
+      type: string
+    PaymentScheduleFrequency:
+      description: Defines how often to make a scheduled payment.
+      enum:
+      - ONCE
+      - MONTHLY
+      type: string
     PaymentScheduleCreateReq:
       description: Information to create a payment schedule.
       properties:
@@ -690,11 +643,45 @@ components:
       - currency_code
       - frequency
       type: object
-    Error:
+    PaymentScheduleTransitionCreateReq:
+      description: Details to create a payment schedule transition
       properties:
-        code:
-          type: integer
-        message:
+        status:
+          $ref: '#/components/schemas/PaymentScheduleStatus'
+        token:
+          description: Unique identifier of the payment schedule transition.
+          maxLength: 36
+          type: string
+      required:
+      - status
+      type: object
+    PaymentScheduleTransitionResponse:
+      description: A payment schedule transition on a credit account.
+      properties:
+        account_token:
+          description: 'Unique identifier of the credit account on which to transition a payment schedule.
+
+
+            Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+          type: string
+        created_time:
+          description: Date and time when the payment schedule transition was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        payment_schedule_token:
+          description: 'Unique identifier of the payment schedule whose status is to transition.
+
+
+            Send a `GET` request to `/credit/accounts/{account_token}/paymentschedules` to retrieve existing payment schedule tokens.'
+          type: string
+        status:
+          $ref: '#/components/schemas/PaymentScheduleStatus'
+        token:
+          description: Unique identifier of the payment schedule transition.
+          type: string
+        updated_time:
+          description: Date and time when the payment schedule transition was last updated on Marqeta's credit platform, in UTC.
+          format: date-time
           type: string
       type: object
     PaymentScheduleResponse:
@@ -708,8 +695,9 @@ components:
 
 
             Returned if the `amount_category` is `FIXED`.'
-          nullable: true
-          type: number
+          type:
+          - number
+          - 'null'
         amount_category:
           $ref: '#/components/schemas/PaymentScheduleAmountCategory'
         created_time:
