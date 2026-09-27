@@ -692,6 +692,401 @@ paths:
       - Businesses
 components:
   schemas:
+    BusinessUserCardHolderListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/user_card_holder_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    business_incorporation:
+      properties:
+        address_registered_under:
+          $ref: '#/components/schemas/AddressRequestModel'
+        incorporation_type:
+          enum:
+          - LLC
+          - CORPORATION
+          - SOLE_PROPRIETORSHIP
+          - PARTNERSHIP
+          - COOPERATIVE
+          - OTHER
+          - FINANCIAL_OR_CREDIT_INSTITUTION
+          - FOUNDATION
+          - ASSOCIATION
+          - CHARITY
+          - TRUST
+          maxLength: 255
+          minLength: 0
+          type: string
+        is_public:
+          default: false
+          type: boolean
+        is_regulated_entity:
+          type: boolean
+        name_registered_under:
+          maxLength: 255
+          minLength: 0
+          type: string
+        state_of_incorporation:
+          maxLength: 255
+          minLength: 0
+          type: string
+        stock_symbol:
+          maxLength: 255
+          minLength: 0
+          type: string
+      type: object
+    IdentificationRequestModel:
+      description: Contains identifications associated with the cardholder.
+      properties:
+        expiration_date:
+          description: Expiration date of the identification, if applicable.
+          type: string
+        issuing_country:
+          readOnly: true
+          type: string
+        type:
+          description: 'Type of identification.
+
+
+            *NOTE:* Full Social Security Number (SSN) is required for US-based user cardholder KYC verification, using the `SSN` type.
+
+            Full Employer Identification Number (EIN) is required for business cardholder KYC verification, using the `BUSINESS_TAX_ID` or `BUSINESS_NUMBER` type.
+
+            For business directors, use one of SSN, TIN, SIN, or NIN.
+
+            Nine digits only, no delimiters.
+
+            `123456789`, for example.'
+          enum:
+          - SSN
+          - TIN
+          - SIN
+          - NIN
+          - PASSPORT_NUMBER
+          - DRIVERS_LICENSE
+          - BUSINESS_NUMBER
+          - BUSINESS_TAX_ID
+          - TAXPAYER_REFERENCE
+          readOnly: true
+          type: string
+        value:
+          description: Number associated with the identification.
+          readOnly: true
+          type: string
+      required:
+      - type
+      type: object
+    ssn_response_model:
+      description: Contains tax identification information.
+      properties:
+        nin:
+          description: National Identification Number (NIN).
+          type: string
+        sin:
+          description: Social Insurance Number (SIN).
+          type: string
+        ssn:
+          description: United States Social Security Number (SSN) or Individual Taxpayer Identification Number (ITIN).
+          type: string
+        tin:
+          description: Taxpayer Identification Number (TIN).
+          type: string
+      type: object
+    business_director_response_model:
+      properties:
+        active:
+          type: boolean
+        address:
+          $ref: '#/components/schemas/AddressResponseModel'
+        birth_date:
+          readOnly: true
+          type: string
+        created_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        email:
+          type: string
+        first_name:
+          type: string
+        identifications:
+          items:
+            $ref: '#/components/schemas/IdentificationResponseModel'
+          type: array
+        last_modified_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        last_name:
+          type: string
+        middle_name:
+          type: string
+        nationality:
+          type: string
+        phone:
+          type: string
+        place_of_birth:
+          type: string
+        title:
+          type: string
+        token:
+          type: string
+      required:
+      - created_time
+      - last_modified_time
+      type: object
+    cardholder_note_request_model:
+      properties:
+        created_by:
+          maxLength: 255
+          minLength: 0
+          type: string
+        created_by_user_role:
+          enum:
+          - USER
+          - ADMIN
+          - BANK_USER
+          - BANK_ADMIN
+          - MARQETA_PD
+          - MARQETA_ADMIN
+          type: string
+        description:
+          type: string
+        private:
+          default: false
+          type: boolean
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - created_by
+      - description
+      type: object
+    DDARequest:
+      properties:
+        dda:
+          type: string
+      required:
+      - dda
+      type: object
+    business_card_holder_update:
+      properties:
+        account_holder_group_token:
+          maxLength: 36
+          minLength: 0
+          type: string
+        active:
+          default: true
+          type: boolean
+        attestation_consent:
+          default: false
+          type: boolean
+        attestation_date:
+          format: date-time
+          type: string
+        attester_name:
+          maxLength: 64
+          minLength: 0
+          type: string
+        attester_title:
+          maxLength: 64
+          minLength: 0
+          type: string
+        beneficial_owner1:
+          $ref: '#/components/schemas/beneficial_owner_request'
+        beneficial_owner2:
+          $ref: '#/components/schemas/beneficial_owner_request'
+        beneficial_owner3:
+          $ref: '#/components/schemas/beneficial_owner_request'
+        beneficial_owner4:
+          $ref: '#/components/schemas/beneficial_owner_request'
+        business_name_dba:
+          maxLength: 255
+          minLength: 0
+          type: string
+        business_name_legal:
+          maxLength: 255
+          minLength: 0
+          type: string
+        business_type:
+          maxLength: 255
+          minLength: 0
+          type: string
+        date_established:
+          format: date-time
+          type: string
+        duns_number:
+          maxLength: 255
+          minLength: 0
+          type: string
+        general_business_description:
+          maxLength: 255
+          minLength: 0
+          type: string
+        history:
+          maxLength: 255
+          minLength: 0
+          type: string
+        identifications:
+          items:
+            $ref: '#/components/schemas/IdentificationRequestModel'
+          type: array
+        in_current_location_since:
+          format: date-time
+          type: string
+        incorporation:
+          $ref: '#/components/schemas/business_incorporation'
+        international_office_locations:
+          maxLength: 255
+          minLength: 0
+          type: string
+        ip_address:
+          maxLength: 39
+          minLength: 0
+          type: string
+        metadata:
+          additionalProperties:
+            type: string
+          type: object
+        notes:
+          maxLength: 255
+          minLength: 0
+          type: string
+        office_location:
+          $ref: '#/components/schemas/AddressRequestModel'
+        password:
+          maxLength: 255
+          minLength: 0
+          type: string
+        phone:
+          maxLength: 16
+          minLength: 0
+          type: string
+        primary_contact:
+          $ref: '#/components/schemas/PrimaryContactInfoModel'
+        proprietor_is_beneficial_owner:
+          default: false
+          type: boolean
+        proprietor_or_officer:
+          $ref: '#/components/schemas/business_proprietor'
+        taxpayer_id:
+          maxLength: 255
+          minLength: 0
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        website:
+          maxLength: 255
+          minLength: 0
+          type: string
+      type: object
+    business_proprietor_response:
+      properties:
+        alternative_names:
+          type: string
+        birth_place:
+          type: string
+        dob:
+          format: date-time
+          type: string
+        email:
+          type: string
+        first_name:
+          type: string
+        home:
+          $ref: '#/components/schemas/AddressResponseModel'
+        identifications:
+          items:
+            $ref: '#/components/schemas/IdentificationResponseModel'
+          type: array
+        last_name:
+          type: string
+        middle_name:
+          type: string
+        nationality:
+          type: string
+        phone:
+          type: string
+        ssn:
+          type: string
+        title:
+          type: string
+      type: object
+    CardHolderNoteListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/cardholder_note_response_model'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    business_proprietor:
+      properties:
+        alternative_names:
+          type: string
+        birth_place:
+          maxLength: 255
+          minLength: 0
+          type: string
+        dob:
+          format: date-time
+          type: string
+        email:
+          type: string
+        first_name:
+          type: string
+        home:
+          $ref: '#/components/schemas/AddressRequestModel'
+        identifications:
+          items:
+            $ref: '#/components/schemas/IdentificationRequestModel'
+          type: array
+        last_name:
+          type: string
+        middle_name:
+          type: string
+        nationality:
+          maxLength: 255
+          minLength: 0
+          type: string
+        phone:
+          type: string
+        ssn:
+          type: string
+        title:
+          type: string
+      required:
+      - first_name
+      - last_name
+      type: object
     AddressRequestModel:
       properties:
         address1:
@@ -723,26 +1118,53 @@ components:
           minLength: 0
           type: string
       type: object
-    Authentication:
-      description: Contains the cardholder's email address and password information.
+    business_director_request_model:
       properties:
-        email_verified:
-          default: false
-          description: Specifies whether the email address has been verified.
+        active:
           type: boolean
-        email_verified_time:
-          description: Date and time when the email address was verified.
-          format: date-time
+        address:
+          $ref: '#/components/schemas/AddressRequestModel'
+        birth_date:
           type: string
-        last_password_update_channel:
-          description: Specifies the channel through which the password was last changed.
-          enum:
-          - USER_CHANGE
-          - USER_RESET
+        email:
+          maxLength: 255
+          minLength: 1
           type: string
-        last_password_update_time:
-          description: Date and time when the password was last changed.
-          format: date-time
+        first_name:
+          maxLength: 255
+          minLength: 0
+          type: string
+        identifications:
+          items:
+            $ref: '#/components/schemas/IdentificationRequestModel'
+          type: array
+        last_name:
+          maxLength: 255
+          minLength: 0
+          type: string
+        middle_name:
+          maxLength: 40
+          minLength: 0
+          type: string
+        nationality:
+          maxLength: 255
+          minLength: 0
+          type: string
+        phone:
+          maxLength: 255
+          minLength: 0
+          type: string
+        place_of_birth:
+          maxLength: 255
+          minLength: 0
+          type: string
+        title:
+          maxLength: 255
+          minLength: 1
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
           type: string
       type: object
     business_card_holder_response:
@@ -882,187 +1304,6 @@ components:
       - created_time
       - last_modified_time
       type: object
-    CardHolderNoteListResponse:
-      properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/cardholder_note_response_model'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
-      type: object
-    business_director_request_model:
-      properties:
-        active:
-          type: boolean
-        address:
-          $ref: '#/components/schemas/AddressRequestModel'
-        birth_date:
-          type: string
-        email:
-          maxLength: 255
-          minLength: 1
-          type: string
-        first_name:
-          maxLength: 255
-          minLength: 0
-          type: string
-        identifications:
-          items:
-            $ref: '#/components/schemas/IdentificationRequestModel'
-          type: array
-        last_name:
-          maxLength: 255
-          minLength: 0
-          type: string
-        middle_name:
-          maxLength: 40
-          minLength: 0
-          type: string
-        nationality:
-          maxLength: 255
-          minLength: 0
-          type: string
-        phone:
-          maxLength: 255
-          minLength: 0
-          type: string
-        place_of_birth:
-          maxLength: 255
-          minLength: 0
-          type: string
-        title:
-          maxLength: 255
-          minLength: 1
-          type: string
-        token:
-          maxLength: 36
-          minLength: 1
-          type: string
-      type: object
-    business_card_holder_update:
-      properties:
-        account_holder_group_token:
-          maxLength: 36
-          minLength: 0
-          type: string
-        active:
-          default: true
-          type: boolean
-        attestation_consent:
-          default: false
-          type: boolean
-        attestation_date:
-          format: date-time
-          type: string
-        attester_name:
-          maxLength: 64
-          minLength: 0
-          type: string
-        attester_title:
-          maxLength: 64
-          minLength: 0
-          type: string
-        beneficial_owner1:
-          $ref: '#/components/schemas/beneficial_owner_request'
-        beneficial_owner2:
-          $ref: '#/components/schemas/beneficial_owner_request'
-        beneficial_owner3:
-          $ref: '#/components/schemas/beneficial_owner_request'
-        beneficial_owner4:
-          $ref: '#/components/schemas/beneficial_owner_request'
-        business_name_dba:
-          maxLength: 255
-          minLength: 0
-          type: string
-        business_name_legal:
-          maxLength: 255
-          minLength: 0
-          type: string
-        business_type:
-          maxLength: 255
-          minLength: 0
-          type: string
-        date_established:
-          format: date-time
-          type: string
-        duns_number:
-          maxLength: 255
-          minLength: 0
-          type: string
-        general_business_description:
-          maxLength: 255
-          minLength: 0
-          type: string
-        history:
-          maxLength: 255
-          minLength: 0
-          type: string
-        identifications:
-          items:
-            $ref: '#/components/schemas/IdentificationRequestModel'
-          type: array
-        in_current_location_since:
-          format: date-time
-          type: string
-        incorporation:
-          $ref: '#/components/schemas/business_incorporation'
-        international_office_locations:
-          maxLength: 255
-          minLength: 0
-          type: string
-        ip_address:
-          maxLength: 39
-          minLength: 0
-          type: string
-        metadata:
-          additionalProperties:
-            type: string
-          type: object
-        notes:
-          maxLength: 255
-          minLength: 0
-          type: string
-        office_location:
-          $ref: '#/components/schemas/AddressRequestModel'
-        password:
-          maxLength: 255
-          minLength: 0
-          type: string
-        phone:
-          maxLength: 16
-          minLength: 0
-          type: string
-        primary_contact:
-          $ref: '#/components/schemas/PrimaryContactInfoModel'
-        proprietor_is_beneficial_owner:
-          default: false
-          type: boolean
-        proprietor_or_officer:
-          $ref: '#/components/schemas/business_proprietor'
-        taxpayer_id:
-          maxLength: 255
-          minLength: 0
-          type: string
-        token:
-          maxLength: 36
-          minLength: 1
-          type: string
-        website:
-          maxLength: 255
-          minLength: 0
-          type: string
-      type: object
     business_incorporation_response:
       properties:
         address_registered_under:
@@ -1100,10 +1341,68 @@ components:
           minLength: 0
           type: string
       type: object
-    business_proprietor:
+    BusinessCardHolderListResponse:
       properties:
-        alternative_names:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/business_card_holder_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    cardholder_note_update_request_model:
+      properties:
+        description:
           type: string
+      required:
+      - description
+      type: object
+    cardholder_note_response_model:
+      properties:
+        created_by:
+          maxLength: 255
+          minLength: 0
+          type: string
+        created_by_user_role:
+          enum:
+          - USER
+          - ADMIN
+          - BANK_USER
+          - BANK_ADMIN
+          - MARQETA_PD
+          - MARQETA_ADMIN
+          type: string
+        created_time:
+          format: date-time
+          type: string
+        description:
+          type: string
+        last_modified_time:
+          format: date-time
+          type: string
+        private:
+          default: false
+          type: boolean
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - created_by
+      - description
+      type: object
+    beneficial_owner_request:
+      properties:
         birth_place:
           maxLength: 255
           minLength: 0
@@ -1112,6 +1411,8 @@ components:
           format: date-time
           type: string
         email:
+          maxLength: 255
+          minLength: 0
           type: string
         first_name:
           type: string
@@ -1129,88 +1430,45 @@ components:
           maxLength: 255
           minLength: 0
           type: string
+        ownership_percentage:
+          maxLength: 40
+          minLength: 0
+          type: string
         phone:
           type: string
         ssn:
           type: string
         title:
           type: string
-      required:
-      - first_name
-      - last_name
       type: object
-    cardholder_note_update_request_model:
+    IdentificationResponseModel:
+      description: Contains identifications associated with the cardholder.
       properties:
-        description:
-          type: string
-      required:
-      - description
-      type: object
-    DDARequest:
-      properties:
-        dda:
-          type: string
-      required:
-      - dda
-      type: object
-    ssn_response_model:
-      description: Contains tax identification information.
-      properties:
-        nin:
-          description: National Identification Number (NIN).
-          type: string
-        sin:
-          description: Social Insurance Number (SIN).
-          type: string
-        ssn:
-          description: United States Social Security Number (SSN) or Individual Taxpayer Identification Number (ITIN).
-          type: string
-        tin:
-          description: Taxpayer Identification Number (TIN).
-          type: string
-      type: object
-    business_director_response_model:
-      properties:
-        active:
-          type: boolean
-        address:
-          $ref: '#/components/schemas/AddressResponseModel'
-        birth_date:
+        expiration_date:
+          description: Expiration date of the identification, if applicable.
           readOnly: true
           type: string
-        created_time:
-          description: yyyy-MM-ddTHH:mm:ssZ
-          format: date-time
+        issuing_country:
+          readOnly: true
           type: string
-        email:
+        type:
+          description: Type of identification.
+          enum:
+          - SSN
+          - TIN
+          - SIN
+          - NIN
+          - PASSPORT_NUMBER
+          - DRIVERS_LICENSE
+          - BUSINESS_NUMBER
+          - BUSINESS_TAX_ID
+          - TAXPAYER_REFERENCE
+          readOnly: true
           type: string
-        first_name:
+        value:
+          description: Number associated with the identification.
+          readOnly: true
           type: string
-        identifications:
-          items:
-            $ref: '#/components/schemas/IdentificationResponseModel'
-          type: array
-        last_modified_time:
-          description: yyyy-MM-ddTHH:mm:ssZ
-          format: date-time
-          type: string
-        last_name:
-          type: string
-        middle_name:
-          type: string
-        nationality:
-          type: string
-        phone:
-          type: string
-        place_of_birth:
-          type: string
-        title:
-          type: string
-        token:
-          type: string
-      required:
-      - created_time
-      - last_modified_time
       type: object
     user_card_holder_response:
       description: Contains information about a cardholder.
@@ -1411,46 +1669,90 @@ components:
       - created_time
       - last_modified_time
       type: object
-    IdentificationRequestModel:
-      description: Contains identifications associated with the cardholder.
+    Authentication:
+      description: Contains the cardholder's email address and password information.
       properties:
-        expiration_date:
-          description: Expiration date of the identification, if applicable.
+        email_verified:
+          default: false
+          description: Specifies whether the email address has been verified.
+          type: boolean
+        email_verified_time:
+          description: Date and time when the email address was verified.
+          format: date-time
           type: string
-        issuing_country:
-          readOnly: true
-          type: string
-        type:
-          description: 'Type of identification.
-
-
-            *NOTE:* Full Social Security Number (SSN) is required for US-based user cardholder KYC verification, using the `SSN` type.
-
-            Full Employer Identification Number (EIN) is required for business cardholder KYC verification, using the `BUSINESS_TAX_ID` or `BUSINESS_NUMBER` type.
-
-            For business directors, use one of SSN, TIN, SIN, or NIN.
-
-            Nine digits only, no delimiters.
-
-            `123456789`, for example.'
+        last_password_update_channel:
+          description: Specifies the channel through which the password was last changed.
           enum:
-          - SSN
-          - TIN
-          - SIN
-          - NIN
-          - PASSPORT_NUMBER
-          - DRIVERS_LICENSE
-          - BUSINESS_NUMBER
-          - BUSINESS_TAX_ID
-          - TAXPAYER_REFERENCE
-          readOnly: true
+          - USER_CHANGE
+          - USER_RESET
           type: string
-        value:
-          description: Number associated with the identification.
-          readOnly: true
+        last_password_update_time:
+          description: Date and time when the password was last changed.
+          format: date-time
           type: string
-      required:
-      - type
+      type: object
+    beneficial_owner_response:
+      properties:
+        birth_place:
+          type: string
+        email:
+          type: string
+        first_name:
+          type: string
+        getdob:
+          format: date-time
+          type: string
+        home:
+          $ref: '#/components/schemas/AddressResponseModel'
+        identifications:
+          items:
+            $ref: '#/components/schemas/IdentificationResponseModel'
+          type: array
+        last_name:
+          type: string
+        middle_name:
+          type: string
+        nationality:
+          type: string
+        ownership_percentage:
+          type: string
+        phone:
+          type: string
+        ssn:
+          type: string
+        title:
+          type: string
+      type: object
+    AddressResponseModel:
+      properties:
+        address1:
+          maxLength: 35
+          minLength: 0
+          type: string
+        address2:
+          maxLength: 35
+          minLength: 0
+          type: string
+        city:
+          maxLength: 35
+          minLength: 0
+          type: string
+        country:
+          maxLength: 40
+          minLength: 0
+          type: string
+        postal_code:
+          maxLength: 20
+          minLength: 0
+          type: string
+        state:
+          maxLength: 35
+          minLength: 0
+          type: string
+        zip:
+          maxLength: 20
+          minLength: 0
+          type: string
       type: object
     PrimaryContactInfoModel:
       properties:
@@ -1485,179 +1787,6 @@ components:
         title:
           maxLength: 255
           minLength: 0
-          type: string
-      type: object
-    BusinessCardHolderListResponse:
-      properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/business_card_holder_response'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
-      type: object
-    AddressResponseModel:
-      properties:
-        address1:
-          maxLength: 35
-          minLength: 0
-          type: string
-        address2:
-          maxLength: 35
-          minLength: 0
-          type: string
-        city:
-          maxLength: 35
-          minLength: 0
-          type: string
-        country:
-          maxLength: 40
-          minLength: 0
-          type: string
-        postal_code:
-          maxLength: 20
-          minLength: 0
-          type: string
-        state:
-          maxLength: 35
-          minLength: 0
-          type: string
-        zip:
-          maxLength: 20
-          minLength: 0
-          type: string
-      type: object
-    cardholder_note_response_model:
-      properties:
-        created_by:
-          maxLength: 255
-          minLength: 0
-          type: string
-        created_by_user_role:
-          enum:
-          - USER
-          - ADMIN
-          - BANK_USER
-          - BANK_ADMIN
-          - MARQETA_PD
-          - MARQETA_ADMIN
-          type: string
-        created_time:
-          format: date-time
-          type: string
-        description:
-          type: string
-        last_modified_time:
-          format: date-time
-          type: string
-        private:
-          default: false
-          type: boolean
-        token:
-          maxLength: 36
-          minLength: 1
-          type: string
-      required:
-      - created_by
-      - description
-      type: object
-    business_incorporation:
-      properties:
-        address_registered_under:
-          $ref: '#/components/schemas/AddressRequestModel'
-        incorporation_type:
-          enum:
-          - LLC
-          - CORPORATION
-          - SOLE_PROPRIETORSHIP
-          - PARTNERSHIP
-          - COOPERATIVE
-          - OTHER
-          - FINANCIAL_OR_CREDIT_INSTITUTION
-          - FOUNDATION
-          - ASSOCIATION
-          - CHARITY
-          - TRUST
-          maxLength: 255
-          minLength: 0
-          type: string
-        is_public:
-          default: false
-          type: boolean
-        is_regulated_entity:
-          type: boolean
-        name_registered_under:
-          maxLength: 255
-          minLength: 0
-          type: string
-        state_of_incorporation:
-          maxLength: 255
-          minLength: 0
-          type: string
-        stock_symbol:
-          maxLength: 255
-          minLength: 0
-          type: string
-      type: object
-    BusinessUserCardHolderListResponse:
-      properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/user_card_holder_response'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
-      type: object
-    beneficial_owner_response:
-      properties:
-        birth_place:
-          type: string
-        email:
-          type: string
-        first_name:
-          type: string
-        getdob:
-          format: date-time
-          type: string
-        home:
-          $ref: '#/components/schemas/AddressResponseModel'
-        identifications:
-          items:
-            $ref: '#/components/schemas/IdentificationResponseModel'
-          type: array
-        last_name:
-          type: string
-        middle_name:
-          type: string
-        nationality:
-          type: string
-        ownership_percentage:
-          type: string
-        phone:
-          type: string
-        ssn:
-          type: string
-        title:
           type: string
       type: object
     business_cardholder:
@@ -1773,135 +1902,6 @@ components:
         website:
           maxLength: 255
           minLength: 0
-          type: string
-      type: object
-    business_proprietor_response:
-      properties:
-        alternative_names:
-          type: string
-        birth_place:
-          type: string
-        dob:
-          format: date-time
-          type: string
-        email:
-          type: string
-        first_name:
-          type: string
-        home:
-          $ref: '#/components/schemas/AddressResponseModel'
-        identifications:
-          items:
-            $ref: '#/components/schemas/IdentificationResponseModel'
-          type: array
-        last_name:
-          type: string
-        middle_name:
-          type: string
-        nationality:
-          type: string
-        phone:
-          type: string
-        ssn:
-          type: string
-        title:
-          type: string
-      type: object
-    IdentificationResponseModel:
-      description: Contains identifications associated with the cardholder.
-      properties:
-        expiration_date:
-          description: Expiration date of the identification, if applicable.
-          readOnly: true
-          type: string
-        issuing_country:
-          readOnly: true
-          type: string
-        type:
-          description: Type of identification.
-          enum:
-          - SSN
-          - TIN
-          - SIN
-          - NIN
-          - PASSPORT_NUMBER
-          - DRIVERS_LICENSE
-          - BUSINESS_NUMBER
-          - BUSINESS_TAX_ID
-          - TAXPAYER_REFERENCE
-          readOnly: true
-          type: string
-        value:
-          description: Number associated with the identification.
-          readOnly: true
-          type: string
-      type: object
-    cardholder_note_request_model:
-      properties:
-        created_by:
-          maxLength: 255
-          minLength: 0
-          type: string
-        created_by_user_role:
-          enum:
-          - USER
-          - ADMIN
-          - BANK_USER
-          - BANK_ADMIN
-          - MARQETA_PD
-          - MARQETA_ADMIN
-          type: string
-        description:
-          type: string
-        private:
-          default: false
-          type: boolean
-        token:
-          maxLength: 36
-          minLength: 1
-          type: string
-      required:
-      - created_by
-      - description
-      type: object
-    beneficial_owner_request:
-      properties:
-        birth_place:
-          maxLength: 255
-          minLength: 0
-          type: string
-        dob:
-          format: date-time
-          type: string
-        email:
-          maxLength: 255
-          minLength: 0
-          type: string
-        first_name:
-          type: string
-        home:
-          $ref: '#/components/schemas/AddressRequestModel'
-        identifications:
-          items:
-            $ref: '#/components/schemas/IdentificationRequestModel'
-          type: array
-        last_name:
-          type: string
-        middle_name:
-          type: string
-        nationality:
-          maxLength: 255
-          minLength: 0
-          type: string
-        ownership_percentage:
-          maxLength: 40
-          minLength: 0
-          type: string
-        phone:
-          type: string
-        ssn:
-          type: string
-        title:
           type: string
       type: object
   securitySchemes:

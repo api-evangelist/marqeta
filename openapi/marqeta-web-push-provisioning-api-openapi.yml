@@ -91,6 +91,15 @@ paths:
       - web push provisioning
 components:
   schemas:
+    request_for_wpp_parameters:
+      properties:
+        card_token:
+          description: Unique identifier of the card resource.
+          example: 5855opl9-abcc-4cb7-a330-xyze5799ea5
+          type: string
+      required:
+      - card_token
+      type: object
     error_message_from_web_push_provisioning_request:
       properties:
         error_code:
@@ -116,15 +125,6 @@ components:
         wpp_google_piaid:
           description: Identifier that Google uses to identify the program to process the request for and to provide the correct card art for.
           type: string
-      type: object
-    request_for_wpp_parameters:
-      properties:
-        card_token:
-          description: Unique identifier of the card resource.
-          example: 5855opl9-abcc-4cb7-a330-xyze5799ea5
-          type: string
-      required:
-      - card_token
       type: object
   securitySchemes:
     mqAppAndAccessToken:

@@ -647,43 +647,6 @@ paths:
       - Account Transitions
 components:
   schemas:
-    AccountStatusEnum:
-      description: 'Status of the credit account.
-
-
-        *NOTE* `CHARGE_OFF` is not an allowable value for `original_status`.'
-      enum:
-      - UNACTIVATED
-      - ACTIVE
-      - SUSPENDED
-      - TERMINATED
-      - CHARGE_OFF
-      type: string
-    AccountTransitionReq:
-      description: Information on the credit account transition.
-      properties:
-        status:
-          $ref: '#/components/schemas/AccountStatusEnum'
-        token:
-          description: Unique identifier of the credit account transition.
-          type: string
-      required:
-      - status
-      type: object
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-      type: object
-    WebhookEventResendContainerResponse:
-      description: Contains information about a webhook event.
-      properties:
-        unused:
-          description: Event notification that was resent to your webhook endpoint.
-          type: string
-      type: object
     AccountTransitionsPage:
       description: Return paginated account transitions.
       properties:
@@ -710,6 +673,43 @@ components:
       - end_index
       - is_more
       - start_index
+      type: object
+    WebhookEventResendContainerResponse:
+      description: Contains information about a webhook event.
+      properties:
+        unused:
+          description: Event notification that was resent to your webhook endpoint.
+          type: string
+      type: object
+    AccountTransitionReq:
+      description: Information on the credit account transition.
+      properties:
+        status:
+          $ref: '#/components/schemas/AccountStatusEnum'
+        token:
+          description: Unique identifier of the credit account transition.
+          type: string
+      required:
+      - status
+      type: object
+    AccountStatusEnum:
+      description: 'Status of the credit account.
+
+
+        *NOTE* `CHARGE_OFF` is not an allowable value for `original_status`.'
+      enum:
+      - UNACTIVATED
+      - ACTIVE
+      - SUSPENDED
+      - TERMINATED
+      - CHARGE_OFF
+      type: string
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
       type: object
     AccountTransitionResponse:
       description: Information on the credit account transition.

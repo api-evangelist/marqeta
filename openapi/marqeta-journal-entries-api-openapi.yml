@@ -1178,55 +1178,6 @@ paths:
       - Journal Entries
 components:
   schemas:
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-      type: object
-    OriginalCurrency:
-      description: Original Currency
-      properties:
-        amount:
-          description: original amount
-          example: 2
-          type: number
-        code:
-          description: Currency code, such as EUR or USD.
-          type: string
-      type: object
-    JournalEntriesPage:
-      description: Return filtered transactions.
-      properties:
-        count:
-          description: Number of resources returned.
-          maximum: 100
-          minimum: 0
-          type: integer
-        data:
-          description: Contains one or more journal entries on a credit account.
-          items:
-            $ref: '#/components/schemas/JournalEntry'
-          maxItems: 100
-          minItems: 0
-          type: array
-        end_index:
-          description: Sort order index of the last resource in the returned array.
-          type: integer
-        is_more:
-          description: A value of `true` indicates that more unreturned resources exist.
-          type: boolean
-        start_index:
-          description: Sort order index of the first resource in the returned array.
-          type: integer
-      required:
-      - count
-      - data
-      - end_index
-      - is_more
-      - start_index
-      type: object
     WebhookEventResendContainerResponse:
       description: Contains information about a webhook event.
       properties:
@@ -1234,12 +1185,6 @@ components:
           description: Event notification that was resent to your webhook endpoint.
           type: string
       type: object
-    CurrencyCode:
-      default: USD
-      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
-      enum:
-      - USD
-      type: string
     JournalEntry:
       description: Contains information about a journal entry.
       properties:
@@ -1412,6 +1357,61 @@ components:
       - token
       - type
       - user_token
+      type: object
+    JournalEntriesPage:
+      description: Return filtered transactions.
+      properties:
+        count:
+          description: Number of resources returned.
+          maximum: 100
+          minimum: 0
+          type: integer
+        data:
+          description: Contains one or more journal entries on a credit account.
+          items:
+            $ref: '#/components/schemas/JournalEntry'
+          maxItems: 100
+          minItems: 0
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
+      type: string
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    OriginalCurrency:
+      description: Original Currency
+      properties:
+        amount:
+          description: original amount
+          example: 2
+          type: number
+        code:
+          description: Currency code, such as EUR or USD.
+          type: string
       type: object
   securitySchemes:
     mqAppAndAccessToken:

@@ -165,29 +165,14 @@ paths:
       - mcc groups
 components:
   schemas:
-    MCCGroupListResponse:
+    AuthControls:
       properties:
-        count:
+        hold_expiration_days:
+          default: 7
           format: int32
           type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/mcc_group_model'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
-      type: object
-    MCCConfig:
-      properties:
-        authorization_controls:
-          $ref: '#/components/schemas/AuthControls'
+        hold_increase:
+          $ref: '#/components/schemas/hold_increase'
       type: object
     hold_increase:
       properties:
@@ -230,14 +215,29 @@ components:
       - mccs
       - name
       type: object
-    AuthControls:
+    MCCGroupListResponse:
       properties:
-        hold_expiration_days:
-          default: 7
+        count:
           format: int32
           type: integer
-        hold_increase:
-          $ref: '#/components/schemas/hold_increase'
+        data:
+          items:
+            $ref: '#/components/schemas/mcc_group_model'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    MCCConfig:
+      properties:
+        authorization_controls:
+          $ref: '#/components/schemas/AuthControls'
       type: object
     mcc_group_update_model:
       properties:

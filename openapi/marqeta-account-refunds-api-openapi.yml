@@ -337,24 +337,6 @@ paths:
       - Account Refunds
 components:
   schemas:
-    RefundStatus:
-      description: Current status of the refund.
-      enum:
-      - INITIATED
-      - PENDING
-      - PROCESSING
-      - SUBMITTED
-      - CANCELLED
-      - COMPLETED
-      - RETURNED
-      type: string
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-      type: object
     RefundsPage:
       description: Returns paginated  list of refund resources.
       properties:
@@ -382,36 +364,42 @@ components:
       - is_more
       - start_index
       type: object
-    CurrencyCode:
-      default: USD
-      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
-      enum:
-      - USD
-      type: string
-    RefundTransitionRequest:
-      description: Request used to transition the status of a refund.
-      properties:
-        status:
-          $ref: '#/components/schemas/RefundStatus'
-        token:
-          description: Unique identifier of the refund status transition.
-          maxLength: 36
-          type: string
-      required:
-      - status
-      type: object
-    RefundType:
-      description: Type of refund.
-      enum:
-      - PAYMENT_REFUND
-      - CREDIT_BALANCE_REFUND
-      type: string
     RefundMethod:
       description: Payment instrument used to issue the refund.
       enum:
       - ACH
       - CHECK
       type: string
+    RefundType:
+      description: Type of refund.
+      enum:
+      - PAYMENT_REFUND
+      - CREDIT_BALANCE_REFUND
+      type: string
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
+      type: string
+    RefundStatus:
+      description: Current status of the refund.
+      enum:
+      - INITIATED
+      - PENDING
+      - PROCESSING
+      - SUBMITTED
+      - CANCELLED
+      - COMPLETED
+      - RETURNED
+      type: string
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
     RefundResponse:
       description: Detailed refund response object.
       properties:
@@ -495,6 +483,18 @@ components:
       required:
       - method
       - type
+      type: object
+    RefundTransitionRequest:
+      description: Request used to transition the status of a refund.
+      properties:
+        status:
+          $ref: '#/components/schemas/RefundStatus'
+        token:
+          description: Unique identifier of the refund status transition.
+          maxLength: 36
+          type: string
+      required:
+      - status
       type: object
   securitySchemes:
     mqAppAndAccessToken:

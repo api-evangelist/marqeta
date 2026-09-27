@@ -174,22 +174,25 @@ paths:
       - Account Documents
 components:
   schemas:
-    AccountDocumentResponse:
-      description: Account document response.
+    AccountDocumentsResponse:
+      description: Account documents response.
       properties:
-        accepted_at:
-          description: Date and time when the user accepted the document on Marqeta's credit platform, in UTC.
-          format: date-time
-          type: string
-        asset_token:
-          description: Unique identifier of the document on a credit account.
-          type: string
-        asset_urls:
-          $ref: '#/components/schemas/PolicyDocumentAssetURLs'
-        effective_from:
-          description: Date and time when the document goes into effect on Marqeta's credit platform, in UTC.
-          format: date-time
-          type: string
+        account_statement:
+          $ref: '#/components/schemas/AccountDocumentResponse'
+        benefits_disclosure:
+          $ref: '#/components/schemas/AccountDocumentResponse'
+        card_member_agreement:
+          $ref: '#/components/schemas/AccountDocumentResponse'
+        e_disclosure:
+          $ref: '#/components/schemas/AccountDocumentResponse'
+        privacy_policy:
+          $ref: '#/components/schemas/AccountDocumentResponse'
+        rewards_disclosure:
+          $ref: '#/components/schemas/AccountDocumentResponse'
+        summary_of_credit_terms:
+          $ref: '#/components/schemas/AccountDocumentResponse'
+        terms_schedule:
+          $ref: '#/components/schemas/AccountDocumentResponse'
       type: object
     Error:
       properties:
@@ -237,25 +240,22 @@ components:
       - is_more
       - start_index
       type: object
-    AccountDocumentsResponse:
-      description: Account documents response.
+    AccountDocumentResponse:
+      description: Account document response.
       properties:
-        account_statement:
-          $ref: '#/components/schemas/AccountDocumentResponse'
-        benefits_disclosure:
-          $ref: '#/components/schemas/AccountDocumentResponse'
-        card_member_agreement:
-          $ref: '#/components/schemas/AccountDocumentResponse'
-        e_disclosure:
-          $ref: '#/components/schemas/AccountDocumentResponse'
-        privacy_policy:
-          $ref: '#/components/schemas/AccountDocumentResponse'
-        rewards_disclosure:
-          $ref: '#/components/schemas/AccountDocumentResponse'
-        summary_of_credit_terms:
-          $ref: '#/components/schemas/AccountDocumentResponse'
-        terms_schedule:
-          $ref: '#/components/schemas/AccountDocumentResponse'
+        accepted_at:
+          description: Date and time when the user accepted the document on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        asset_token:
+          description: Unique identifier of the document on a credit account.
+          type: string
+        asset_urls:
+          $ref: '#/components/schemas/PolicyDocumentAssetURLs'
+        effective_from:
+          description: Date and time when the document goes into effect on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
       type: object
     PolicyDocumentAssetURLs:
       description: Contains one or more URLs for an asset.

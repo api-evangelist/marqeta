@@ -937,6 +937,246 @@ paths:
       - Payments
 components:
   schemas:
+    PaymentCreateReq:
+      description: 'Object that is created when a user pays a portion or all of their statement balance.
+
+
+        Applies to immediate payments only.
+
+        Once the value is set to `ACTIVE`, it cannot be edited or deleted.'
+      properties:
+        amount:
+          description: Amount of the payment.
+          minimum: 0
+          type: number
+        currency_code:
+          $ref: '#/components/schemas/CurrencyCode'
+        description:
+          description: Description of the payment.
+          maxLength: 255
+          type: string
+        hold_days:
+          description: Overrides the configured default number of days for which to hold ACH and check payments.
+          maximum: 30
+          minimum: 0
+          type: integer
+        impact_time:
+          description: Date and time when the payment impacts the account balance and fee calculations.
+          format: date-time
+          type: string
+        metadata:
+          description: Customer-defined additional information about the payment (for example, a check number).
+          maxLength: 255
+          type: string
+        method:
+          description: Method of payment.
+          enum:
+          - ACH
+          - CHECK
+          - DEBIT
+          - CASH
+          - SECURED_CARD
+          type: string
+        payment_source_token:
+          description: Unique identifier of the payment source. Required for ACH payments.
+          maxLength: 36
+          type: string
+        token:
+          description: Unique identifier of the payment.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+      required:
+      - amount
+      - currency_code
+      - description
+      - method
+      type: object
+    RefundDetailsResponse:
+      description: Contains details for a refund.
+      properties:
+        description:
+          description: Description of the refund.
+          type: string
+        method:
+          $ref: '#/components/schemas/RefundMethod'
+        status:
+          $ref: '#/components/schemas/RefundStatus'
+      required:
+      - description
+      - method
+      - status
+      type:
+      - object
+      - 'null'
+    PaymentTransitionReq:
+      description: Request used to transition the status of a payment.
+      properties:
+        refund_details:
+          $ref: '#/components/schemas/RefundDetails'
+        status:
+          $ref: '#/components/schemas/PaymentStatus'
+        token:
+          description: Unique identifier of the payment status transition.
+          maxLength: 36
+          type: string
+        waive_returned_payment_fee:
+          description: A value of `true` indicates that a returned payment fee should not be applied if one is applicable. This is false by default. This field is only considered during a transition to either `REFUNDED` or `RETURNED`
+          type: boolean
+      required:
+      - status
+      type: object
+    WebhookEventResendContainerResponse:
+      description: Contains information about a webhook event.
+      properties:
+        unused:
+          description: Event notification that was resent to your webhook endpoint.
+          type: string
+      type: object
+    RefundMethod:
+      description: Payment instrument used to issue the refund.
+      enum:
+      - ACH
+      - CHECK
+      type: string
+    RefundDetails:
+      description: Contains details for a refund.
+      properties:
+        description:
+          description: Description of the refund.
+          type: string
+        method:
+          $ref: '#/components/schemas/RefundMethod'
+      required:
+      - description
+      - method
+      type: object
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
+      type: string
+    ReturnedDetails:
+      description: Contains information on a returned payment.
+      properties:
+        return_code:
+          description: 'Return code for the returned payment.
+
+            For more, see <</developer-guides/ach-origination#_nacha_ach_return_codes, NACHA ACH return codes>>.'
+          type: string
+        return_reason:
+          description: 'Reason the payment was returned.
+
+            For more, see <</developer-guides/ach-origination#_nacha_ach_return_codes, NACHA ACH return codes>>.'
+          type: string
+      required:
+      - return_code
+      - return_reason
+      type:
+      - object
+      - 'null'
+    RefundStatus:
+      description: Current status of the refund.
+      enum:
+      - INITIATED
+      - PENDING
+      - PROCESSING
+      - SUBMITTED
+      - CANCELLED
+      - COMPLETED
+      - RETURNED
+      type: string
+    PaymentTransitionResponse:
+      description: Response containing payment transition information.
+      properties:
+        account_token:
+          description: Unique identifier of the credit account on which you want to transition a payment status.
+          type: string
+        created_time:
+          description: Date and time when the payment transition was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        payment_token:
+          description: Unique identifier of the payment whose status you want to transition.
+          type: string
+        status:
+          $ref: '#/components/schemas/PaymentStatus'
+        token:
+          description: Unique identifier of the payment status transition.
+          type: string
+      required:
+      - account_token
+      - payment_token
+      - status
+      - token
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    PaymentStatus:
+      description: Current status of the payment or refund.
+      enum:
+      - INITIATED
+      - PENDING
+      - PROCESSING
+      - SUBMITTED
+      - CANCELLED
+      - COMPLETED
+      - RETURNED
+      - REFUNDED
+      - SYS_ERROR
+      - ACH_ERROR
+      type: string
+    PaymentAllocationResponse:
+      description: Object containing payment allocation information.
+      properties:
+        amount:
+          description: Total amount of the payment allocation.
+          minimum: 0
+          type: number
+        bucket:
+          description: Category to which a portion of the payment is allocated.
+          enum:
+          - PRINCIPAL
+          - INTEREST
+          - FEES
+          type: string
+      required:
+      - amount
+      - bucket
+      type: object
+    PaymentsPage:
+      description: Returns paginated payments
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: Contains one or more payments on a credit account.
+          items:
+            $ref: '#/components/schemas/PaymentDetailResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
     PaymentDetailResponse:
       description: Response containing payment details with transition history.
       properties:
@@ -1047,246 +1287,6 @@ components:
       - token
       - transitions
       - updated_time
-      type: object
-    RefundStatus:
-      description: Current status of the refund.
-      enum:
-      - INITIATED
-      - PENDING
-      - PROCESSING
-      - SUBMITTED
-      - CANCELLED
-      - COMPLETED
-      - RETURNED
-      type: string
-    ReturnedDetails:
-      description: Contains information on a returned payment.
-      properties:
-        return_code:
-          description: 'Return code for the returned payment.
-
-            For more, see <</developer-guides/ach-origination#_nacha_ach_return_codes, NACHA ACH return codes>>.'
-          type: string
-        return_reason:
-          description: 'Reason the payment was returned.
-
-            For more, see <</developer-guides/ach-origination#_nacha_ach_return_codes, NACHA ACH return codes>>.'
-          type: string
-      required:
-      - return_code
-      - return_reason
-      type:
-      - object
-      - 'null'
-    PaymentCreateReq:
-      description: 'Object that is created when a user pays a portion or all of their statement balance.
-
-
-        Applies to immediate payments only.
-
-        Once the value is set to `ACTIVE`, it cannot be edited or deleted.'
-      properties:
-        amount:
-          description: Amount of the payment.
-          minimum: 0
-          type: number
-        currency_code:
-          $ref: '#/components/schemas/CurrencyCode'
-        description:
-          description: Description of the payment.
-          maxLength: 255
-          type: string
-        hold_days:
-          description: Overrides the configured default number of days for which to hold ACH and check payments.
-          maximum: 30
-          minimum: 0
-          type: integer
-        impact_time:
-          description: Date and time when the payment impacts the account balance and fee calculations.
-          format: date-time
-          type: string
-        metadata:
-          description: Customer-defined additional information about the payment (for example, a check number).
-          maxLength: 255
-          type: string
-        method:
-          description: Method of payment.
-          enum:
-          - ACH
-          - CHECK
-          - DEBIT
-          - CASH
-          - SECURED_CARD
-          type: string
-        payment_source_token:
-          description: Unique identifier of the payment source. Required for ACH payments.
-          maxLength: 36
-          type: string
-        token:
-          description: Unique identifier of the payment.
-          maxLength: 36
-          pattern: (?!^ +$)^.+$
-          type: string
-      required:
-      - amount
-      - currency_code
-      - description
-      - method
-      type: object
-    PaymentStatus:
-      description: Current status of the payment or refund.
-      enum:
-      - INITIATED
-      - PENDING
-      - PROCESSING
-      - SUBMITTED
-      - CANCELLED
-      - COMPLETED
-      - RETURNED
-      - REFUNDED
-      - SYS_ERROR
-      - ACH_ERROR
-      type: string
-    PaymentAllocationResponse:
-      description: Object containing payment allocation information.
-      properties:
-        amount:
-          description: Total amount of the payment allocation.
-          minimum: 0
-          type: number
-        bucket:
-          description: Category to which a portion of the payment is allocated.
-          enum:
-          - PRINCIPAL
-          - INTEREST
-          - FEES
-          type: string
-      required:
-      - amount
-      - bucket
-      type: object
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-      type: object
-    CurrencyCode:
-      default: USD
-      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
-      enum:
-      - USD
-      type: string
-    WebhookEventResendContainerResponse:
-      description: Contains information about a webhook event.
-      properties:
-        unused:
-          description: Event notification that was resent to your webhook endpoint.
-          type: string
-      type: object
-    RefundDetails:
-      description: Contains details for a refund.
-      properties:
-        description:
-          description: Description of the refund.
-          type: string
-        method:
-          $ref: '#/components/schemas/RefundMethod'
-      required:
-      - description
-      - method
-      type: object
-    RefundDetailsResponse:
-      description: Contains details for a refund.
-      properties:
-        description:
-          description: Description of the refund.
-          type: string
-        method:
-          $ref: '#/components/schemas/RefundMethod'
-        status:
-          $ref: '#/components/schemas/RefundStatus'
-      required:
-      - description
-      - method
-      - status
-      type:
-      - object
-      - 'null'
-    PaymentsPage:
-      description: Returns paginated payments
-      properties:
-        count:
-          description: Number of resources returned.
-          type: integer
-        data:
-          description: Contains one or more payments on a credit account.
-          items:
-            $ref: '#/components/schemas/PaymentDetailResponse'
-          type: array
-        end_index:
-          description: Sort order index of the last resource in the returned array.
-          type: integer
-        is_more:
-          description: A value of `true` indicates that more unreturned resources exist.
-          type: boolean
-        start_index:
-          description: Sort order index of the first resource in the returned array.
-          type: integer
-      required:
-      - count
-      - data
-      - end_index
-      - is_more
-      - start_index
-      type: object
-    RefundMethod:
-      description: Payment instrument used to issue the refund.
-      enum:
-      - ACH
-      - CHECK
-      type: string
-    PaymentTransitionReq:
-      description: Request used to transition the status of a payment.
-      properties:
-        refund_details:
-          $ref: '#/components/schemas/RefundDetails'
-        status:
-          $ref: '#/components/schemas/PaymentStatus'
-        token:
-          description: Unique identifier of the payment status transition.
-          maxLength: 36
-          type: string
-        waive_returned_payment_fee:
-          description: A value of `true` indicates that a returned payment fee should not be applied if one is applicable. This is false by default. This field is only considered during a transition to either `REFUNDED` or `RETURNED`
-          type: boolean
-      required:
-      - status
-      type: object
-    PaymentTransitionResponse:
-      description: Response containing payment transition information.
-      properties:
-        account_token:
-          description: Unique identifier of the credit account on which you want to transition a payment status.
-          type: string
-        created_time:
-          description: Date and time when the payment transition was created on Marqeta's credit platform, in UTC.
-          format: date-time
-          type: string
-        payment_token:
-          description: Unique identifier of the payment whose status you want to transition.
-          type: string
-        status:
-          $ref: '#/components/schemas/PaymentStatus'
-        token:
-          description: Unique identifier of the payment status transition.
-          type: string
-      required:
-      - account_token
-      - payment_token
-      - status
-      - token
       type: object
   securitySchemes:
     mqAppAndAccessToken:

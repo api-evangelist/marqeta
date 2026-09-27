@@ -180,6 +180,19 @@ paths:
       - Account Bundle Transitions
 components:
   schemas:
+    AccountBundleTransitionReq:
+      description: Information on the credit account bundle transition request.
+      properties:
+        new_bundle_token:
+          description: Unique identifier of the new bundle to transition to.
+          maxLength: 36
+          type: string
+        token:
+          description: Unique identifier of the credit account bundle transition.
+          type: string
+      required:
+      - new_bundle_token
+      type: object
     AccountBundleTransitionResponse:
       description: The credit account bundle transition.
       properties:
@@ -216,19 +229,6 @@ components:
       - token
       - transition_state
       - updated_time
-      type: object
-    AccountBundleTransitionReq:
-      description: Information on the credit account bundle transition request.
-      properties:
-        new_bundle_token:
-          description: Unique identifier of the new bundle to transition to.
-          maxLength: 36
-          type: string
-        token:
-          description: Unique identifier of the credit account bundle transition.
-          type: string
-      required:
-      - new_bundle_token
       type: object
     AccountBundleTransitionsPage:
       description: Return paginated account bundle transitions.

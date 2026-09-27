@@ -89,39 +89,12 @@ paths:
       - Account Rewards
 components:
   schemas:
-    RewardCreateReq:
-      properties:
-        amount:
-          description: Amount of the reward.
-          type: number
-          exclusiveMinimum: 0
-        currency_code:
-          $ref: '#/components/schemas/CurrencyCode'
-        description:
-          description: Description of the reward.
-          maxLength: 255
-          type: string
-        forced:
-          description: 'Allows you to force the creation of a reward on an account.
-
-
-            By default, reward creation is not permitted for accounts with a status of `SUSPENDED` or `TERMINATED` if more than 90 days have passed since the status transition.'
-          type: boolean
-        note:
-          description: Additional information about the reward.
-          maxLength: 255
-          type: string
-        token:
-          description: Unique identifier of the reward.
-          maxLength: 36
-          pattern: (?!^ +$)^.+$
-          type: string
-      required:
-      - amount
-      - currency_code
-      - description
-      - type
-      type: object
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
+      type: string
     Error:
       properties:
         code:
@@ -129,6 +102,24 @@ components:
         message:
           type: string
       type: object
+    Method:
+      description: 'Method, either a flat amount or a percentage.
+
+
+        *NOTE:*
+
+        Only `FLAT` is currently supported.'
+      enum:
+      - PERCENTAGE
+      - FLAT
+      type: string
+    RewardType:
+      description: Type of reward.
+      enum:
+      - AUTO_CASH_BACK
+      - CASH_BACK
+      - STATEMENT_CREDIT
+      type: string
     RewardResponse:
       properties:
         account_token:
@@ -189,30 +180,39 @@ components:
       - type
       - updated_time
       type: object
-    CurrencyCode:
-      default: USD
-      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
-      enum:
-      - USD
-      type: string
-    Method:
-      description: 'Method, either a flat amount or a percentage.
+    RewardCreateReq:
+      properties:
+        amount:
+          description: Amount of the reward.
+          type: number
+          exclusiveMinimum: 0
+        currency_code:
+          $ref: '#/components/schemas/CurrencyCode'
+        description:
+          description: Description of the reward.
+          maxLength: 255
+          type: string
+        forced:
+          description: 'Allows you to force the creation of a reward on an account.
 
 
-        *NOTE:*
-
-        Only `FLAT` is currently supported.'
-      enum:
-      - PERCENTAGE
-      - FLAT
-      type: string
-    RewardType:
-      description: Type of reward.
-      enum:
-      - AUTO_CASH_BACK
-      - CASH_BACK
-      - STATEMENT_CREDIT
-      type: string
+            By default, reward creation is not permitted for accounts with a status of `SUSPENDED` or `TERMINATED` if more than 90 days have passed since the status transition.'
+          type: boolean
+        note:
+          description: Additional information about the reward.
+          maxLength: 255
+          type: string
+        token:
+          description: Unique identifier of the reward.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+      required:
+      - amount
+      - currency_code
+      - description
+      - type
+      type: object
   securitySchemes:
     mqAppAndAccessToken:
       scheme: basic

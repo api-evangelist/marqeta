@@ -224,21 +224,32 @@ paths:
       - Program Gateways
 components:
   schemas:
-    ProgramGatewayCustomHeaderCreateReq:
-      additionalProperties:
-        type: string
-      description: 'Additional custom information included in the HTTP header.
-
-        For example, this might contain security information, along with Basic Authentication, when making a Program Gateway request.
-
-        Custom headers also appear in the associated webhook''s notifications.'
-      type: object
-    Error:
+    ProgramGatewayPage:
+      description: Returns paginated Program Gateways.
       properties:
-        code:
+        count:
+          description: Number of resources returned.
           type: integer
-        message:
-          type: string
+        data:
+          description: Contains one or more Program Gateway objects.
+          items:
+            $ref: '#/components/schemas/ProgramGatewayResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
       type: object
     ProgramGatewayUpdateReq:
       description: Contains information relevant to updating a Program Gateway.
@@ -283,6 +294,56 @@ components:
           maxLength: 250
           pattern: (?!^ +$)^.+$
           type: string
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    ProgramGatewayResponse:
+      description: Contains information relevant to a Credit Program Gateway.
+      properties:
+        active:
+          default: true
+          description: Indicates whether the Program Gateway is active.
+          type: boolean
+        basic_auth_password:
+          description: Basic Authentication password for authenticating your environment.
+          type: string
+        basic_auth_username:
+          description: Basic Authentication username for authenticating your environment.
+          type: string
+        created_time:
+          description: Date and time when the Program Gateway was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        custom_header:
+          $ref: '#/components/schemas/ProgramGatewayCustomHeaderResponse'
+        mtls:
+          description: Indicates whether the Program Gateway uses mutual Transport Layer Security (mTLS).
+          type: boolean
+        name:
+          description: Name of the Program Gateway.
+          type: string
+        timeout_millis:
+          description: Total timeout for Program Gateway calls, in milliseconds.
+          maximum: 2000
+          type: integer
+        token:
+          description: Unique identifier of the Program Gateway.
+          type: string
+        updated_time:
+          description: Date and time when the Program Gateway was last updated on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        url:
+          description: URL of the Program Gateway endpoint hosted in your environment and configured to receive authorization requests made by the Marqeta platform.
+          type: string
+      type: object
+    ProgramGatewayCustomHeaderResponse:
+      description: Additional custom information included in the HTTP header.
       type: object
     ProgramGatewayCreateReq:
       description: Contains information relevant to creating a Credit Program Gateway.
@@ -342,75 +403,14 @@ components:
       - name
       - url
       type: object
-    ProgramGatewayPage:
-      description: Returns paginated Program Gateways.
-      properties:
-        count:
-          description: Number of resources returned.
-          type: integer
-        data:
-          description: Contains one or more Program Gateway objects.
-          items:
-            $ref: '#/components/schemas/ProgramGatewayResponse'
-          type: array
-        end_index:
-          description: Sort order index of the last resource in the returned array.
-          type: integer
-        is_more:
-          description: A value of `true` indicates that more unreturned resources exist.
-          type: boolean
-        start_index:
-          description: Sort order index of the first resource in the returned array.
-          type: integer
-      required:
-      - count
-      - data
-      - end_index
-      - is_more
-      - start_index
-      type: object
-    ProgramGatewayResponse:
-      description: Contains information relevant to a Credit Program Gateway.
-      properties:
-        active:
-          default: true
-          description: Indicates whether the Program Gateway is active.
-          type: boolean
-        basic_auth_password:
-          description: Basic Authentication password for authenticating your environment.
-          type: string
-        basic_auth_username:
-          description: Basic Authentication username for authenticating your environment.
-          type: string
-        created_time:
-          description: Date and time when the Program Gateway was created on Marqeta's credit platform, in UTC.
-          format: date-time
-          type: string
-        custom_header:
-          $ref: '#/components/schemas/ProgramGatewayCustomHeaderResponse'
-        mtls:
-          description: Indicates whether the Program Gateway uses mutual Transport Layer Security (mTLS).
-          type: boolean
-        name:
-          description: Name of the Program Gateway.
-          type: string
-        timeout_millis:
-          description: Total timeout for Program Gateway calls, in milliseconds.
-          maximum: 2000
-          type: integer
-        token:
-          description: Unique identifier of the Program Gateway.
-          type: string
-        updated_time:
-          description: Date and time when the Program Gateway was last updated on Marqeta's credit platform, in UTC.
-          format: date-time
-          type: string
-        url:
-          description: URL of the Program Gateway endpoint hosted in your environment and configured to receive authorization requests made by the Marqeta platform.
-          type: string
-      type: object
-    ProgramGatewayCustomHeaderResponse:
-      description: Additional custom information included in the HTTP header.
+    ProgramGatewayCustomHeaderCreateReq:
+      additionalProperties:
+        type: string
+      description: 'Additional custom information included in the HTTP header.
+
+        For example, this might contain security information, along with Basic Authentication, when making a Program Gateway request.
+
+        Custom headers also appear in the associated webhook''s notifications.'
       type: object
   securitySchemes:
     mqAppAndAccessToken:

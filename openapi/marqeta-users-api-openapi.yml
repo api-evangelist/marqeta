@@ -1650,7 +1650,7 @@ paths:
     - url: /v3
   /views/users/{time_agg}:
     get:
-      operationId: getUsers
+      operationId: getViewsUsersByTimeAgg
       summary: Retrieve user activity data
       description: Returns cardholder (user) data aggregated over the specified time period. Includes registration counts, KYC status distributions, and account status summaries for program reporting.
       tags:
@@ -1681,6 +1681,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
       security:
       - basicAuth: []
+      x-operation-id-source: normalized
+      x-operation-id-original: getUsers
     servers:
     - url: https://diva-api.marqeta.com/data/v2
       description: Production Server
@@ -1719,6 +1721,304 @@ paths:
       description: Production Server
 components:
   schemas:
+    reset_user_password_model:
+      properties:
+        new_password:
+          description: New password to the cardholder's user account on the Marqeta platform.
+          maxLength: 255
+          minLength: 1
+          type: string
+        user_token:
+          description: Unique identifier of the cardholder.
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - new_password
+      - user_token
+      type: object
+    client_access_token_request:
+      properties:
+        application_token:
+          description: Unique identifier of the `application` object.
+          maxLength: 255
+          minLength: 1
+          type: string
+        card_token:
+          description: Unique identifier of the card whose sensitive information you want to display.
+          maxLength: 255
+          minLength: 1
+          type: string
+      required:
+      - card_token
+      type: object
+    ssn_response_model:
+      description: Contains tax identification information.
+      properties:
+        nin:
+          description: National Identification Number (NIN).
+          type: string
+        sin:
+          description: Social Insurance Number (SIN).
+          type: string
+        ssn:
+          description: United States Social Security Number (SSN) or Individual Taxpayer Identification Number (ITIN).
+          type: string
+        tin:
+          description: Taxpayer Identification Number (TIN).
+          type: string
+      type: object
+    IdentificationRequestModel:
+      description: Contains identifications associated with the cardholder.
+      properties:
+        expiration_date:
+          description: Expiration date of the identification, if applicable.
+          type: string
+        issuing_country:
+          readOnly: true
+          type: string
+        type:
+          description: 'Type of identification.
+
+
+            *NOTE:* Full Social Security Number (SSN) is required for US-based user cardholder KYC verification, using the `SSN` type.
+
+            Full Employer Identification Number (EIN) is required for business cardholder KYC verification, using the `BUSINESS_TAX_ID` or `BUSINESS_NUMBER` type.
+
+            For business directors, use one of SSN, TIN, SIN, or NIN.
+
+            Nine digits only, no delimiters.
+
+            `123456789`, for example.'
+          enum:
+          - SSN
+          - TIN
+          - SIN
+          - NIN
+          - PASSPORT_NUMBER
+          - DRIVERS_LICENSE
+          - BUSINESS_NUMBER
+          - BUSINESS_TAX_ID
+          - TAXPAYER_REFERENCE
+          readOnly: true
+          type: string
+        value:
+          description: Number associated with the identification.
+          readOnly: true
+          type: string
+      required:
+      - type
+      type: object
+    UserCardHolderUpdateModel:
+      properties:
+        account_holder_group_token:
+          description: 'Associates the specified account holder group with the cardholder.
+
+            Send a `GET` request to `/accountholdergroups` to retrieve account holder group tokens.'
+          maxLength: 36
+          minLength: 0
+          type: string
+        address1:
+          description: 'Cardholder address.
+
+
+            *NOTE:* Required for KYC verification (US-based cardholders only).
+
+            Cannot perform KYC if set to a PO Box.'
+          maxLength: 255
+          minLength: 0
+          type: string
+        address2:
+          description: 'Additional address information for the cardholder.
+
+
+            *NOTE:* Cannot perform KYC if set to a PO Box.'
+          maxLength: 255
+          minLength: 0
+          type: string
+        birth_date:
+          description: 'Cardholder date of birth.
+
+
+            *NOTE:* Required for KYC verification (US-based cardholders only).'
+          type: string
+        birth_place:
+          description: Country where the cardholder was born.
+          maxLength: 255
+          minLength: 0
+          type: string
+        city:
+          description: 'The city that corresponds to the address.
+
+
+            *NOTE:* Required for KYC verification (US-based cardholders only).'
+          maxLength: 40
+          minLength: 0
+          type: string
+        company:
+          description: Company name.
+          maxLength: 255
+          minLength: 0
+          type: string
+        corporate_card_holder:
+          default: false
+          description: Specifies if the cardholder holds a corporate card.
+          type: boolean
+        country:
+          description: 'Country in which the cardholder resides.
+
+
+            *NOTE:* Required for KYC verification (US-based cardholders only).'
+          maxLength: 40
+          minLength: 0
+          type: string
+        email:
+          description: 'Valid email address for the cardholder.
+
+
+            This value must be unique among cardholders.'
+          maxLength: 255
+          minLength: 1
+          type: string
+        first_name:
+          description: 'Cardholder first name.
+
+
+            *NOTE:* Required for KYC verification (US-based cardholders only).'
+          maxLength: 40
+          minLength: 0
+          type: string
+        gender:
+          description: Gender of the cardholder.
+          enum:
+          - F
+          - M
+          maxLength: 1
+          minLength: 0
+          type: string
+        honorific:
+          description: 'Cardholder title or prefix: Ms., Mr., Miss, Mrs.'
+          maxLength: 10
+          minLength: 0
+          type: string
+        id_card_expiration_date:
+          description: Expiration date of the cardholder's identification card.
+          type: string
+        id_card_number:
+          description: Cardholder's identification card number.
+          maxLength: 255
+          minLength: 0
+          type: string
+        identifications:
+          description: One or more objects containing identifications associated with the cardholder.
+          items:
+            $ref: '#/components/schemas/IdentificationRequestModel'
+          type: array
+        ip_address:
+          description: Cardholder IP address.
+          maxLength: 39
+          minLength: 0
+          type: string
+        last_name:
+          description: 'Cardholder last name.
+
+
+            *NOTE:* Required for KYC verification (US-based cardholders only).'
+          maxLength: 40
+          minLength: 0
+          type: string
+        metadata:
+          additionalProperties:
+            type: string
+          description: Associates any additional metadata you provide with the cardholder.
+          type: object
+        middle_name:
+          description: Cardholder middle name.
+          maxLength: 40
+          minLength: 0
+          type: string
+        nationality:
+          description: Cardholder nationality.
+          maxLength: 255
+          minLength: 0
+          type: string
+        notes:
+          description: Any additional information pertaining to the cardholder.
+          maxLength: 255
+          minLength: 0
+          type: string
+        parent_token:
+          description: 'Unique identifier of an existing user or business resource.
+
+
+            Required if `uses_parent_account = true`.
+
+            This account holder is configured as the parent of the current cardholder.
+
+
+            To unlink a child account from a parent account, update this field to a null value.'
+          maxLength: 36
+          minLength: 1
+          type: string
+        passport_expiration_date:
+          description: Expiration date of the cardholder's passport.
+          type: string
+        passport_number:
+          description: Cardholder passport number.
+          maxLength: 40
+          minLength: 0
+          type: string
+        password:
+          description: Cardholder's user account password on the Marqeta platform.
+          maxLength: 255
+          minLength: 0
+          type: string
+        phone:
+          description: 'Cardholder telephone number (including area code), prepended by the `+` symbol and the 1- to 3-digit country calling code.
+
+            Do not include hyphens, spaces, or parentheses.'
+          maxLength: 16
+          minLength: 0
+          type: string
+        postal_code:
+          description: 'Postal code of the cardholder''s address.
+
+
+            *NOTE:* Required for KYC verification (US-based cardholders only).'
+          maxLength: 10
+          minLength: 0
+          type: string
+        ssn:
+          description: Cardholder's Social Security Number (SSN) or Individual Taxpayer Identification Number (ITIN).
+          type: string
+        state:
+          description: 'State where the cardholder resides (`CA` for California, for example).
+
+
+            *NOTE:* <</core-api/kyc-verification#_valid_state_provincial_territorial_and_federal_abbreviations, Two-character abbreviation>> required for KYC verification (US-based cardholders only).'
+          maxLength: 32
+          minLength: 0
+          type: string
+        title:
+          description: Professional title of the cardholder, such as Chief Comptroller.
+          maxLength: 255
+          minLength: 0
+          type: string
+        token:
+          description: Unique identifier of the cardholder.
+          maxLength: 36
+          minLength: 1
+          type: string
+        uses_parent_account:
+          default: false
+          description: 'Indicates whether the child shares balances with the parent (`true`), or the child''s balances are independent of the parent (`false`).
+
+
+            If set to `true`, you must also include a `parent_token` in the request.
+
+            This value cannot be updated.'
+          type: boolean
+      type: object
     client_access_token_response:
       properties:
         application:
@@ -1738,27 +2038,102 @@ components:
           description: Value of the client access token to redeem when displaying sensitive card data.
           type: string
       type: object
-    Authentication:
-      description: Contains the cardholder's email address and password information.
+    user_card_holder_search_model:
       properties:
-        email_verified:
-          default: false
-          description: Specifies whether the email address has been verified.
-          type: boolean
-        email_verified_time:
-          description: Date and time when the email address was verified.
-          format: date-time
+        dda:
+          description: 'Performs a match on the specified deposit account number.
+
+            Send a `GET` request to `/directdeposits/accounts/{user_token}` to retrieve the deposit account number for a specific cardholder.'
           type: string
-        last_password_update_channel:
-          description: Specifies the channel through which the password was last changed.
-          enum:
-          - USER_CHANGE
-          - USER_RESET
+        email:
+          description: Performs a non-case-sensitive, exact match on the cardholder's `email` field.
+          maxLength: 255
+          minLength: 1
           type: string
-        last_password_update_time:
-          description: Date and time when the password was last changed.
-          format: date-time
+        first_name:
+          description: 'Performs a non-case-sensitive match on the cardholder''s `first_name` field.
+
+            Matching is partial on the beginning of the name.
+
+            For example, a match on "Alex" returns both "Alex" and "Alexander".'
+          maxLength: 40
+          minLength: 0
           type: string
+        last_name:
+          description: 'Performs a non-case-sensitive match on the cardholder''s `last_name` field.
+
+            Matching is partial on the beginning of the name.
+
+            For example, a match on "Smith" returns both "Smith" and "Smithfield".'
+          maxLength: 40
+          minLength: 0
+          type: string
+        phone:
+          description: Performs a match on the cardholder's `phone` field.
+          maxLength: 255
+          minLength: 0
+          type: string
+        ssn:
+          description: Performs a match on the cardholder's identification number.
+          type: string
+      type: object
+    Application:
+      description: Contains client application information.
+      properties:
+        access_code:
+          description: Access code of the client application.
+          type: string
+        assets_url:
+          description: URL of the client application assets.
+          type: string
+        client_api_base_url:
+          description: Base URL of the client API.
+          type: string
+        environment:
+          description: Client application's environment.
+          type: string
+        program:
+          description: Name of the program on the Marqeta platform.
+          type: string
+        program_short_code:
+          description: Short code of the program on the Marqeta platform.
+          type: string
+        token:
+          description: Unique identifier of the `application` object.
+          type: string
+      type: object
+    login_response_model:
+      properties:
+        access_token:
+          $ref: '#/components/schemas/access_token_response'
+        user:
+          $ref: '#/components/schemas/user_card_holder_response'
+      type: object
+    password_update_model:
+      properties:
+        current_password:
+          description: Current password to the cardholder's user account on the Marqeta platform.
+          maxLength: 255
+          minLength: 1
+          type: string
+        new_password:
+          description: "New password to the cardholder's user account on the Marqeta platform.\n\n* Must contain at least one numeral +\n* Must contain at least one lowercase letter +\n* Must contain at least one uppercase letter +\n* Must contain at least one of these symbols:   +\n `@` `#` `$` `%` `!` `^` `&` `*` `(` `)`   +\n `\\` `_` `+` `~` `-` `=` `[` `]` `{` `}`   +\n `,` `;` `:` `'` `\"` `.` `/` `<` `>` `?` ```"
+          maxLength: 255
+          minLength: 1
+          type: string
+      required:
+      - current_password
+      - new_password
+      type: object
+    reset_user_password_email_model:
+      properties:
+        email:
+          description: Cardholder email address.
+          maxLength: 255
+          minLength: 1
+          type: string
+      required:
+      - email
       type: object
     UserCardHolderListResponse:
       properties:
@@ -1800,6 +2175,282 @@ components:
             This field is returned if there are resources in your returned array.'
           format: int32
           type: integer
+      type: object
+    login_request_model:
+      properties:
+        email:
+          description: Cardholder email address.
+          type: string
+        password:
+          description: Password to the cardholder's user account on the Marqeta platform.
+          maxLength: 255
+          minLength: 1
+          type: string
+        user_token:
+          description: 'Identifies the cardholder to log in.
+
+
+            Send a `GET` request to `/users` to retrieve user tokens.'
+          maxLength: 36
+          minLength: 1
+          type: string
+      type: object
+    IdentificationResponseModel:
+      description: Contains identifications associated with the cardholder.
+      properties:
+        expiration_date:
+          description: Expiration date of the identification, if applicable.
+          readOnly: true
+          type: string
+        issuing_country:
+          readOnly: true
+          type: string
+        type:
+          description: Type of identification.
+          enum:
+          - SSN
+          - TIN
+          - SIN
+          - NIN
+          - PASSPORT_NUMBER
+          - DRIVERS_LICENSE
+          - BUSINESS_NUMBER
+          - BUSINESS_TAX_ID
+          - TAXPAYER_REFERENCE
+          readOnly: true
+          type: string
+        value:
+          description: Number associated with the identification.
+          readOnly: true
+          type: string
+      type: object
+    one_time_request_model:
+      properties:
+        email:
+          description: 'Cardholder email address.
+
+
+            Required when neither the user token nor the admin access token is provided as the Basic Authentication password (case #3).'
+          maxLength: 255
+          minLength: 1
+          type: string
+        password:
+          description: 'Password to the cardholder''s user account on the Marqeta platform.
+
+
+            Required when neither the user token nor the admin access token is provided as the Basic Authentication password (case #3).'
+          maxLength: 255
+          minLength: 1
+          type: string
+        user_token:
+          description: 'Identifies the cardholder whose data is accessed.
+
+            Send a `GET` request to `/users` to retrieve cardholder tokens.
+
+
+            Required when the Basic Authentication password is set to an admin access token (case #2).'
+          maxLength: 36
+          minLength: 1
+          type: string
+      type: object
+    user_card_holder_response:
+      description: Contains information about a cardholder.
+      properties:
+        account_holder_group_token:
+          description: Associates the specified account holder group with the cardholder.
+          maxLength: 36
+          minLength: 0
+          type: string
+        active:
+          default: false
+          description: Specifies if the cardholder is in the `ACTIVE` state on the Marqeta platform.
+          type: boolean
+        address1:
+          description: Cardholder's address.
+          maxLength: 255
+          minLength: 0
+          type: string
+        address2:
+          description: Additional address information for the cardholder.
+          maxLength: 255
+          minLength: 0
+          type: string
+        authentication:
+          $ref: '#/components/schemas/Authentication'
+        birth_date:
+          description: Cardholder's date of birth.
+          type: string
+        birth_place:
+          description: Country where the cardholder was born.
+          maxLength: 255
+          minLength: 0
+          type: string
+        business_token:
+          description: Unique identifier of the business resource.
+          type: string
+        city:
+          description: City where the cardholder resides.
+          maxLength: 40
+          minLength: 0
+          type: string
+        company:
+          description: Company name.
+          maxLength: 255
+          minLength: 0
+          type: string
+        corporate_card_holder:
+          default: false
+          description: Specifies if the cardholder holds a corporate card.
+          type: boolean
+        country:
+          description: Country where the cardholder resides.
+          maxLength: 40
+          minLength: 0
+          type: string
+        created_time:
+          description: Date and time when the resource was created, in UTC.
+          format: date-time
+          type: string
+        email:
+          description: Valid email address of the cardholder.
+          maxLength: 255
+          minLength: 1
+          type: string
+        first_name:
+          description: Cardholder's first name.
+          maxLength: 40
+          minLength: 0
+          type: string
+        gender:
+          description: Gender of the cardholder.
+          enum:
+          - F
+          - M
+          maxLength: 1
+          minLength: 0
+          type: string
+        honorific:
+          description: 'Cardholder''s title or prefix: Dr., Miss, Mr., Ms., and so on.'
+          maxLength: 10
+          minLength: 0
+          type: string
+        id_card_expiration_date:
+          description: Expiration date of the cardholder's identification.
+          readOnly: true
+          type: string
+        id_card_number:
+          description: Cardholder's identification card number.
+          maxLength: 255
+          minLength: 0
+          type: string
+        identifications:
+          description: One or more objects containing identifications associated with the cardholder.
+          items:
+            $ref: '#/components/schemas/IdentificationResponseModel'
+          type: array
+        ip_address:
+          description: Cardholder's IP address.
+          maxLength: 39
+          minLength: 0
+          type: string
+        last_modified_time:
+          description: Date and time when the resource was last updated, in UTC.
+          format: date-time
+          type: string
+        last_name:
+          description: Cardholder's last name.
+          maxLength: 40
+          minLength: 0
+          type: string
+        metadata:
+          additionalProperties:
+            type: string
+          description: Associates any additional metadata you provide with the cardholder.
+          type: object
+        middle_name:
+          description: Cardholder's middle name.
+          maxLength: 40
+          minLength: 0
+          type: string
+        nationality:
+          description: Cardholder's nationality.
+          maxLength: 255
+          minLength: 0
+          type: string
+        notes:
+          description: Any additional information pertaining to the cardholder.
+          maxLength: 255
+          minLength: 0
+          type: string
+        parent_token:
+          description: Unique identifier of the parent user or business resource.
+          maxLength: 36
+          minLength: 1
+          type: string
+        passport_expiration_date:
+          description: Expiration date of the cardholder's passport.
+          readOnly: true
+          type: string
+        passport_number:
+          description: Cardholder's passport number.
+          maxLength: 40
+          minLength: 0
+          type: string
+        password:
+          description: Password to the cardholder's user account on the Marqeta platform.
+          maxLength: 255
+          minLength: 1
+          type: string
+        phone:
+          description: Cardholder's telephone number.
+          maxLength: 255
+          minLength: 0
+          type: string
+        postal_code:
+          description: Postal code of the cardholder's address.
+          maxLength: 10
+          minLength: 0
+          type: string
+        ssn:
+          description: Cardholder's Social Security Number (SSN).
+          type: string
+        state:
+          description: State or province where the cardholder resides.
+          maxLength: 2
+          minLength: 0
+          type: string
+        status:
+          description: Specifies the status of the cardholder on the Marqeta platform.
+          enum:
+          - UNVERIFIED
+          - LIMITED
+          - ACTIVE
+          - SUSPENDED
+          - CLOSED
+          - TERMINATED
+          type: string
+        title:
+          description: Professional title of the cardholder, such as Chief Comptroller.
+          maxLength: 255
+          minLength: 0
+          type: string
+        token:
+          description: Unique identifier of the cardholder.
+          maxLength: 36
+          minLength: 1
+          type: string
+        uses_parent_account:
+          default: false
+          description: Indicates whether the child shares balances with the parent (`true`), or the child's balances are independent of the parent (`false`).
+          type: boolean
+        zip:
+          description: United States ZIP code of the cardholder's address.
+          maxLength: 10
+          minLength: 0
+          type: string
+      required:
+      - created_time
+      - last_modified_time
       type: object
     card_holder_model:
       description: Contains information about a cardholder.
@@ -2044,631 +2695,27 @@ components:
             This value cannot be updated.'
           type: boolean
       type: object
-    user_card_holder_search_model:
+    Authentication:
+      description: Contains the cardholder's email address and password information.
       properties:
-        dda:
-          description: 'Performs a match on the specified deposit account number.
-
-            Send a `GET` request to `/directdeposits/accounts/{user_token}` to retrieve the deposit account number for a specific cardholder.'
-          type: string
-        email:
-          description: Performs a non-case-sensitive, exact match on the cardholder's `email` field.
-          maxLength: 255
-          minLength: 1
-          type: string
-        first_name:
-          description: 'Performs a non-case-sensitive match on the cardholder''s `first_name` field.
-
-            Matching is partial on the beginning of the name.
-
-            For example, a match on "Alex" returns both "Alex" and "Alexander".'
-          maxLength: 40
-          minLength: 0
-          type: string
-        last_name:
-          description: 'Performs a non-case-sensitive match on the cardholder''s `last_name` field.
-
-            Matching is partial on the beginning of the name.
-
-            For example, a match on "Smith" returns both "Smith" and "Smithfield".'
-          maxLength: 40
-          minLength: 0
-          type: string
-        phone:
-          description: Performs a match on the cardholder's `phone` field.
-          maxLength: 255
-          minLength: 0
-          type: string
-        ssn:
-          description: Performs a match on the cardholder's identification number.
-          type: string
-      type: object
-    reset_user_password_model:
-      properties:
-        new_password:
-          description: New password to the cardholder's user account on the Marqeta platform.
-          maxLength: 255
-          minLength: 1
-          type: string
-        user_token:
-          description: Unique identifier of the cardholder.
-          maxLength: 36
-          minLength: 1
-          type: string
-      required:
-      - new_password
-      - user_token
-      type: object
-    UserCardHolderUpdateModel:
-      properties:
-        account_holder_group_token:
-          description: 'Associates the specified account holder group with the cardholder.
-
-            Send a `GET` request to `/accountholdergroups` to retrieve account holder group tokens.'
-          maxLength: 36
-          minLength: 0
-          type: string
-        address1:
-          description: 'Cardholder address.
-
-
-            *NOTE:* Required for KYC verification (US-based cardholders only).
-
-            Cannot perform KYC if set to a PO Box.'
-          maxLength: 255
-          minLength: 0
-          type: string
-        address2:
-          description: 'Additional address information for the cardholder.
-
-
-            *NOTE:* Cannot perform KYC if set to a PO Box.'
-          maxLength: 255
-          minLength: 0
-          type: string
-        birth_date:
-          description: 'Cardholder date of birth.
-
-
-            *NOTE:* Required for KYC verification (US-based cardholders only).'
-          type: string
-        birth_place:
-          description: Country where the cardholder was born.
-          maxLength: 255
-          minLength: 0
-          type: string
-        city:
-          description: 'The city that corresponds to the address.
-
-
-            *NOTE:* Required for KYC verification (US-based cardholders only).'
-          maxLength: 40
-          minLength: 0
-          type: string
-        company:
-          description: Company name.
-          maxLength: 255
-          minLength: 0
-          type: string
-        corporate_card_holder:
+        email_verified:
           default: false
-          description: Specifies if the cardholder holds a corporate card.
+          description: Specifies whether the email address has been verified.
           type: boolean
-        country:
-          description: 'Country in which the cardholder resides.
-
-
-            *NOTE:* Required for KYC verification (US-based cardholders only).'
-          maxLength: 40
-          minLength: 0
-          type: string
-        email:
-          description: 'Valid email address for the cardholder.
-
-
-            This value must be unique among cardholders.'
-          maxLength: 255
-          minLength: 1
-          type: string
-        first_name:
-          description: 'Cardholder first name.
-
-
-            *NOTE:* Required for KYC verification (US-based cardholders only).'
-          maxLength: 40
-          minLength: 0
-          type: string
-        gender:
-          description: Gender of the cardholder.
-          enum:
-          - F
-          - M
-          maxLength: 1
-          minLength: 0
-          type: string
-        honorific:
-          description: 'Cardholder title or prefix: Ms., Mr., Miss, Mrs.'
-          maxLength: 10
-          minLength: 0
-          type: string
-        id_card_expiration_date:
-          description: Expiration date of the cardholder's identification card.
-          type: string
-        id_card_number:
-          description: Cardholder's identification card number.
-          maxLength: 255
-          minLength: 0
-          type: string
-        identifications:
-          description: One or more objects containing identifications associated with the cardholder.
-          items:
-            $ref: '#/components/schemas/IdentificationRequestModel'
-          type: array
-        ip_address:
-          description: Cardholder IP address.
-          maxLength: 39
-          minLength: 0
-          type: string
-        last_name:
-          description: 'Cardholder last name.
-
-
-            *NOTE:* Required for KYC verification (US-based cardholders only).'
-          maxLength: 40
-          minLength: 0
-          type: string
-        metadata:
-          additionalProperties:
-            type: string
-          description: Associates any additional metadata you provide with the cardholder.
-          type: object
-        middle_name:
-          description: Cardholder middle name.
-          maxLength: 40
-          minLength: 0
-          type: string
-        nationality:
-          description: Cardholder nationality.
-          maxLength: 255
-          minLength: 0
-          type: string
-        notes:
-          description: Any additional information pertaining to the cardholder.
-          maxLength: 255
-          minLength: 0
-          type: string
-        parent_token:
-          description: 'Unique identifier of an existing user or business resource.
-
-
-            Required if `uses_parent_account = true`.
-
-            This account holder is configured as the parent of the current cardholder.
-
-
-            To unlink a child account from a parent account, update this field to a null value.'
-          maxLength: 36
-          minLength: 1
-          type: string
-        passport_expiration_date:
-          description: Expiration date of the cardholder's passport.
-          type: string
-        passport_number:
-          description: Cardholder passport number.
-          maxLength: 40
-          minLength: 0
-          type: string
-        password:
-          description: Cardholder's user account password on the Marqeta platform.
-          maxLength: 255
-          minLength: 0
-          type: string
-        phone:
-          description: 'Cardholder telephone number (including area code), prepended by the `+` symbol and the 1- to 3-digit country calling code.
-
-            Do not include hyphens, spaces, or parentheses.'
-          maxLength: 16
-          minLength: 0
-          type: string
-        postal_code:
-          description: 'Postal code of the cardholder''s address.
-
-
-            *NOTE:* Required for KYC verification (US-based cardholders only).'
-          maxLength: 10
-          minLength: 0
-          type: string
-        ssn:
-          description: Cardholder's Social Security Number (SSN) or Individual Taxpayer Identification Number (ITIN).
-          type: string
-        state:
-          description: 'State where the cardholder resides (`CA` for California, for example).
-
-
-            *NOTE:* <</core-api/kyc-verification#_valid_state_provincial_territorial_and_federal_abbreviations, Two-character abbreviation>> required for KYC verification (US-based cardholders only).'
-          maxLength: 32
-          minLength: 0
-          type: string
-        title:
-          description: Professional title of the cardholder, such as Chief Comptroller.
-          maxLength: 255
-          minLength: 0
-          type: string
-        token:
-          description: Unique identifier of the cardholder.
-          maxLength: 36
-          minLength: 1
-          type: string
-        uses_parent_account:
-          default: false
-          description: 'Indicates whether the child shares balances with the parent (`true`), or the child''s balances are independent of the parent (`false`).
-
-
-            If set to `true`, you must also include a `parent_token` in the request.
-
-            This value cannot be updated.'
-          type: boolean
-      type: object
-    ssn_response_model:
-      description: Contains tax identification information.
-      properties:
-        nin:
-          description: National Identification Number (NIN).
-          type: string
-        sin:
-          description: Social Insurance Number (SIN).
-          type: string
-        ssn:
-          description: United States Social Security Number (SSN) or Individual Taxpayer Identification Number (ITIN).
-          type: string
-        tin:
-          description: Taxpayer Identification Number (TIN).
-          type: string
-      type: object
-    Application:
-      description: Contains client application information.
-      properties:
-        access_code:
-          description: Access code of the client application.
-          type: string
-        assets_url:
-          description: URL of the client application assets.
-          type: string
-        client_api_base_url:
-          description: Base URL of the client API.
-          type: string
-        environment:
-          description: Client application's environment.
-          type: string
-        program:
-          description: Name of the program on the Marqeta platform.
-          type: string
-        program_short_code:
-          description: Short code of the program on the Marqeta platform.
-          type: string
-        token:
-          description: Unique identifier of the `application` object.
-          type: string
-      type: object
-    reset_user_password_email_model:
-      properties:
-        email:
-          description: Cardholder email address.
-          maxLength: 255
-          minLength: 1
-          type: string
-      required:
-      - email
-      type: object
-    one_time_request_model:
-      properties:
-        email:
-          description: 'Cardholder email address.
-
-
-            Required when neither the user token nor the admin access token is provided as the Basic Authentication password (case #3).'
-          maxLength: 255
-          minLength: 1
-          type: string
-        password:
-          description: 'Password to the cardholder''s user account on the Marqeta platform.
-
-
-            Required when neither the user token nor the admin access token is provided as the Basic Authentication password (case #3).'
-          maxLength: 255
-          minLength: 1
-          type: string
-        user_token:
-          description: 'Identifies the cardholder whose data is accessed.
-
-            Send a `GET` request to `/users` to retrieve cardholder tokens.
-
-
-            Required when the Basic Authentication password is set to an admin access token (case #2).'
-          maxLength: 36
-          minLength: 1
-          type: string
-      type: object
-    client_access_token_request:
-      properties:
-        application_token:
-          description: Unique identifier of the `application` object.
-          maxLength: 255
-          minLength: 1
-          type: string
-        card_token:
-          description: Unique identifier of the card whose sensitive information you want to display.
-          maxLength: 255
-          minLength: 1
-          type: string
-      required:
-      - card_token
-      type: object
-    user_card_holder_response:
-      description: Contains information about a cardholder.
-      properties:
-        account_holder_group_token:
-          description: Associates the specified account holder group with the cardholder.
-          maxLength: 36
-          minLength: 0
-          type: string
-        active:
-          default: false
-          description: Specifies if the cardholder is in the `ACTIVE` state on the Marqeta platform.
-          type: boolean
-        address1:
-          description: Cardholder's address.
-          maxLength: 255
-          minLength: 0
-          type: string
-        address2:
-          description: Additional address information for the cardholder.
-          maxLength: 255
-          minLength: 0
-          type: string
-        authentication:
-          $ref: '#/components/schemas/Authentication'
-        birth_date:
-          description: Cardholder's date of birth.
-          type: string
-        birth_place:
-          description: Country where the cardholder was born.
-          maxLength: 255
-          minLength: 0
-          type: string
-        business_token:
-          description: Unique identifier of the business resource.
-          type: string
-        city:
-          description: City where the cardholder resides.
-          maxLength: 40
-          minLength: 0
-          type: string
-        company:
-          description: Company name.
-          maxLength: 255
-          minLength: 0
-          type: string
-        corporate_card_holder:
-          default: false
-          description: Specifies if the cardholder holds a corporate card.
-          type: boolean
-        country:
-          description: Country where the cardholder resides.
-          maxLength: 40
-          minLength: 0
-          type: string
-        created_time:
-          description: Date and time when the resource was created, in UTC.
+        email_verified_time:
+          description: Date and time when the email address was verified.
           format: date-time
           type: string
-        email:
-          description: Valid email address of the cardholder.
-          maxLength: 255
-          minLength: 1
-          type: string
-        first_name:
-          description: Cardholder's first name.
-          maxLength: 40
-          minLength: 0
-          type: string
-        gender:
-          description: Gender of the cardholder.
+        last_password_update_channel:
+          description: Specifies the channel through which the password was last changed.
           enum:
-          - F
-          - M
-          maxLength: 1
-          minLength: 0
+          - USER_CHANGE
+          - USER_RESET
           type: string
-        honorific:
-          description: 'Cardholder''s title or prefix: Dr., Miss, Mr., Ms., and so on.'
-          maxLength: 10
-          minLength: 0
-          type: string
-        id_card_expiration_date:
-          description: Expiration date of the cardholder's identification.
-          readOnly: true
-          type: string
-        id_card_number:
-          description: Cardholder's identification card number.
-          maxLength: 255
-          minLength: 0
-          type: string
-        identifications:
-          description: One or more objects containing identifications associated with the cardholder.
-          items:
-            $ref: '#/components/schemas/IdentificationResponseModel'
-          type: array
-        ip_address:
-          description: Cardholder's IP address.
-          maxLength: 39
-          minLength: 0
-          type: string
-        last_modified_time:
-          description: Date and time when the resource was last updated, in UTC.
+        last_password_update_time:
+          description: Date and time when the password was last changed.
           format: date-time
           type: string
-        last_name:
-          description: Cardholder's last name.
-          maxLength: 40
-          minLength: 0
-          type: string
-        metadata:
-          additionalProperties:
-            type: string
-          description: Associates any additional metadata you provide with the cardholder.
-          type: object
-        middle_name:
-          description: Cardholder's middle name.
-          maxLength: 40
-          minLength: 0
-          type: string
-        nationality:
-          description: Cardholder's nationality.
-          maxLength: 255
-          minLength: 0
-          type: string
-        notes:
-          description: Any additional information pertaining to the cardholder.
-          maxLength: 255
-          minLength: 0
-          type: string
-        parent_token:
-          description: Unique identifier of the parent user or business resource.
-          maxLength: 36
-          minLength: 1
-          type: string
-        passport_expiration_date:
-          description: Expiration date of the cardholder's passport.
-          readOnly: true
-          type: string
-        passport_number:
-          description: Cardholder's passport number.
-          maxLength: 40
-          minLength: 0
-          type: string
-        password:
-          description: Password to the cardholder's user account on the Marqeta platform.
-          maxLength: 255
-          minLength: 1
-          type: string
-        phone:
-          description: Cardholder's telephone number.
-          maxLength: 255
-          minLength: 0
-          type: string
-        postal_code:
-          description: Postal code of the cardholder's address.
-          maxLength: 10
-          minLength: 0
-          type: string
-        ssn:
-          description: Cardholder's Social Security Number (SSN).
-          type: string
-        state:
-          description: State or province where the cardholder resides.
-          maxLength: 2
-          minLength: 0
-          type: string
-        status:
-          description: Specifies the status of the cardholder on the Marqeta platform.
-          enum:
-          - UNVERIFIED
-          - LIMITED
-          - ACTIVE
-          - SUSPENDED
-          - CLOSED
-          - TERMINATED
-          type: string
-        title:
-          description: Professional title of the cardholder, such as Chief Comptroller.
-          maxLength: 255
-          minLength: 0
-          type: string
-        token:
-          description: Unique identifier of the cardholder.
-          maxLength: 36
-          minLength: 1
-          type: string
-        uses_parent_account:
-          default: false
-          description: Indicates whether the child shares balances with the parent (`true`), or the child's balances are independent of the parent (`false`).
-          type: boolean
-        zip:
-          description: United States ZIP code of the cardholder's address.
-          maxLength: 10
-          minLength: 0
-          type: string
-      required:
-      - created_time
-      - last_modified_time
-      type: object
-    IdentificationRequestModel:
-      description: Contains identifications associated with the cardholder.
-      properties:
-        expiration_date:
-          description: Expiration date of the identification, if applicable.
-          type: string
-        issuing_country:
-          readOnly: true
-          type: string
-        type:
-          description: 'Type of identification.
-
-
-            *NOTE:* Full Social Security Number (SSN) is required for US-based user cardholder KYC verification, using the `SSN` type.
-
-            Full Employer Identification Number (EIN) is required for business cardholder KYC verification, using the `BUSINESS_TAX_ID` or `BUSINESS_NUMBER` type.
-
-            For business directors, use one of SSN, TIN, SIN, or NIN.
-
-            Nine digits only, no delimiters.
-
-            `123456789`, for example.'
-          enum:
-          - SSN
-          - TIN
-          - SIN
-          - NIN
-          - PASSPORT_NUMBER
-          - DRIVERS_LICENSE
-          - BUSINESS_NUMBER
-          - BUSINESS_TAX_ID
-          - TAXPAYER_REFERENCE
-          readOnly: true
-          type: string
-        value:
-          description: Number associated with the identification.
-          readOnly: true
-          type: string
-      required:
-      - type
-      type: object
-    login_request_model:
-      properties:
-        email:
-          description: Cardholder email address.
-          type: string
-        password:
-          description: Password to the cardholder's user account on the Marqeta platform.
-          maxLength: 255
-          minLength: 1
-          type: string
-        user_token:
-          description: 'Identifies the cardholder to log in.
-
-
-            Send a `GET` request to `/users` to retrieve user tokens.'
-          maxLength: 36
-          minLength: 1
-          type: string
-      type: object
-    login_response_model:
-      properties:
-        access_token:
-          $ref: '#/components/schemas/access_token_response'
-        user:
-          $ref: '#/components/schemas/user_card_holder_response'
       type: object
     access_token_response:
       description: Contains a cardholder's login access information.
@@ -2701,84 +2748,11 @@ components:
       required:
       - expires
       type: object
-    IdentificationResponseModel:
-      description: Contains identifications associated with the cardholder.
-      properties:
-        expiration_date:
-          description: Expiration date of the identification, if applicable.
-          readOnly: true
-          type: string
-        issuing_country:
-          readOnly: true
-          type: string
-        type:
-          description: Type of identification.
-          enum:
-          - SSN
-          - TIN
-          - SIN
-          - NIN
-          - PASSPORT_NUMBER
-          - DRIVERS_LICENSE
-          - BUSINESS_NUMBER
-          - BUSINESS_TAX_ID
-          - TAXPAYER_REFERENCE
-          readOnly: true
-          type: string
-        value:
-          description: Number associated with the identification.
-          readOnly: true
-          type: string
-      type: object
-    password_update_model:
-      properties:
-        current_password:
-          description: Current password to the cardholder's user account on the Marqeta platform.
-          maxLength: 255
-          minLength: 1
-          type: string
-        new_password:
-          description: "New password to the cardholder's user account on the Marqeta platform.\n\n* Must contain at least one numeral +\n* Must contain at least one lowercase letter +\n* Must contain at least one uppercase letter +\n* Must contain at least one of these symbols:   +\n `@` `#` `$` `%` `!` `^` `&` `*` `(` `)`   +\n `\\` `_` `+` `~` `-` `=` `[` `]` `{` `}`   +\n `,` `;` `:` `'` `\"` `.` `/` `<` `>` `?` ```"
-          maxLength: 255
-          minLength: 1
-          type: string
-      required:
-      - current_password
-      - new_password
-      type: object
     cardholder_note_update_request_model:
       properties:
         description:
           type: string
       required:
-      - description
-      type: object
-    cardholder_note_request_model:
-      properties:
-        created_by:
-          maxLength: 255
-          minLength: 0
-          type: string
-        created_by_user_role:
-          enum:
-          - USER
-          - ADMIN
-          - BANK_USER
-          - BANK_ADMIN
-          - MARQETA_PD
-          - MARQETA_ADMIN
-          type: string
-        description:
-          type: string
-        private:
-          default: false
-          type: boolean
-        token:
-          maxLength: 36
-          minLength: 1
-          type: string
-      required:
-      - created_by
       - description
       type: object
     cardholder_note_response_model:
@@ -2815,6 +2789,34 @@ components:
       - created_by
       - description
       type: object
+    cardholder_note_request_model:
+      properties:
+        created_by:
+          maxLength: 255
+          minLength: 0
+          type: string
+        created_by_user_role:
+          enum:
+          - USER
+          - ADMIN
+          - BANK_USER
+          - BANK_ADMIN
+          - MARQETA_PD
+          - MARQETA_ADMIN
+          type: string
+        description:
+          type: string
+        private:
+          default: false
+          type: boolean
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - created_by
+      - description
+      type: object
     CardHolderNoteListResponse:
       properties:
         count:
@@ -2834,6 +2836,16 @@ components:
           format: int32
           type: integer
       type: object
+    ErrorResponse:
+      type: object
+      description: Standard error response returned by the Marqeta DiVA API.
+      properties:
+        error_code:
+          type: string
+          description: Machine-readable error code.
+        error_message:
+          type: string
+          description: Human-readable error description.
     UsersDetailResponse:
       type: object
       description: Detailed user records response.
@@ -2908,17 +2920,44 @@ components:
               kyc_passed_count:
                 type: integer
                 description: Number of users who passed KYC during the period.
-    ErrorResponse:
-      type: object
-      description: Standard error response returned by the Marqeta DiVA API.
-      properties:
-        error_code:
-          type: string
-          description: Machine-readable error code.
-        error_message:
-          type: string
-          description: Human-readable error description.
   parameters:
+    offset:
+      name: offset
+      in: query
+      description: Zero-based offset for pagination.
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+    start_date:
+      name: start_date
+      in: query
+      description: Start date for filtering data (format YYYY-MM-DD). Returns records on or after this date.
+      schema:
+        type: string
+        format: date
+    fields:
+      name: fields
+      in: query
+      description: Comma-delimited list of fields to include in the response. If not specified, all available fields are returned.
+      schema:
+        type: string
+    limit:
+      name: limit
+      in: query
+      description: Maximum number of records to return per request.
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 10000
+        default: 1000
+    program:
+      name: program
+      in: query
+      required: true
+      description: The name of your Marqeta card program. This parameter is required for most DiVA API endpoints to scope the data to your program.
+      schema:
+        type: string
     time_agg:
       name: time_agg
       in: path
@@ -2931,41 +2970,6 @@ components:
         - week
         - month
         - detail
-    offset:
-      name: offset
-      in: query
-      description: Zero-based offset for pagination.
-      schema:
-        type: integer
-        minimum: 0
-        default: 0
-    end_date:
-      name: end_date
-      in: query
-      description: End date for filtering data (format YYYY-MM-DD). Returns records on or before this date.
-      schema:
-        type: string
-        format: date
-    fields:
-      name: fields
-      in: query
-      description: Comma-delimited list of fields to include in the response. If not specified, all available fields are returned.
-      schema:
-        type: string
-    start_date:
-      name: start_date
-      in: query
-      description: Start date for filtering data (format YYYY-MM-DD). Returns records on or after this date.
-      schema:
-        type: string
-        format: date
-    program:
-      name: program
-      in: query
-      required: true
-      description: The name of your Marqeta card program. This parameter is required for most DiVA API endpoints to scope the data to your program.
-      schema:
-        type: string
     format:
       name: format
       in: query
@@ -2976,24 +2980,22 @@ components:
         - json
         - csv
         default: json
-    limit:
-      name: limit
+    end_date:
+      name: end_date
       in: query
-      description: Maximum number of records to return per request.
+      description: End date for filtering data (format YYYY-MM-DD). Returns records on or before this date.
       schema:
-        type: integer
-        minimum: 1
-        maximum: 10000
-        default: 1000
+        type: string
+        format: date
   responses:
-    Unauthorized:
-      description: Unauthorized. The provided application token and access token credentials are invalid or missing.
+    BadRequest:
+      description: Bad request. One or more required query parameters are missing or contain invalid values.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: Bad request. One or more required query parameters are missing or contain invalid values.
+    Unauthorized:
+      description: Unauthorized. The provided application token and access token credentials are invalid or missing.
       content:
         application/json:
           schema:

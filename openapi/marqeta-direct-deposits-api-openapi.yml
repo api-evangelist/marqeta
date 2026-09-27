@@ -345,49 +345,43 @@ paths:
       - direct deposits
 components:
   schemas:
-    DirectDepositTransitionListResponse:
+    DirectDepositTransitionResponse:
       properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/DirectDepositTransitionResponse'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
-      type: object
-    DirectDepositListResponse:
-      properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/DepositDepositResponse'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
-      type: object
-    DepositAccountUpdateRequest:
-      properties:
-        allow_immediate_credit:
-          default: false
-          type: boolean
+        channel:
+          enum:
+          - API
+          - IVR
+          - FRAUD
+          - ADMIN
+          - SYSTEM
+          - NETWORK
+          - PROD_SUPPORT
+          - UNSUPPORTED
+          type: string
+        created_time:
+          format: date-time
+          type: string
+        direct_deposit_account_token:
+          type: string
+        direct_deposit_token:
+          type: string
+        reason:
+          type: string
+        reason_code:
+          type: string
+        state:
+          enum:
+          - PENDING
+          - APPLIED
+          - REVERSED
+          - REJECTED
+          type: string
+        token:
+          type: string
+        transaction_token:
+          type: string
+        type:
+          type: string
       type: object
     DirectDepositTransitionRequest:
       properties:
@@ -441,43 +435,63 @@ components:
       - reason
       - state
       type: object
-    DirectDepositTransitionResponse:
+    DirectDepositListResponse:
       properties:
-        channel:
-          enum:
-          - API
-          - IVR
-          - FRAUD
-          - ADMIN
-          - SYSTEM
-          - NETWORK
-          - PROD_SUPPORT
-          - UNSUPPORTED
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/DepositDepositResponse'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    DepositAccountResponse:
+      properties:
+        account_number:
           type: string
-        created_time:
-          format: date-time
+        allow_immediate_credit:
+          default: false
+          type: boolean
+        business_token:
           type: string
-        direct_deposit_account_token:
-          type: string
-        direct_deposit_token:
-          type: string
-        reason:
-          type: string
-        reason_code:
-          type: string
-        state:
-          enum:
-          - PENDING
-          - APPLIED
-          - REVERSED
-          - REJECTED
+        routing_number:
           type: string
         token:
           type: string
-        transaction_token:
+        user_token:
           type: string
-        type:
-          type: string
+      required:
+      - account_number
+      - routing_number
+      - token
+      type: object
+    DirectDepositTransitionListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/DirectDepositTransitionResponse'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
       type: object
     DepositDepositResponse:
       description: Contains information about a direct deposit.
@@ -551,25 +565,11 @@ components:
           description: The unique identifier of the user account holder.
           type: string
       type: object
-    DepositAccountResponse:
+    DepositAccountUpdateRequest:
       properties:
-        account_number:
-          type: string
         allow_immediate_credit:
           default: false
           type: boolean
-        business_token:
-          type: string
-        routing_number:
-          type: string
-        token:
-          type: string
-        user_token:
-          type: string
-      required:
-      - account_number
-      - routing_number
-      - token
       type: object
   securitySchemes:
     mqAppAndAccessToken:

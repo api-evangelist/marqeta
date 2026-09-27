@@ -1744,528 +1744,6 @@ paths:
       - Statements
 components:
   schemas:
-    StatementInterestCharge:
-      description: Contains information on statement interest charges.
-      properties:
-        amount:
-          description: Amount of interest calculated for the billing period.
-          type: number
-        apr_type:
-          description: Type of APR.
-          enum:
-          - GO_TO
-          type: string
-        apr_value:
-          description: Annual percentage rate.
-          maximum: 100
-          minimum: 0
-          type: number
-        balance_subject_to_interest_rate:
-          description: Average daily balance used to calculate interest.
-          type: number
-        balance_type:
-          description: 'Type of balance.
-
-
-            * `PURCHASE` - The balance on purchases.'
-          enum:
-          - PURCHASE
-          type: string
-      type: object
-    StatementSummary:
-      description: Contains the summary data for an account's monthly statement.
-      properties:
-        account_token:
-          description: Unique identifier of the credit account on which the statement summary is generated.
-          maxLength: 36
-          type: string
-        available_credit:
-          description: Amount available to spend on the credit account, as of the statement closing date.
-          type: number
-        closing_balance:
-          description: Balance of the credit account when the statement period ended.
-          type: number
-        closing_date:
-          description: Date and time when the statement period ended.
-          format: date-time
-          type: string
-        created_time:
-          description: Date and time when the statement summary was created on Marqeta's credit platform, in UTC.
-          format: date-time
-          type: string
-        credit_limit:
-          description: Maximum balance the credit account can carry, as of the statement closing date.
-          type: number
-        credits:
-          description: Total amount of credits received during the statement period.
-          type: number
-        cycle_type:
-          $ref: '#/components/schemas/CycleType'
-        days_in_billing_cycle:
-          description: Number of days in the billing cycle, also known as the statement period.
-          type: integer
-        fees:
-          description: 'Total amount of fees charged during the statement period.
-
-            Does not include periodic fees.'
-          type: number
-        interest:
-          description: Total amount of interest charged during the statement period.
-          type: number
-        min_payment_due:
-          description: Minimum payment that is due.
-          minimum: 0
-          type: number
-        opening_balance:
-          description: Balance of the credit account when the statement period began.
-          type: number
-        opening_date:
-          description: Date and time when the statement period began.
-          format: date-time
-          type: string
-        past_due_amount:
-          description: Total amount of the payment required to make the account current.
-          type: number
-        payment_due_date:
-          description: Date when the payment was due for this statement period.
-          format: date-time
-          type: string
-        payments:
-          description: Total amount of payments made during the statement period.
-          type: number
-        program_migration_time:
-          description: 'Date and time when the statement summary was migrated to Marqeta''s credit platform, in UTC.
-
-
-            The value of this field is `null` if it has not been migrated.'
-          format: date-time
-          type: string
-        purchases:
-          description: Total amount of purchases made during the statement period.
-          type: number
-        remaining_min_payment_due:
-          description: Amount of the minimum payment that remains unpaid for the previous statement period.
-          type: number
-        remaining_statement_balance:
-          description: Amount of the statement balance that remains unpaid for the previous statement period.
-          type: number
-        sda_closing_balance:
-          description: Secured deposit account closing balance for the statement period.
-          type: number
-        sda_opening_balance:
-          description: Secured deposit account opening balance for the statement period.
-          type: number
-        token:
-          description: Unique identifier of the statement summary.
-          format: uuid
-          type: string
-      required:
-      - account_token
-      - available_credit
-      - closing_balance
-      - closing_date
-      - created_time
-      - credits
-      - cycle_type
-      - days_in_billing_cycle
-      - fees
-      - interest
-      - opening_balance
-      - opening_date
-      - past_due_amount
-      - payments
-      - purchases
-      - token
-      type: object
-    StatementInterestChargesPage:
-      description: Return paginated statement interest charges.
-      properties:
-        account_token:
-          description: Unique identifier of the credit account on which the statement interest charge is generated.
-          maxLength: 36
-          type: string
-        data:
-          description: Contains one or more interest charges on a statement.
-          items:
-            $ref: '#/components/schemas/StatementInterestCharge'
-          type: array
-        statement_summary_token:
-          description: Unique identifier of the statement summary.
-          type: string
-      required:
-      - account_token
-      - data
-      - statement_summary_token
-      type: object
-    StatementPaymentWarning:
-      description: Contains information on statement payment warnings.
-      properties:
-        disclosure:
-          description: 'Statement disclosure in the case of negative or no amortization, or no lifetime repayment for the minimum payment warning type.
-
-
-            * `NEGATIVE_OR_NO_AMORTIZATION` - Occurs when the interest amount is higher than the minimum payment; results in the outstanding balance remaining in perpetuity.
-
-            * `NO_LIFETIME_REPAYMENT` - Occurs when the interest amount is just below the minimum payment; results in the outstanding balance taking longer than a lifetime to pay off.'
-          enum:
-          - NEGATIVE_OR_NO_AMORTIZATION
-          - NO_LIFETIME_REPAYMENT
-          type: string
-        interest_paid:
-          description: 'For the minimum payment warning type, this value represents the total amount of interest to pay off the statement balance if only making the minimum payment each month.
-
-
-            For the 3 Year warning type, this value represents the total amount of interest if paying off the statement balance in three years.'
-          type: number
-        monthly_payment:
-          description: 'For the minimum payment warning type, this value is 0.
-
-
-            For the 3 Year warning type, this value represents the fixed monthly payment amount required to pay off the statement balance in three years.'
-          type: number
-        pay_off_period:
-          description: 'For the minimum payment warning type, this value represents the number of periods required to pay off the statement balance.
-
-
-            For the 3 Year warning type, this value is 36 (months).'
-          minimum: 0
-          type: integer
-        period_type:
-          description: Time unit of the pay off period.
-          enum:
-          - MONTH
-          - YEAR
-          type: string
-        total_paid:
-          description: 'For the minimum payment warning type, this value represents the total amount of principal and interest to pay off the statement balance if only making the minimum payment each month.
-
-
-            For the 3 Year warning type, this value represents the total amount of principal and interest if paying off the statement balance in three years.'
-          type: number
-        type:
-          description: 'Type of statement warning.
-
-
-            * `MIN_PAYMENT` - Displays the total estimated payment amount and how long it would take to pay off the statement balance if only making minimum payments.
-
-            * `3_YEAR` - Displays the monthly payment amount and total estimated payment amount if paying off the statement balance in three years.'
-          enum:
-          - MIN_PAYMENT
-          - 3_YEAR
-          type: string
-      type: object
-    CycleType:
-      description: 'Type of cycle.
-
-
-        * `BEGINNING_REVOLVING` - Account is beginning to revolve and just started carrying a balance
-
-        from the previous month.
-
-        * `REVOLVING` - Account is revolving and has been carrying a balance from month to month for more than one month.
-
-        * `END_REVOLVING` - Account is no longer revolving and the previous month''s balance is paid off.
-
-        * `TRANSACTING` - Account is not revolving and the balance is paid off each month.'
-      enum:
-      - BEGINNING_REVOLVING
-      - REVOLVING
-      - END_REVOLVING
-      - TRANSACTING
-      type: string
-    PaymentReminderPage:
-      description: Return payment reminders.
-      properties:
-        count:
-          description: Number of resources returned.
-          type: integer
-        data:
-          description: Contains payment reminders on a credit account statement. Can be zero if none exist for the given statement.
-          items:
-            $ref: '#/components/schemas/PaymentReminderResponse'
-          minItems: 1
-          type: array
-        end_index:
-          description: Sort order index of the last resource in the returned array.
-          type: integer
-        is_more:
-          description: A value of `true` indicates that more unreturned resources exist.
-          type: boolean
-        start_index:
-          description: Sort order index of the first resource in the returned array.
-          type: integer
-      required:
-      - count
-      - data
-      - end_index
-      - is_more
-      - start_index
-      type: object
-    StatementReward:
-      description: Contains information on statement rewards.
-      properties:
-        created_time:
-          description: Date and time when the statement reward was created on Marqeta's credit platform, in UTC.
-          format: date-time
-          type: string
-        current_billing_cycle_reward:
-          description: Amount of rewards received in the current billing cycle.
-          type: number
-        previous_billing_cycle_reward:
-          description: Amount of rewards received in the previous billing cycle.
-          type: number
-        token:
-          description: Unique identifier of the rewards for a specific statement.
-          type: string
-      type: object
-    StatementPaymentInfo:
-      description: Contains information on a statement payment.
-      properties:
-        created_time:
-          description: Date and time when the statement payment information was created on Marqeta's credit platform, in UTC.
-          format: date-time
-          type: string
-        minimum_payment_due:
-          description: Minimum payment amount for the current statement period, based on the associated credit product settings.
-          type: number
-        new_statement_balance:
-          description: Balance on the credit account when the statement period ended.
-          type: number
-        payment_cutoff_date:
-          description: Last day a payment can be made before interest and fees are charged to the account.
-          format: date-time
-          type: string
-        payment_due_date:
-          description: Payment due date, based on the credit account settings.
-          format: date-time
-          type: string
-        statement_summary_token:
-          description: Unique identifier of the statement summary.
-          format: uuid
-          type: string
-        three_year_savings:
-          description: Savings amount if the balance is paid off in three years versus only making minimum payments.
-          type: number
-        token:
-          description: Unique identifier of the statement payment.
-          format: uuid
-          type: string
-        warnings:
-          description: One or more payoff warnings.
-          items:
-            $ref: '#/components/schemas/StatementPaymentWarning'
-          type: array
-      type: object
-    CurrencyCode:
-      default: USD
-      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
-      enum:
-      - USD
-      type: string
-    StatementFilePage:
-      description: Returns paginated statement files.
-      properties:
-        count:
-          description: Number of resources returned.
-          type: integer
-        data:
-          description: List of statement files.
-          items:
-            $ref: '#/components/schemas/StatementFile'
-          type: array
-        end_index:
-          description: Sort order index of the last resource in the returned array.
-          type: integer
-        is_more:
-          description: A value of `true` indicates that more unreturned resources exist.
-          type: boolean
-        start_index:
-          description: Sort order index of the first resource in the returned array.
-          type: integer
-      required:
-      - count
-      - data
-      - end_index
-      - is_more
-      - start_index
-      type: object
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-      type: object
-    OriginalCurrency:
-      description: Original Currency
-      properties:
-        amount:
-          description: original amount
-          example: 2
-          type: number
-        code:
-          description: Currency code, such as EUR or USD.
-          type: string
-      type: object
-    JournalEntriesPage:
-      description: Return filtered transactions.
-      properties:
-        count:
-          description: Number of resources returned.
-          maximum: 100
-          minimum: 0
-          type: integer
-        data:
-          description: Contains one or more journal entries on a credit account.
-          items:
-            $ref: '#/components/schemas/JournalEntry'
-          maxItems: 100
-          minItems: 0
-          type: array
-        end_index:
-          description: Sort order index of the last resource in the returned array.
-          type: integer
-        is_more:
-          description: A value of `true` indicates that more unreturned resources exist.
-          type: boolean
-        start_index:
-          description: Sort order index of the first resource in the returned array.
-          type: integer
-      required:
-      - count
-      - data
-      - end_index
-      - is_more
-      - start_index
-      type: object
-    StatementSummaryPage:
-      description: Return filtered transactions.
-      properties:
-        count:
-          description: Number of resources returned.
-          type: integer
-        data:
-          description: One or more statement summaries.
-          items:
-            $ref: '#/components/schemas/StatementSummary'
-          type: array
-        end_index:
-          description: Sort order index of the last resource in the returned array.
-          type: integer
-        is_more:
-          description: A value of `true` indicates that more unreturned resources exist.
-          type: boolean
-        start_index:
-          description: Sort order index of the first resource in the returned array.
-          type: integer
-      required:
-      - count
-      - data
-      - end_index
-      - is_more
-      - start_index
-      type: object
-    StatementFile:
-      description: Collection of statement files.
-      properties:
-        account_token:
-          description: Unique identifier of the credit account on which the statement PDF file is generated.
-          maxLength: 36
-          type: string
-        closing_date:
-          description: Date and time when the statement period ended.
-          format: date-time
-          type: string
-        opening_date:
-          description: Date and time when the statement period began.
-          format: date-time
-          type: string
-        signed_url:
-          description: Signed URL to retrieve the statement PDF file.
-          type: string
-        statement_summary_token:
-          description: Unique identifier of the statement summary.
-          format: uuid
-          type: string
-        token:
-          description: Unique identifier of the statement file.
-          type: string
-        type:
-          description: Type of file.
-          enum:
-          - STATEMENT_PDF
-          type: string
-      type: object
-    YearToDate:
-      description: Contains information about year-to-date totals for an account.
-      properties:
-        account_token:
-          description: Unique identifier of the associated credit account.
-          maxLength: 36
-          type: string
-        created_time:
-          description: Date and time when the year-to-date total was created on Marqeta's credit platform, in UTC.
-          format: date-time
-          type: string
-        statement_token:
-          description: Unique identifier of the statement summary from which to retrieve year-to-date totals.
-          format: uuid
-          type: string
-        token:
-          description: Unique identifier of the year-to-date total.
-          format: uuid
-          type: string
-        total_fees:
-          description: Total fees charged year-to-date.
-          type: number
-        total_interest:
-          description: Total interest charged year-to-date.
-          type: number
-      required:
-      - account_token
-      - statement_token
-      - total_fees
-      - total_interest
-      type: object
-    WebhookEventResendContainerResponse:
-      description: Contains information about a webhook event.
-      properties:
-        unused:
-          description: Event notification that was resent to your webhook endpoint.
-          type: string
-      type: object
-    PaymentReminderResponse:
-      description: Details of a payment reminder.
-      properties:
-        account_token:
-          description: Token of the associated account.
-          type: string
-        created_time:
-          description: Date and time when the Billing Cycle was created on Marqeta's credit platform
-          format: date-time
-          type: string
-        days_until_due:
-          description: Days until payment cutoff date
-          type: integer
-        payment_cutoff_date:
-          description: Last day a payment can be made before interest and fees are charged to the account.
-          format: date-time
-          type: string
-        payment_due_date:
-          description: Payment due date, based on the credit account settings.
-          format: date-time
-          type: string
-        remaining_minimum_payment_due:
-          description: Amount remaining on the latest statement's minimum payment, after it's adjusted for payments, returned payments, and applicable credits that occurred after the latest statement's closing date.
-          type: number
-        statement_summary_token:
-          description: Token of the associated statement summary
-          format: uuid
-          type: string
-        token:
-          description: Token of the payment reminder
-          type: string
-      type: object
     JournalEntry:
       description: Contains information about a journal entry.
       properties:
@@ -2438,6 +1916,95 @@ components:
       - token
       - type
       - user_token
+      type: object
+    StatementPaymentWarning:
+      description: Contains information on statement payment warnings.
+      properties:
+        disclosure:
+          description: 'Statement disclosure in the case of negative or no amortization, or no lifetime repayment for the minimum payment warning type.
+
+
+            * `NEGATIVE_OR_NO_AMORTIZATION` - Occurs when the interest amount is higher than the minimum payment; results in the outstanding balance remaining in perpetuity.
+
+            * `NO_LIFETIME_REPAYMENT` - Occurs when the interest amount is just below the minimum payment; results in the outstanding balance taking longer than a lifetime to pay off.'
+          enum:
+          - NEGATIVE_OR_NO_AMORTIZATION
+          - NO_LIFETIME_REPAYMENT
+          type: string
+        interest_paid:
+          description: 'For the minimum payment warning type, this value represents the total amount of interest to pay off the statement balance if only making the minimum payment each month.
+
+
+            For the 3 Year warning type, this value represents the total amount of interest if paying off the statement balance in three years.'
+          type: number
+        monthly_payment:
+          description: 'For the minimum payment warning type, this value is 0.
+
+
+            For the 3 Year warning type, this value represents the fixed monthly payment amount required to pay off the statement balance in three years.'
+          type: number
+        pay_off_period:
+          description: 'For the minimum payment warning type, this value represents the number of periods required to pay off the statement balance.
+
+
+            For the 3 Year warning type, this value is 36 (months).'
+          minimum: 0
+          type: integer
+        period_type:
+          description: Time unit of the pay off period.
+          enum:
+          - MONTH
+          - YEAR
+          type: string
+        total_paid:
+          description: 'For the minimum payment warning type, this value represents the total amount of principal and interest to pay off the statement balance if only making the minimum payment each month.
+
+
+            For the 3 Year warning type, this value represents the total amount of principal and interest if paying off the statement balance in three years.'
+          type: number
+        type:
+          description: 'Type of statement warning.
+
+
+            * `MIN_PAYMENT` - Displays the total estimated payment amount and how long it would take to pay off the statement balance if only making minimum payments.
+
+            * `3_YEAR` - Displays the monthly payment amount and total estimated payment amount if paying off the statement balance in three years.'
+          enum:
+          - MIN_PAYMENT
+          - 3_YEAR
+          type: string
+      type: object
+    PaymentReminderResponse:
+      description: Details of a payment reminder.
+      properties:
+        account_token:
+          description: Token of the associated account.
+          type: string
+        created_time:
+          description: Date and time when the Billing Cycle was created on Marqeta's credit platform
+          format: date-time
+          type: string
+        days_until_due:
+          description: Days until payment cutoff date
+          type: integer
+        payment_cutoff_date:
+          description: Last day a payment can be made before interest and fees are charged to the account.
+          format: date-time
+          type: string
+        payment_due_date:
+          description: Payment due date, based on the credit account settings.
+          format: date-time
+          type: string
+        remaining_minimum_payment_due:
+          description: Amount remaining on the latest statement's minimum payment, after it's adjusted for payments, returned payments, and applicable credits that occurred after the latest statement's closing date.
+          type: number
+        statement_summary_token:
+          description: Token of the associated statement summary
+          format: uuid
+          type: string
+        token:
+          description: Token of the payment reminder
+          type: string
       type: object
     LedgerEntry:
       description: Contains information about a ledger entry.
@@ -2626,6 +2193,439 @@ components:
       - status
       - token
       - type
+      type: object
+    StatementInterestCharge:
+      description: Contains information on statement interest charges.
+      properties:
+        amount:
+          description: Amount of interest calculated for the billing period.
+          type: number
+        apr_type:
+          description: Type of APR.
+          enum:
+          - GO_TO
+          type: string
+        apr_value:
+          description: Annual percentage rate.
+          maximum: 100
+          minimum: 0
+          type: number
+        balance_subject_to_interest_rate:
+          description: Average daily balance used to calculate interest.
+          type: number
+        balance_type:
+          description: 'Type of balance.
+
+
+            * `PURCHASE` - The balance on purchases.'
+          enum:
+          - PURCHASE
+          type: string
+      type: object
+    PaymentReminderPage:
+      description: Return payment reminders.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: Contains payment reminders on a credit account statement. Can be zero if none exist for the given statement.
+          items:
+            $ref: '#/components/schemas/PaymentReminderResponse'
+          minItems: 1
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    WebhookEventResendContainerResponse:
+      description: Contains information about a webhook event.
+      properties:
+        unused:
+          description: Event notification that was resent to your webhook endpoint.
+          type: string
+      type: object
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
+      type: string
+    JournalEntriesPage:
+      description: Return filtered transactions.
+      properties:
+        count:
+          description: Number of resources returned.
+          maximum: 100
+          minimum: 0
+          type: integer
+        data:
+          description: Contains one or more journal entries on a credit account.
+          items:
+            $ref: '#/components/schemas/JournalEntry'
+          maxItems: 100
+          minItems: 0
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    StatementReward:
+      description: Contains information on statement rewards.
+      properties:
+        created_time:
+          description: Date and time when the statement reward was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        current_billing_cycle_reward:
+          description: Amount of rewards received in the current billing cycle.
+          type: number
+        previous_billing_cycle_reward:
+          description: Amount of rewards received in the previous billing cycle.
+          type: number
+        token:
+          description: Unique identifier of the rewards for a specific statement.
+          type: string
+      type: object
+    StatementSummaryPage:
+      description: Return filtered transactions.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: One or more statement summaries.
+          items:
+            $ref: '#/components/schemas/StatementSummary'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    StatementPaymentInfo:
+      description: Contains information on a statement payment.
+      properties:
+        created_time:
+          description: Date and time when the statement payment information was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        minimum_payment_due:
+          description: Minimum payment amount for the current statement period, based on the associated credit product settings.
+          type: number
+        new_statement_balance:
+          description: Balance on the credit account when the statement period ended.
+          type: number
+        payment_cutoff_date:
+          description: Last day a payment can be made before interest and fees are charged to the account.
+          format: date-time
+          type: string
+        payment_due_date:
+          description: Payment due date, based on the credit account settings.
+          format: date-time
+          type: string
+        statement_summary_token:
+          description: Unique identifier of the statement summary.
+          format: uuid
+          type: string
+        three_year_savings:
+          description: Savings amount if the balance is paid off in three years versus only making minimum payments.
+          type: number
+        token:
+          description: Unique identifier of the statement payment.
+          format: uuid
+          type: string
+        warnings:
+          description: One or more payoff warnings.
+          items:
+            $ref: '#/components/schemas/StatementPaymentWarning'
+          type: array
+      type: object
+    OriginalCurrency:
+      description: Original Currency
+      properties:
+        amount:
+          description: original amount
+          example: 2
+          type: number
+        code:
+          description: Currency code, such as EUR or USD.
+          type: string
+      type: object
+    StatementFilePage:
+      description: Returns paginated statement files.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: List of statement files.
+          items:
+            $ref: '#/components/schemas/StatementFile'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    StatementFile:
+      description: Collection of statement files.
+      properties:
+        account_token:
+          description: Unique identifier of the credit account on which the statement PDF file is generated.
+          maxLength: 36
+          type: string
+        closing_date:
+          description: Date and time when the statement period ended.
+          format: date-time
+          type: string
+        opening_date:
+          description: Date and time when the statement period began.
+          format: date-time
+          type: string
+        signed_url:
+          description: Signed URL to retrieve the statement PDF file.
+          type: string
+        statement_summary_token:
+          description: Unique identifier of the statement summary.
+          format: uuid
+          type: string
+        token:
+          description: Unique identifier of the statement file.
+          type: string
+        type:
+          description: Type of file.
+          enum:
+          - STATEMENT_PDF
+          type: string
+      type: object
+    StatementInterestChargesPage:
+      description: Return paginated statement interest charges.
+      properties:
+        account_token:
+          description: Unique identifier of the credit account on which the statement interest charge is generated.
+          maxLength: 36
+          type: string
+        data:
+          description: Contains one or more interest charges on a statement.
+          items:
+            $ref: '#/components/schemas/StatementInterestCharge'
+          type: array
+        statement_summary_token:
+          description: Unique identifier of the statement summary.
+          type: string
+      required:
+      - account_token
+      - data
+      - statement_summary_token
+      type: object
+    CycleType:
+      description: 'Type of cycle.
+
+
+        * `BEGINNING_REVOLVING` - Account is beginning to revolve and just started carrying a balance
+
+        from the previous month.
+
+        * `REVOLVING` - Account is revolving and has been carrying a balance from month to month for more than one month.
+
+        * `END_REVOLVING` - Account is no longer revolving and the previous month''s balance is paid off.
+
+        * `TRANSACTING` - Account is not revolving and the balance is paid off each month.'
+      enum:
+      - BEGINNING_REVOLVING
+      - REVOLVING
+      - END_REVOLVING
+      - TRANSACTING
+      type: string
+    StatementSummary:
+      description: Contains the summary data for an account's monthly statement.
+      properties:
+        account_token:
+          description: Unique identifier of the credit account on which the statement summary is generated.
+          maxLength: 36
+          type: string
+        available_credit:
+          description: Amount available to spend on the credit account, as of the statement closing date.
+          type: number
+        closing_balance:
+          description: Balance of the credit account when the statement period ended.
+          type: number
+        closing_date:
+          description: Date and time when the statement period ended.
+          format: date-time
+          type: string
+        created_time:
+          description: Date and time when the statement summary was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        credit_limit:
+          description: Maximum balance the credit account can carry, as of the statement closing date.
+          type: number
+        credits:
+          description: Total amount of credits received during the statement period.
+          type: number
+        cycle_type:
+          $ref: '#/components/schemas/CycleType'
+        days_in_billing_cycle:
+          description: Number of days in the billing cycle, also known as the statement period.
+          type: integer
+        fees:
+          description: 'Total amount of fees charged during the statement period.
+
+            Does not include periodic fees.'
+          type: number
+        interest:
+          description: Total amount of interest charged during the statement period.
+          type: number
+        min_payment_due:
+          description: Minimum payment that is due.
+          minimum: 0
+          type: number
+        opening_balance:
+          description: Balance of the credit account when the statement period began.
+          type: number
+        opening_date:
+          description: Date and time when the statement period began.
+          format: date-time
+          type: string
+        past_due_amount:
+          description: Total amount of the payment required to make the account current.
+          type: number
+        payment_due_date:
+          description: Date when the payment was due for this statement period.
+          format: date-time
+          type: string
+        payments:
+          description: Total amount of payments made during the statement period.
+          type: number
+        program_migration_time:
+          description: 'Date and time when the statement summary was migrated to Marqeta''s credit platform, in UTC.
+
+
+            The value of this field is `null` if it has not been migrated.'
+          format: date-time
+          type: string
+        purchases:
+          description: Total amount of purchases made during the statement period.
+          type: number
+        remaining_min_payment_due:
+          description: Amount of the minimum payment that remains unpaid for the previous statement period.
+          type: number
+        remaining_statement_balance:
+          description: Amount of the statement balance that remains unpaid for the previous statement period.
+          type: number
+        sda_closing_balance:
+          description: Secured deposit account closing balance for the statement period.
+          type: number
+        sda_opening_balance:
+          description: Secured deposit account opening balance for the statement period.
+          type: number
+        token:
+          description: Unique identifier of the statement summary.
+          format: uuid
+          type: string
+      required:
+      - account_token
+      - available_credit
+      - closing_balance
+      - closing_date
+      - created_time
+      - credits
+      - cycle_type
+      - days_in_billing_cycle
+      - fees
+      - interest
+      - opening_balance
+      - opening_date
+      - past_due_amount
+      - payments
+      - purchases
+      - token
+      type: object
+    YearToDate:
+      description: Contains information about year-to-date totals for an account.
+      properties:
+        account_token:
+          description: Unique identifier of the associated credit account.
+          maxLength: 36
+          type: string
+        created_time:
+          description: Date and time when the year-to-date total was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        statement_token:
+          description: Unique identifier of the statement summary from which to retrieve year-to-date totals.
+          format: uuid
+          type: string
+        token:
+          description: Unique identifier of the year-to-date total.
+          format: uuid
+          type: string
+        total_fees:
+          description: Total fees charged year-to-date.
+          type: number
+        total_interest:
+          description: Total interest charged year-to-date.
+          type: number
+      required:
+      - account_token
+      - statement_token
+      - total_fees
+      - total_interest
       type: object
   securitySchemes:
     mqAppAndAccessToken:

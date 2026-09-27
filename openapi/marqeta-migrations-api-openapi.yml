@@ -136,21 +136,10 @@ paths:
       - Migrations
 components:
   schemas:
-    CalculatedBalanceResponse:
+    MigrationResponse:
       properties:
-        available_credit:
-          description: the latest balance of the account from the migrated program
-          type: number
-        current_balance:
-          description: the latest balance of the account from the migrated program
-          type: number
-      type: object
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
+        success:
+          type: boolean
       type: object
     FinalizeMigrationStatusResponse:
       description: Finalize status of a migrated account.
@@ -201,10 +190,21 @@ components:
           maxLength: 36
           type: string
       type: object
-    MigrationResponse:
+    Error:
       properties:
-        success:
-          type: boolean
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    CalculatedBalanceResponse:
+      properties:
+        available_credit:
+          description: the latest balance of the account from the migrated program
+          type: number
+        current_balance:
+          description: the latest balance of the account from the migrated program
+          type: number
       type: object
     SyncStatementAssetReq:
       properties:

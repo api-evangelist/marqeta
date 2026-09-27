@@ -560,6 +560,47 @@ components:
       - status
       - token
       type: object
+    UserTransitionListResponse:
+      properties:
+        count:
+          description: 'Number of resources retrieved.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+        data:
+          description: 'Array of user transition resources.
+
+
+            Resources are returned as appropriate to your query.'
+          items:
+            $ref: '#/components/schemas/UserTransitionResponse'
+          type: array
+        end_index:
+          description: 'Sort order index of the last resource in the returned array.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          description: 'A value of `true` indicates that more unreturned resources exist.
+
+            A value of `false` indicates that no more unreturned resources exist.
+
+
+            This field is returned if there are resources in your returned array.'
+          type: boolean
+        start_index:
+          description: 'Sort order index of the first resource in the returned array.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+      type: object
     UserTransitionRequest:
       properties:
         channel:
@@ -744,47 +785,6 @@ components:
       - reason_code
       - status
       - user_token
-      type: object
-    UserTransitionListResponse:
-      properties:
-        count:
-          description: 'Number of resources retrieved.
-
-
-            This field is returned if there are resources in your returned array.'
-          format: int32
-          type: integer
-        data:
-          description: 'Array of user transition resources.
-
-
-            Resources are returned as appropriate to your query.'
-          items:
-            $ref: '#/components/schemas/UserTransitionResponse'
-          type: array
-        end_index:
-          description: 'Sort order index of the last resource in the returned array.
-
-
-            This field is returned if there are resources in your returned array.'
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          description: 'A value of `true` indicates that more unreturned resources exist.
-
-            A value of `false` indicates that no more unreturned resources exist.
-
-
-            This field is returned if there are resources in your returned array.'
-          type: boolean
-        start_index:
-          description: 'Sort order index of the first resource in the returned array.
-
-
-            This field is returned if there are resources in your returned array.'
-          format: int32
-          type: integer
       type: object
   securitySchemes:
     mqAppAndAccessToken:

@@ -746,230 +746,12 @@ paths:
       - Credit Substatuses
 components:
   schemas:
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-      type: object
-    SubstatusEventResponseDetails:
-      description: Details of an event related to a substatus.
-      properties:
-        channel:
-          description: The channel through which the event occurred.
-          enum:
-          - ADMIN
-          - API
-          - FRAUD
-          - SYSTEM
-          type: string
-        created_by:
-          description: User who created the substatus event.
-          maxLength: 255
-          type: string
-        created_time:
-          description: Creation time of the event.
-          format: date-time
-          type: string
-        effective_date:
-          description: Effective date of the event, in UTC.
-          format: date-time
-          type: string
-        reason:
-          description: Reason for the event.
-          maxLength: 255
-          type: string
-        state:
-          description: The state of the event.
-          enum:
-          - ACTIVE
-          - INACTIVE
-          - DECEASED_REPORTED
-          - DECEASED_CONFIRMED
-          - FRAUD_REPORTED
-          - FRAUD_CONFIRMED
-          - BANKRUPTCY_FILED
-          - BANKRUPTCY_WITHDRAWN
-          - BANKRUPTCY_REAFFIRMED
-          - BANKRUPTCY_REAFFIRM_RESCINDED
-          - BANKRUPTCY_DISCHARGED
-          - BANKRUPTCY_DISMISSED
-          - BANKRUPTCY_FILED_INACTIVE
-          - BANKRUPTCY_WITHDRAWN_INACTIVE
-          - BANKRUPTCY_REAFFIRMED_INACTIVE
-          - BANKRUPTCY_REAFFIRM_RESCINDED_INACTIVE
-          - BANKRUPTCY_DISCHARGED_INACTIVE
-          - BANKRUPTCY_DISMISSED_INACTIVE
-          type: string
-      required:
-      - channel
-      - created_time
-      - effective_date
-      - state
-      type: object
     WebhookEventResendContainerResponse:
       description: Contains information about a webhook event.
       properties:
         unused:
           description: Event notification that was resent to your webhook endpoint.
           type: string
-      type: object
-    SubstatusEvent:
-      description: Details of an event related to a substatus.
-      properties:
-        channel:
-          description: 'The mechanism by which the state of the substatus was applied.
-
-
-            * `ADMIN` - Indicates that the state of the substatus was added through the Marqeta Dashboard.
-
-            * `API` - Indicates that you initiated an update of the substatus through the Core API.
-
-            Use this value when creating a substatus.
-
-            * `FRAUD` - Indicates that either Marqeta or the card network has determined that the account is fraudulent.
-
-            * `SYSTEM` - Indicates that Marqeta initiated the state of the substatus.
-
-            For example, Marqeta determined during application decisioning that the applicant is `MLA`.'
-          enum:
-          - ADMIN
-          - API
-          - FRAUD
-          - SYSTEM
-          type: string
-        created_by:
-          description: User who created the substatus event.
-          maxLength: 255
-          type: string
-        effective_date:
-          description: 'Date and time when the state of the substatus went into effect, in UTC.
-
-            The effective date must be in the past.
-
-            If no value is set, then the effective date and time will be the current time.'
-          format: date-time
-          type: string
-        reason:
-          description: Reason for applying a state designation to the substatus.
-          maxLength: 255
-          type: string
-        state:
-          description: 'Initial state of the substatus.
-
-
-            * `ACTIVE` - Required if the substatus is `HARDSHIP`, `MLA`, `SCRA`, `DECEASED`, `BLOCKED`, `CEASE_AND_DESIST`, `OPT_OUT`, or `POWER_OF_ATTORNEY`.
-
-            * `BANKRUPTCY_FILED` - Required if the substatus is `BANKRUPTCY`.
-
-            * `DECEASED_REPORTED` - Required if the substatus is `DECEASED`.
-
-            * `FRAUD_REPORTED` - Required if the substatus is `FRAUD`.'
-          enum:
-          - ACTIVE
-          - BANKRUPTCY_FILED
-          - DECEASED_REPORTED
-          - FRAUD_REPORTED
-          type: string
-      required:
-      - state
-      type: object
-    SubstatusUpdateReq:
-      description: Contains information relevant to deactivating a substatus.
-      properties:
-        channel:
-          description: 'The mechanism by which a state designation was applied to a substatus.
-
-            If no value is set, then it defaults to `API`.
-
-
-            * `ADMIN` - Indicates that the state of the substatus was added through the Marqeta Dashboard.
-
-            * `API` - Indicates that you initiated the update of the substatus through the Core API.
-
-            Use this value when creating a card transition with an API `POST` request.
-
-            * `FRAUD` - Indicates that either Marqeta or the card network has determined that the account is fraudulent.
-
-            * `SYSTEM` - Indicates that the substatus update was initiated by Marqeta.
-
-            For example, Marqeta determined during application decisioning that the applicant is `MLA`.'
-          enum:
-          - ADMIN
-          - API
-          - FRAUD
-          - SYSTEM
-          type: string
-        created_by:
-          description: User who created the substatus event.
-          maxLength: 255
-          type: string
-        effective_date:
-          description: Date and time when the state of the substatus is effective, in UTC.
-          format: date-time
-          type: string
-        reason:
-          description: Reason for applying the state to the substatus.
-          maxLength: 255
-          minLength: 1
-          type: string
-        state:
-          description: 'New state of the substatus.
-
-
-            * `INACTIVE` is a valid state for substatuses `HARDSHIP`, `FRAUD`, `MLA`, `SCRA`, `DECEASED`, `BLOCKED`, `CEASE_AND_DESIST`, `OPT_OUT`, and `POWER_OF_ATTORNEY`.
-
-            * `DECEASED_CONFIRMED` is a valid state for substatus `DECEASED`.
-
-            * `FRAUD_CONFIRMED` is a valid state for substatus `FRAUD`.
-
-            * `BANKRUPTCY_WITHDRAWN`, `BANKRUPTCY_REAFFIRMED`, `BANKRUPTCY_REAFFIRM_RESCINDED`, `BANKRUPTCY_DISCHARGED`, `BANKRUPTCY_DISMISSED`, `BANKRUPTCY_FILED_INACTIVE`, `BANKRUPTCY_WITHDRAWN_INACTIVE`, `BANKRUPTCY_REAFFIRMED_INACTIVE`, `BANKRUPTCY_REAFFIRM_RESCINDED_INACTIVE`, `BANKRUPTCY_DISCHARGED_INACTIVE`, and `BANKRUPTCY_DISMISSED_INACTIVE` states are applicable to `BANKRUPTCY`.'
-          enum:
-          - INACTIVE
-          - BANKRUPTCY_WITHDRAWN
-          - BANKRUPTCY_REAFFIRMED
-          - BANKRUPTCY_REAFFIRM_RESCINDED
-          - BANKRUPTCY_DISCHARGED
-          - BANKRUPTCY_DISMISSED
-          - BANKRUPTCY_FILED_INACTIVE
-          - BANKRUPTCY_WITHDRAWN_INACTIVE
-          - BANKRUPTCY_REAFFIRMED_INACTIVE
-          - BANKRUPTCY_REAFFIRM_RESCINDED_INACTIVE
-          - BANKRUPTCY_DISCHARGED_INACTIVE
-          - BANKRUPTCY_DISMISSED_INACTIVE
-          - DECEASED_CONFIRMED
-          - FRAUD_CONFIRMED
-          type: string
-      required:
-      - state
-      type: object
-    SubstatusPage:
-      description: Return paginated account and user substatuses.
-      properties:
-        count:
-          description: Number of resources returned.
-          type: integer
-        data:
-          description: Contains one or more substatuses.
-          items:
-            $ref: '#/components/schemas/SubstatusResponse'
-          type: array
-        end_index:
-          description: Sort order index of the last resource in the returned array.
-          type: integer
-        is_more:
-          description: A value of `true` indicates that more unreturned resources exist.
-          type: boolean
-        start_index:
-          description: Sort order index of the first resource in the returned array.
-          type: integer
-      required:
-      - count
-      - data
-      - end_index
-      - is_more
-      - start_index
       type: object
     SubstatusCreateReq:
       description: Contains information relevant to creating a substatus.
@@ -1121,6 +903,66 @@ components:
       - resource_token
       - resource_type
       - substatus
+      type: object
+    SubstatusEvent:
+      description: Details of an event related to a substatus.
+      properties:
+        channel:
+          description: 'The mechanism by which the state of the substatus was applied.
+
+
+            * `ADMIN` - Indicates that the state of the substatus was added through the Marqeta Dashboard.
+
+            * `API` - Indicates that you initiated an update of the substatus through the Core API.
+
+            Use this value when creating a substatus.
+
+            * `FRAUD` - Indicates that either Marqeta or the card network has determined that the account is fraudulent.
+
+            * `SYSTEM` - Indicates that Marqeta initiated the state of the substatus.
+
+            For example, Marqeta determined during application decisioning that the applicant is `MLA`.'
+          enum:
+          - ADMIN
+          - API
+          - FRAUD
+          - SYSTEM
+          type: string
+        created_by:
+          description: User who created the substatus event.
+          maxLength: 255
+          type: string
+        effective_date:
+          description: 'Date and time when the state of the substatus went into effect, in UTC.
+
+            The effective date must be in the past.
+
+            If no value is set, then the effective date and time will be the current time.'
+          format: date-time
+          type: string
+        reason:
+          description: Reason for applying a state designation to the substatus.
+          maxLength: 255
+          type: string
+        state:
+          description: 'Initial state of the substatus.
+
+
+            * `ACTIVE` - Required if the substatus is `HARDSHIP`, `MLA`, `SCRA`, `DECEASED`, `BLOCKED`, `CEASE_AND_DESIST`, `OPT_OUT`, or `POWER_OF_ATTORNEY`.
+
+            * `BANKRUPTCY_FILED` - Required if the substatus is `BANKRUPTCY`.
+
+            * `DECEASED_REPORTED` - Required if the substatus is `DECEASED`.
+
+            * `FRAUD_REPORTED` - Required if the substatus is `FRAUD`.'
+          enum:
+          - ACTIVE
+          - BANKRUPTCY_FILED
+          - DECEASED_REPORTED
+          - FRAUD_REPORTED
+          type: string
+      required:
+      - state
       type: object
     SubstatusResponse:
       description: Contains information about the substatus.
@@ -1285,6 +1127,164 @@ components:
       - state
       - substatus
       - token
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    SubstatusPage:
+      description: Return paginated account and user substatuses.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: Contains one or more substatuses.
+          items:
+            $ref: '#/components/schemas/SubstatusResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    SubstatusUpdateReq:
+      description: Contains information relevant to deactivating a substatus.
+      properties:
+        channel:
+          description: 'The mechanism by which a state designation was applied to a substatus.
+
+            If no value is set, then it defaults to `API`.
+
+
+            * `ADMIN` - Indicates that the state of the substatus was added through the Marqeta Dashboard.
+
+            * `API` - Indicates that you initiated the update of the substatus through the Core API.
+
+            Use this value when creating a card transition with an API `POST` request.
+
+            * `FRAUD` - Indicates that either Marqeta or the card network has determined that the account is fraudulent.
+
+            * `SYSTEM` - Indicates that the substatus update was initiated by Marqeta.
+
+            For example, Marqeta determined during application decisioning that the applicant is `MLA`.'
+          enum:
+          - ADMIN
+          - API
+          - FRAUD
+          - SYSTEM
+          type: string
+        created_by:
+          description: User who created the substatus event.
+          maxLength: 255
+          type: string
+        effective_date:
+          description: Date and time when the state of the substatus is effective, in UTC.
+          format: date-time
+          type: string
+        reason:
+          description: Reason for applying the state to the substatus.
+          maxLength: 255
+          minLength: 1
+          type: string
+        state:
+          description: 'New state of the substatus.
+
+
+            * `INACTIVE` is a valid state for substatuses `HARDSHIP`, `FRAUD`, `MLA`, `SCRA`, `DECEASED`, `BLOCKED`, `CEASE_AND_DESIST`, `OPT_OUT`, and `POWER_OF_ATTORNEY`.
+
+            * `DECEASED_CONFIRMED` is a valid state for substatus `DECEASED`.
+
+            * `FRAUD_CONFIRMED` is a valid state for substatus `FRAUD`.
+
+            * `BANKRUPTCY_WITHDRAWN`, `BANKRUPTCY_REAFFIRMED`, `BANKRUPTCY_REAFFIRM_RESCINDED`, `BANKRUPTCY_DISCHARGED`, `BANKRUPTCY_DISMISSED`, `BANKRUPTCY_FILED_INACTIVE`, `BANKRUPTCY_WITHDRAWN_INACTIVE`, `BANKRUPTCY_REAFFIRMED_INACTIVE`, `BANKRUPTCY_REAFFIRM_RESCINDED_INACTIVE`, `BANKRUPTCY_DISCHARGED_INACTIVE`, and `BANKRUPTCY_DISMISSED_INACTIVE` states are applicable to `BANKRUPTCY`.'
+          enum:
+          - INACTIVE
+          - BANKRUPTCY_WITHDRAWN
+          - BANKRUPTCY_REAFFIRMED
+          - BANKRUPTCY_REAFFIRM_RESCINDED
+          - BANKRUPTCY_DISCHARGED
+          - BANKRUPTCY_DISMISSED
+          - BANKRUPTCY_FILED_INACTIVE
+          - BANKRUPTCY_WITHDRAWN_INACTIVE
+          - BANKRUPTCY_REAFFIRMED_INACTIVE
+          - BANKRUPTCY_REAFFIRM_RESCINDED_INACTIVE
+          - BANKRUPTCY_DISCHARGED_INACTIVE
+          - BANKRUPTCY_DISMISSED_INACTIVE
+          - DECEASED_CONFIRMED
+          - FRAUD_CONFIRMED
+          type: string
+      required:
+      - state
+      type: object
+    SubstatusEventResponseDetails:
+      description: Details of an event related to a substatus.
+      properties:
+        channel:
+          description: The channel through which the event occurred.
+          enum:
+          - ADMIN
+          - API
+          - FRAUD
+          - SYSTEM
+          type: string
+        created_by:
+          description: User who created the substatus event.
+          maxLength: 255
+          type: string
+        created_time:
+          description: Creation time of the event.
+          format: date-time
+          type: string
+        effective_date:
+          description: Effective date of the event, in UTC.
+          format: date-time
+          type: string
+        reason:
+          description: Reason for the event.
+          maxLength: 255
+          type: string
+        state:
+          description: The state of the event.
+          enum:
+          - ACTIVE
+          - INACTIVE
+          - DECEASED_REPORTED
+          - DECEASED_CONFIRMED
+          - FRAUD_REPORTED
+          - FRAUD_CONFIRMED
+          - BANKRUPTCY_FILED
+          - BANKRUPTCY_WITHDRAWN
+          - BANKRUPTCY_REAFFIRMED
+          - BANKRUPTCY_REAFFIRM_RESCINDED
+          - BANKRUPTCY_DISCHARGED
+          - BANKRUPTCY_DISMISSED
+          - BANKRUPTCY_FILED_INACTIVE
+          - BANKRUPTCY_WITHDRAWN_INACTIVE
+          - BANKRUPTCY_REAFFIRMED_INACTIVE
+          - BANKRUPTCY_REAFFIRM_RESCINDED_INACTIVE
+          - BANKRUPTCY_DISCHARGED_INACTIVE
+          - BANKRUPTCY_DISMISSED_INACTIVE
+          type: string
+      required:
+      - channel
+      - created_time
+      - effective_date
+      - state
       type: object
   securitySchemes:
     mqAppAndAccessToken:

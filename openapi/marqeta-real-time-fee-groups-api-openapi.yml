@@ -221,6 +221,38 @@ paths:
       - Real-Time Fee Groups
 components:
   schemas:
+    real_time_fee_group:
+      description: Contains information about a real-time fee group.
+      properties:
+        active:
+          default: false
+          description: Indicates whether the real-time fee group is active.
+          type: boolean
+        created_time:
+          description: Date and time when the real-time fee group was created, in UTC.
+          format: date-time
+          type: string
+        fee_tokens:
+          description: Specifies the fees in this real-time fee group.
+          items:
+            type: string
+          type: array
+          uniqueItems: true
+        last_modified_time:
+          description: Date and time when the real-time fee group was last modified, in UTC.
+          format: date-time
+          type: string
+        name:
+          description: Descriptive name for the real-time fee group.
+          type: string
+        token:
+          description: Unique identifier of the real-time fee group.
+          type: string
+      required:
+      - active
+      - name
+      - token
+      type: object
     real_time_fee_group_request:
       properties:
         active:
@@ -280,38 +312,6 @@ components:
           type: string
       required:
       - name
-      type: object
-    real_time_fee_group:
-      description: Contains information about a real-time fee group.
-      properties:
-        active:
-          default: false
-          description: Indicates whether the real-time fee group is active.
-          type: boolean
-        created_time:
-          description: Date and time when the real-time fee group was created, in UTC.
-          format: date-time
-          type: string
-        fee_tokens:
-          description: Specifies the fees in this real-time fee group.
-          items:
-            type: string
-          type: array
-          uniqueItems: true
-        last_modified_time:
-          description: Date and time when the real-time fee group was last modified, in UTC.
-          format: date-time
-          type: string
-        name:
-          description: Descriptive name for the real-time fee group.
-          type: string
-        token:
-          description: Unique identifier of the real-time fee group.
-          type: string
-      required:
-      - active
-      - name
-      - token
       type: object
     RealTimeFeeGroupListResponse:
       properties:

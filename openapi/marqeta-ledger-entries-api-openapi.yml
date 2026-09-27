@@ -1066,22 +1066,11 @@ paths:
       - Ledger Entries
 components:
   schemas:
-    Error:
+    WebhookEventResendContainerResponse:
+      description: Contains information about a webhook event.
       properties:
-        code:
-          type: integer
-        message:
-          type: string
-      type: object
-    OriginalCurrency:
-      description: Original Currency
-      properties:
-        amount:
-          description: original amount
-          example: 2
-          type: number
-        code:
-          description: Currency code, such as EUR or USD.
+        unused:
+          description: Event notification that was resent to your webhook endpoint.
           type: string
       type: object
     CurrencyCode:
@@ -1090,11 +1079,39 @@ components:
       enum:
       - USD
       type: string
-    WebhookEventResendContainerResponse:
-      description: Contains information about a webhook event.
+    LedgerEntriesPage:
+      description: Return filtered transactions.
       properties:
-        unused:
-          description: Event notification that was resent to your webhook endpoint.
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: Contains one or more ledger entries on a credit account.
+          items:
+            $ref: '#/components/schemas/LedgerEntry'
+          minItems: 1
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
           type: string
       type: object
     LedgerEntry:
@@ -1285,33 +1302,16 @@ components:
       - token
       - type
       type: object
-    LedgerEntriesPage:
-      description: Return filtered transactions.
+    OriginalCurrency:
+      description: Original Currency
       properties:
-        count:
-          description: Number of resources returned.
-          type: integer
-        data:
-          description: Contains one or more ledger entries on a credit account.
-          items:
-            $ref: '#/components/schemas/LedgerEntry'
-          minItems: 1
-          type: array
-        end_index:
-          description: Sort order index of the last resource in the returned array.
-          type: integer
-        is_more:
-          description: A value of `true` indicates that more unreturned resources exist.
-          type: boolean
-        start_index:
-          description: Sort order index of the first resource in the returned array.
-          type: integer
-      required:
-      - count
-      - data
-      - end_index
-      - is_more
-      - start_index
+        amount:
+          description: original amount
+          example: 2
+          type: number
+        code:
+          description: Currency code, such as EUR or USD.
+          type: string
       type: object
   securitySchemes:
     mqAppAndAccessToken:

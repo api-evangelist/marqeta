@@ -273,148 +273,6 @@ paths:
       - push to card
 components:
   schemas:
-    push_to_card_disburse_request:
-      properties:
-        amount:
-          maximum: 50000.0
-          minimum: 0.01
-          type: number
-        currency_code:
-          type: string
-        memo:
-          maxLength: 99
-          minLength: 1
-          type: string
-        payment_instrument_token:
-          maxLength: 36
-          minLength: 1
-          type: string
-        soft_descriptor:
-          $ref: '#/components/schemas/PTCSoftDescriptor'
-        tags:
-          maxLength: 255
-          minLength: 1
-          type: string
-        token:
-          maxLength: 36
-          minLength: 1
-          type: string
-      required:
-      - amount
-      - currency_code
-      - payment_instrument_token
-      - token
-      type: object
-    PushToCardDisburseListResponse:
-      properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/push_to_card_disbursement_response'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
-      type: object
-    push_to_card_disbursement_response:
-      properties:
-        amount:
-          type: number
-        created_time:
-          description: yyyy-MM-ddTHH:mm:ssZ
-          format: date-time
-          type: string
-        currency_code:
-          type: string
-        last_modified_time:
-          description: yyyy-MM-ddTHH:mm:ssZ
-          format: date-time
-          type: string
-        memo:
-          maxLength: 99
-          minLength: 1
-          type: string
-        payment_instrument_token:
-          maxLength: 36
-          minLength: 1
-          type: string
-        status:
-          type: string
-        tags:
-          maxLength: 255
-          minLength: 1
-          type: string
-        token:
-          maxLength: 36
-          minLength: 1
-          type: string
-      required:
-      - created_time
-      - last_modified_time
-      type: object
-    push_to_card_request:
-      properties:
-        address_1:
-          maxLength: 255
-          minLength: 1
-          type: string
-        address_2:
-          maxLength: 255
-          minLength: 1
-          type: string
-        city:
-          maxLength: 40
-          minLength: 1
-          type: string
-        country:
-          type: string
-        cvv:
-          type: string
-        exp_date:
-          type: string
-        name_on_card:
-          maxLength: 50
-          minLength: 1
-          type: string
-        pan:
-          type: string
-        postal_code:
-          maxLength: 10
-          minLength: 1
-          type: string
-        state:
-          maxLength: 2
-          minLength: 1
-          type: string
-        token:
-          maxLength: 36
-          minLength: 1
-          type: string
-        user_token:
-          maxLength: 36
-          minLength: 1
-          type: string
-      required:
-      - address_1
-      - city
-      - country
-      - cvv
-      - exp_date
-      - name_on_card
-      - pan
-      - postal_code
-      - state
-      - token
-      - user_token
-      type: object
     PTCAddress:
       properties:
         city:
@@ -447,33 +305,6 @@ components:
       - line1
       - postal_code
       - state
-      type: object
-    PTCSoftDescriptor:
-      properties:
-        address:
-          $ref: '#/components/schemas/PTCAddress'
-        email:
-          type: string
-        name:
-          maxLength: 50
-          minLength: 0
-          type: string
-        phone:
-          $ref: '#/components/schemas/PTCPhone'
-      required:
-      - address
-      - name
-      type: object
-    PTCPhone:
-      properties:
-        country_code:
-          type: string
-        number:
-          maxLength: 14
-          minLength: 4
-          type: string
-      required:
-      - number
       type: object
     push_to_card_response:
       properties:
@@ -530,6 +361,93 @@ components:
       - created_time
       - last_modified_time
       type: object
+    push_to_card_disburse_request:
+      properties:
+        amount:
+          maximum: 50000.0
+          minimum: 0.01
+          type: number
+        currency_code:
+          type: string
+        memo:
+          maxLength: 99
+          minLength: 1
+          type: string
+        payment_instrument_token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        soft_descriptor:
+          $ref: '#/components/schemas/PTCSoftDescriptor'
+        tags:
+          maxLength: 255
+          minLength: 1
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - amount
+      - currency_code
+      - payment_instrument_token
+      - token
+      type: object
+    push_to_card_disbursement_response:
+      properties:
+        amount:
+          type: number
+        created_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        currency_code:
+          type: string
+        last_modified_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        memo:
+          maxLength: 99
+          minLength: 1
+          type: string
+        payment_instrument_token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        status:
+          type: string
+        tags:
+          maxLength: 255
+          minLength: 1
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - created_time
+      - last_modified_time
+      type: object
+    PushToCardDisburseListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/push_to_card_disbursement_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
     PushToCardListResponse:
       properties:
         count:
@@ -548,6 +466,88 @@ components:
         start_index:
           format: int32
           type: integer
+      type: object
+    PTCPhone:
+      properties:
+        country_code:
+          type: string
+        number:
+          maxLength: 14
+          minLength: 4
+          type: string
+      required:
+      - number
+      type: object
+    push_to_card_request:
+      properties:
+        address_1:
+          maxLength: 255
+          minLength: 1
+          type: string
+        address_2:
+          maxLength: 255
+          minLength: 1
+          type: string
+        city:
+          maxLength: 40
+          minLength: 1
+          type: string
+        country:
+          type: string
+        cvv:
+          type: string
+        exp_date:
+          type: string
+        name_on_card:
+          maxLength: 50
+          minLength: 1
+          type: string
+        pan:
+          type: string
+        postal_code:
+          maxLength: 10
+          minLength: 1
+          type: string
+        state:
+          maxLength: 2
+          minLength: 1
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        user_token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - address_1
+      - city
+      - country
+      - cvv
+      - exp_date
+      - name_on_card
+      - pan
+      - postal_code
+      - state
+      - token
+      - user_token
+      type: object
+    PTCSoftDescriptor:
+      properties:
+        address:
+          $ref: '#/components/schemas/PTCAddress'
+        email:
+          type: string
+        name:
+          maxLength: 50
+          minLength: 0
+          type: string
+        phone:
+          $ref: '#/components/schemas/PTCPhone'
+      required:
+      - address
+      - name
       type: object
   securitySchemes:
     mqAppAndAccessToken:

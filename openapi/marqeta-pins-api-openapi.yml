@@ -5,7 +5,7 @@ info:
     name: Marqeta
   description: Marqeta's Core API endpoints, conveniently annotated to enable code generation (including SDKs), test cases, and documentation. Currently in beta.
   termsOfService: https://www.marqeta.com/api-terms
-  title: Core PI Ns API
+  title: Core PINs API
   version: 3.0.39
 servers:
 - url: /v3
@@ -215,6 +215,32 @@ components:
       - cardholder_verification_method
       - control_token
       type: object
+    pin_request:
+      properties:
+        control_token:
+          description: 'Unique value generated as a result of issuing a `POST` request to the `/pins/controltoken` endpoint.
+
+            This value cannot be updated.'
+          maxLength: 36
+          minLength: 1
+          type: string
+        pin:
+          description: Four-digit number to associate with the card.
+          type: string
+      required:
+      - control_token
+      - pin
+      type: object
+    control_token_response:
+      properties:
+        control_token:
+          description: 'Unique value generated as a result of issuing a `POST` request to the `/pins/controltoken` endpoint.
+
+            This value cannot be updated.'
+          type: string
+      required:
+      - control_token
+      type: object
     control_token_request:
       properties:
         card_token:
@@ -241,32 +267,6 @@ components:
           type: string
       required:
       - card_token
-      type: object
-    pin_request:
-      properties:
-        control_token:
-          description: 'Unique value generated as a result of issuing a `POST` request to the `/pins/controltoken` endpoint.
-
-            This value cannot be updated.'
-          maxLength: 36
-          minLength: 1
-          type: string
-        pin:
-          description: Four-digit number to associate with the card.
-          type: string
-      required:
-      - control_token
-      - pin
-      type: object
-    control_token_response:
-      properties:
-        control_token:
-          description: 'Unique value generated as a result of issuing a `POST` request to the `/pins/controltoken` endpoint.
-
-            This value cannot be updated.'
-          type: string
-      required:
-      - control_token
       type: object
   securitySchemes:
     mqAppAndAccessToken:

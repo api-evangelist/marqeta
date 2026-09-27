@@ -507,183 +507,6 @@ paths:
       - Payment Schedules
 components:
   schemas:
-    PaymentScheduleAmountCategory:
-      description: A category used to determine the actual payment amount.
-      enum:
-      - FIXED
-      - MINIMUM_PAYMENT
-      - REMAINING_STATEMENT_BALANCE
-      - CURRENT_BALANCE
-      type: string
-    PaymentSchedulePage:
-      description: Returns paginated information for multiple payment schedules.
-      properties:
-        count:
-          description: Number of resources returned.
-          type: integer
-        data:
-          description: List of payment schedules.
-          items:
-            $ref: '#/components/schemas/PaymentScheduleResponse'
-          type: array
-        end_index:
-          description: Sort order index of the last resource in the returned array.
-          type: integer
-        is_more:
-          description: A value of `true` indicates that more unreturned resources exist.
-          type: boolean
-        start_index:
-          description: Sort order index of the first resource in the returned array.
-          type: integer
-      required:
-      - count
-      - data
-      - end_index
-      - is_more
-      - start_index
-      type: object
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-      type: object
-    PaymentScheduleTransitionPage:
-      description: Returns paginated information for multiple payment schedule transitions.
-      properties:
-        count:
-          description: Number of resources returned.
-          type: integer
-        data:
-          description: List of payment schedule transitions.
-          items:
-            $ref: '#/components/schemas/PaymentScheduleTransitionResponse'
-          type: array
-        end_index:
-          description: Sort order index of the last resource in the returned array.
-          type: integer
-        is_more:
-          description: A value of `true` indicates that more unreturned resources exist.
-          type: boolean
-        start_index:
-          description: Sort order index of the first resource in the returned array.
-          type: integer
-      required:
-      - count
-      - data
-      - end_index
-      - is_more
-      - start_index
-      type: object
-    PaymentScheduleStatus:
-      description: Status of the payment schedule.
-      enum:
-      - ACTIVE
-      - COMPLETED
-      - TERMINATED
-      type: string
-    CurrencyCode:
-      default: USD
-      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
-      enum:
-      - USD
-      type: string
-    PaymentScheduleFrequency:
-      description: Defines how often to make a scheduled payment.
-      enum:
-      - ONCE
-      - MONTHLY
-      type: string
-    PaymentScheduleCreateReq:
-      description: Information to create a payment schedule.
-      properties:
-        amount:
-          description: 'Amount of the payment.
-
-
-            Required if `amount_category` is `FIXED`.'
-          type: number
-        amount_category:
-          $ref: '#/components/schemas/PaymentScheduleAmountCategory'
-        currency_code:
-          $ref: '#/components/schemas/CurrencyCode'
-        description:
-          description: Description of the payment schedule.
-          maxLength: 255
-          type: string
-        frequency:
-          $ref: '#/components/schemas/PaymentScheduleFrequency'
-        next_payment_impact_date:
-          description: 'Date to make a one-time payment.
-
-
-            Required if frequency is `ONCE`.'
-          format: date
-          type: string
-        payment_day:
-          description: 'Day on which monthly payments are made.
-
-
-            Required if `frequency` is `MONTHLY`.'
-          enum:
-          - PAYMENT_DUE_DAY
-          type: string
-        payment_source_token:
-          description: Unique identifier of the payment source. Required for ACH payments.
-          maxLength: 36
-          type: string
-        token:
-          description: Unique identifier of the payment schedule.
-          maxLength: 36
-          pattern: (?!^ +$)^.+$
-          type: string
-      required:
-      - amount_category
-      - currency_code
-      - frequency
-      type: object
-    PaymentScheduleTransitionCreateReq:
-      description: Details to create a payment schedule transition
-      properties:
-        status:
-          $ref: '#/components/schemas/PaymentScheduleStatus'
-        token:
-          description: Unique identifier of the payment schedule transition.
-          maxLength: 36
-          type: string
-      required:
-      - status
-      type: object
-    PaymentScheduleTransitionResponse:
-      description: A payment schedule transition on a credit account.
-      properties:
-        account_token:
-          description: 'Unique identifier of the credit account on which to transition a payment schedule.
-
-
-            Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
-          type: string
-        created_time:
-          description: Date and time when the payment schedule transition was created on Marqeta's credit platform, in UTC.
-          format: date-time
-          type: string
-        payment_schedule_token:
-          description: 'Unique identifier of the payment schedule whose status is to transition.
-
-
-            Send a `GET` request to `/credit/accounts/{account_token}/paymentschedules` to retrieve existing payment schedule tokens.'
-          type: string
-        status:
-          $ref: '#/components/schemas/PaymentScheduleStatus'
-        token:
-          description: Unique identifier of the payment schedule transition.
-          type: string
-        updated_time:
-          description: Date and time when the payment schedule transition was last updated on Marqeta's credit platform, in UTC.
-          format: date-time
-          type: string
-      type: object
     PaymentScheduleResponse:
       description: A future one-time or recurring payment schedule.
       properties:
@@ -746,6 +569,183 @@ components:
       - status
       - token
       type: object
+    PaymentScheduleTransitionResponse:
+      description: A payment schedule transition on a credit account.
+      properties:
+        account_token:
+          description: 'Unique identifier of the credit account on which to transition a payment schedule.
+
+
+            Send a `GET` request to `/credit/accounts` to retrieve existing credit account tokens.'
+          type: string
+        created_time:
+          description: Date and time when the payment schedule transition was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        payment_schedule_token:
+          description: 'Unique identifier of the payment schedule whose status is to transition.
+
+
+            Send a `GET` request to `/credit/accounts/{account_token}/paymentschedules` to retrieve existing payment schedule tokens.'
+          type: string
+        status:
+          $ref: '#/components/schemas/PaymentScheduleStatus'
+        token:
+          description: Unique identifier of the payment schedule transition.
+          type: string
+        updated_time:
+          description: Date and time when the payment schedule transition was last updated on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+      type: object
+    PaymentScheduleStatus:
+      description: Status of the payment schedule.
+      enum:
+      - ACTIVE
+      - COMPLETED
+      - TERMINATED
+      type: string
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
+      type: string
+    PaymentScheduleTransitionPage:
+      description: Returns paginated information for multiple payment schedule transitions.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: List of payment schedule transitions.
+          items:
+            $ref: '#/components/schemas/PaymentScheduleTransitionResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    PaymentSchedulePage:
+      description: Returns paginated information for multiple payment schedules.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: List of payment schedules.
+          items:
+            $ref: '#/components/schemas/PaymentScheduleResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    PaymentScheduleCreateReq:
+      description: Information to create a payment schedule.
+      properties:
+        amount:
+          description: 'Amount of the payment.
+
+
+            Required if `amount_category` is `FIXED`.'
+          type: number
+        amount_category:
+          $ref: '#/components/schemas/PaymentScheduleAmountCategory'
+        currency_code:
+          $ref: '#/components/schemas/CurrencyCode'
+        description:
+          description: Description of the payment schedule.
+          maxLength: 255
+          type: string
+        frequency:
+          $ref: '#/components/schemas/PaymentScheduleFrequency'
+        next_payment_impact_date:
+          description: 'Date to make a one-time payment.
+
+
+            Required if frequency is `ONCE`.'
+          format: date
+          type: string
+        payment_day:
+          description: 'Day on which monthly payments are made.
+
+
+            Required if `frequency` is `MONTHLY`.'
+          enum:
+          - PAYMENT_DUE_DAY
+          type: string
+        payment_source_token:
+          description: Unique identifier of the payment source. Required for ACH payments.
+          maxLength: 36
+          type: string
+        token:
+          description: Unique identifier of the payment schedule.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+      required:
+      - amount_category
+      - currency_code
+      - frequency
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    PaymentScheduleAmountCategory:
+      description: A category used to determine the actual payment amount.
+      enum:
+      - FIXED
+      - MINIMUM_PAYMENT
+      - REMAINING_STATEMENT_BALANCE
+      - CURRENT_BALANCE
+      type: string
+    PaymentScheduleTransitionCreateReq:
+      description: Details to create a payment schedule transition
+      properties:
+        status:
+          $ref: '#/components/schemas/PaymentScheduleStatus'
+        token:
+          description: Unique identifier of the payment schedule transition.
+          maxLength: 36
+          type: string
+      required:
+      - status
+      type: object
+    PaymentScheduleFrequency:
+      description: Defines how often to make a scheduled payment.
+      enum:
+      - ONCE
+      - MONTHLY
+      type: string
   securitySchemes:
     mqAppAndAccessToken:
       scheme: basic

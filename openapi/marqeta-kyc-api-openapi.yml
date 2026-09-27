@@ -205,46 +205,6 @@ paths:
       - KYC
 components:
   schemas:
-    result:
-      properties:
-        codes:
-          items:
-            $ref: '#/components/schemas/result_code'
-          type: array
-        status:
-          type: string
-      type: object
-    kyc_response:
-      properties:
-        business_token:
-          type: string
-        created_time:
-          description: yyyy-MM-ddTHH:mm:ssZ
-          format: date-time
-          type: string
-        last_modified_time:
-          description: yyyy-MM-ddTHH:mm:ssZ
-          format: date-time
-          type: string
-        manual_override:
-          default: false
-          readOnly: true
-          type: boolean
-        notes:
-          readOnly: true
-          type: string
-        reference_id:
-          type: string
-        result:
-          $ref: '#/components/schemas/result'
-        token:
-          type: string
-        user_token:
-          type: string
-      required:
-      - created_time
-      - last_modified_time
-      type: object
     KYCListResponse:
       properties:
         count:
@@ -263,6 +223,15 @@ components:
         start_index:
           format: int32
           type: integer
+      type: object
+    result:
+      properties:
+        codes:
+          items:
+            $ref: '#/components/schemas/result_code'
+          type: array
+        status:
+          type: string
       type: object
     result_code:
       properties:
@@ -298,6 +267,37 @@ components:
           maxLength: 36
           minLength: 1
           type: string
+      type: object
+    kyc_response:
+      properties:
+        business_token:
+          type: string
+        created_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        last_modified_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        manual_override:
+          default: false
+          readOnly: true
+          type: boolean
+        notes:
+          readOnly: true
+          type: string
+        reference_id:
+          type: string
+        result:
+          $ref: '#/components/schemas/result'
+        token:
+          type: string
+        user_token:
+          type: string
+      required:
+      - created_time
+      - last_modified_time
       type: object
   securitySchemes:
     mqAppAndAccessToken:

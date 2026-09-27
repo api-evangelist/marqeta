@@ -63,6 +63,18 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    InternalServerError:
+      properties:
+        error_code:
+          enum:
+          - '500'
+          type: string
+        error_message:
+          type: string
+      required:
+      - error_code
+      - error_message
+      type: object
     UnauthorizedError:
       properties:
         error_code:
@@ -106,18 +118,6 @@ components:
       - status
       - transaction_token
       type: object
-    InternalServerError:
-      properties:
-        error_code:
-          enum:
-          - '500'
-          type: string
-        error_message:
-          type: string
-      required:
-      - error_code
-      - error_message
-      type: object
     FraudFeedbackResponse:
       description: of the fraudfeedback response object
       properties:
@@ -127,11 +127,11 @@ components:
       required:
       - message
       type: object
-    BadRequestError:
+    ForbiddenError:
       properties:
         error_code:
           enum:
-          - '400'
+          - '403'
           type: string
         error_message:
           type: string
@@ -139,11 +139,11 @@ components:
       - error_code
       - error_message
       type: object
-    ForbiddenError:
+    BadRequestError:
       properties:
         error_code:
           enum:
-          - '403'
+          - '400'
           type: string
         error_message:
           type: string

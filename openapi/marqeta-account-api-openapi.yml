@@ -104,6 +104,61 @@ paths:
       - Account
 components:
   schemas:
+    PeriodicFeeSchedule:
+      description: periodic fee schedules on account
+      properties:
+        amount:
+          description: fee amount
+          type: number
+        effective_date:
+          description: date the fee becomes effective
+          format: date
+          type: string
+        next_fee_impact_date:
+          description: date of the next time fee will be charged
+          format: date
+          type: string
+        type:
+          description: type of fee to be charged
+          enum:
+          - ANNUAL_FEE
+          - MONTHLY_FEE
+          type: string
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    PeriodicFeeSchedulePage:
+      description: Return paginated periodic fee schedules on a credit account.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: List of account periodic fee schedules.
+          items:
+            $ref: '#/components/schemas/PeriodicFeeSchedule'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
     AccountBillingCycleResponse:
       description: Details of a billing cycle.
       properties:
@@ -156,61 +211,6 @@ components:
       - next_start_time
       - short_code
       - updated_time
-      type: object
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-      type: object
-    PeriodicFeeSchedulePage:
-      description: Return paginated periodic fee schedules on a credit account.
-      properties:
-        count:
-          description: Number of resources returned.
-          type: integer
-        data:
-          description: List of account periodic fee schedules.
-          items:
-            $ref: '#/components/schemas/PeriodicFeeSchedule'
-          type: array
-        end_index:
-          description: Sort order index of the last resource in the returned array.
-          type: integer
-        is_more:
-          description: A value of `true` indicates that more unreturned resources exist.
-          type: boolean
-        start_index:
-          description: Sort order index of the first resource in the returned array.
-          type: integer
-      required:
-      - count
-      - data
-      - end_index
-      - is_more
-      - start_index
-      type: object
-    PeriodicFeeSchedule:
-      description: periodic fee schedules on account
-      properties:
-        amount:
-          description: fee amount
-          type: number
-        effective_date:
-          description: date the fee becomes effective
-          format: date
-          type: string
-        next_fee_impact_date:
-          description: date of the next time fee will be charged
-          format: date
-          type: string
-        type:
-          description: type of fee to be charged
-          enum:
-          - ANNUAL_FEE
-          - MONTHLY_FEE
-          type: string
       type: object
   securitySchemes:
     mqAppAndAccessToken:

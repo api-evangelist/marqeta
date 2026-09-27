@@ -84,6 +84,24 @@ paths:
       - Refunds
 components:
   schemas:
+    RefundType:
+      description: Type of refund.
+      enum:
+      - PAYMENT_REFUND
+      - CREDIT_BALANCE_REFUND
+      type: string
+    RefundMethod:
+      description: Payment instrument used to issue the refund.
+      enum:
+      - ACH
+      - CHECK
+      type: string
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
+      type: string
     RefundStatus:
       description: Current status of the refund.
       enum:
@@ -102,12 +120,6 @@ components:
         message:
           type: string
       type: object
-    CurrencyCode:
-      default: USD
-      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
-      enum:
-      - USD
-      type: string
     SimulateRefundTransitionRequest:
       description: Specifies the details of simulate refund transition request .
       properties:
@@ -120,18 +132,6 @@ components:
       - status
       - token
       type: object
-    RefundType:
-      description: Type of refund.
-      enum:
-      - PAYMENT_REFUND
-      - CREDIT_BALANCE_REFUND
-      type: string
-    RefundMethod:
-      description: Payment instrument used to issue the refund.
-      enum:
-      - ACH
-      - CHECK
-      type: string
     RefundResponse:
       description: Detailed refund response object.
       properties:

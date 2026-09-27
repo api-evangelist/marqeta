@@ -84,19 +84,17 @@ paths:
       - Balance Refunds
 components:
   schemas:
-    PaymentStatus:
-      description: Current status of the payment or refund.
+    RefundMethod:
+      description: Payment instrument used to issue the refund.
       enum:
-      - INITIATED
-      - PENDING
-      - PROCESSING
-      - SUBMITTED
-      - CANCELLED
-      - COMPLETED
-      - RETURNED
-      - REFUNDED
-      - SYS_ERROR
-      - ACH_ERROR
+      - ACH
+      - CHECK
+      type: string
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
       type: string
     Error:
       properties:
@@ -151,11 +149,19 @@ components:
       - token
       - updated_time
       type: object
-    CurrencyCode:
-      default: USD
-      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+    PaymentStatus:
+      description: Current status of the payment or refund.
       enum:
-      - USD
+      - INITIATED
+      - PENDING
+      - PROCESSING
+      - SUBMITTED
+      - CANCELLED
+      - COMPLETED
+      - RETURNED
+      - REFUNDED
+      - SYS_ERROR
+      - ACH_ERROR
       type: string
     AccountCreditBalanceRefundReq:
       description: Contains details on a credit balance refund.
@@ -185,12 +191,6 @@ components:
       - description
       - method
       type: object
-    RefundMethod:
-      description: Payment instrument used to issue the refund.
-      enum:
-      - ACH
-      - CHECK
-      type: string
   securitySchemes:
     mqAppAndAccessToken:
       scheme: basic
