@@ -195,6 +195,39 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    program_reserve_account_balance:
+      properties:
+        available_balance:
+          description: 'Ledger balance, minus any authorized transactions that have not yet cleared.
+
+            When using JIT Funding, this balance is usually equal to $0.00.'
+          readOnly: true
+          type: number
+        balances:
+          additionalProperties:
+            $ref: '#/components/schemas/program_reserve_account_balance'
+          description: 'Contains program reserve account balance information, organized by currency code.
+
+            Sometimes referred to as a _program funding account_.'
+          type: object
+        credit_balance:
+          description: Not currently in use.
+          readOnly: true
+          type: number
+        currency_code:
+          description: Three-digit ISO 4217 currency code.
+          type: string
+        ledger_balance:
+          description: 'When using standard funding: The funds that are available to spend immediately, including funds from any authorized transactions that have not yet cleared.
+
+            When using Just-in-Time (JIT) Funding: Authorized funds that are currently on hold, but not yet cleared.'
+          readOnly: true
+          type: number
+        pending_credits:
+          description: ACH loads that have been accepted, but for which the funding time has not yet elapsed.
+          readOnly: true
+          type: number
+      type: object
     ProgramReserveTransactionListResponse:
       properties:
         count:
@@ -285,39 +318,6 @@ components:
       required:
       - created_time
       - last_modified_time
-      type: object
-    program_reserve_account_balance:
-      properties:
-        available_balance:
-          description: 'Ledger balance, minus any authorized transactions that have not yet cleared.
-
-            When using JIT Funding, this balance is usually equal to $0.00.'
-          readOnly: true
-          type: number
-        balances:
-          additionalProperties:
-            $ref: '#/components/schemas/program_reserve_account_balance'
-          description: 'Contains program reserve account balance information, organized by currency code.
-
-            Sometimes referred to as a _program funding account_.'
-          type: object
-        credit_balance:
-          description: Not currently in use.
-          readOnly: true
-          type: number
-        currency_code:
-          description: Three-digit ISO 4217 currency code.
-          type: string
-        ledger_balance:
-          description: 'When using standard funding: The funds that are available to spend immediately, including funds from any authorized transactions that have not yet cleared.
-
-            When using Just-in-Time (JIT) Funding: Authorized funds that are currently on hold, but not yet cleared.'
-          readOnly: true
-          type: number
-        pending_credits:
-          description: ACH loads that have been accepted, but for which the funding time has not yet elapsed.
-          readOnly: true
-          type: number
       type: object
     program_reserve_deposit_request:
       properties:

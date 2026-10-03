@@ -273,38 +273,16 @@ paths:
       - push to card
 components:
   schemas:
-    PTCAddress:
+    PTCPhone:
       properties:
-        city:
-          maxLength: 40
-          minLength: 1
+        country_code:
           type: string
-        country:
-          maxLength: 3
-          minLength: 3
-          type: string
-        county:
-          maxLength: 3
-          minLength: 3
-          type: string
-        line1:
-          maxLength: 255
-          minLength: 1
-          type: string
-        line2:
-          maxLength: 255
-          minLength: 0
-          type: string
-        postal_code:
-          type: string
-        state:
+        number:
+          maxLength: 14
+          minLength: 4
           type: string
       required:
-      - city
-      - county
-      - line1
-      - postal_code
-      - state
+      - number
       type: object
     push_to_card_response:
       properties:
@@ -361,38 +339,6 @@ components:
       - created_time
       - last_modified_time
       type: object
-    push_to_card_disburse_request:
-      properties:
-        amount:
-          maximum: 50000.0
-          minimum: 0.01
-          type: number
-        currency_code:
-          type: string
-        memo:
-          maxLength: 99
-          minLength: 1
-          type: string
-        payment_instrument_token:
-          maxLength: 36
-          minLength: 1
-          type: string
-        soft_descriptor:
-          $ref: '#/components/schemas/PTCSoftDescriptor'
-        tags:
-          maxLength: 255
-          minLength: 1
-          type: string
-        token:
-          maxLength: 36
-          minLength: 1
-          type: string
-      required:
-      - amount
-      - currency_code
-      - payment_instrument_token
-      - token
-      type: object
     push_to_card_disbursement_response:
       properties:
         amount:
@@ -428,55 +374,6 @@ components:
       required:
       - created_time
       - last_modified_time
-      type: object
-    PushToCardDisburseListResponse:
-      properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/push_to_card_disbursement_response'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
-      type: object
-    PushToCardListResponse:
-      properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/push_to_card_response'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
-      type: object
-    PTCPhone:
-      properties:
-        country_code:
-          type: string
-        number:
-          maxLength: 14
-          minLength: 4
-          type: string
-      required:
-      - number
       type: object
     push_to_card_request:
       properties:
@@ -548,6 +445,109 @@ components:
       required:
       - address
       - name
+      type: object
+    PushToCardListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/push_to_card_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    PTCAddress:
+      properties:
+        city:
+          maxLength: 40
+          minLength: 1
+          type: string
+        country:
+          maxLength: 3
+          minLength: 3
+          type: string
+        county:
+          maxLength: 3
+          minLength: 3
+          type: string
+        line1:
+          maxLength: 255
+          minLength: 1
+          type: string
+        line2:
+          maxLength: 255
+          minLength: 0
+          type: string
+        postal_code:
+          type: string
+        state:
+          type: string
+      required:
+      - city
+      - county
+      - line1
+      - postal_code
+      - state
+      type: object
+    push_to_card_disburse_request:
+      properties:
+        amount:
+          maximum: 50000.0
+          minimum: 0.01
+          type: number
+        currency_code:
+          type: string
+        memo:
+          maxLength: 99
+          minLength: 1
+          type: string
+        payment_instrument_token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        soft_descriptor:
+          $ref: '#/components/schemas/PTCSoftDescriptor'
+        tags:
+          maxLength: 255
+          minLength: 1
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - amount
+      - currency_code
+      - payment_instrument_token
+      - token
+      type: object
+    PushToCardDisburseListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/push_to_card_disbursement_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
       type: object
   securitySchemes:
     mqAppAndAccessToken:

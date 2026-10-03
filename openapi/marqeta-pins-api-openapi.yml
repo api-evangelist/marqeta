@@ -173,6 +173,49 @@ paths:
       - Pins
 components:
   schemas:
+    control_token_request:
+      properties:
+        card_token:
+          description: The unique identifier of the card for which you want to generate a control token.
+          maxLength: 36
+          minLength: 1
+          type: string
+        controltoken_type:
+          description: 'Specifies the type of action completed by this request.
+
+
+            *WARNING:* Sending a request to this endpoint with a `REVEAL_PIN` control token requires PCI DSS compliance.
+
+
+            The lifespan of the control token depends on the token type:
+
+
+            * *SET_PIN:* 60 minutes
+
+            * *REVEAL_PIN:* 5 minutes'
+          enum:
+          - SET_PIN
+          - REVEAL_PIN
+          type: string
+      required:
+      - card_token
+      type: object
+    pin_request:
+      properties:
+        control_token:
+          description: 'Unique value generated as a result of issuing a `POST` request to the `/pins/controltoken` endpoint.
+
+            This value cannot be updated.'
+          maxLength: 36
+          minLength: 1
+          type: string
+        pin:
+          description: Four-digit number to associate with the card.
+          type: string
+      required:
+      - control_token
+      - pin
+      type: object
     pin_reveal_request:
       properties:
         cardholder_verification_method:
@@ -215,22 +258,6 @@ components:
       - cardholder_verification_method
       - control_token
       type: object
-    pin_request:
-      properties:
-        control_token:
-          description: 'Unique value generated as a result of issuing a `POST` request to the `/pins/controltoken` endpoint.
-
-            This value cannot be updated.'
-          maxLength: 36
-          minLength: 1
-          type: string
-        pin:
-          description: Four-digit number to associate with the card.
-          type: string
-      required:
-      - control_token
-      - pin
-      type: object
     control_token_response:
       properties:
         control_token:
@@ -240,33 +267,6 @@ components:
           type: string
       required:
       - control_token
-      type: object
-    control_token_request:
-      properties:
-        card_token:
-          description: The unique identifier of the card for which you want to generate a control token.
-          maxLength: 36
-          minLength: 1
-          type: string
-        controltoken_type:
-          description: 'Specifies the type of action completed by this request.
-
-
-            *WARNING:* Sending a request to this endpoint with a `REVEAL_PIN` control token requires PCI DSS compliance.
-
-
-            The lifespan of the control token depends on the token type:
-
-
-            * *SET_PIN:* 60 minutes
-
-            * *REVEAL_PIN:* 5 minutes'
-          enum:
-          - SET_PIN
-          - REVEAL_PIN
-          type: string
-      required:
-      - card_token
       type: object
   securitySchemes:
     mqAppAndAccessToken:

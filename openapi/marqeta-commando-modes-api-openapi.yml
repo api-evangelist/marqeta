@@ -204,6 +204,25 @@ components:
       - created_time
       - last_modified_time
       type: object
+    CommandoModeTransitionListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/commando_mode_transition_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
     real_time_standin_criteria:
       properties:
         enabled:
@@ -298,25 +317,6 @@ components:
           type: array
       required:
       - program_funding_source
-      type: object
-    CommandoModeTransitionListResponse:
-      properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/commando_mode_transition_response'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
       type: object
   securitySchemes:
     mqAppAndAccessToken:

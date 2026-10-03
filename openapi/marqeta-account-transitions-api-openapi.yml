@@ -647,40 +647,6 @@ paths:
       - Account Transitions
 components:
   schemas:
-    AccountTransitionsPage:
-      description: Return paginated account transitions.
-      properties:
-        count:
-          description: Number of resources returned.
-          type: integer
-        data:
-          description: Contains one or more account transitions.
-          items:
-            $ref: '#/components/schemas/AccountTransitionResponse'
-          type: array
-        end_index:
-          description: Sort order index of the last resource in the returned array.
-          type: integer
-        is_more:
-          description: A value of `true` indicates that more unreturned resources exist.
-          type: boolean
-        start_index:
-          description: Sort order index of the first resource in the returned array.
-          type: integer
-      required:
-      - count
-      - data
-      - end_index
-      - is_more
-      - start_index
-      type: object
-    WebhookEventResendContainerResponse:
-      description: Contains information about a webhook event.
-      properties:
-        unused:
-          description: Event notification that was resent to your webhook endpoint.
-          type: string
-      type: object
     AccountTransitionReq:
       description: Information on the credit account transition.
       properties:
@@ -704,11 +670,11 @@ components:
       - TERMINATED
       - CHARGE_OFF
       type: string
-    Error:
+    WebhookEventResendContainerResponse:
+      description: Contains information about a webhook event.
       properties:
-        code:
-          type: integer
-        message:
+        unused:
+          description: Event notification that was resent to your webhook endpoint.
           type: string
       type: object
     AccountTransitionResponse:
@@ -735,6 +701,40 @@ components:
       - original_status
       - status
       - token
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    AccountTransitionsPage:
+      description: Return paginated account transitions.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: Contains one or more account transitions.
+          items:
+            $ref: '#/components/schemas/AccountTransitionResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
       type: object
   securitySchemes:
     mqAppAndAccessToken:

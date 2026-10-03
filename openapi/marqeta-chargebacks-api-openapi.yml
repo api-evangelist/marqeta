@@ -477,84 +477,6 @@ paths:
       description: Production Server
 components:
   schemas:
-    chargeback_request:
-      properties:
-        amount:
-          minimum: 0.01
-          type: number
-        channel:
-          enum:
-          - GATEWAY
-          - GATEWAY_AUTOMATED
-          - ISSUER
-          - ISSUER_AUTOMATED
-          type: string
-        credit_user:
-          default: true
-          type: boolean
-        currency_code:
-          type: string
-        memo:
-          maxLength: 1024
-          minLength: 1
-          type: string
-        pre_initiated:
-          type: boolean
-        reason_code:
-          description: Either 'reason_code' or 'reason_description' is required
-          type: string
-        reason_description:
-          description: Either 'reason_description' or 'reason_code' is required
-          enum:
-          - SERVICE_NOT_PROVIDED_MERCHANDISE_NOT_RECEIVED
-          - CANCELLED_RECURRING_TRANSACTION
-          - NOT_AS_DESCRIBED_OR_DEFECTIVE_MERCHANDISE
-          - FRAUD_MULTIPLE_TRANSACTIONS
-          - FRAUD_TRANSACTION
-          - NO_AUTHORIZATION
-          - LATE_PRESENTMENT
-          - TRANSACTION_NOT_RECOGNIZED
-          - INCORRECT_CURRENCY
-          - INCORRECT_TRANSACTION_CODE
-          - INCORRECT_CURRENCY_OR_TRANSACTION_CODE
-          - INCORRECT_TRANSACTION_AMOUNT
-          - INCORRECT_ACCOUNT_NUMBER
-          - INCORRECT_TRANSACTION_AMOUNT_OR_ACCOUNT_NUMBER
-          - NOT_AUTHORIZED_CARD_PRESENT
-          - NOT_AUTHORIZED_CARD_ABSENT
-          - CREDIT_NOT_PROCESSED
-          - NON_RECEIPT_OF_CASH_OR_LOAD_TRANSACTION_VALUE_AT_ATM
-          - DUPLICATE_PROCESSING_OR_PAID_BY_OTHER_MEANS
-          type: string
-        regulation_type:
-          type: string
-        status:
-          enum:
-          - ARBITRATION
-          - CASE_LOST
-          - CASE_WON
-          - INITIATED
-          - NETWORK_REJECTED
-          - PREARBITRATION
-          - PRE_INITIATED
-          - REPRESENTMENT
-          - WITHDRAWN
-          - WRITTEN_OFF_ISSUER
-          - WRITTEN_OFF_PROGRAM
-          type: string
-        token:
-          maxLength: 36
-          minLength: 1
-          type: string
-        transaction_token:
-          maxLength: 36
-          minLength: 1
-          type: string
-      required:
-      - amount
-      - channel
-      - transaction_token
-      type: object
     ChargebackUpdateRequest:
       properties:
         reason_code:
@@ -597,6 +519,15 @@ components:
           - WRITTEN_OFF_ISSUER
           - WRITTEN_OFF_PROGRAM
           type: string
+      type: object
+    chargeback_allocation_ack_request:
+      properties:
+        chargeback_token:
+          type: string
+        token:
+          type: string
+      required:
+      - chargeback_token
       type: object
     chargeback_response:
       description: Contains the chargeback object associated with this transaction if a chargeback has been initiated.
@@ -691,34 +622,6 @@ components:
       - token
       - transaction_token
       type: object
-    chargeback_allocation_ack_request:
-      properties:
-        chargeback_token:
-          type: string
-        token:
-          type: string
-      required:
-      - chargeback_token
-      type: object
-    ChargebackListResponse:
-      properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/chargeback_response'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
-      type: object
     chargeback_transition_response:
       properties:
         amount:
@@ -804,6 +707,122 @@ components:
       - token
       - type
       type: object
+    ChargebackListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/chargeback_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    ChargebackTransitionListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/chargeback_transition_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    chargeback_request:
+      properties:
+        amount:
+          minimum: 0.01
+          type: number
+        channel:
+          enum:
+          - GATEWAY
+          - GATEWAY_AUTOMATED
+          - ISSUER
+          - ISSUER_AUTOMATED
+          type: string
+        credit_user:
+          default: true
+          type: boolean
+        currency_code:
+          type: string
+        memo:
+          maxLength: 1024
+          minLength: 1
+          type: string
+        pre_initiated:
+          type: boolean
+        reason_code:
+          description: Either 'reason_code' or 'reason_description' is required
+          type: string
+        reason_description:
+          description: Either 'reason_description' or 'reason_code' is required
+          enum:
+          - SERVICE_NOT_PROVIDED_MERCHANDISE_NOT_RECEIVED
+          - CANCELLED_RECURRING_TRANSACTION
+          - NOT_AS_DESCRIBED_OR_DEFECTIVE_MERCHANDISE
+          - FRAUD_MULTIPLE_TRANSACTIONS
+          - FRAUD_TRANSACTION
+          - NO_AUTHORIZATION
+          - LATE_PRESENTMENT
+          - TRANSACTION_NOT_RECOGNIZED
+          - INCORRECT_CURRENCY
+          - INCORRECT_TRANSACTION_CODE
+          - INCORRECT_CURRENCY_OR_TRANSACTION_CODE
+          - INCORRECT_TRANSACTION_AMOUNT
+          - INCORRECT_ACCOUNT_NUMBER
+          - INCORRECT_TRANSACTION_AMOUNT_OR_ACCOUNT_NUMBER
+          - NOT_AUTHORIZED_CARD_PRESENT
+          - NOT_AUTHORIZED_CARD_ABSENT
+          - CREDIT_NOT_PROCESSED
+          - NON_RECEIPT_OF_CASH_OR_LOAD_TRANSACTION_VALUE_AT_ATM
+          - DUPLICATE_PROCESSING_OR_PAID_BY_OTHER_MEANS
+          type: string
+        regulation_type:
+          type: string
+        status:
+          enum:
+          - ARBITRATION
+          - CASE_LOST
+          - CASE_WON
+          - INITIATED
+          - NETWORK_REJECTED
+          - PREARBITRATION
+          - PRE_INITIATED
+          - REPRESENTMENT
+          - WITHDRAWN
+          - WRITTEN_OFF_ISSUER
+          - WRITTEN_OFF_PROGRAM
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        transaction_token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - amount
+      - channel
+      - transaction_token
+      type: object
     chargeback_transition_request:
       properties:
         amount:
@@ -845,25 +864,22 @@ components:
       - chargeback_token
       - state
       type: object
-    ChargebackTransitionListResponse:
-      properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/chargeback_transition_response'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
+    DivaResponseMeta:
       type: object
+      description: Metadata included in DiVA API paginated responses.
+      properties:
+        total_count:
+          type: integer
+          description: Total number of records matching the query.
+        limit:
+          type: integer
+          description: Maximum records returned per page.
+        offset:
+          type: integer
+          description: Current page offset.
+        has_more:
+          type: boolean
+          description: Whether additional pages of data are available.
     ErrorResponse:
       type: object
       description: Standard error response returned by the Marqeta DiVA API.
@@ -904,31 +920,48 @@ components:
               status:
                 type: string
                 description: Current status of the chargeback.
-    DivaResponseMeta:
-      type: object
-      description: Metadata included in DiVA API paginated responses.
-      properties:
-        total_count:
-          type: integer
-          description: Total number of records matching the query.
-        limit:
-          type: integer
-          description: Maximum records returned per page.
-        offset:
-          type: integer
-          description: Current page offset.
-        has_more:
-          type: boolean
-          description: Whether additional pages of data are available.
+  responses:
+    Unauthorized:
+      description: Unauthorized. The provided application token and access token credentials are invalid or missing.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Bad request. One or more required query parameters are missing or contain invalid values.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   parameters:
-    offset:
-      name: offset
+    format:
+      name: format
       in: query
-      description: Zero-based offset for pagination.
+      description: Response format. Use 'json' for JSON responses or 'csv' for comma-separated bulk file format. Defaults to json.
       schema:
-        type: integer
-        minimum: 0
-        default: 0
+        type: string
+        enum:
+        - json
+        - csv
+        default: json
+    fields:
+      name: fields
+      in: query
+      description: Comma-delimited list of fields to include in the response. If not specified, all available fields are returned.
+      schema:
+        type: string
+    time_agg:
+      name: time_agg
+      in: path
+      required: true
+      description: Aggregation time level for the data. Use 'day' for daily rollups, 'week' for weekly rollups, 'month' for monthly rollups, or 'detail' for individual record-level data.
+      schema:
+        type: string
+        enum:
+        - day
+        - week
+        - month
+        - detail
     start_date:
       name: start_date
       in: query
@@ -936,12 +969,6 @@ components:
       schema:
         type: string
         format: date
-    fields:
-      name: fields
-      in: query
-      description: Comma-delimited list of fields to include in the response. If not specified, all available fields are returned.
-      schema:
-        type: string
     limit:
       name: limit
       in: query
@@ -958,28 +985,6 @@ components:
       description: The name of your Marqeta card program. This parameter is required for most DiVA API endpoints to scope the data to your program.
       schema:
         type: string
-    time_agg:
-      name: time_agg
-      in: path
-      required: true
-      description: Aggregation time level for the data. Use 'day' for daily rollups, 'week' for weekly rollups, 'month' for monthly rollups, or 'detail' for individual record-level data.
-      schema:
-        type: string
-        enum:
-        - day
-        - week
-        - month
-        - detail
-    format:
-      name: format
-      in: query
-      description: Response format. Use 'json' for JSON responses or 'csv' for comma-separated bulk file format. Defaults to json.
-      schema:
-        type: string
-        enum:
-        - json
-        - csv
-        default: json
     end_date:
       name: end_date
       in: query
@@ -987,19 +992,14 @@ components:
       schema:
         type: string
         format: date
-  responses:
-    BadRequest:
-      description: Bad request. One or more required query parameters are missing or contain invalid values.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: Unauthorized. The provided application token and access token credentials are invalid or missing.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
+    offset:
+      name: offset
+      in: query
+      description: Zero-based offset for pagination.
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
   securitySchemes:
     mqAppAndAccessToken:
       scheme: basic

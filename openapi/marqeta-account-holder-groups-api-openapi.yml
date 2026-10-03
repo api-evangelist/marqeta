@@ -157,30 +157,16 @@ paths:
       - account holder groups
 components:
   schemas:
-    account_holder_group_config:
-      properties:
-        is_reloadable:
-          default: false
-          type: boolean
-        kyc_required:
-          enum:
-          - ALWAYS
-          - CONDITIONAL
-          - NEVER
-          type: string
-        pre_kyc_controls:
-          $ref: '#/components/schemas/pre_kyc_controls'
-        real_time_fee_group_token:
-          maxLength: 36
-          minLength: 0
-          type: string
-      type: object
-    account_holder_group_update_request:
+    account_holder_group_request:
       properties:
         config:
           $ref: '#/components/schemas/account_holder_group_config'
         name:
           maxLength: 40
+          minLength: 1
+          type: string
+        token:
+          maxLength: 36
           minLength: 1
           type: string
       type: object
@@ -203,6 +189,15 @@ components:
           default: false
           type: boolean
       type: object
+    account_holder_group_update_request:
+      properties:
+        config:
+          $ref: '#/components/schemas/account_holder_group_config'
+        name:
+          maxLength: 40
+          minLength: 1
+          type: string
+      type: object
     account_holder_group_response:
       properties:
         config:
@@ -214,17 +209,22 @@ components:
           description: 36 char max
           type: string
       type: object
-    account_holder_group_request:
+    account_holder_group_config:
       properties:
-        config:
-          $ref: '#/components/schemas/account_holder_group_config'
-        name:
-          maxLength: 40
-          minLength: 1
+        is_reloadable:
+          default: false
+          type: boolean
+        kyc_required:
+          enum:
+          - ALWAYS
+          - CONDITIONAL
+          - NEVER
           type: string
-        token:
+        pre_kyc_controls:
+          $ref: '#/components/schemas/pre_kyc_controls'
+        real_time_fee_group_token:
           maxLength: 36
-          minLength: 1
+          minLength: 0
           type: string
       type: object
     AccountHolderGroupListResponse:

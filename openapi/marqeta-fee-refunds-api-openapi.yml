@@ -47,6 +47,41 @@ paths:
       - fee refunds
 components:
   schemas:
+    fee_refund_response:
+      properties:
+        created_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        fee:
+          $ref: '#/components/schemas/fee'
+        memo:
+          maxLength: 99
+          minLength: 1
+          type: string
+        original_fee_transaction_token:
+          type: string
+        overrideAmount:
+          type: number
+        state:
+          type: string
+        tags:
+          maxLength: 255
+          minLength: 0
+          type: string
+        token:
+          description: 36 char max
+          maxLength: 36
+          minLength: 1
+          type: string
+        transaction_token:
+          type: string
+      required:
+      - created_time
+      - fee
+      - token
+      - transaction_token
+      type: object
     fee_refund_request:
       properties:
         original_fee_transaction_token:
@@ -90,41 +125,6 @@ components:
       - last_modified_time
       - name
       - token
-      type: object
-    fee_refund_response:
-      properties:
-        created_time:
-          description: yyyy-MM-ddTHH:mm:ssZ
-          format: date-time
-          type: string
-        fee:
-          $ref: '#/components/schemas/fee'
-        memo:
-          maxLength: 99
-          minLength: 1
-          type: string
-        original_fee_transaction_token:
-          type: string
-        overrideAmount:
-          type: number
-        state:
-          type: string
-        tags:
-          maxLength: 255
-          minLength: 0
-          type: string
-        token:
-          description: 36 char max
-          maxLength: 36
-          minLength: 1
-          type: string
-        transaction_token:
-          type: string
-      required:
-      - created_time
-      - fee
-      - token
-      - transaction_token
       type: object
   securitySchemes:
     mqAppAndAccessToken:

@@ -111,52 +111,6 @@ paths:
       - cardholder balances
 components:
   schemas:
-    user_accounts_balance_response:
-      properties:
-        account_balances:
-          items:
-            $ref: '#/components/schemas/account_balance'
-          type: array
-        user_token:
-          type: string
-      required:
-      - account_balances
-      type: object
-    account_balance:
-      properties:
-        balances:
-          additionalProperties:
-            $ref: '#/components/schemas/CurrencyBalance'
-          type: object
-        default_currency_code:
-          type: string
-        description:
-          type: string
-        impacted_amount:
-          type: number
-        last_updated_time:
-          format: date-time
-          type: string
-        token:
-          type: string
-        type:
-          type: string
-      type: object
-    CurrencyBalance:
-      properties:
-        available_balance:
-          type: number
-        cached_balance:
-          type: number
-        credit_balance:
-          type: number
-        impacted_amount:
-          type: number
-        ledger_balance:
-          type: number
-        pending_credits:
-          type: number
-      type: object
     cardholder_balance:
       description: Returns general purpose account (GPA) balances for a user or business.
       properties:
@@ -204,6 +158,52 @@ components:
       - last_updated_time
       - ledger_balance
       - pending_credits
+      type: object
+    user_accounts_balance_response:
+      properties:
+        account_balances:
+          items:
+            $ref: '#/components/schemas/account_balance'
+          type: array
+        user_token:
+          type: string
+      required:
+      - account_balances
+      type: object
+    CurrencyBalance:
+      properties:
+        available_balance:
+          type: number
+        cached_balance:
+          type: number
+        credit_balance:
+          type: number
+        impacted_amount:
+          type: number
+        ledger_balance:
+          type: number
+        pending_credits:
+          type: number
+      type: object
+    account_balance:
+      properties:
+        balances:
+          additionalProperties:
+            $ref: '#/components/schemas/CurrencyBalance'
+          type: object
+        default_currency_code:
+          type: string
+        description:
+          type: string
+        impacted_amount:
+          type: number
+        last_updated_time:
+          format: date-time
+          type: string
+        token:
+          type: string
+        type:
+          type: string
       type: object
     account_balance_response:
       properties:

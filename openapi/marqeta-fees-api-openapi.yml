@@ -472,46 +472,6 @@ components:
       - type
       - value
       type: object
-    CurrencyCode:
-      default: USD
-      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
-      enum:
-      - USD
-      type: string
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-      type: object
-    AccountFeePage:
-      description: Returns paginated account fees.
-      properties:
-        count:
-          description: Number of resources returned.
-          type: integer
-        data:
-          description: Contains one or more account fees.
-          items:
-            $ref: '#/components/schemas/AccountFeeResponse'
-          type: array
-        end_index:
-          description: Sort order index of the last resource in the returned array.
-          type: integer
-        is_more:
-          description: A value of `true` indicates that more unreturned resources exist.
-          type: boolean
-        start_index:
-          description: Sort order index of the first resource in the returned array.
-          type: integer
-      required:
-      - count
-      - data
-      - end_index
-      - is_more
-      - start_index
-      type: object
     AccountFeeReq:
       description: Contains information relevant to creating an account fee.
       properties:
@@ -551,67 +511,46 @@ components:
       - currency_code
       - type
       type: object
-    FeeListResponse:
+    AccountFeePage:
+      description: Returns paginated account fees.
       properties:
         count:
-          format: int32
+          description: Number of resources returned.
           type: integer
         data:
+          description: Contains one or more account fees.
           items:
-            $ref: '#/components/schemas/fee_response'
+            $ref: '#/components/schemas/AccountFeeResponse'
           type: array
         end_index:
-          format: int32
+          description: Sort order index of the last resource in the returned array.
           type: integer
         is_more:
-          default: false
+          description: A value of `true` indicates that more unreturned resources exist.
           type: boolean
         start_index:
-          format: int32
+          description: Sort order index of the first resource in the returned array.
           type: integer
-      type: object
-    fee_request:
-      properties:
-        active:
-          default: true
-          type: boolean
-        amount:
-          type: number
-        category:
-          enum:
-          - STANDALONE
-          - REALTIME
-          type: string
-        currency_code:
-          type: string
-        fee_attributes:
-          $ref: '#/components/schemas/fee_attributes'
-        memo:
-          maxLength: 255
-          minLength: 0
-          type: string
-        name:
-          maxLength: 50
-          minLength: 1
-          type: string
-        tags:
-          maxLength: 255
-          minLength: 1
-          type: string
-        token:
-          maxLength: 36
-          minLength: 1
-          type: string
-        type:
-          enum:
-          - FLAT
-          - PERCENTAGE
-          type: string
       required:
-      - amount
-      - currency_code
-      - name
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
       type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
+      type: string
     fee_update_request:
       properties:
         active:
@@ -644,6 +583,36 @@ components:
           enum:
           - FLAT
           - PERCENTAGE
+          type: string
+      type: object
+    FeeListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/fee_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    fee_attributes:
+      properties:
+        reason:
+          type: string
+        region:
+          type: string
+        status:
+          type: string
+        transaction_type:
           type: string
       type: object
     fee_response:
@@ -695,16 +664,47 @@ components:
       - name
       - token
       type: object
-    fee_attributes:
+    fee_request:
       properties:
-        reason:
+        active:
+          default: true
+          type: boolean
+        amount:
+          type: number
+        category:
+          enum:
+          - STANDALONE
+          - REALTIME
           type: string
-        region:
+        currency_code:
           type: string
-        status:
+        fee_attributes:
+          $ref: '#/components/schemas/fee_attributes'
+        memo:
+          maxLength: 255
+          minLength: 0
           type: string
-        transaction_type:
+        name:
+          maxLength: 50
+          minLength: 1
           type: string
+        tags:
+          maxLength: 255
+          minLength: 1
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        type:
+          enum:
+          - FLAT
+          - PERCENTAGE
+          type: string
+      required:
+      - amount
+      - currency_code
+      - name
       type: object
   securitySchemes:
     mqAppAndAccessToken:

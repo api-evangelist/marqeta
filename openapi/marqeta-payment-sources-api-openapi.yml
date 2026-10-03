@@ -301,6 +301,33 @@ paths:
       - Payment Sources
 components:
   schemas:
+    PaymentSourcePage:
+      description: Returns paginated information for multiple payment sources.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: List of payment sources.
+          items:
+            $ref: '#/components/schemas/PaymentSourceResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
     PaymentSourceResponse:
       description: Contains information about a payment source.
       properties:
@@ -371,6 +398,21 @@ components:
           - ACH_VERIFIED
           - PENDING
           type: string
+      type: object
+    PaymentSourceStatusEnum:
+      description: Current status of the payment source.
+      enum:
+      - ACTIVE
+      - PENDING
+      - INACTIVE
+      type: string
+    PaymentSourceUpdateReq:
+      description: Request used to update the status of a payment source.
+      properties:
+        status:
+          $ref: '#/components/schemas/PaymentSourceStatusEnum'
+      required:
+      - status
       type: object
     Error:
       properties:
@@ -451,48 +493,6 @@ components:
       - name
       - source_type
       - verification_override
-      type: object
-    PaymentSourcePage:
-      description: Returns paginated information for multiple payment sources.
-      properties:
-        count:
-          description: Number of resources returned.
-          type: integer
-        data:
-          description: List of payment sources.
-          items:
-            $ref: '#/components/schemas/PaymentSourceResponse'
-          type: array
-        end_index:
-          description: Sort order index of the last resource in the returned array.
-          type: integer
-        is_more:
-          description: A value of `true` indicates that more unreturned resources exist.
-          type: boolean
-        start_index:
-          description: Sort order index of the first resource in the returned array.
-          type: integer
-      required:
-      - count
-      - data
-      - end_index
-      - is_more
-      - start_index
-      type: object
-    PaymentSourceStatusEnum:
-      description: Current status of the payment source.
-      enum:
-      - ACTIVE
-      - PENDING
-      - INACTIVE
-      type: string
-    PaymentSourceUpdateReq:
-      description: Request used to update the status of a payment source.
-      properties:
-        status:
-          $ref: '#/components/schemas/PaymentSourceStatusEnum'
-      required:
-      - status
       type: object
   securitySchemes:
     mqAppAndAccessToken:

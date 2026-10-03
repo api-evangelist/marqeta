@@ -384,6 +384,36 @@ paths:
       - direct deposit accounts
 components:
   schemas:
+    DirectDepositAccountRequest:
+      properties:
+        allow_immediate_credit:
+          default: false
+          type: boolean
+        business_token:
+          description: Required if 'user_token' is null
+          maxLength: 36
+          minLength: 1
+          type: string
+        customer_due_diligence:
+          description: Required if account type = Checking
+          items:
+            $ref: '#/components/schemas/CustomerDueDiligenceRequest'
+          type: array
+        token:
+          type: string
+        type:
+          enum:
+          - DEPOSIT_ACCOUNT
+          - CHECKING
+          - SAVINGS
+          - INTEREST_BEARING
+          type: string
+        user_token:
+          description: Required if 'business_token' is null
+          maxLength: 36
+          minLength: 1
+          type: string
+      type: object
     CustomerDueDiligenceRequest:
       properties:
         answer:
@@ -434,27 +464,24 @@ components:
       - account_token
       - channel
       type: object
-    customer_due_diligence_response:
+    DirectDepositAccountListResponse:
       properties:
-        account_token:
-          type: string
-        answer:
-          type: string
-        bank:
-          type: string
-        question:
-          type: string
-        token:
-          type: string
-        type:
-          type: string
-      required:
-      - account_token
-      - answer
-      - bank
-      - question
-      - token
-      - type
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/direct_deposit_account_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
       type: object
     direct_deposit_account_response:
       properties:
@@ -508,60 +535,6 @@ components:
       - token
       - user_token
       type: object
-    DirectDepositAccountListResponse:
-      properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/direct_deposit_account_response'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
-      type: object
-    CustomerDueDiligenceUpdateRequest:
-      properties:
-        answer:
-          type: string
-      type: object
-    DirectDepositAccountRequest:
-      properties:
-        allow_immediate_credit:
-          default: false
-          type: boolean
-        business_token:
-          description: Required if 'user_token' is null
-          maxLength: 36
-          minLength: 1
-          type: string
-        customer_due_diligence:
-          description: Required if account type = Checking
-          items:
-            $ref: '#/components/schemas/CustomerDueDiligenceRequest'
-          type: array
-        token:
-          type: string
-        type:
-          enum:
-          - DEPOSIT_ACCOUNT
-          - CHECKING
-          - SAVINGS
-          - INTEREST_BEARING
-          type: string
-        user_token:
-          description: Required if 'business_token' is null
-          maxLength: 36
-          minLength: 1
-          type: string
-      type: object
     direct_deposit_account_transition_response:
       properties:
         account_token:
@@ -606,11 +579,38 @@ components:
       - token
       - user_token
       type: object
+    customer_due_diligence_response:
+      properties:
+        account_token:
+          type: string
+        answer:
+          type: string
+        bank:
+          type: string
+        question:
+          type: string
+        token:
+          type: string
+        type:
+          type: string
+      required:
+      - account_token
+      - answer
+      - bank
+      - question
+      - token
+      - type
+      type: object
     DepositAccountUpdateRequest:
       properties:
         allow_immediate_credit:
           default: false
           type: boolean
+      type: object
+    CustomerDueDiligenceUpdateRequest:
+      properties:
+        answer:
+          type: string
       type: object
   securitySchemes:
     mqAppAndAccessToken:

@@ -746,6 +746,33 @@ paths:
       - Credit Substatuses
 components:
   schemas:
+    SubstatusPage:
+      description: Return paginated account and user substatuses.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: Contains one or more substatuses.
+          items:
+            $ref: '#/components/schemas/SubstatusResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
     WebhookEventResendContainerResponse:
       description: Contains information about a webhook event.
       properties:
@@ -753,175 +780,11 @@ components:
           description: Event notification that was resent to your webhook endpoint.
           type: string
       type: object
-    SubstatusCreateReq:
-      description: Contains information relevant to creating a substatus.
-      properties:
-        attributes:
-          description: 'Additional dynamic attributes related to the substatus.
-
-            If the substatus is `BANKRUPTCY`, `SCRA` or `POWER_OF_ATTORNEY`, then attributes are required.'
-          items:
-            properties:
-              key:
-                description: 'The name of the attribute.
-
-
-                  Marqeta provides several preconfigured attributes, as described in the following list.
-
-
-                  * *chapter:* If the substatus is `BANKRUPTCY`, then the chapter attribute is required.
-
-                  `CHAPTER_9` is not applicable to a `USER` resource type.
-
-                  `CHAPTER_13` is not applicable to a `BUSINESS` resource type.
-
-
-                  * *military_start_date:* If the substatus is `SCRA`, then the military start date attribute is required.
-
-                  The 6% APR override will be applied from the time and date of account opening until the last statement period of the military start date.
-
-
-                  * *end_date:* If the substatus is `POWER_OF_ATTORNEY`, then the end date attribute is applicable.
-
-                  This specifies the date when the power of attorney document is no longer valid.
-
-
-                  * *poa_details:* If the substatus is `POWER_OF_ATTORNEY`, then the Power of Attorney details attribute is applicable.
-
-                  This attribute specifies the range of actions that the agent with Power of Attorney is able to perform on the account.
-
-                  By default the range is `UNRESTRICTED`.
-
-
-                  * *agent_name:* If the substatus is `POWER_OF_ATTORNEY`, then the agent name is required.
-
-                  This attribute specifies the name of the agent with Power of Attorney for the user.
-
-
-                  * *agent_address:* If the substatus is `POWER_OF_ATTORNEY`, then the agent address attribute is required.
-
-                  This attribute specifies the address of the agent with Power of Attorney for the user.
-
-
-                  * *agent_id_type:* If the substatus is `POWER_OF_ATTORNEY`, then the agent identification type attribute is required.
-
-                  This specifies the type of the identification method used to identify the agent with Power of Attorney for the user.
-
-
-                  * *agent_id_value:* If the substatus is `POWER_OF_ATTORNEY`, then the agent identification value attribute is required.
-
-                  This attribute specifies the value of the identification method used to identify the agent with Power of Attorney for the user.
-
-
-                  * *agent_id_expiration_date:* If the substatus is `POWER_OF_ATTORNEY`, then the attribute for the Power of Attorney identification expiration date attribute is required.
-
-                  This attribute specifies the expiration date of the identification method used to identify the agent with Power of Attorney for the user.'
-                type: string
-                x-allowableValues: '- `chapter`
-
-                  - `military_start_date`
-
-                  - `end_date`
-
-                  - `poa_details`
-
-                  - `agent_name`
-
-                  - `agent_address`
-
-                  - `agent_id_type`
-
-                  - `agent_id_value`
-
-                  - `agent_id_expiration_date`'
-              value:
-                description: The value of the attribute.
-                type: string
-                x-allowableValues: '* *chapter:* `CHAPTER_7`, `CHAPTER_9`, `CHAPTER_11`, `CHAPTER_12`, `CHAPTER_13`
-
-                  * *military_start_date:* yyyy-MM-ddThh:mm:ssZ format
-
-                  * *end_date:* yyyy-MM-ddThh:mm:ssZ format
-
-                  * *poa_details:* string (255 char max)
-
-                  * *agent_name:* string (255 char max)
-
-                  * *agent_address:* string (255 char max)
-
-                  * *agent_id_type:* `SSN`, `TIN`, `SIN`, `NIN`, `PASSPORT_NUMBER`, `DRIVERS_LICENSE`, `BUSINESS_LICENSE`, `BUSINESS_NUMBER`, `BUSINESS_TAX_ID`, `TAXPAYER_REFERENCE`
-
-                  * *agent_id_value:* string (255 char max)
-
-                  * *agent_id_expiration_date:* yyyy-MM-ddThh:mm:ssZ format'
-            title: SubstatusCreateReqAttributes
-            type: object
-          type: array
-        events:
-          description: List of events related to the substatus.
-          items:
-            $ref: '#/components/schemas/SubstatusEvent'
-          type: array
-        resource_token:
-          description: 'Unique identifier of the user or account or business for which you want to create a substatus.
-
-
-            * Send a `GET` request to `/credit/accounts` to retrieve existing account tokens.
-
-            * Send a `GET` request to `/users` to retrieve existing user tokens.
-
-            * Send a `GET` request to `/business` to retrieve existing business tokens.'
-          maxLength: 36
-          minLength: 1
-          type: string
-        resource_type:
-          description: Type of resource to which the substatus can be applied.
-          enum:
-          - USER
-          - ACCOUNT
-          - BUSINESS
-          type: string
-        substatus:
-          description: 'Type of substatus.
-
-
-            * `HARDSHIP`, `FRAUD`, `CEASE_AND_DESIST`, `BLOCKED`, and `OPT_OUT` can only be applied to the `ACCOUNT` resource type.
-
-            * `MLA`, `SCRA` and `DECEASED` can only be applied to the `USER` resource type.
-
-            * `POWER_OF_ATTORNEY` and `BANKRUPTCY` can be applied to either the `USER` or the `BUSINESS` resource type.'
-          maxLength: 36
-          minLength: 1
-          type: string
-        token:
-          description: Unique identifier of the credit substatus.
-          maxLength: 36
-          pattern: (?!^ +$)^.+$
-          type: string
-      required:
-      - events
-      - resource_token
-      - resource_type
-      - substatus
-      type: object
-    SubstatusEvent:
+    SubstatusEventResponseDetails:
       description: Details of an event related to a substatus.
       properties:
         channel:
-          description: 'The mechanism by which the state of the substatus was applied.
-
-
-            * `ADMIN` - Indicates that the state of the substatus was added through the Marqeta Dashboard.
-
-            * `API` - Indicates that you initiated an update of the substatus through the Core API.
-
-            Use this value when creating a substatus.
-
-            * `FRAUD` - Indicates that either Marqeta or the card network has determined that the account is fraudulent.
-
-            * `SYSTEM` - Indicates that Marqeta initiated the state of the substatus.
-
-            For example, Marqeta determined during application decisioning that the applicant is `MLA`.'
+          description: The channel through which the event occurred.
           enum:
           - ADMIN
           - API
@@ -932,36 +795,44 @@ components:
           description: User who created the substatus event.
           maxLength: 255
           type: string
+        created_time:
+          description: Creation time of the event.
+          format: date-time
+          type: string
         effective_date:
-          description: 'Date and time when the state of the substatus went into effect, in UTC.
-
-            The effective date must be in the past.
-
-            If no value is set, then the effective date and time will be the current time.'
+          description: Effective date of the event, in UTC.
           format: date-time
           type: string
         reason:
-          description: Reason for applying a state designation to the substatus.
+          description: Reason for the event.
           maxLength: 255
           type: string
         state:
-          description: 'Initial state of the substatus.
-
-
-            * `ACTIVE` - Required if the substatus is `HARDSHIP`, `MLA`, `SCRA`, `DECEASED`, `BLOCKED`, `CEASE_AND_DESIST`, `OPT_OUT`, or `POWER_OF_ATTORNEY`.
-
-            * `BANKRUPTCY_FILED` - Required if the substatus is `BANKRUPTCY`.
-
-            * `DECEASED_REPORTED` - Required if the substatus is `DECEASED`.
-
-            * `FRAUD_REPORTED` - Required if the substatus is `FRAUD`.'
+          description: The state of the event.
           enum:
           - ACTIVE
-          - BANKRUPTCY_FILED
+          - INACTIVE
           - DECEASED_REPORTED
+          - DECEASED_CONFIRMED
           - FRAUD_REPORTED
+          - FRAUD_CONFIRMED
+          - BANKRUPTCY_FILED
+          - BANKRUPTCY_WITHDRAWN
+          - BANKRUPTCY_REAFFIRMED
+          - BANKRUPTCY_REAFFIRM_RESCINDED
+          - BANKRUPTCY_DISCHARGED
+          - BANKRUPTCY_DISMISSED
+          - BANKRUPTCY_FILED_INACTIVE
+          - BANKRUPTCY_WITHDRAWN_INACTIVE
+          - BANKRUPTCY_REAFFIRMED_INACTIVE
+          - BANKRUPTCY_REAFFIRM_RESCINDED_INACTIVE
+          - BANKRUPTCY_DISCHARGED_INACTIVE
+          - BANKRUPTCY_DISMISSED_INACTIVE
           type: string
       required:
+      - channel
+      - created_time
+      - effective_date
       - state
       type: object
     SubstatusResponse:
@@ -1128,39 +999,223 @@ components:
       - substatus
       - token
       type: object
+    SubstatusEvent:
+      description: Details of an event related to a substatus.
+      properties:
+        channel:
+          description: 'The mechanism by which the state of the substatus was applied.
+
+
+            * `ADMIN` - Indicates that the state of the substatus was added through the Marqeta Dashboard.
+
+            * `API` - Indicates that you initiated an update of the substatus through the Core API.
+
+            Use this value when creating a substatus.
+
+            * `FRAUD` - Indicates that either Marqeta or the card network has determined that the account is fraudulent.
+
+            * `SYSTEM` - Indicates that Marqeta initiated the state of the substatus.
+
+            For example, Marqeta determined during application decisioning that the applicant is `MLA`.'
+          enum:
+          - ADMIN
+          - API
+          - FRAUD
+          - SYSTEM
+          type: string
+        created_by:
+          description: User who created the substatus event.
+          maxLength: 255
+          type: string
+        effective_date:
+          description: 'Date and time when the state of the substatus went into effect, in UTC.
+
+            The effective date must be in the past.
+
+            If no value is set, then the effective date and time will be the current time.'
+          format: date-time
+          type: string
+        reason:
+          description: Reason for applying a state designation to the substatus.
+          maxLength: 255
+          type: string
+        state:
+          description: 'Initial state of the substatus.
+
+
+            * `ACTIVE` - Required if the substatus is `HARDSHIP`, `MLA`, `SCRA`, `DECEASED`, `BLOCKED`, `CEASE_AND_DESIST`, `OPT_OUT`, or `POWER_OF_ATTORNEY`.
+
+            * `BANKRUPTCY_FILED` - Required if the substatus is `BANKRUPTCY`.
+
+            * `DECEASED_REPORTED` - Required if the substatus is `DECEASED`.
+
+            * `FRAUD_REPORTED` - Required if the substatus is `FRAUD`.'
+          enum:
+          - ACTIVE
+          - BANKRUPTCY_FILED
+          - DECEASED_REPORTED
+          - FRAUD_REPORTED
+          type: string
+      required:
+      - state
+      type: object
+    SubstatusCreateReq:
+      description: Contains information relevant to creating a substatus.
+      properties:
+        attributes:
+          description: 'Additional dynamic attributes related to the substatus.
+
+            If the substatus is `BANKRUPTCY`, `SCRA` or `POWER_OF_ATTORNEY`, then attributes are required.'
+          items:
+            properties:
+              key:
+                description: 'The name of the attribute.
+
+
+                  Marqeta provides several preconfigured attributes, as described in the following list.
+
+
+                  * *chapter:* If the substatus is `BANKRUPTCY`, then the chapter attribute is required.
+
+                  `CHAPTER_9` is not applicable to a `USER` resource type.
+
+                  `CHAPTER_13` is not applicable to a `BUSINESS` resource type.
+
+
+                  * *military_start_date:* If the substatus is `SCRA`, then the military start date attribute is required.
+
+                  The 6% APR override will be applied from the time and date of account opening until the last statement period of the military start date.
+
+
+                  * *end_date:* If the substatus is `POWER_OF_ATTORNEY`, then the end date attribute is applicable.
+
+                  This specifies the date when the power of attorney document is no longer valid.
+
+
+                  * *poa_details:* If the substatus is `POWER_OF_ATTORNEY`, then the Power of Attorney details attribute is applicable.
+
+                  This attribute specifies the range of actions that the agent with Power of Attorney is able to perform on the account.
+
+                  By default the range is `UNRESTRICTED`.
+
+
+                  * *agent_name:* If the substatus is `POWER_OF_ATTORNEY`, then the agent name is required.
+
+                  This attribute specifies the name of the agent with Power of Attorney for the user.
+
+
+                  * *agent_address:* If the substatus is `POWER_OF_ATTORNEY`, then the agent address attribute is required.
+
+                  This attribute specifies the address of the agent with Power of Attorney for the user.
+
+
+                  * *agent_id_type:* If the substatus is `POWER_OF_ATTORNEY`, then the agent identification type attribute is required.
+
+                  This specifies the type of the identification method used to identify the agent with Power of Attorney for the user.
+
+
+                  * *agent_id_value:* If the substatus is `POWER_OF_ATTORNEY`, then the agent identification value attribute is required.
+
+                  This attribute specifies the value of the identification method used to identify the agent with Power of Attorney for the user.
+
+
+                  * *agent_id_expiration_date:* If the substatus is `POWER_OF_ATTORNEY`, then the attribute for the Power of Attorney identification expiration date attribute is required.
+
+                  This attribute specifies the expiration date of the identification method used to identify the agent with Power of Attorney for the user.'
+                type: string
+                x-allowableValues: '- `chapter`
+
+                  - `military_start_date`
+
+                  - `end_date`
+
+                  - `poa_details`
+
+                  - `agent_name`
+
+                  - `agent_address`
+
+                  - `agent_id_type`
+
+                  - `agent_id_value`
+
+                  - `agent_id_expiration_date`'
+              value:
+                description: The value of the attribute.
+                type: string
+                x-allowableValues: '* *chapter:* `CHAPTER_7`, `CHAPTER_9`, `CHAPTER_11`, `CHAPTER_12`, `CHAPTER_13`
+
+                  * *military_start_date:* yyyy-MM-ddThh:mm:ssZ format
+
+                  * *end_date:* yyyy-MM-ddThh:mm:ssZ format
+
+                  * *poa_details:* string (255 char max)
+
+                  * *agent_name:* string (255 char max)
+
+                  * *agent_address:* string (255 char max)
+
+                  * *agent_id_type:* `SSN`, `TIN`, `SIN`, `NIN`, `PASSPORT_NUMBER`, `DRIVERS_LICENSE`, `BUSINESS_LICENSE`, `BUSINESS_NUMBER`, `BUSINESS_TAX_ID`, `TAXPAYER_REFERENCE`
+
+                  * *agent_id_value:* string (255 char max)
+
+                  * *agent_id_expiration_date:* yyyy-MM-ddThh:mm:ssZ format'
+            title: SubstatusCreateReqAttributes
+            type: object
+          type: array
+        events:
+          description: List of events related to the substatus.
+          items:
+            $ref: '#/components/schemas/SubstatusEvent'
+          type: array
+        resource_token:
+          description: 'Unique identifier of the user or account or business for which you want to create a substatus.
+
+
+            * Send a `GET` request to `/credit/accounts` to retrieve existing account tokens.
+
+            * Send a `GET` request to `/users` to retrieve existing user tokens.
+
+            * Send a `GET` request to `/business` to retrieve existing business tokens.'
+          maxLength: 36
+          minLength: 1
+          type: string
+        resource_type:
+          description: Type of resource to which the substatus can be applied.
+          enum:
+          - USER
+          - ACCOUNT
+          - BUSINESS
+          type: string
+        substatus:
+          description: 'Type of substatus.
+
+
+            * `HARDSHIP`, `FRAUD`, `CEASE_AND_DESIST`, `BLOCKED`, and `OPT_OUT` can only be applied to the `ACCOUNT` resource type.
+
+            * `MLA`, `SCRA` and `DECEASED` can only be applied to the `USER` resource type.
+
+            * `POWER_OF_ATTORNEY` and `BANKRUPTCY` can be applied to either the `USER` or the `BUSINESS` resource type.'
+          maxLength: 36
+          minLength: 1
+          type: string
+        token:
+          description: Unique identifier of the credit substatus.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+      required:
+      - events
+      - resource_token
+      - resource_type
+      - substatus
+      type: object
     Error:
       properties:
         code:
           type: integer
         message:
           type: string
-      type: object
-    SubstatusPage:
-      description: Return paginated account and user substatuses.
-      properties:
-        count:
-          description: Number of resources returned.
-          type: integer
-        data:
-          description: Contains one or more substatuses.
-          items:
-            $ref: '#/components/schemas/SubstatusResponse'
-          type: array
-        end_index:
-          description: Sort order index of the last resource in the returned array.
-          type: integer
-        is_more:
-          description: A value of `true` indicates that more unreturned resources exist.
-          type: boolean
-        start_index:
-          description: Sort order index of the first resource in the returned array.
-          type: integer
-      required:
-      - count
-      - data
-      - end_index
-      - is_more
-      - start_index
       type: object
     SubstatusUpdateReq:
       description: Contains information relevant to deactivating a substatus.
@@ -1229,61 +1284,6 @@ components:
           - FRAUD_CONFIRMED
           type: string
       required:
-      - state
-      type: object
-    SubstatusEventResponseDetails:
-      description: Details of an event related to a substatus.
-      properties:
-        channel:
-          description: The channel through which the event occurred.
-          enum:
-          - ADMIN
-          - API
-          - FRAUD
-          - SYSTEM
-          type: string
-        created_by:
-          description: User who created the substatus event.
-          maxLength: 255
-          type: string
-        created_time:
-          description: Creation time of the event.
-          format: date-time
-          type: string
-        effective_date:
-          description: Effective date of the event, in UTC.
-          format: date-time
-          type: string
-        reason:
-          description: Reason for the event.
-          maxLength: 255
-          type: string
-        state:
-          description: The state of the event.
-          enum:
-          - ACTIVE
-          - INACTIVE
-          - DECEASED_REPORTED
-          - DECEASED_CONFIRMED
-          - FRAUD_REPORTED
-          - FRAUD_CONFIRMED
-          - BANKRUPTCY_FILED
-          - BANKRUPTCY_WITHDRAWN
-          - BANKRUPTCY_REAFFIRMED
-          - BANKRUPTCY_REAFFIRM_RESCINDED
-          - BANKRUPTCY_DISCHARGED
-          - BANKRUPTCY_DISMISSED
-          - BANKRUPTCY_FILED_INACTIVE
-          - BANKRUPTCY_WITHDRAWN_INACTIVE
-          - BANKRUPTCY_REAFFIRMED_INACTIVE
-          - BANKRUPTCY_REAFFIRM_RESCINDED_INACTIVE
-          - BANKRUPTCY_DISCHARGED_INACTIVE
-          - BANKRUPTCY_DISMISSED_INACTIVE
-          type: string
-      required:
-      - channel
-      - created_time
-      - effective_date
       - state
       type: object
   securitySchemes:

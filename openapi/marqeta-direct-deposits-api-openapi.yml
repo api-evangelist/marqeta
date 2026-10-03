@@ -383,6 +383,45 @@ components:
         type:
           type: string
       type: object
+    DepositAccountResponse:
+      properties:
+        account_number:
+          type: string
+        allow_immediate_credit:
+          default: false
+          type: boolean
+        business_token:
+          type: string
+        routing_number:
+          type: string
+        token:
+          type: string
+        user_token:
+          type: string
+      required:
+      - account_number
+      - routing_number
+      - token
+      type: object
+    DirectDepositListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/DepositDepositResponse'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
     DirectDepositTransitionRequest:
       properties:
         channel:
@@ -435,44 +474,11 @@ components:
       - reason
       - state
       type: object
-    DirectDepositListResponse:
+    DepositAccountUpdateRequest:
       properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/DepositDepositResponse'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
-      type: object
-    DepositAccountResponse:
-      properties:
-        account_number:
-          type: string
         allow_immediate_credit:
           default: false
           type: boolean
-        business_token:
-          type: string
-        routing_number:
-          type: string
-        token:
-          type: string
-        user_token:
-          type: string
-      required:
-      - account_number
-      - routing_number
-      - token
       type: object
     DirectDepositTransitionListResponse:
       properties:
@@ -564,12 +570,6 @@ components:
         user_token:
           description: The unique identifier of the user account holder.
           type: string
-      type: object
-    DepositAccountUpdateRequest:
-      properties:
-        allow_immediate_credit:
-          default: false
-          type: boolean
       type: object
   securitySchemes:
     mqAppAndAccessToken:

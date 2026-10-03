@@ -552,48 +552,6 @@ paths:
       - Webhooks
 components:
   schemas:
-    echo_ping_request:
-      properties:
-        payload:
-          description: Payload of the ping request.
-          type: string
-        token:
-          description: Unique identifier of the ping request.
-          type: string
-      type: object
-    webhook_base_model:
-      properties:
-        active:
-          default: true
-          description: Indicates whether the webhook is active.
-          type: boolean
-        config:
-          $ref: '#/components/schemas/webhook_config_request_model'
-        events:
-          description: 'Specifies the types of events for which notifications are sent.
-
-
-            The wildcard character `\*` indicates that you receive all webhook notifications, or all notifications of a specified category.
-
-            For example, `*` indicates that you receive all webhook notifications; `transaction.*` indicates that you receive all `transaction` webhook notifications.
-
-
-            *NOTE:* You can only use the wildcard character with the _base_ type events, not subcategories.
-
-            For example, you cannot subscribe to `cardtransition.fulfillment.\*` events, but you can subscribe to `cardtransition.*`.'
-          items:
-            type: string
-          type: array
-        name:
-          description: Descriptive name of the webhook.
-          maxLength: 64
-          minLength: 1
-          type: string
-      required:
-      - config
-      - events
-      - name
-      type: object
     webhook_request_model:
       properties:
         active:
@@ -631,67 +589,6 @@ components:
       - config
       - events
       - name
-      type: object
-    webhook_ping_model:
-      properties:
-        pings:
-          description: Array of ping requests to your webhook endpoint.
-          items:
-            $ref: '#/components/schemas/echo_ping_request'
-          type: array
-      required:
-      - pings
-      type: object
-    WebhookResponseModelListResponse:
-      properties:
-        count:
-          description: 'Number of resources to retrieve.
-
-
-            This field is returned if there are resources in your returned array.'
-          format: int32
-          type: integer
-        data:
-          description: 'Array of webhooks resources.
-
-
-            Resources are returned as appropriate to your query.'
-          items:
-            $ref: '#/components/schemas/webhook_response_model'
-          type: array
-        end_index:
-          description: 'Sort order index of the last resource in the returned array.
-
-
-            This field is returned if there are resources in your returned array.'
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          description: 'A value of `true` indicates that more unreturned resources exist.
-
-            A value of `false` indicates that no more unreturned resources exist.
-
-
-            This field is returned if there are resources in your returned array.'
-          type: boolean
-        start_index:
-          description: 'Sort order index of the first resource in the returned array.
-
-
-            This field is returned if there are resources in your returned array.'
-          format: int32
-          type: integer
-      type: object
-    WebhookUpdateCustomHeaderRequest:
-      properties:
-        custom_header:
-          additionalProperties:
-            type: string
-          description: 'Additional custom information included in the HTTP header.
-
-            For example, this might contain security information, along with Basic Authentication, when making a JIT Funding request.'
-          type: object
       type: object
     webhook_config_response_model:
       description: Contains the configuration information for the webhook.
@@ -752,53 +649,46 @@ components:
       - basic_auth_username
       - url
       type: object
-    webhook_response_model:
+    WebhookResponseModelListResponse:
       properties:
-        active:
-          default: true
-          description: 'Indicates whether the webhook is active.
-
-            This field is returned if you included it in your webhook.'
-          type: boolean
-        config:
-          $ref: '#/components/schemas/webhook_config_response_model'
-        created_time:
-          description: Date and time when the webhook event was created, in UTC.
-          format: date-time
-          type: string
-        events:
-          description: 'Specifies the types of events for which notifications are sent.
+        count:
+          description: 'Number of resources to retrieve.
 
 
-            The wildcard character `\*` indicates that you receive all webhook notifications, or all notifications of a specified category.
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+        data:
+          description: 'Array of webhooks resources.
 
-            For example, `*` indicates that you receive all webhook notifications; `transaction.*` indicates that you receive all `transaction` webhook notifications.
 
-
-            *NOTE:* You can only use the wildcard character with the _base_ type events, not subcategories.
-
-            For example, you cannot subscribe to `cardtransition.fulfillment.\*` events, but you can subscribe to `cardtransition.*`.'
+            Resources are returned as appropriate to your query.'
           items:
-            type: string
+            $ref: '#/components/schemas/webhook_response_model'
           type: array
-        last_modified_time:
-          description: Date and time when the associated object was last modified, in UTC.
-          format: date-time
-          type: string
-        name:
-          description: Descriptive name of the webhook.
-          maxLength: 64
-          minLength: 1
-          type: string
-        token:
-          description: Unique identifier of the webhook.
-          maxLength: 36
-          minLength: 1
-          type: string
-      required:
-      - config
-      - events
-      - name
+        end_index:
+          description: 'Sort order index of the last resource in the returned array.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          description: 'A value of `true` indicates that more unreturned resources exist.
+
+            A value of `false` indicates that no more unreturned resources exist.
+
+
+            This field is returned if there are resources in your returned array.'
+          type: boolean
+        start_index:
+          description: 'Sort order index of the first resource in the returned array.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
       type: object
     webhook_config_request_model:
       description: Contains the configuration information for the webhook.
@@ -857,6 +747,116 @@ components:
       - basic_auth_password
       - basic_auth_username
       - url
+      type: object
+    webhook_base_model:
+      properties:
+        active:
+          default: true
+          description: Indicates whether the webhook is active.
+          type: boolean
+        config:
+          $ref: '#/components/schemas/webhook_config_request_model'
+        events:
+          description: 'Specifies the types of events for which notifications are sent.
+
+
+            The wildcard character `\*` indicates that you receive all webhook notifications, or all notifications of a specified category.
+
+            For example, `*` indicates that you receive all webhook notifications; `transaction.*` indicates that you receive all `transaction` webhook notifications.
+
+
+            *NOTE:* You can only use the wildcard character with the _base_ type events, not subcategories.
+
+            For example, you cannot subscribe to `cardtransition.fulfillment.\*` events, but you can subscribe to `cardtransition.*`.'
+          items:
+            type: string
+          type: array
+        name:
+          description: Descriptive name of the webhook.
+          maxLength: 64
+          minLength: 1
+          type: string
+      required:
+      - config
+      - events
+      - name
+      type: object
+    webhook_response_model:
+      properties:
+        active:
+          default: true
+          description: 'Indicates whether the webhook is active.
+
+            This field is returned if you included it in your webhook.'
+          type: boolean
+        config:
+          $ref: '#/components/schemas/webhook_config_response_model'
+        created_time:
+          description: Date and time when the webhook event was created, in UTC.
+          format: date-time
+          type: string
+        events:
+          description: 'Specifies the types of events for which notifications are sent.
+
+
+            The wildcard character `\*` indicates that you receive all webhook notifications, or all notifications of a specified category.
+
+            For example, `*` indicates that you receive all webhook notifications; `transaction.*` indicates that you receive all `transaction` webhook notifications.
+
+
+            *NOTE:* You can only use the wildcard character with the _base_ type events, not subcategories.
+
+            For example, you cannot subscribe to `cardtransition.fulfillment.\*` events, but you can subscribe to `cardtransition.*`.'
+          items:
+            type: string
+          type: array
+        last_modified_time:
+          description: Date and time when the associated object was last modified, in UTC.
+          format: date-time
+          type: string
+        name:
+          description: Descriptive name of the webhook.
+          maxLength: 64
+          minLength: 1
+          type: string
+        token:
+          description: Unique identifier of the webhook.
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - config
+      - events
+      - name
+      type: object
+    webhook_ping_model:
+      properties:
+        pings:
+          description: Array of ping requests to your webhook endpoint.
+          items:
+            $ref: '#/components/schemas/echo_ping_request'
+          type: array
+      required:
+      - pings
+      type: object
+    echo_ping_request:
+      properties:
+        payload:
+          description: Payload of the ping request.
+          type: string
+        token:
+          description: Unique identifier of the ping request.
+          type: string
+      type: object
+    WebhookUpdateCustomHeaderRequest:
+      properties:
+        custom_header:
+          additionalProperties:
+            type: string
+          description: 'Additional custom information included in the HTTP header.
+
+            For example, this might contain security information, along with Basic Authentication, when making a JIT Funding request.'
+          type: object
       type: object
   securitySchemes:
     mqAppAndAccessToken:

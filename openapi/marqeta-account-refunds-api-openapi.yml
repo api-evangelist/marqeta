@@ -337,51 +337,6 @@ paths:
       - Account Refunds
 components:
   schemas:
-    RefundsPage:
-      description: Returns paginated  list of refund resources.
-      properties:
-        count:
-          description: Number of resources returned.
-          type: integer
-        data:
-          description: Contains one or more refunds on a credit account.
-          items:
-            $ref: '#/components/schemas/RefundResponse'
-          type: array
-        end_index:
-          description: Sort order index of the last resource in the returned array.
-          type: integer
-        is_more:
-          description: A value of `true` indicates that more unreturned resources exist.
-          type: boolean
-        start_index:
-          description: Sort order index of the first resource in the returned array.
-          type: integer
-      required:
-      - count
-      - data
-      - end_index
-      - is_more
-      - start_index
-      type: object
-    RefundMethod:
-      description: Payment instrument used to issue the refund.
-      enum:
-      - ACH
-      - CHECK
-      type: string
-    RefundType:
-      description: Type of refund.
-      enum:
-      - PAYMENT_REFUND
-      - CREDIT_BALANCE_REFUND
-      type: string
-    CurrencyCode:
-      default: USD
-      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
-      enum:
-      - USD
-      type: string
     RefundStatus:
       description: Current status of the refund.
       enum:
@@ -393,13 +348,62 @@ components:
       - COMPLETED
       - RETURNED
       type: string
-    Error:
+    RefundTransitionRequest:
+      description: Request used to transition the status of a refund.
       properties:
-        code:
-          type: integer
-        message:
+        status:
+          $ref: '#/components/schemas/RefundStatus'
+        token:
+          description: Unique identifier of the refund status transition.
+          maxLength: 36
           type: string
+      required:
+      - status
       type: object
+    RefundType:
+      description: Type of refund.
+      enum:
+      - PAYMENT_REFUND
+      - CREDIT_BALANCE_REFUND
+      type: string
+    RefundCreateRequest:
+      description: Specifies the details of a refund creation request.
+      properties:
+        amount:
+          description: 'Amount of the refund.
+
+
+            The maximum refund amount is the amount that brings the account balance to $0.
+
+            For example, $4000 is the maximum refund amount for a -$4000 account balance.'
+          minimum: 0.01
+          type: number
+        currency_code:
+          $ref: '#/components/schemas/CurrencyCode'
+        description:
+          description: Description of the refund.
+          type: string
+        method:
+          $ref: '#/components/schemas/RefundMethod'
+        payment_source_token:
+          description: Unique identifier of the payment source that receives the refunded amount.
+          maxLength: 36
+          type: string
+        token:
+          description: Unique identifier of the refund.
+          type: string
+        type:
+          $ref: '#/components/schemas/RefundType'
+      required:
+      - method
+      - type
+      type: object
+    RefundMethod:
+      description: Payment instrument used to issue the refund.
+      enum:
+      - ACH
+      - CHECK
+      type: string
     RefundResponse:
       description: Detailed refund response object.
       properties:
@@ -452,50 +456,46 @@ components:
       - type
       - updated_time
       type: object
-    RefundCreateRequest:
-      description: Specifies the details of a refund creation request.
+    RefundsPage:
+      description: Returns paginated  list of refund resources.
       properties:
-        amount:
-          description: 'Amount of the refund.
-
-
-            The maximum refund amount is the amount that brings the account balance to $0.
-
-            For example, $4000 is the maximum refund amount for a -$4000 account balance.'
-          minimum: 0.01
-          type: number
-        currency_code:
-          $ref: '#/components/schemas/CurrencyCode'
-        description:
-          description: Description of the refund.
-          type: string
-        method:
-          $ref: '#/components/schemas/RefundMethod'
-        payment_source_token:
-          description: Unique identifier of the payment source that receives the refunded amount.
-          maxLength: 36
-          type: string
-        token:
-          description: Unique identifier of the refund.
-          type: string
-        type:
-          $ref: '#/components/schemas/RefundType'
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: Contains one or more refunds on a credit account.
+          items:
+            $ref: '#/components/schemas/RefundResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
       required:
-      - method
-      - type
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
       type: object
-    RefundTransitionRequest:
-      description: Request used to transition the status of a refund.
+    Error:
       properties:
-        status:
-          $ref: '#/components/schemas/RefundStatus'
-        token:
-          description: Unique identifier of the refund status transition.
-          maxLength: 36
+        code:
+          type: integer
+        message:
           type: string
-      required:
-      - status
       type: object
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
+      type: string
   securitySchemes:
     mqAppAndAccessToken:
       scheme: basic

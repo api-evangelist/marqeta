@@ -270,99 +270,6 @@ paths:
       - Adjustments
 components:
   schemas:
-    AccountAdjustmentReq:
-      description: Contains information relevant to creating an account adjustment.
-      properties:
-        amount:
-          description: 'Amount of the adjustment.
-
-
-            Value must be negative if `original_ledger_entry_token` is not passed.'
-          maximum: 1000000
-          type: number
-        currency_code:
-          $ref: '#/components/schemas/CurrencyCode'
-        description:
-          description: Description of the adjustment.
-          maxLength: 255
-          minLength: 1
-          type: string
-        external_adjustment_id:
-          description: Unique identifier you provide of an associated external adjustment that exists outside Marqeta's credit platform.
-          format: uuid
-          type: string
-        note:
-          description: Additional information on the adjustment.
-          maxLength: 255
-          type: string
-        original_ledger_entry_token:
-          description: 'Unique identifier of the original journal entry needing the adjustment.
-
-
-            Required when adjusting an existing journal entry.'
-          format: uuid
-          type: string
-        reason:
-          description: 'Reason for the adjustment.
-
-
-            * `DISPUTE` - The adjustment occurred because a dispute was initiated.
-
-            * `DISPUTE_RESOLUTION` - The adjustment occurred because of the result of a dispute resolution.
-
-            * `RETURNED_OR_CANCELED_PAYMENT` - The adjustment occurred because a payment was returned or canceled.
-
-            * `OTHER` - Any other reason the adjustment occurred. For example, a waived fee or account write-off.'
-          enum:
-          - DISPUTE
-          - DISPUTE_RESOLUTION
-          - RETURNED_OR_CANCELED_PAYMENT
-          - OTHER
-          type: string
-        source_account_type:
-          description: The source account type.
-          enum:
-          - NETWORK
-          - SPONSOR_BANK
-          - MQ_RESERVE
-          - PROGRAM_FUNDING
-          type: string
-        token:
-          description: Unique identifier of the adjustment.
-          maxLength: 36
-          type: string
-      required:
-      - amount
-      - currency_code
-      - description
-      type: object
-    AccountAdjustmentPage:
-      description: Returns paginated account adjustments.
-      properties:
-        count:
-          description: Number of resources returned.
-          type: integer
-        data:
-          description: Contains one or more account adjustments.
-          items:
-            $ref: '#/components/schemas/AccountAdjustmentResponse'
-          type: array
-        end_index:
-          description: Sort order index of the last resource in the returned array.
-          type: integer
-        is_more:
-          description: A value of `true` indicates that more unreturned resources exist.
-          type: boolean
-        start_index:
-          description: Sort order index of the first resource in the returned array.
-          type: integer
-      required:
-      - count
-      - data
-      - end_index
-      - is_more
-      - start_index
-      type: object
     AccountAdjustmentResponse:
       description: Contains information returned for account adjustment.
       properties:
@@ -510,12 +417,99 @@ components:
       - token
       - type
       type: object
-    CurrencyCode:
-      default: USD
-      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
-      enum:
-      - USD
-      type: string
+    AccountAdjustmentReq:
+      description: Contains information relevant to creating an account adjustment.
+      properties:
+        amount:
+          description: 'Amount of the adjustment.
+
+
+            Value must be negative if `original_ledger_entry_token` is not passed.'
+          maximum: 1000000
+          type: number
+        currency_code:
+          $ref: '#/components/schemas/CurrencyCode'
+        description:
+          description: Description of the adjustment.
+          maxLength: 255
+          minLength: 1
+          type: string
+        external_adjustment_id:
+          description: Unique identifier you provide of an associated external adjustment that exists outside Marqeta's credit platform.
+          format: uuid
+          type: string
+        note:
+          description: Additional information on the adjustment.
+          maxLength: 255
+          type: string
+        original_ledger_entry_token:
+          description: 'Unique identifier of the original journal entry needing the adjustment.
+
+
+            Required when adjusting an existing journal entry.'
+          format: uuid
+          type: string
+        reason:
+          description: 'Reason for the adjustment.
+
+
+            * `DISPUTE` - The adjustment occurred because a dispute was initiated.
+
+            * `DISPUTE_RESOLUTION` - The adjustment occurred because of the result of a dispute resolution.
+
+            * `RETURNED_OR_CANCELED_PAYMENT` - The adjustment occurred because a payment was returned or canceled.
+
+            * `OTHER` - Any other reason the adjustment occurred. For example, a waived fee or account write-off.'
+          enum:
+          - DISPUTE
+          - DISPUTE_RESOLUTION
+          - RETURNED_OR_CANCELED_PAYMENT
+          - OTHER
+          type: string
+        source_account_type:
+          description: The source account type.
+          enum:
+          - NETWORK
+          - SPONSOR_BANK
+          - MQ_RESERVE
+          - PROGRAM_FUNDING
+          type: string
+        token:
+          description: Unique identifier of the adjustment.
+          maxLength: 36
+          type: string
+      required:
+      - amount
+      - currency_code
+      - description
+      type: object
+    AccountAdjustmentPage:
+      description: Returns paginated account adjustments.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: Contains one or more account adjustments.
+          items:
+            $ref: '#/components/schemas/AccountAdjustmentResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
     Error:
       properties:
         code:
@@ -523,6 +517,12 @@ components:
         message:
           type: string
       type: object
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
+      type: string
   securitySchemes:
     mqAppAndAccessToken:
       scheme: basic

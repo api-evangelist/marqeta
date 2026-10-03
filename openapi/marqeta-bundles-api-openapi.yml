@@ -1773,31 +1773,132 @@ paths:
       - Bundles
 components:
   schemas:
-    ProductType:
-      default: REVOLVING
-      description: 'Type of credit product.
-
-
-        `REVOLVING` - Allows users to continuously borrow and pay debts up to the credit limit.'
-      enum:
-      - REVOLVING
-      type: string
-    ProductCreditLine:
-      description: Contains information on the credit line range.
+    PolicyRewardConversion:
+      description: Defines the conversion properties intended for a reward policy.
       properties:
-        max:
-          description: Maximum credit limit.
-          maximum: 9.9999999999999E11
-          minimum: 0
+        conversion_increment:
+          description: The static amount to reward if the rule conditions are met.
+          type: integer
+        conversion_rate:
+          description: The rate that points are worth with converting the REDEMPTION_TYPE indicated.
+          format: decimal
+          minimum: 0.001
           type: number
-        min:
-          description: Minimum credit limit.
-          maximum: 9.9999999999999E11
-          minimum: 0
-          type: number
+        currency:
+          description: Type of currency used with the conversion rate.
+          type: string
+        type:
+          $ref: '#/components/schemas/PolicyRewardConversionType'
       required:
-      - max
-      - min
+      - conversion_increment
+      - conversion_rate
+      - type
+      type: object
+    PolicyProductCardProductResponse:
+      description: Contains information on the card products associated with the credit product policy.
+      properties:
+        level:
+          $ref: '#/components/schemas/PolicyProductCardProductLevel'
+        network:
+          description: Name of the card network.
+          enum:
+          - VISA
+          - MASTERCARD
+          - SANDBOX
+          type: string
+        token:
+          description: Unique identifier of the card product.
+          pattern: (?!^ +$)^.+$
+          type: string
+      type: object
+    BundleCreateReq:
+      description: Contains information on a bundle.
+      properties:
+        apr_policy_token:
+          description: Unique identifier of the APR policy.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+        credit_product_policy_token:
+          description: Unique identifier of the credit product policy.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+        description:
+          description: Description of the bundle.
+          maxLength: 255
+          type: string
+        document_policy_token:
+          description: Unique identifier of the document policy.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+        fee_policy_token:
+          description: Unique identifier of the fee policy.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+        name:
+          description: Name of the bundle.
+          maxLength: 255
+          type: string
+        offer_policy_token:
+          description: Unique identifier of the offer policy.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+        reward_policy_token:
+          description: Unique identifier of the reward policy.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+        status:
+          $ref: '#/components/schemas/BundleResourceStatus'
+        token:
+          description: Unique identifier of the bundle.
+          maxLength: 36
+          pattern: (?!^ +$)^.+$
+          type: string
+      required:
+      - apr_policy_token
+      - credit_product_policy_token
+      - description
+      - document_policy_token
+      - fee_policy_token
+      - name
+      - status
+      type: object
+    PolicyRewardRuleAttributes:
+      description: Additional properties for which the rule can be used to determine reward accrual eligibility for a transaction.
+      properties:
+        max_spend:
+          description: Maximum spend amount.
+          type: number
+        mcc:
+          description: 'List of merchant category codes (MCCs).
+
+            MCCs must be a four-digit number, or a range of two four-digit numbers separated by a hyphen.'
+          items:
+            type: string
+          type: array
+        mid:
+          description: Comma-separated list of merchant IDs for the rule.
+          items:
+            type: string
+          type: array
+        min_spend:
+          description: Minimum spend amount.
+          type: number
+        spend_days:
+          description: 'Maximum number of days since account creation within which the minimum spend requirements must be met to qualify for the reward (used for signup bonus rules).
+
+
+            Positive integer values are allowed, with a minimum value of `1`.'
+          minimum: 1
+          type: integer
+        spend_total:
+          description: Total spend amount.
+          type: number
       type: object
     PolicyFeeResponse:
       description: Contains information on a fee policy.
@@ -1823,28 +1924,12 @@ components:
           format: date-time
           type: string
       type: object
-    PolicyRewardRoundingStrategy:
-      default: ROUND_HALF_EVEN
-      description: 'Rounding strategy for reward accrual calculations.
-
-        If no value for `rounding_strategy` is set, then the default value of this field is `ROUND_HALF_EVEN`.
-
-
-        Available options:
-
-
-        * `ROUND_UP`: Always rounds away from zero to whole numbers.
-
-        * `ROUND_DOWN`: Always rounds towards zero to whole numbers.
-
-        * `ROUND_HALF_EVEN`: Rounds to two decimal places using half-even logic (default).
-
-        * `ROUND_HALF_EVEN_WHOLE`: Rounds to whole numbers using half-even logic.'
+    PaymentAllocationOrderEnum:
+      description: Ordered list of balance types to which payments are allocated, from first to last.
       enum:
-      - ROUND_UP
-      - ROUND_DOWN
-      - ROUND_HALF_EVEN
-      - ROUND_HALF_EVEN_WHOLE
+      - INTEREST
+      - FEES
+      - PRINCIPAL
       type: string
     BundleTransitionReq:
       description: Contains information on a bundle transition.
@@ -1854,111 +1939,6 @@ components:
       required:
       - status
       type: object
-    PolicyFeePayment:
-      description: Contains information on a specific fee in a fee policy.
-      properties:
-        default_method:
-          description: Method used to calculate the fee value.
-          enum:
-          - FLAT
-          type: string
-        default_value:
-          description: Amount of the fee.
-          type: number
-      type: object
-    PolicyDocumentResponse:
-      description: Contains information on a document policy.
-      properties:
-        account_statement:
-          $ref: '#/components/schemas/PolicyDocumentTemplateResponse'
-        benefits_disclosure_premium:
-          $ref: '#/components/schemas/PolicyDocumentAssetResponse'
-        benefits_disclosure_traditional:
-          $ref: '#/components/schemas/PolicyDocumentAssetResponse'
-        card_member_agreement:
-          $ref: '#/components/schemas/PolicyDocumentAssetResponse'
-        created_time:
-          description: Date and time when the document policy was created on Marqeta's credit platform, in UTC.
-          format: date-time
-          type: string
-        e_disclosure:
-          $ref: '#/components/schemas/PolicyDocumentAssetResponse'
-        name:
-          description: Name of the document policy.
-          pattern: (?!^ +$)^.+$
-          type: string
-        noaa_multiple_reason_with_dodd_frank:
-          $ref: '#/components/schemas/PolicyDocumentTemplateResponse'
-        noaa_single_reason:
-          $ref: '#/components/schemas/PolicyDocumentTemplateResponse'
-        noaa_single_reason_with_dodd_frank:
-          $ref: '#/components/schemas/PolicyDocumentTemplateResponse'
-        pre_qualification_disclosure:
-          $ref: '#/components/schemas/PolicyDocumentAssetAndTemplateResponse'
-        privacy_policy:
-          $ref: '#/components/schemas/PolicyDocumentAssetResponse'
-        rewards_disclosure:
-          $ref: '#/components/schemas/PolicyDocumentAssetAndTemplateResponse'
-        summary_of_credit_terms:
-          $ref: '#/components/schemas/PolicyDocumentAssetAndTemplateResponse'
-        terms_schedule:
-          $ref: '#/components/schemas/PolicyDocumentTemplateResponse'
-        token:
-          description: Unique identifier of the document policy.
-          pattern: (?!^ +$)^.+$
-          type: string
-        updated_time:
-          description: Date and time when the document policy was last updated on Marqeta's credit platform, in UTC.
-          format: date-time
-          type: string
-      type: object
-    PolicyRewardPlatformRule:
-      description: Defines the rules intended for a reward policy.
-      properties:
-        amount:
-          description: The static amount to reward if the rule conditions are met.
-          type:
-          - number
-          - 'null'
-        attributes:
-          $ref: '#/components/schemas/PolicyRewardRuleAttributes'
-        calculation_type:
-          description: Type of calculation to use to evaluate if a rule has been satisfied.
-          enum:
-          - PER_TRANSACTION
-          - SPEND_BALANCE
-          type: string
-        description:
-          description: The description of the rule.
-          type: string
-        multiplier:
-          description: The reward multiplier to apply the transaction, where '1' means 1x transaction amount.
-          format: float
-          type:
-          - number
-          - 'null'
-        type:
-          description: Type of rule.
-          enum:
-          - MULTIPLIER_PER_TRANSACTION
-          - SIGNUP_BONUS
-          type: string
-      required:
-      - description
-      - type
-      type: object
-    ProductClassification:
-      default: CONSUMER
-      description: 'Specifies for whom the credit product is intended.
-
-
-        * `CONSUMER` - The credit product is intended for individual consumers.
-
-        * `SMALL_AND_MEDIUM_BUSINESS` - The credit product is intended for small and medium business.'
-      enum:
-      - CONSUMER
-      - SMALL_AND_MEDIUM_BUSINESS
-      type: string
     BalanceType:
       description: 'Type of balance.
 
@@ -1967,6 +1947,69 @@ components:
       enum:
       - PURCHASE
       type: string
+    PolicyAprTierResponse:
+      description: Response details for the APR for a risk tier.
+      properties:
+        apr:
+          default: 0
+          description: Value of the APR.
+          type: number
+        margin_rate:
+          description: Margin rate for the risk tier for a pricing strategy.
+          type: number
+      type: object
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
+      type: string
+    PolicyRewardConversionType:
+      description: Type of conversion.
+      enum:
+      - STATEMENT_CREDIT
+      type: string
+    BundleTransitionResponse:
+      description: Contains information on a bundle transition.
+      properties:
+        bundle_token:
+          description: Unique identifier of the bundle.
+          maxLength: 36
+          type: string
+        created_time:
+          description: Date and time when the bundle was changed the status on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        original_status:
+          $ref: '#/components/schemas/BundleResourceStatus'
+        status:
+          $ref: '#/components/schemas/BundleResourceStatus'
+        token:
+          description: Unique identifier of the bundle transition.
+          maxLength: 36
+          type: string
+      type: object
+    PolicyRewardExclusions:
+      description: 'Defines what merchant category codes (MCCs) are excluded from earning rewards.
+
+        MCCs must be a four-digit number, or a range of two four-digit numbers separated by a hyphen.'
+      properties:
+        custom_exclusions:
+          description: 'List of merchant category codes (MCCs).
+
+            MCCs must be a four-digit number, or a range of two four-digit numbers separated by a hyphen.'
+          items:
+            type: string
+          type: array
+        use_default_exclusions:
+          description: 'Indicates whether to use the default exclusion list.
+
+
+            * If `true`, the default exclusion list is used.
+
+            * If `false`, the custom exclusion list is used, if custom exclusions are included.'
+          type: boolean
+      type: object
     PolicyDocumentTemplateResponse:
       description: Response details for a template.
       properties:
@@ -1980,22 +2023,108 @@ components:
         template_urls:
           $ref: '#/components/schemas/PolicyDocumentTemplateURLs'
       type: object
-    PolicyDocumentAssetURLs:
-      description: Contains one or more URLs for an asset.
+    InterestOnGraceReactivationEnum:
+      description: Determines whether to charge or waive interest for the billing period when the balance is paid off.
+      enum:
+      - ACCRUE_FULL_CYCLE
+      - ACCRUE_PAYMENT_DATE
+      - WAIVE
+      type: string
+    PolicyDocumentAssetResponse:
+      description: Return details for a specific asset.
       properties:
-        html:
-          description: URL to the HTML version of the asset.
+        asset_created_time:
+          description: Date and time when the asset was created.
+          format: date-time
           type: string
-        pdf:
-          description: URL to the PDF version of the asset.
+        asset_token:
+          description: 'Unique identifier of the asset, which is a type of document that contains finalized values.
+
+            The values are finalized when the bundle containing the document is created.'
+          pattern: (?!^ +$)^.+$
           type: string
-        png:
-          description: URL to the PNG version of the asset.
+        asset_urls:
+          $ref: '#/components/schemas/PolicyDocumentAssetURLs'
+      type: object
+    PolicyRewardResponse:
+      description: Contains information on a reward policy.
+      properties:
+        accrual_strategy:
+          $ref: '#/components/schemas/PolicyRewardAccrualType'
+        conversions:
+          description: List of one or more reward conversions.
+          items:
+            $ref: '#/components/schemas/PolicyRewardConversion'
+          minItems: 1
+          type: array
+        created_time:
+          description: Date and time when the reward policy was created on Marqeta's credit platform, in UTC.
+          format: date-time
           type: string
+        description:
+          description: Description of the reward policy.
+          type: string
+        exclusions:
+          $ref: '#/components/schemas/PolicyRewardExclusions'
+        name:
+          description: Name of the reward policy.
+          type: string
+        redemption_strategy:
+          $ref: '#/components/schemas/PolicyRewardRedemptionStrategy'
+        rounding_strategy:
+          $ref: '#/components/schemas/PolicyRewardRoundingStrategy'
+        rules:
+          description: A list of one or more reward rules.
+          items:
+            $ref: '#/components/schemas/PolicyRewardPlatformRule'
+          minItems: 1
+          type: array
+        settlement_strategy:
+          $ref: '#/components/schemas/PolicyRewardSettlementType'
+        token:
+          description: Unique identifier of the reward policy.
+          pattern: (?!^ +$)^.+$
+          type: string
+        updated_time:
+          description: Date and time when the reward policy was last updated on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+      type: object
+    ProductCreditLine:
+      description: Contains information on the credit line range.
+      properties:
+        max:
+          description: Maximum credit limit.
+          maximum: 9.9999999999999E11
+          minimum: 0
+          type: number
+        min:
+          description: Minimum credit limit.
+          maximum: 9.9999999999999E11
+          minimum: 0
+          type: number
       required:
-      - html
-      - pdf
-      - png
+      - max
+      - min
+      type: object
+    PolicyFeePeriodic:
+      description: Contains information on a specific periodic fee in a fee policy.
+      properties:
+        exclude_from_interest_calc:
+          description: Whether the periodic fee is excluded from interest calculation.
+          type: boolean
+        fee_amount:
+          description: Amount of the fee.
+          maximum: 5000
+          minimum: 1
+          type: number
+        number_of_days_post_activation:
+          description: 'Number of days after an account is activated that the initial fee is charged.
+
+            For example, if the value in this field is `30`, then the initial fee is charged 30 days after an account is activated.'
+          maximum: 1000
+          minimum: 1
+          type: number
       type: object
     PolicyProductPaymentConfiguration:
       description: Contains the configurations for billing cycle day, payment due day, and fees.
@@ -2055,95 +2184,436 @@ components:
       - billing_cycle_day
       - min_payment_calculation
       type: object
-    PolicyRewardRedemptionStrategy:
-      default: MANUAL
-      description: 'Redemption strategy for reward redemption behavior.
+    ProductClassification:
+      default: CONSUMER
+      description: 'Specifies for whom the credit product is intended.
 
-        If no value for `redemption_strategy` is set, then the default value of this field is `MANUAL`.
+
+        * `CONSUMER` - The credit product is intended for individual consumers.
+
+        * `SMALL_AND_MEDIUM_BUSINESS` - The credit product is intended for small and medium business.'
+      enum:
+      - CONSUMER
+      - SMALL_AND_MEDIUM_BUSINESS
+      type: string
+    PolicyFeeAccount:
+      description: Contains information on the fees in an account's fee policy.
+      properties:
+        annual_fee:
+          $ref: '#/components/schemas/PolicyFeePeriodic'
+        foreign_transaction_fee:
+          $ref: '#/components/schemas/PolicyFeeForeignTransaction'
+        late_payment:
+          $ref: '#/components/schemas/PolicyFeePayment'
+        monthly_fee:
+          $ref: '#/components/schemas/PolicyFeePeriodic'
+        returned_payment:
+          $ref: '#/components/schemas/PolicyFeePayment'
+      type: object
+    InterestCalculation:
+      description: Contains the configurations for interest calculation.
+      properties:
+        day_count:
+          description: Day-count convention.
+          enum:
+          - ACTUAL
+          type: string
+        exclude_tran_types:
+          default:
+          - ANNUAL_FEE
+          - MONTHLY_FEE
+          - LATE_PAYMENT_FEE
+          - CASH_BACK_STATEMENT_CREDIT
+          - FOREIGN_TRANSACTION_FEE
+          description: One or more transactions that are excluded from current billing period's interest charge, but included in next.
+          items:
+            enum:
+            - LATE_PAYMENT_FEE
+            - ANNUAL_FEE
+            - MONTHLY_FEE
+            - CASH_BACK_STATEMENT_CREDIT
+            - RETURNED_PAYMENT_FEE
+            - FOREIGN_TRANSACTION_FEE
+            type: string
+          type: array
+        grace_days_application:
+          description: Determines the last day of grace period based on which interest charges are calculated.
+          enum:
+          - NEXT_CYCLE_DATE
+          type: string
+        interest_application:
+          default:
+          - PRINCIPAL
+          - FEES
+          description: One or more balance types on which interest is applied.
+          items:
+            enum:
+            - PRINCIPAL
+            - FEES
+            - INTEREST
+            type: string
+          minItems: 1
+          type: array
+        interest_on_grace_reactivation:
+          $ref: '#/components/schemas/InterestOnGraceReactivationEnum'
+        method:
+          description: Method of interest calculation.
+          enum:
+          - AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS
+          type: string
+        minimum_interest:
+          description: When interest is applied, this value determines the minimum amount of interest that can be charged.
+          maximum: 9.9999999999999E11
+          minimum: 0
+          type: number
+      required:
+      - day_count
+      - grace_days_application
+      - interest_application
+      - interest_on_grace_reactivation
+      - method
+      - minimum_interest
+      type: object
+    PolicyRewardPlatformRule:
+      description: Defines the rules intended for a reward policy.
+      properties:
+        amount:
+          description: The static amount to reward if the rule conditions are met.
+          type:
+          - number
+          - 'null'
+        attributes:
+          $ref: '#/components/schemas/PolicyRewardRuleAttributes'
+        calculation_type:
+          description: Type of calculation to use to evaluate if a rule has been satisfied.
+          enum:
+          - PER_TRANSACTION
+          - SPEND_BALANCE
+          type: string
+        description:
+          description: The description of the rule.
+          type: string
+        multiplier:
+          description: The reward multiplier to apply the transaction, where '1' means 1x transaction amount.
+          format: float
+          type:
+          - number
+          - 'null'
+        type:
+          description: Type of rule.
+          enum:
+          - MULTIPLIER_PER_TRANSACTION
+          - SIGNUP_BONUS
+          type: string
+      required:
+      - description
+      - type
+      type: object
+    PolicyDocumentResponse:
+      description: Contains information on a document policy.
+      properties:
+        account_statement:
+          $ref: '#/components/schemas/PolicyDocumentTemplateResponse'
+        benefits_disclosure_premium:
+          $ref: '#/components/schemas/PolicyDocumentAssetResponse'
+        benefits_disclosure_traditional:
+          $ref: '#/components/schemas/PolicyDocumentAssetResponse'
+        card_member_agreement:
+          $ref: '#/components/schemas/PolicyDocumentAssetResponse'
+        created_time:
+          description: Date and time when the document policy was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        e_disclosure:
+          $ref: '#/components/schemas/PolicyDocumentAssetResponse'
+        name:
+          description: Name of the document policy.
+          pattern: (?!^ +$)^.+$
+          type: string
+        noaa_multiple_reason_with_dodd_frank:
+          $ref: '#/components/schemas/PolicyDocumentTemplateResponse'
+        noaa_single_reason:
+          $ref: '#/components/schemas/PolicyDocumentTemplateResponse'
+        noaa_single_reason_with_dodd_frank:
+          $ref: '#/components/schemas/PolicyDocumentTemplateResponse'
+        pre_qualification_disclosure:
+          $ref: '#/components/schemas/PolicyDocumentAssetAndTemplateResponse'
+        privacy_policy:
+          $ref: '#/components/schemas/PolicyDocumentAssetResponse'
+        rewards_disclosure:
+          $ref: '#/components/schemas/PolicyDocumentAssetAndTemplateResponse'
+        summary_of_credit_terms:
+          $ref: '#/components/schemas/PolicyDocumentAssetAndTemplateResponse'
+        terms_schedule:
+          $ref: '#/components/schemas/PolicyDocumentTemplateResponse'
+        token:
+          description: Unique identifier of the document policy.
+          pattern: (?!^ +$)^.+$
+          type: string
+        updated_time:
+          description: Date and time when the document policy was last updated on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+      type: object
+    BundleResourceStatus:
+      description: 'Status of the bundle.
+
+
+        * `DRAFT` - The bundle is in the process of being created.
+
+        * `PENDING_APPROVAL` - The bundle has been created and is awaiting approval.
+
+        * `SENT_FOR_REVISION` - The bundle has been returned for revision.
+
+        * `ACTIVE` - The bundle is active.
+
+        * `REJECTED` - The bundle has been rejected; this status cannot be changed.
+
+        * `ARCHIVED` - The previously active bundle has been archived.
+
+        * `APPROVED` - The bundle has been approved (after having been sent for approval).'
+      enum:
+      - DRAFT
+      - PENDING_APPROVAL
+      - SENT_FOR_REVISION
+      - ACTIVE
+      - REJECTED
+      - ARCHIVED
+      - APPROVED
+      type: string
+    PolicyAprPurchaseResponse:
+      description: Contains information on the pricing strategy for purchases.
+      properties:
+        external_token:
+          description: Unique identifier of the pricing strategy on a credit program.
+          pattern: (?!^ +$)^.+$
+          type: string
+        name:
+          description: Name of the pricing strategy.
+          type: string
+        tiers:
+          description: One or more risk tiers for a pricing strategy.
+          items:
+            $ref: '#/components/schemas/PolicyAprTierResponse'
+          type: array
+      type: object
+    PolicyFeePayment:
+      description: Contains information on a specific fee in a fee policy.
+      properties:
+        default_method:
+          description: Method used to calculate the fee value.
+          enum:
+          - FLAT
+          type: string
+        default_value:
+          description: Amount of the fee.
+          type: number
+      type: object
+    PolicyAprResponse:
+      description: Contains information on an APR policy.
+      properties:
+        created_time:
+          description: Date and time when the APR policy was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        description:
+          description: Description of the APR policy.
+          type: string
+        effective_date:
+          description: Date the APR goes into effect, in UTC.
+          format: date
+          type: string
+        name:
+          description: Name of the APR policy.
+          type: string
+        purchases:
+          $ref: '#/components/schemas/PolicyAprPurchaseResponse'
+        token:
+          description: Unique identifier of the APR policy.
+          pattern: (?!^ +$)^.+$
+          type: string
+        updated_time:
+          description: Date and time when the APR policy was last updated on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+      type: object
+    PolicyDocumentAssetAndTemplateResponse:
+      description: Return details for a specific asset and the template on which it was based.
+      properties:
+        asset_created_time:
+          description: Date and time when the asset was created.
+          format: date-time
+          type: string
+        asset_token:
+          description: 'Unique identifier of the asset, which is the version of a document that is based on the template and contains finalized values.
+
+            The values are finalized when the bundle containing the document is created.'
+          type: string
+        asset_urls:
+          $ref: '#/components/schemas/PolicyDocumentAssetURLs'
+        template_created_time:
+          description: Date and time when the template was created.
+          format: date-time
+          type: string
+        template_token:
+          description: 'Unique identifier of the template, which is the version of a document that serves as an initial disclosure but does not contain finalized values.
+
+            Values are finalized in the asset version of the document.'
+          type: string
+        template_urls:
+          $ref: '#/components/schemas/PolicyDocumentTemplateURLs'
+      type: object
+    PolicyType:
+      description: Type of policy.
+      enum:
+      - APR
+      - DOCUMENT
+      - FEE
+      - OFFER
+      - PRODUCT
+      - REWARD
+      - ALL
+      type: string
+    PolicyRewardAccrualType:
+      default: DEFAULT
+      description: 'Reward accrual strategy for a credit program.
+
+        If no value for `accrual_strategy` is set, the default value of this field is `DEFAULT`.'
+      enum:
+      - DEFAULT
+      - PAYMENT
+      type: string
+    PolicyRewardRoundingStrategy:
+      default: ROUND_HALF_EVEN
+      description: 'Rounding strategy for reward accrual calculations.
+
+        If no value for `rounding_strategy` is set, then the default value of this field is `ROUND_HALF_EVEN`.
 
 
         Available options:
 
 
-        * `AUTO`: Automatically redeem rewards when conditions are met.
+        * `ROUND_UP`: Always rounds away from zero to whole numbers.
 
-        * `MANUAL`: Require manual intervention for reward redemption (default).'
+        * `ROUND_DOWN`: Always rounds towards zero to whole numbers.
+
+        * `ROUND_HALF_EVEN`: Rounds to two decimal places using half-even logic (default).
+
+        * `ROUND_HALF_EVEN_WHOLE`: Rounds to whole numbers using half-even logic.'
       enum:
-      - AUTO
-      - MANUAL
+      - ROUND_UP
+      - ROUND_DOWN
+      - ROUND_HALF_EVEN
+      - ROUND_HALF_EVEN_WHOLE
       type: string
-    PolicyRewardRuleAttributes:
-      description: Additional properties for which the rule can be used to determine reward accrual eligibility for a transaction.
+    PolicyOfferResponse:
+      description: Contains information on an offer policy.
       properties:
-        max_spend:
-          description: Maximum spend amount.
-          type: number
-        mcc:
-          description: 'List of merchant category codes (MCCs).
-
-            MCCs must be a four-digit number, or a range of two four-digit numbers separated by a hyphen.'
-          items:
-            type: string
-          type: array
-        mid:
-          description: Comma-separated list of merchant IDs for the rule.
-          items:
-            type: string
-          type: array
-        min_spend:
-          description: Minimum spend amount.
-          type: number
-        spend_days:
-          description: 'Maximum number of days since account creation within which the minimum spend requirements must be met to qualify for the reward (used for signup bonus rules).
-
-
-            Positive integer values are allowed, with a minimum value of `1`.'
-          minimum: 1
-          type: integer
-        spend_total:
-          description: Total spend amount.
-          type: number
-      type: object
-    PolicyAprTierResponse:
-      description: Response details for the APR for a risk tier.
-      properties:
-        apr:
-          default: 0
-          description: Value of the APR.
-          type: number
-        margin_rate:
-          description: Margin rate for the risk tier for a pricing strategy.
-          type: number
-      type: object
-    PolicyDocumentTemplateURLs:
-      description: Contains one or more URLs for a template.
-      properties:
-        html:
-          description: URL to the HTML version of the document template.
+        created_time:
+          description: Date and time when the offer policy was created on Marqeta's credit platform, in UTC.
+          format: date-time
           type: string
-      required:
-      - html
-      type: object
-    PolicyRewardConversion:
-      description: Defines the conversion properties intended for a reward policy.
-      properties:
-        conversion_increment:
-          description: The static amount to reward if the rule conditions are met.
-          type: integer
-        conversion_rate:
-          description: The rate that points are worth with converting the REDEMPTION_TYPE indicated.
-          format: decimal
-          minimum: 0.001
-          type: number
-        currency:
-          description: Type of currency used with the conversion rate.
+        description:
+          description: Description of the offer policy.
           type: string
-        type:
-          $ref: '#/components/schemas/PolicyRewardConversionType'
+        name:
+          description: Name of the offer policy.
+          type: string
+        token:
+          description: Unique identifier of the offer policy.
+          pattern: (?!^ +$)^.+$
+          type: string
+        updated_time:
+          description: Date and time when the offer policy was last updated on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+      type: object
+    PolicyProductMinPaymentCalculation:
+      description: Contains information used to calculate the minimum payment amount on a credit product policy.
+      properties:
+        include_overlimit_amount:
+          description: Whether to include the overlimit amount when calculating the minimum payment.
+          type: boolean
+        include_past_due_amount:
+          description: Whether to include the past due amount when calculating the minimum payment.
+          type: boolean
+        min_payment_flat_amount:
+          description: Minimum payment, expressed as a flat amount, due on the payment due day.
+          type: number
+        min_payment_percentage:
+          $ref: '#/components/schemas/PolicyProductMinPaymentPercentage'
       required:
-      - conversion_increment
-      - conversion_rate
-      - type
+      - include_overlimit_amount
+      - include_past_due_amount
+      type: object
+    PolicyFeeForeignTransaction:
+      description: Contains information on a specific fee in a fee policy.
+      properties:
+        default_method:
+          description: Method used to calculate the fee value.
+          enum:
+          - PERCENTAGE
+          type: string
+        default_value:
+          description: Percentage value for the foreign transaction fee.
+          minimum: 0
+          type: number
+      type: object
+    PolicyProductResponse:
+      description: Contains information on the credit product policy.
+      properties:
+        card_products:
+          description: One or more card products associated with the credit product policy.
+          items:
+            $ref: '#/components/schemas/PolicyProductCardProductResponse'
+          minItems: 1
+          type: array
+        classification:
+          $ref: '#/components/schemas/ProductClassification'
+        created_time:
+          description: Date and time when the credit product policy was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        credit_line:
+          $ref: '#/components/schemas/ProductCreditLine'
+        currency_code:
+          $ref: '#/components/schemas/CurrencyCode'
+        description:
+          description: Description of the credit product policy.
+          type: string
+        interest_calculation:
+          $ref: '#/components/schemas/InterestCalculation'
+        name:
+          description: Name of the credit product policy.
+          minLength: 1
+          type: string
+        payments:
+          $ref: '#/components/schemas/PolicyProductPaymentConfiguration'
+        product_sub_type:
+          $ref: '#/components/schemas/ProductSubType'
+        product_type:
+          $ref: '#/components/schemas/ProductType'
+        token:
+          description: Unique identifier of the credit product policy.
+          pattern: (?!^ +$)^.+$
+          type: string
+        updated_time:
+          description: Date and time when the credit product policy was last updated on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        usage:
+          description: One or more usage types for the credit product policy.
+          items:
+            $ref: '#/components/schemas/BalanceType'
+          minItems: 1
+          type: array
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
       type: object
     BundleResponse:
       description: Contains information on a bundle.
@@ -2211,166 +2681,82 @@ components:
           format: date-time
           type: string
       type: object
-    BundleCreateReq:
-      description: Contains information on a bundle.
+    PolicyDocumentAssetURLs:
+      description: Contains one or more URLs for an asset.
       properties:
-        apr_policy_token:
-          description: Unique identifier of the APR policy.
-          maxLength: 36
-          pattern: (?!^ +$)^.+$
+        html:
+          description: URL to the HTML version of the asset.
           type: string
-        credit_product_policy_token:
-          description: Unique identifier of the credit product policy.
-          maxLength: 36
-          pattern: (?!^ +$)^.+$
+        pdf:
+          description: URL to the PDF version of the asset.
           type: string
-        description:
-          description: Description of the bundle.
-          maxLength: 255
-          type: string
-        document_policy_token:
-          description: Unique identifier of the document policy.
-          maxLength: 36
-          pattern: (?!^ +$)^.+$
-          type: string
-        fee_policy_token:
-          description: Unique identifier of the fee policy.
-          maxLength: 36
-          pattern: (?!^ +$)^.+$
-          type: string
-        name:
-          description: Name of the bundle.
-          maxLength: 255
-          type: string
-        offer_policy_token:
-          description: Unique identifier of the offer policy.
-          maxLength: 36
-          pattern: (?!^ +$)^.+$
-          type: string
-        reward_policy_token:
-          description: Unique identifier of the reward policy.
-          maxLength: 36
-          pattern: (?!^ +$)^.+$
-          type: string
-        status:
-          $ref: '#/components/schemas/BundleResourceStatus'
-        token:
-          description: Unique identifier of the bundle.
-          maxLength: 36
-          pattern: (?!^ +$)^.+$
+        png:
+          description: URL to the PNG version of the asset.
           type: string
       required:
-      - apr_policy_token
-      - credit_product_policy_token
-      - description
-      - document_policy_token
-      - fee_policy_token
-      - name
-      - status
+      - html
+      - pdf
+      - png
       type: object
-    PolicyAprResponse:
-      description: Contains information on an APR policy.
-      properties:
-        created_time:
-          description: Date and time when the APR policy was created on Marqeta's credit platform, in UTC.
-          format: date-time
-          type: string
-        description:
-          description: Description of the APR policy.
-          type: string
-        effective_date:
-          description: Date the APR goes into effect, in UTC.
-          format: date
-          type: string
-        name:
-          description: Name of the APR policy.
-          type: string
-        purchases:
-          $ref: '#/components/schemas/PolicyAprPurchaseResponse'
-        token:
-          description: Unique identifier of the APR policy.
-          pattern: (?!^ +$)^.+$
-          type: string
-        updated_time:
-          description: Date and time when the APR policy was last updated on Marqeta's credit platform, in UTC.
-          format: date-time
-          type: string
-      type: object
-    PolicyFeeForeignTransaction:
-      description: Contains information on a specific fee in a fee policy.
-      properties:
-        default_method:
-          description: Method used to calculate the fee value.
-          enum:
-          - PERCENTAGE
-          type: string
-        default_value:
-          description: Percentage value for the foreign transaction fee.
-          minimum: 0
-          type: number
-      type: object
-    PolicyRewardExclusions:
-      description: 'Defines what merchant category codes (MCCs) are excluded from earning rewards.
+    PolicyRewardRedemptionStrategy:
+      default: MANUAL
+      description: 'Redemption strategy for reward redemption behavior.
 
-        MCCs must be a four-digit number, or a range of two four-digit numbers separated by a hyphen.'
-      properties:
-        custom_exclusions:
-          description: 'List of merchant category codes (MCCs).
-
-            MCCs must be a four-digit number, or a range of two four-digit numbers separated by a hyphen.'
-          items:
-            type: string
-          type: array
-        use_default_exclusions:
-          description: 'Indicates whether to use the default exclusion list.
+        If no value for `redemption_strategy` is set, then the default value of this field is `MANUAL`.
 
 
-            * If `true`, the default exclusion list is used.
+        Available options:
 
-            * If `false`, the custom exclusion list is used, if custom exclusions are included.'
-          type: boolean
-      type: object
-    PolicyDocumentAssetResponse:
-      description: Return details for a specific asset.
-      properties:
-        asset_created_time:
-          description: Date and time when the asset was created.
-          format: date-time
-          type: string
-        asset_token:
-          description: 'Unique identifier of the asset, which is a type of document that contains finalized values.
 
-            The values are finalized when the bundle containing the document is created.'
-          pattern: (?!^ +$)^.+$
-          type: string
-        asset_urls:
-          $ref: '#/components/schemas/PolicyDocumentAssetURLs'
-      type: object
-    PolicyFeeAccount:
-      description: Contains information on the fees in an account's fee policy.
-      properties:
-        annual_fee:
-          $ref: '#/components/schemas/PolicyFeePeriodic'
-        foreign_transaction_fee:
-          $ref: '#/components/schemas/PolicyFeeForeignTransaction'
-        late_payment:
-          $ref: '#/components/schemas/PolicyFeePayment'
-        monthly_fee:
-          $ref: '#/components/schemas/PolicyFeePeriodic'
-        returned_payment:
-          $ref: '#/components/schemas/PolicyFeePayment'
-      type: object
-    PolicyType:
-      description: Type of policy.
+        * `AUTO`: Automatically redeem rewards when conditions are met.
+
+        * `MANUAL`: Require manual intervention for reward redemption (default).'
       enum:
-      - APR
-      - DOCUMENT
-      - FEE
-      - OFFER
-      - PRODUCT
-      - REWARD
-      - ALL
+      - AUTO
+      - MANUAL
       type: string
+    ProductType:
+      default: REVOLVING
+      description: 'Type of credit product.
+
+
+        `REVOLVING` - Allows users to continuously borrow and pay debts up to the credit limit.'
+      enum:
+      - REVOLVING
+      type: string
+    PolicyProductCardProductLevel:
+      description: Level of the card product.
+      enum:
+      - PREMIUM
+      - TRADITIONAL
+      type: string
+    BundleResponsePage:
+      description: Returns paginated bundles.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: Contains one or more bundles.
+          items:
+            $ref: '#/components/schemas/BundleResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
     ProductSubType:
       default: CREDIT_CARD
       description: 'Subtype of the credit product type.
@@ -2383,250 +2769,12 @@ components:
       - CREDIT_CARD
       - SECURED_CARD
       type: string
-    BundleResourceStatus:
-      description: 'Status of the bundle.
-
-
-        * `DRAFT` - The bundle is in the process of being created.
-
-        * `PENDING_APPROVAL` - The bundle has been created and is awaiting approval.
-
-        * `SENT_FOR_REVISION` - The bundle has been returned for revision.
-
-        * `ACTIVE` - The bundle is active.
-
-        * `REJECTED` - The bundle has been rejected; this status cannot be changed.
-
-        * `ARCHIVED` - The previously active bundle has been archived.
-
-        * `APPROVED` - The bundle has been approved (after having been sent for approval).'
+    PolicyRewardSettlementType:
+      description: Reward settlement strategy for a credit program.
       enum:
-      - DRAFT
-      - PENDING_APPROVAL
-      - SENT_FOR_REVISION
-      - ACTIVE
-      - REJECTED
-      - ARCHIVED
-      - APPROVED
+      - STATEMENT
+      - LIVE
       type: string
-    CurrencyCode:
-      default: USD
-      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
-      enum:
-      - USD
-      type: string
-    PolicyOfferResponse:
-      description: Contains information on an offer policy.
-      properties:
-        created_time:
-          description: Date and time when the offer policy was created on Marqeta's credit platform, in UTC.
-          format: date-time
-          type: string
-        description:
-          description: Description of the offer policy.
-          type: string
-        name:
-          description: Name of the offer policy.
-          type: string
-        token:
-          description: Unique identifier of the offer policy.
-          pattern: (?!^ +$)^.+$
-          type: string
-        updated_time:
-          description: Date and time when the offer policy was last updated on Marqeta's credit platform, in UTC.
-          format: date-time
-          type: string
-      type: object
-    PolicyProductCardProductResponse:
-      description: Contains information on the card products associated with the credit product policy.
-      properties:
-        level:
-          $ref: '#/components/schemas/PolicyProductCardProductLevel'
-        network:
-          description: Name of the card network.
-          enum:
-          - VISA
-          - MASTERCARD
-          - SANDBOX
-          type: string
-        token:
-          description: Unique identifier of the card product.
-          pattern: (?!^ +$)^.+$
-          type: string
-      type: object
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-      type: object
-    PolicyDocumentAssetAndTemplateResponse:
-      description: Return details for a specific asset and the template on which it was based.
-      properties:
-        asset_created_time:
-          description: Date and time when the asset was created.
-          format: date-time
-          type: string
-        asset_token:
-          description: 'Unique identifier of the asset, which is the version of a document that is based on the template and contains finalized values.
-
-            The values are finalized when the bundle containing the document is created.'
-          type: string
-        asset_urls:
-          $ref: '#/components/schemas/PolicyDocumentAssetURLs'
-        template_created_time:
-          description: Date and time when the template was created.
-          format: date-time
-          type: string
-        template_token:
-          description: 'Unique identifier of the template, which is the version of a document that serves as an initial disclosure but does not contain finalized values.
-
-            Values are finalized in the asset version of the document.'
-          type: string
-        template_urls:
-          $ref: '#/components/schemas/PolicyDocumentTemplateURLs'
-      type: object
-    InterestOnGraceReactivationEnum:
-      description: Determines whether to charge or waive interest for the billing period when the balance is paid off.
-      enum:
-      - ACCRUE_FULL_CYCLE
-      - ACCRUE_PAYMENT_DATE
-      - WAIVE
-      type: string
-    PolicyFeePeriodic:
-      description: Contains information on a specific periodic fee in a fee policy.
-      properties:
-        exclude_from_interest_calc:
-          description: Whether the periodic fee is excluded from interest calculation.
-          type: boolean
-        fee_amount:
-          description: Amount of the fee.
-          maximum: 5000
-          minimum: 1
-          type: number
-        number_of_days_post_activation:
-          description: 'Number of days after an account is activated that the initial fee is charged.
-
-            For example, if the value in this field is `30`, then the initial fee is charged 30 days after an account is activated.'
-          maximum: 1000
-          minimum: 1
-          type: number
-      type: object
-    PolicyAprPurchaseResponse:
-      description: Contains information on the pricing strategy for purchases.
-      properties:
-        external_token:
-          description: Unique identifier of the pricing strategy on a credit program.
-          pattern: (?!^ +$)^.+$
-          type: string
-        name:
-          description: Name of the pricing strategy.
-          type: string
-        tiers:
-          description: One or more risk tiers for a pricing strategy.
-          items:
-            $ref: '#/components/schemas/PolicyAprTierResponse'
-          type: array
-      type: object
-    PolicyRewardResponse:
-      description: Contains information on a reward policy.
-      properties:
-        accrual_strategy:
-          $ref: '#/components/schemas/PolicyRewardAccrualType'
-        conversions:
-          description: List of one or more reward conversions.
-          items:
-            $ref: '#/components/schemas/PolicyRewardConversion'
-          minItems: 1
-          type: array
-        created_time:
-          description: Date and time when the reward policy was created on Marqeta's credit platform, in UTC.
-          format: date-time
-          type: string
-        description:
-          description: Description of the reward policy.
-          type: string
-        exclusions:
-          $ref: '#/components/schemas/PolicyRewardExclusions'
-        name:
-          description: Name of the reward policy.
-          type: string
-        redemption_strategy:
-          $ref: '#/components/schemas/PolicyRewardRedemptionStrategy'
-        rounding_strategy:
-          $ref: '#/components/schemas/PolicyRewardRoundingStrategy'
-        rules:
-          description: A list of one or more reward rules.
-          items:
-            $ref: '#/components/schemas/PolicyRewardPlatformRule'
-          minItems: 1
-          type: array
-        settlement_strategy:
-          $ref: '#/components/schemas/PolicyRewardSettlementType'
-        token:
-          description: Unique identifier of the reward policy.
-          pattern: (?!^ +$)^.+$
-          type: string
-        updated_time:
-          description: Date and time when the reward policy was last updated on Marqeta's credit platform, in UTC.
-          format: date-time
-          type: string
-      type: object
-    PaymentAllocationOrderEnum:
-      description: Ordered list of balance types to which payments are allocated, from first to last.
-      enum:
-      - INTEREST
-      - FEES
-      - PRINCIPAL
-      type: string
-    PolicyRewardAccrualType:
-      default: DEFAULT
-      description: 'Reward accrual strategy for a credit program.
-
-        If no value for `accrual_strategy` is set, the default value of this field is `DEFAULT`.'
-      enum:
-      - DEFAULT
-      - PAYMENT
-      type: string
-    PolicyProductMinPaymentCalculation:
-      description: Contains information used to calculate the minimum payment amount on a credit product policy.
-      properties:
-        include_overlimit_amount:
-          description: Whether to include the overlimit amount when calculating the minimum payment.
-          type: boolean
-        include_past_due_amount:
-          description: Whether to include the past due amount when calculating the minimum payment.
-          type: boolean
-        min_payment_flat_amount:
-          description: Minimum payment, expressed as a flat amount, due on the payment due day.
-          type: number
-        min_payment_percentage:
-          $ref: '#/components/schemas/PolicyProductMinPaymentPercentage'
-      required:
-      - include_overlimit_amount
-      - include_past_due_amount
-      type: object
-    BundleTransitionResponse:
-      description: Contains information on a bundle transition.
-      properties:
-        bundle_token:
-          description: Unique identifier of the bundle.
-          maxLength: 36
-          type: string
-        created_time:
-          description: Date and time when the bundle was changed the status on Marqeta's credit platform, in UTC.
-          format: date-time
-          type: string
-        original_status:
-          $ref: '#/components/schemas/BundleResourceStatus'
-        status:
-          $ref: '#/components/schemas/BundleResourceStatus'
-        token:
-          description: Unique identifier of the bundle transition.
-          maxLength: 36
-          type: string
-      type: object
     BundleUpdateReq:
       description: Specifies bundles for a credit program.
       properties:
@@ -2676,66 +2824,15 @@ components:
       - fee_policy_token
       - name
       type: object
-    PolicyProductCardProductLevel:
-      description: Level of the card product.
-      enum:
-      - PREMIUM
-      - TRADITIONAL
-      type: string
-    PolicyProductResponse:
-      description: Contains information on the credit product policy.
+    PolicyDocumentTemplateURLs:
+      description: Contains one or more URLs for a template.
       properties:
-        card_products:
-          description: One or more card products associated with the credit product policy.
-          items:
-            $ref: '#/components/schemas/PolicyProductCardProductResponse'
-          minItems: 1
-          type: array
-        classification:
-          $ref: '#/components/schemas/ProductClassification'
-        created_time:
-          description: Date and time when the credit product policy was created on Marqeta's credit platform, in UTC.
-          format: date-time
+        html:
+          description: URL to the HTML version of the document template.
           type: string
-        credit_line:
-          $ref: '#/components/schemas/ProductCreditLine'
-        currency_code:
-          $ref: '#/components/schemas/CurrencyCode'
-        description:
-          description: Description of the credit product policy.
-          type: string
-        interest_calculation:
-          $ref: '#/components/schemas/InterestCalculation'
-        name:
-          description: Name of the credit product policy.
-          minLength: 1
-          type: string
-        payments:
-          $ref: '#/components/schemas/PolicyProductPaymentConfiguration'
-        product_sub_type:
-          $ref: '#/components/schemas/ProductSubType'
-        product_type:
-          $ref: '#/components/schemas/ProductType'
-        token:
-          description: Unique identifier of the credit product policy.
-          pattern: (?!^ +$)^.+$
-          type: string
-        updated_time:
-          description: Date and time when the credit product policy was last updated on Marqeta's credit platform, in UTC.
-          format: date-time
-          type: string
-        usage:
-          description: One or more usage types for the credit product policy.
-          items:
-            $ref: '#/components/schemas/BalanceType'
-          minItems: 1
-          type: array
+      required:
+      - html
       type: object
-    PolicyRewardConversionType:
-      description: Type of conversion.
-      enum:
-      - STATEMENT_CREDIT
-      type: string
     PolicyProductMinPaymentPercentage:
       description: Contains information used to calculate the minimum payment amount when expressed as a percentage.
       properties:
@@ -2753,103 +2850,6 @@ components:
       required:
       - include_interest_charged
       - percentage_of_balance
-      type: object
-    PolicyRewardSettlementType:
-      description: Reward settlement strategy for a credit program.
-      enum:
-      - STATEMENT
-      - LIVE
-      type: string
-    BundleResponsePage:
-      description: Returns paginated bundles.
-      properties:
-        count:
-          description: Number of resources returned.
-          type: integer
-        data:
-          description: Contains one or more bundles.
-          items:
-            $ref: '#/components/schemas/BundleResponse'
-          type: array
-        end_index:
-          description: Sort order index of the last resource in the returned array.
-          type: integer
-        is_more:
-          description: A value of `true` indicates that more unreturned resources exist.
-          type: boolean
-        start_index:
-          description: Sort order index of the first resource in the returned array.
-          type: integer
-      required:
-      - count
-      - data
-      - end_index
-      - is_more
-      - start_index
-      type: object
-    InterestCalculation:
-      description: Contains the configurations for interest calculation.
-      properties:
-        day_count:
-          description: Day-count convention.
-          enum:
-          - ACTUAL
-          type: string
-        exclude_tran_types:
-          default:
-          - ANNUAL_FEE
-          - MONTHLY_FEE
-          - LATE_PAYMENT_FEE
-          - CASH_BACK_STATEMENT_CREDIT
-          - FOREIGN_TRANSACTION_FEE
-          description: One or more transactions that are excluded from current billing period's interest charge, but included in next.
-          items:
-            enum:
-            - LATE_PAYMENT_FEE
-            - ANNUAL_FEE
-            - MONTHLY_FEE
-            - CASH_BACK_STATEMENT_CREDIT
-            - RETURNED_PAYMENT_FEE
-            - FOREIGN_TRANSACTION_FEE
-            type: string
-          type: array
-        grace_days_application:
-          description: Determines the last day of grace period based on which interest charges are calculated.
-          enum:
-          - NEXT_CYCLE_DATE
-          type: string
-        interest_application:
-          default:
-          - PRINCIPAL
-          - FEES
-          description: One or more balance types on which interest is applied.
-          items:
-            enum:
-            - PRINCIPAL
-            - FEES
-            - INTEREST
-            type: string
-          minItems: 1
-          type: array
-        interest_on_grace_reactivation:
-          $ref: '#/components/schemas/InterestOnGraceReactivationEnum'
-        method:
-          description: Method of interest calculation.
-          enum:
-          - AVG_DAILY_BALANCE_WITH_NEW_TRANSACTIONS
-          type: string
-        minimum_interest:
-          description: When interest is applied, this value determines the minimum amount of interest that can be charged.
-          maximum: 9.9999999999999E11
-          minimum: 0
-          type: number
-      required:
-      - day_count
-      - grace_days_application
-      - interest_application
-      - interest_on_grace_reactivation
-      - method
-      - minimum_interest
       type: object
   securitySchemes:
     mqAppAndAccessToken:

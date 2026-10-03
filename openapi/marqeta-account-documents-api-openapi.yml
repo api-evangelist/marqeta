@@ -174,6 +174,35 @@ paths:
       - Account Documents
 components:
   schemas:
+    AccountDocumentResponse:
+      description: Account document response.
+      properties:
+        accepted_at:
+          description: Date and time when the user accepted the document on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        asset_token:
+          description: Unique identifier of the document on a credit account.
+          type: string
+        asset_urls:
+          $ref: '#/components/schemas/PolicyDocumentAssetURLs'
+        effective_from:
+          description: Date and time when the document goes into effect on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+      type: object
+    AccountAndDocumentAssetType:
+      description: Type of document.
+      enum:
+      - TERMS_SCHEDULE
+      - ACCOUNT_STATEMENT
+      - SUMMARY_OF_CREDIT_TERMS
+      - REWARDS_DISCLOSURE
+      - PRIVACY_POLICY
+      - E_DISCLOSURE
+      - BENEFITS_DISCLOSURE
+      - CARD_MEMBER_AGREEMENT
+      type: string
     AccountDocumentsResponse:
       description: Account documents response.
       properties:
@@ -194,6 +223,23 @@ components:
         terms_schedule:
           $ref: '#/components/schemas/AccountDocumentResponse'
       type: object
+    PolicyDocumentAssetURLs:
+      description: Contains one or more URLs for an asset.
+      properties:
+        html:
+          description: URL to the HTML version of the asset.
+          type: string
+        pdf:
+          description: URL to the PDF version of the asset.
+          type: string
+        png:
+          description: URL to the PNG version of the asset.
+          type: string
+      required:
+      - html
+      - pdf
+      - png
+      type: object
     Error:
       properties:
         code:
@@ -201,18 +247,6 @@ components:
         message:
           type: string
       type: object
-    AccountAndDocumentAssetType:
-      description: Type of document.
-      enum:
-      - TERMS_SCHEDULE
-      - ACCOUNT_STATEMENT
-      - SUMMARY_OF_CREDIT_TERMS
-      - REWARDS_DISCLOSURE
-      - PRIVACY_POLICY
-      - E_DISCLOSURE
-      - BENEFITS_DISCLOSURE
-      - CARD_MEMBER_AGREEMENT
-      type: string
     AccountDocumentsPage:
       description: Account document response.
       properties:
@@ -239,40 +273,6 @@ components:
       - end_index
       - is_more
       - start_index
-      type: object
-    AccountDocumentResponse:
-      description: Account document response.
-      properties:
-        accepted_at:
-          description: Date and time when the user accepted the document on Marqeta's credit platform, in UTC.
-          format: date-time
-          type: string
-        asset_token:
-          description: Unique identifier of the document on a credit account.
-          type: string
-        asset_urls:
-          $ref: '#/components/schemas/PolicyDocumentAssetURLs'
-        effective_from:
-          description: Date and time when the document goes into effect on Marqeta's credit platform, in UTC.
-          format: date-time
-          type: string
-      type: object
-    PolicyDocumentAssetURLs:
-      description: Contains one or more URLs for an asset.
-      properties:
-        html:
-          description: URL to the HTML version of the asset.
-          type: string
-        pdf:
-          description: URL to the PDF version of the asset.
-          type: string
-        png:
-          description: URL to the PNG version of the asset.
-          type: string
-      required:
-      - html
-      - pdf
-      - png
       type: object
   securitySchemes:
     mqAppAndAccessToken:

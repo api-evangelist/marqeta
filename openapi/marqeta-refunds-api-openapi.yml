@@ -84,6 +84,23 @@ paths:
       - Refunds
 components:
   schemas:
+    RefundStatus:
+      description: Current status of the refund.
+      enum:
+      - INITIATED
+      - PENDING
+      - PROCESSING
+      - SUBMITTED
+      - CANCELLED
+      - COMPLETED
+      - RETURNED
+      type: string
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
+      type: string
     RefundType:
       description: Type of refund.
       enum:
@@ -96,42 +113,6 @@ components:
       - ACH
       - CHECK
       type: string
-    CurrencyCode:
-      default: USD
-      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
-      enum:
-      - USD
-      type: string
-    RefundStatus:
-      description: Current status of the refund.
-      enum:
-      - INITIATED
-      - PENDING
-      - PROCESSING
-      - SUBMITTED
-      - CANCELLED
-      - COMPLETED
-      - RETURNED
-      type: string
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-      type: object
-    SimulateRefundTransitionRequest:
-      description: Specifies the details of simulate refund transition request .
-      properties:
-        status:
-          $ref: '#/components/schemas/RefundStatus'
-        token:
-          description: Unique identifier for the refund.
-          type: string
-      required:
-      - status
-      - token
-      type: object
     RefundResponse:
       description: Detailed refund response object.
       properties:
@@ -183,6 +164,25 @@ components:
       - token
       - type
       - updated_time
+      type: object
+    SimulateRefundTransitionRequest:
+      description: Specifies the details of simulate refund transition request .
+      properties:
+        status:
+          $ref: '#/components/schemas/RefundStatus'
+        token:
+          description: Unique identifier for the refund.
+          type: string
+      required:
+      - status
+      - token
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
       type: object
   securitySchemes:
     mqAppAndAccessToken:

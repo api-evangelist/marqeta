@@ -439,51 +439,6 @@ paths:
       - Credit Accounts
 components:
   schemas:
-    ConfigFeeScheduleReq:
-      description: Contains information relevant to configuring fees.
-      properties:
-        schedule:
-          description: Contains one or more fee schedules.
-          items:
-            $ref: '#/components/schemas/ConfigFeeScheduleEntry'
-          type: array
-        type:
-          $ref: '#/components/schemas/AccountProductFeeType'
-      required:
-      - schedule
-      - type
-      type: object
-    MaxAPRSchedulesResponse:
-      properties:
-        end_date:
-          description: Date and time when the override APR ends, in UTC.
-          format: date-time
-          type: string
-        reason:
-          description: Reason for the override APR.
-          enum:
-          - SCRA
-          - MLA
-          - HARDSHIP
-          type: string
-        start_date:
-          description: Date and time when the override APR goes into effect, in UTC.
-          format: date-time
-          type: string
-        value:
-          description: 'The APR percentage value.
-
-            This is the value of the fixed rate during the override period.
-
-            The APR value must adhere to the constraints of the main schedule, such as maximum allowable values.'
-          maximum: 100
-          minimum: 0
-          type: number
-      required:
-      - reason
-      - start_date
-      - value
-      type: object
     AccountUsageResponse:
       description: Contains information on how a credit account is used and what types of balances are permitted on the account.
       properties:
@@ -503,96 +458,6 @@ components:
       - aprs
       - type
       type: object
-    AprScheduleUpdateReq:
-      properties:
-        schedule:
-          description: Contains one or more `schedule` objects, which contain information about the annual percentage rates (APRs) associated with the type of balance on the credit account and when they are effective.
-          items:
-            $ref: '#/components/schemas/AprScheduleEntryUpdateReq'
-          type: array
-        type:
-          $ref: '#/components/schemas/AccountAprType'
-      required:
-      - schedule
-      - type
-      type: object
-    Method:
-      description: 'Method, either a flat amount or a percentage.
-
-
-        *NOTE:*
-
-        Only `FLAT` is currently supported.'
-      enum:
-      - PERCENTAGE
-      - FLAT
-      type: string
-    ConfigFeeScheduleResponse:
-      description: Contains information returned when configuring fees.
-      properties:
-        active:
-          description: Whether the fee is active.
-          type: boolean
-        created_date:
-          description: Date and time when the fee was created on Marqeta's credit platform, in UTC.
-          format: date-time
-          type: string
-        schedule:
-          description: Contains one or more fee schedules.
-          items:
-            $ref: '#/components/schemas/ConfigFeeScheduleEntry'
-          type: array
-        type:
-          $ref: '#/components/schemas/AccountProductFeeType'
-        updated_date:
-          description: Date and time when the fee was last updated on Marqeta's credit platform, in UTC.
-          format: date-time
-          type: string
-      type: object
-    AccountsPage:
-      description: Return paginated accounts.
-      properties:
-        count:
-          description: Number of resources returned.
-          type: integer
-        data:
-          description: Contains one or more credit accounts.
-          items:
-            $ref: '#/components/schemas/AccountResponse'
-          type: array
-        end_index:
-          description: Sort order index of the first resource in the returned array.
-          type: integer
-        is_more:
-          description: A value of `true` indicates that more unreturned resources exist.
-          type: boolean
-        start_index:
-          description: Sort order index of the first resource in the returned array.
-          type: integer
-      required:
-      - count
-      - data
-      - end_index
-      - is_more
-      - start_index
-      type: object
-    BalanceType:
-      description: 'Type of balance.
-
-
-        * `PURCHASE` - The balance on purchases.'
-      enum:
-      - PURCHASE
-      type: string
-    AccountProductFeeType:
-      description: Type of fee.
-      enum:
-      - LATE_PAYMENT_FEE
-      - RETURNED_PAYMENT_FEE
-      - MONTHLY_FEE
-      - ANNUAL_FEE
-      - FOREIGN_TRANSACTION_FEE
-      type: string
     AccountConfigMinPayment:
       description: Contains configurations for a minimum payment override on a credit account, which overrides the minimum payment configurations on the associated credit product.
       properties:
@@ -616,18 +481,97 @@ components:
           format: date-time
           type: string
       type: object
-    AccountType:
-      description: Type of credit account.
+    BalanceType:
+      description: 'Type of balance.
+
+
+        * `PURCHASE` - The balance on purchases.'
       enum:
-      - CONSUMER
-      - BUSINESS
+      - PURCHASE
       type: string
-    FeeMethod:
-      description: Method used to calculate the fee value.
+    ConfigFeeScheduleReq:
+      description: Contains information relevant to configuring fees.
+      properties:
+        schedule:
+          description: Contains one or more fee schedules.
+          items:
+            $ref: '#/components/schemas/ConfigFeeScheduleEntry'
+          type: array
+        type:
+          $ref: '#/components/schemas/AccountProductFeeType'
+      required:
+      - schedule
+      - type
+      type: object
+    AccountAprType:
+      description: 'Type of APR.
+
+
+        * `GO_TO` - Default APR rate that is applicable when any promotional periods expire.
+
+        * `PROMOTIONAL` - A temporary rate that is applicable for a specified period of time.'
       enum:
-      - FLAT
+      - GO_TO
+      - PROMOTIONAL
+      type: string
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
+      type: string
+    Method:
+      description: 'Method, either a flat amount or a percentage.
+
+
+        *NOTE:*
+
+        Only `FLAT` is currently supported.'
+      enum:
       - PERCENTAGE
+      - FLAT
       type: string
+    CycleType:
+      description: 'Type of cycle.
+
+
+        * `BEGINNING_REVOLVING` - Account is beginning to revolve and just started carrying a balance
+
+        from the previous month.
+
+        * `REVOLVING` - Account is revolving and has been carrying a balance from month to month for more than one month.
+
+        * `END_REVOLVING` - Account is no longer revolving and the previous month''s balance is paid off.
+
+        * `TRANSACTING` - Account is not revolving and the balance is paid off each month.'
+      enum:
+      - BEGINNING_REVOLVING
+      - REVOLVING
+      - END_REVOLVING
+      - TRANSACTING
+      type: string
+    ConfigFeeScheduleResponse:
+      description: Contains information returned when configuring fees.
+      properties:
+        active:
+          description: Whether the fee is active.
+          type: boolean
+        created_date:
+          description: Date and time when the fee was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        schedule:
+          description: Contains one or more fee schedules.
+          items:
+            $ref: '#/components/schemas/ConfigFeeScheduleEntry'
+          type: array
+        type:
+          $ref: '#/components/schemas/AccountProductFeeType'
+        updated_date:
+          description: Date and time when the fee was last updated on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+      type: object
     AprScheduleResponse:
       properties:
         active:
@@ -653,189 +597,27 @@ components:
       - schedule
       - type
       type: object
-    AccountUpdateReq:
-      properties:
-        apr_upper_limit:
-          description: Maximum APR percentage value that can be applied to the credit account.
-          maximum: 100
-          minimum: 0
-          type: number
-        config:
-          $ref: '#/components/schemas/AccountConfigUpdateReq'
-        credit_limit:
-          description: Contains information on the credit limit.
-          properties:
-            value:
-              description: Maximum balance the credit account can carry.
-              maximum: 9.9999999999999E11
-              type: number
-              exclusiveMinimum: 0
-          required:
-          - value
-          type: object
-        latest_statement_cycle_type:
-          $ref: '#/components/schemas/CycleType'
-        usages:
-          description: 'Contains one or more `usages` objects that contain information on how a credit account is used and what types of balances are permitted on the account.
+    FeeType:
+      description: 'Type of fee.
 
 
-            You can pass only one `usages` object per `usages.type`.'
-          items:
-            $ref: '#/components/schemas/AccountUsageUpdateReq'
-          type: array
-        user_token:
-          description: 'User token tied to the credit account.
+        *NOTE:*
 
-            You can only update the value of the user token for business accounts.'
-          type: string
-      type: object
-    AccountConfigPaymentHolds:
-      description: Contains configurations for a payment hold.
-      properties:
-        ach_hold_days:
-          description: Number of days to hold an ACH payment.
-          maximum: 30
-          minimum: 0
-          type: integer
-        check_hold_days:
-          description: Number of days to hold a check payment.
-          maximum: 30
-          minimum: 0
-          type: integer
-      type: object
-    AccountUsageUpdateReq:
-      description: Contains information on how a credit account is used and what types of balances are permitted on the account.
-      properties:
-        aprs:
-          description: Contains one or more annual percentage rates (APRs) associated with the credit account.
-          items:
-            $ref: '#/components/schemas/AprScheduleUpdateReq'
-          type: array
-        type:
-          $ref: '#/components/schemas/BalanceType'
-      required:
-      - apr_type
-      - apr_value
-      - type
-      type: object
-    AccountFee:
-      description: Contains fee configurations on a credit account.
-      properties:
-        method:
-          $ref: '#/components/schemas/Method'
-        type:
-          $ref: '#/components/schemas/FeeType'
-        value:
-          description: Value of the fee, either a flat fee amount or percentage value.
-          maximum: 9999.99
-          minimum: 0
-          type: number
-      required:
-      - method
-      - type
-      type: object
-    CurrencyCode:
-      default: USD
-      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+        Only `RETURNED_PAYMENT_FEE`, `LATE_PAYMENT_FEE`, `ANNUAL_FEE`, and `MONTHLY_FEE` are currently supported.
+
+        Do not pass other fees types.'
       enum:
-      - USD
+      - FOREIGN_TRANSACTION_FEE
+      - OVER_LIMIT_FEE
+      - LATE_PAYMENT_FEE
+      - RETURNED_PAYMENT_FEE
+      - CARD_REPLACEMENT_FEE
+      - MINIMUM_INTEREST_FEE
+      - MINIMUM_INTEREST_FEE_REVERSAL
+      - ANNUAL_FEE
+      - MONTHLY_FEE
+      - ACCOUNT_FEE
       type: string
-    AccountStatusEnum:
-      description: 'Status of the credit account.
-
-
-        *NOTE* `CHARGE_OFF` is not an allowable value for `original_status`.'
-      enum:
-      - UNACTIVATED
-      - ACTIVE
-      - SUSPENDED
-      - TERMINATED
-      - CHARGE_OFF
-      type: string
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-      type: object
-    AccountAprType:
-      description: 'Type of APR.
-
-
-        * `GO_TO` - Default APR rate that is applicable when any promotional periods expire.
-
-        * `PROMOTIONAL` - A temporary rate that is applicable for a specified period of time.'
-      enum:
-      - GO_TO
-      - PROMOTIONAL
-      type: string
-    AccountConfigUpdateReq:
-      description: Contains information relevant for updating configurations for electronic disclosures, fees, payment holds, and minimum payment.
-      properties:
-        e_disclosure_active:
-          default: false
-          description: A value of `true` indicates that the account holder consents to receiving disclosures and statements electronically.
-          type: boolean
-        fees:
-          description: Contains one or more fees associated with the credit account.
-          items:
-            $ref: '#/components/schemas/ConfigFeeScheduleReq'
-          type: array
-        min_payment:
-          $ref: '#/components/schemas/AccountConfigMinPayment'
-        payment_due_interval:
-          description: 'Specifies the payment due interval that is used to determine the payment due date for a billing cycle.
-
-            A value of -1 indicates one day prior to the next billing cycle date.
-
-
-            For consumer programs, a minimum gap of 21 days is required between when a statement is delivered and the payment due date.'
-          minimum: -1
-          type: integer
-        payment_holds:
-          $ref: '#/components/schemas/AccountConfigPaymentHolds'
-      type: object
-    AprScheduleEntryResponse:
-      properties:
-        apply_next_cycle:
-          default: false
-          description: Whether the APR is ignored for the current billing cycle and applied on the next.
-          type: boolean
-        effective_date:
-          description: Date and time when the APR goes into effect, in UTC.
-          format: date-time
-          type: string
-        margin:
-          description: 'Number of percentage points added to the prime rate, used to calculate a variable value.
-
-
-            Used for variable values only.'
-          format: float
-          type: number
-        type:
-          default: FIXED
-          description: Indicates whether the APR value is fixed or variable.
-          enum:
-          - FIXED
-          - VARIABLE
-          type: string
-        value:
-          description: 'Percentage value of the APR.
-
-
-            If the APR type is `FIXED`, this is the value of the fixed rate.
-
-            If the APR type is `VARIABLE`, the value is calculated by adding the margin to the prime rate that was stored on Marqeta''s credit platform when your credit program was created.
-
-
-            When backdating an APR, this value cannot be greater than the value of the effective APR on the backdated date.'
-          maximum: 100
-          minimum: 0
-          type: number
-      required:
-      - value
-      type: object
     AccountConfigResponse:
       description: Contains information returned when configuring an account's billing cycle day, payment due day, fees, and more.
       properties:
@@ -891,6 +673,208 @@ components:
       - e_disclosure_active
       - payment_holds
       type: object
+    MaxAPRSchedulesResponse:
+      properties:
+        end_date:
+          description: Date and time when the override APR ends, in UTC.
+          format: date-time
+          type: string
+        reason:
+          description: Reason for the override APR.
+          enum:
+          - SCRA
+          - MLA
+          - HARDSHIP
+          type: string
+        start_date:
+          description: Date and time when the override APR goes into effect, in UTC.
+          format: date-time
+          type: string
+        value:
+          description: 'The APR percentage value.
+
+            This is the value of the fixed rate during the override period.
+
+            The APR value must adhere to the constraints of the main schedule, such as maximum allowable values.'
+          maximum: 100
+          minimum: 0
+          type: number
+      required:
+      - reason
+      - start_date
+      - value
+      type: object
+    AprScheduleEntryResponse:
+      properties:
+        apply_next_cycle:
+          default: false
+          description: Whether the APR is ignored for the current billing cycle and applied on the next.
+          type: boolean
+        effective_date:
+          description: Date and time when the APR goes into effect, in UTC.
+          format: date-time
+          type: string
+        margin:
+          description: 'Number of percentage points added to the prime rate, used to calculate a variable value.
+
+
+            Used for variable values only.'
+          format: float
+          type: number
+        type:
+          default: FIXED
+          description: Indicates whether the APR value is fixed or variable.
+          enum:
+          - FIXED
+          - VARIABLE
+          type: string
+        value:
+          description: 'Percentage value of the APR.
+
+
+            If the APR type is `FIXED`, this is the value of the fixed rate.
+
+            If the APR type is `VARIABLE`, the value is calculated by adding the margin to the prime rate that was stored on Marqeta''s credit platform when your credit program was created.
+
+
+            When backdating an APR, this value cannot be greater than the value of the effective APR on the backdated date.'
+          maximum: 100
+          minimum: 0
+          type: number
+      required:
+      - value
+      type: object
+    AccountUsageUpdateReq:
+      description: Contains information on how a credit account is used and what types of balances are permitted on the account.
+      properties:
+        aprs:
+          description: Contains one or more annual percentage rates (APRs) associated with the credit account.
+          items:
+            $ref: '#/components/schemas/AprScheduleUpdateReq'
+          type: array
+        type:
+          $ref: '#/components/schemas/BalanceType'
+      required:
+      - apr_type
+      - apr_value
+      - type
+      type: object
+    AprScheduleUpdateReq:
+      properties:
+        schedule:
+          description: Contains one or more `schedule` objects, which contain information about the annual percentage rates (APRs) associated with the type of balance on the credit account and when they are effective.
+          items:
+            $ref: '#/components/schemas/AprScheduleEntryUpdateReq'
+          type: array
+        type:
+          $ref: '#/components/schemas/AccountAprType'
+      required:
+      - schedule
+      - type
+      type: object
+    FeeMethod:
+      description: Method used to calculate the fee value.
+      enum:
+      - FLAT
+      - PERCENTAGE
+      type: string
+    AprScheduleEntryUpdateReq:
+      properties:
+        apply_next_cycle:
+          default: false
+          description: Whether the APR can be ignored for the current billing cycle and applied on the next.
+          type: boolean
+        effective_date:
+          description: 'Date and time when the APR goes into effect, in UTC.
+
+
+            If you do not include a date-time value, the system uses the date and time when the API request was received.
+
+
+            *NOTE:*
+
+            When passing multiple `schedule` objects, this field is required in all objects but the first.
+
+            If you do not include `effective_date` in the first `schedule`, the system uses the date and time when the API request was received.'
+          format: date-time
+          type: string
+        margin:
+          description: 'Number of percentage points added to the prime rate, used to calculate a variable value.
+
+
+            Used for variable values only.'
+          format: float
+          type: number
+        type:
+          default: FIXED
+          description: Indicates whether the APR value is fixed or variable.
+          enum:
+          - FIXED
+          - VARIABLE
+          type: string
+        value:
+          description: 'Percentage value of the APR.
+
+
+            If the APR type is `FIXED`, this is the value of the fixed rate.
+
+            If the APR type is `VARIABLE`, the value is calculated by adding the margin to the prime rate that was stored on Marqeta''s credit platform when your credit program was created.
+
+
+            When backdating an APR, this value cannot be greater than the value of the effective APR on the backdated date.'
+          maximum: 100
+          minimum: 0
+          type: number
+      required:
+      - value
+      type: object
+    AccountProductFeeType:
+      description: Type of fee.
+      enum:
+      - LATE_PAYMENT_FEE
+      - RETURNED_PAYMENT_FEE
+      - MONTHLY_FEE
+      - ANNUAL_FEE
+      - FOREIGN_TRANSACTION_FEE
+      type: string
+    AccountConfigUpdateReq:
+      description: Contains information relevant for updating configurations for electronic disclosures, fees, payment holds, and minimum payment.
+      properties:
+        e_disclosure_active:
+          default: false
+          description: A value of `true` indicates that the account holder consents to receiving disclosures and statements electronically.
+          type: boolean
+        fees:
+          description: Contains one or more fees associated with the credit account.
+          items:
+            $ref: '#/components/schemas/ConfigFeeScheduleReq'
+          type: array
+        min_payment:
+          $ref: '#/components/schemas/AccountConfigMinPayment'
+        payment_due_interval:
+          description: 'Specifies the payment due interval that is used to determine the payment due date for a billing cycle.
+
+            A value of -1 indicates one day prior to the next billing cycle date.
+
+
+            For consumer programs, a minimum gap of 21 days is required between when a statement is delivered and the payment due date.'
+          minimum: -1
+          type: integer
+        payment_holds:
+          $ref: '#/components/schemas/AccountConfigPaymentHolds'
+      type: object
+    AccountStatusEnum:
+      description: 'Status of the credit account.
+
+
+        *NOTE* `CHARGE_OFF` is not an allowable value for `original_status`.'
+      enum:
+      - UNACTIVATED
+      - ACTIVE
+      - SUSPENDED
+      - TERMINATED
+      - CHARGE_OFF
+      type: string
     AccountResponse:
       description: Contains information on a credit account.
       properties:
@@ -1025,55 +1009,134 @@ components:
       - type
       - updated_time
       type: object
-    AprScheduleEntryUpdateReq:
+    AccountConfigPaymentHolds:
+      description: Contains configurations for a payment hold.
       properties:
-        apply_next_cycle:
-          default: false
-          description: Whether the APR can be ignored for the current billing cycle and applied on the next.
-          type: boolean
-        effective_date:
-          description: 'Date and time when the APR goes into effect, in UTC.
-
-
-            If you do not include a date-time value, the system uses the date and time when the API request was received.
-
-
-            *NOTE:*
-
-            When passing multiple `schedule` objects, this field is required in all objects but the first.
-
-            If you do not include `effective_date` in the first `schedule`, the system uses the date and time when the API request was received.'
-          format: date-time
+        ach_hold_days:
+          description: Number of days to hold an ACH payment.
+          maximum: 30
+          minimum: 0
+          type: integer
+        check_hold_days:
+          description: Number of days to hold a check payment.
+          maximum: 30
+          minimum: 0
+          type: integer
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
           type: string
-        margin:
-          description: 'Number of percentage points added to the prime rate, used to calculate a variable value.
-
-
-            Used for variable values only.'
-          format: float
+      type: object
+    AccountType:
+      description: Type of credit account.
+      enum:
+      - CONSUMER
+      - BUSINESS
+      type: string
+    AccountUpdateReq:
+      properties:
+        apr_upper_limit:
+          description: Maximum APR percentage value that can be applied to the credit account.
+          maximum: 100
+          minimum: 0
           type: number
-        type:
-          default: FIXED
-          description: Indicates whether the APR value is fixed or variable.
-          enum:
-          - FIXED
-          - VARIABLE
+        config:
+          $ref: '#/components/schemas/AccountConfigUpdateReq'
+        credit_limit:
+          description: Contains information on the credit limit.
+          properties:
+            value:
+              description: Maximum balance the credit account can carry.
+              maximum: 9.9999999999999E11
+              type: number
+              exclusiveMinimum: 0
+          required:
+          - value
+          type: object
+        latest_statement_cycle_type:
+          $ref: '#/components/schemas/CycleType'
+        usages:
+          description: 'Contains one or more `usages` objects that contain information on how a credit account is used and what types of balances are permitted on the account.
+
+
+            You can pass only one `usages` object per `usages.type`.'
+          items:
+            $ref: '#/components/schemas/AccountUsageUpdateReq'
+          type: array
+        user_token:
+          description: 'User token tied to the credit account.
+
+            You can only update the value of the user token for business accounts.'
           type: string
+      type: object
+    AccountReward:
+      description: TODO Add description here
+      properties:
+        method:
+          $ref: '#/components/schemas/Method'
+        type:
+          $ref: '#/components/schemas/RewardType'
         value:
-          description: 'Percentage value of the APR.
-
-
-            If the APR type is `FIXED`, this is the value of the fixed rate.
-
-            If the APR type is `VARIABLE`, the value is calculated by adding the margin to the prime rate that was stored on Marqeta''s credit platform when your credit program was created.
-
-
-            When backdating an APR, this value cannot be greater than the value of the effective APR on the backdated date.'
+          description: Value of the reward, either a flat reward amount or percentage value.
           maximum: 100
           minimum: 0
           type: number
       required:
-      - value
+      - method
+      - type
+      type: object
+    AccountFee:
+      description: Contains fee configurations on a credit account.
+      properties:
+        method:
+          $ref: '#/components/schemas/Method'
+        type:
+          $ref: '#/components/schemas/FeeType'
+        value:
+          description: Value of the fee, either a flat fee amount or percentage value.
+          maximum: 9999.99
+          minimum: 0
+          type: number
+      required:
+      - method
+      - type
+      type: object
+    RewardType:
+      description: Type of reward.
+      enum:
+      - AUTO_CASH_BACK
+      - CASH_BACK
+      - STATEMENT_CREDIT
+      type: string
+    AccountsPage:
+      description: Return paginated accounts.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: Contains one or more credit accounts.
+          items:
+            $ref: '#/components/schemas/AccountResponse'
+          type: array
+        end_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
       type: object
     ConfigFeeScheduleEntry:
       description: Contains information on a fee schedule.
@@ -1093,69 +1156,6 @@ components:
       - method
       - value
       type: object
-    RewardType:
-      description: Type of reward.
-      enum:
-      - AUTO_CASH_BACK
-      - CASH_BACK
-      - STATEMENT_CREDIT
-      type: string
-    FeeType:
-      description: 'Type of fee.
-
-
-        *NOTE:*
-
-        Only `RETURNED_PAYMENT_FEE`, `LATE_PAYMENT_FEE`, `ANNUAL_FEE`, and `MONTHLY_FEE` are currently supported.
-
-        Do not pass other fees types.'
-      enum:
-      - FOREIGN_TRANSACTION_FEE
-      - OVER_LIMIT_FEE
-      - LATE_PAYMENT_FEE
-      - RETURNED_PAYMENT_FEE
-      - CARD_REPLACEMENT_FEE
-      - MINIMUM_INTEREST_FEE
-      - MINIMUM_INTEREST_FEE_REVERSAL
-      - ANNUAL_FEE
-      - MONTHLY_FEE
-      - ACCOUNT_FEE
-      type: string
-    AccountReward:
-      description: TODO Add description here
-      properties:
-        method:
-          $ref: '#/components/schemas/Method'
-        type:
-          $ref: '#/components/schemas/RewardType'
-        value:
-          description: Value of the reward, either a flat reward amount or percentage value.
-          maximum: 100
-          minimum: 0
-          type: number
-      required:
-      - method
-      - type
-      type: object
-    CycleType:
-      description: 'Type of cycle.
-
-
-        * `BEGINNING_REVOLVING` - Account is beginning to revolve and just started carrying a balance
-
-        from the previous month.
-
-        * `REVOLVING` - Account is revolving and has been carrying a balance from month to month for more than one month.
-
-        * `END_REVOLVING` - Account is no longer revolving and the previous month''s balance is paid off.
-
-        * `TRANSACTING` - Account is not revolving and the balance is paid off each month.'
-      enum:
-      - BEGINNING_REVOLVING
-      - REVOLVING
-      - END_REVOLVING
-      - TRANSACTING
-      type: string
   securitySchemes:
     mqAppAndAccessToken:
       scheme: basic
