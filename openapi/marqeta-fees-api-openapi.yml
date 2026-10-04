@@ -511,6 +511,19 @@ components:
       - currency_code
       - type
       type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
+      type: string
     AccountFeePage:
       description: Returns paginated account fees.
       properties:
@@ -538,19 +551,6 @@ components:
       - is_more
       - start_index
       type: object
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-      type: object
-    CurrencyCode:
-      default: USD
-      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
-      enum:
-      - USD
-      type: string
     fee_update_request:
       properties:
         active:
@@ -583,36 +583,6 @@ components:
           enum:
           - FLAT
           - PERCENTAGE
-          type: string
-      type: object
-    FeeListResponse:
-      properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/fee_response'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
-      type: object
-    fee_attributes:
-      properties:
-        reason:
-          type: string
-        region:
-          type: string
-        status:
-          type: string
-        transaction_type:
           type: string
       type: object
     fee_response:
@@ -663,6 +633,36 @@ components:
       - last_modified_time
       - name
       - token
+      type: object
+    fee_attributes:
+      properties:
+        reason:
+          type: string
+        region:
+          type: string
+        status:
+          type: string
+        transaction_type:
+          type: string
+      type: object
+    FeeListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/fee_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
       type: object
     fee_request:
       properties:

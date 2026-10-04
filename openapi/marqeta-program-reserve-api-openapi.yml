@@ -195,6 +195,56 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    program_reserve_transaction_response:
+      properties:
+        amount:
+          description: 'Amount of the program reserve account credit or debit.
+
+            Sometimes referred to as a _program funding account_.'
+          type: number
+        created_time:
+          description: Date and time when the resource was created, in UTC.
+          format: date-time
+          type: string
+        currency_code:
+          description: Three-digit ISO 4217 currency code.
+          type: string
+        is_collateral:
+          type: boolean
+        last_modified_time:
+          description: The date and time when the resource was last modified, in UTC.
+          format: date-time
+          type: string
+        memo:
+          description: Memo or note describing the transaction.
+          type: string
+        state:
+          description: Transaction state.
+          enum:
+          - PENDING
+          - COMPLETE
+          type: string
+        tags:
+          description: Comma-delimited list of tags describing the transaction.
+          type: string
+        token:
+          description: The unique identifier of the transaction response.
+          type: string
+        transaction_token:
+          description: Unique identifier of the transaction.
+          type: string
+        type:
+          description: Transaction type.
+          enum:
+          - CREDIT
+          - DEBIT
+          - PENDING_CREDIT
+          - PENDING_DEBIT
+          type: string
+      required:
+      - created_time
+      - last_modified_time
+      type: object
     program_reserve_account_balance:
       properties:
         available_balance:
@@ -268,56 +318,6 @@ components:
             This field is returned if there are resources in your returned array.'
           format: int32
           type: integer
-      type: object
-    program_reserve_transaction_response:
-      properties:
-        amount:
-          description: 'Amount of the program reserve account credit or debit.
-
-            Sometimes referred to as a _program funding account_.'
-          type: number
-        created_time:
-          description: Date and time when the resource was created, in UTC.
-          format: date-time
-          type: string
-        currency_code:
-          description: Three-digit ISO 4217 currency code.
-          type: string
-        is_collateral:
-          type: boolean
-        last_modified_time:
-          description: The date and time when the resource was last modified, in UTC.
-          format: date-time
-          type: string
-        memo:
-          description: Memo or note describing the transaction.
-          type: string
-        state:
-          description: Transaction state.
-          enum:
-          - PENDING
-          - COMPLETE
-          type: string
-        tags:
-          description: Comma-delimited list of tags describing the transaction.
-          type: string
-        token:
-          description: The unique identifier of the transaction response.
-          type: string
-        transaction_token:
-          description: Unique identifier of the transaction.
-          type: string
-        type:
-          description: Transaction type.
-          enum:
-          - CREDIT
-          - DEBIT
-          - PENDING_CREDIT
-          - PENDING_DEBIT
-          type: string
-      required:
-      - created_time
-      - last_modified_time
       type: object
     program_reserve_deposit_request:
       properties:

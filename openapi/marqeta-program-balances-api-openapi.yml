@@ -111,131 +111,7 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
-  responses:
-    Unauthorized:
-      description: Unauthorized. The provided application token and access token credentials are invalid or missing.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: Bad request. One or more required query parameters are missing or contain invalid values.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-  parameters:
-    format:
-      name: format
-      in: query
-      description: Response format. Use 'json' for JSON responses or 'csv' for comma-separated bulk file format. Defaults to json.
-      schema:
-        type: string
-        enum:
-        - json
-        - csv
-        default: json
-    fields:
-      name: fields
-      in: query
-      description: Comma-delimited list of fields to include in the response. If not specified, all available fields are returned.
-      schema:
-        type: string
-    time_agg:
-      name: time_agg
-      in: path
-      required: true
-      description: Aggregation time level for the data. Use 'day' for daily rollups, 'week' for weekly rollups, 'month' for monthly rollups, or 'detail' for individual record-level data.
-      schema:
-        type: string
-        enum:
-        - day
-        - week
-        - month
-        - detail
-    start_date:
-      name: start_date
-      in: query
-      description: Start date for filtering data (format YYYY-MM-DD). Returns records on or after this date.
-      schema:
-        type: string
-        format: date
-    limit:
-      name: limit
-      in: query
-      description: Maximum number of records to return per request.
-      schema:
-        type: integer
-        minimum: 1
-        maximum: 10000
-        default: 1000
-    program:
-      name: program
-      in: query
-      required: true
-      description: The name of your Marqeta card program. This parameter is required for most DiVA API endpoints to scope the data to your program.
-      schema:
-        type: string
-    end_date:
-      name: end_date
-      in: query
-      description: End date for filtering data (format YYYY-MM-DD). Returns records on or before this date.
-      schema:
-        type: string
-        format: date
-    offset:
-      name: offset
-      in: query
-      description: Zero-based offset for pagination.
-      schema:
-        type: integer
-        minimum: 0
-        default: 0
   schemas:
-    SettlementBalancesResponse:
-      type: object
-      description: Program settlement balance data response.
-      properties:
-        meta:
-          $ref: '#/components/schemas/DivaResponseMeta'
-        data:
-          type: array
-          description: Array of settlement balance records.
-          items:
-            type: object
-            properties:
-              date:
-                type: string
-                format: date
-                description: Settlement date.
-              program:
-                type: string
-                description: Program identifier.
-              settlement_amount:
-                type: number
-                description: Total amount settled during this period.
-              network:
-                type: string
-                description: Card network (e.g., VISA, MASTERCARD).
-              currency_code:
-                type: string
-                description: ISO 4217 currency code.
-    DivaResponseMeta:
-      type: object
-      description: Metadata included in DiVA API paginated responses.
-      properties:
-        total_count:
-          type: integer
-          description: Total number of records matching the query.
-        limit:
-          type: integer
-          description: Maximum records returned per page.
-        offset:
-          type: integer
-          description: Current page offset.
-        has_more:
-          type: boolean
-          description: Whether additional pages of data are available.
     ActivityBalancesResponse:
       type: object
       description: Activity balance data response.
@@ -266,6 +142,50 @@ components:
               spend_amount:
                 type: number
                 description: Total funds spent during the period.
+              currency_code:
+                type: string
+                description: ISO 4217 currency code.
+    DivaResponseMeta:
+      type: object
+      description: Metadata included in DiVA API paginated responses.
+      properties:
+        total_count:
+          type: integer
+          description: Total number of records matching the query.
+        limit:
+          type: integer
+          description: Maximum records returned per page.
+        offset:
+          type: integer
+          description: Current page offset.
+        has_more:
+          type: boolean
+          description: Whether additional pages of data are available.
+    SettlementBalancesResponse:
+      type: object
+      description: Program settlement balance data response.
+      properties:
+        meta:
+          $ref: '#/components/schemas/DivaResponseMeta'
+        data:
+          type: array
+          description: Array of settlement balance records.
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                format: date
+                description: Settlement date.
+              program:
+                type: string
+                description: Program identifier.
+              settlement_amount:
+                type: number
+                description: Total amount settled during this period.
+              network:
+                type: string
+                description: Card network (e.g., VISA, MASTERCARD).
               currency_code:
                 type: string
                 description: ISO 4217 currency code.
@@ -310,6 +230,86 @@ components:
               currency_code:
                 type: string
                 description: ISO 4217 currency code for the balance figures.
+  parameters:
+    time_agg:
+      name: time_agg
+      in: path
+      required: true
+      description: Aggregation time level for the data. Use 'day' for daily rollups, 'week' for weekly rollups, 'month' for monthly rollups, or 'detail' for individual record-level data.
+      schema:
+        type: string
+        enum:
+        - day
+        - week
+        - month
+        - detail
+    limit:
+      name: limit
+      in: query
+      description: Maximum number of records to return per request.
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 10000
+        default: 1000
+    start_date:
+      name: start_date
+      in: query
+      description: Start date for filtering data (format YYYY-MM-DD). Returns records on or after this date.
+      schema:
+        type: string
+        format: date
+    format:
+      name: format
+      in: query
+      description: Response format. Use 'json' for JSON responses or 'csv' for comma-separated bulk file format. Defaults to json.
+      schema:
+        type: string
+        enum:
+        - json
+        - csv
+        default: json
+    offset:
+      name: offset
+      in: query
+      description: Zero-based offset for pagination.
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+    fields:
+      name: fields
+      in: query
+      description: Comma-delimited list of fields to include in the response. If not specified, all available fields are returned.
+      schema:
+        type: string
+    end_date:
+      name: end_date
+      in: query
+      description: End date for filtering data (format YYYY-MM-DD). Returns records on or before this date.
+      schema:
+        type: string
+        format: date
+    program:
+      name: program
+      in: query
+      required: true
+      description: The name of your Marqeta card program. This parameter is required for most DiVA API endpoints to scope the data to your program.
+      schema:
+        type: string
+  responses:
+    Unauthorized:
+      description: Unauthorized. The provided application token and access token credentials are invalid or missing.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Bad request. One or more required query parameters are missing or contain invalid values.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   securitySchemes:
     basicAuth:
       type: http

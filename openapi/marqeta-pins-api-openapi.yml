@@ -173,6 +173,48 @@ paths:
       - Pins
 components:
   schemas:
+    pin_reveal_request:
+      properties:
+        cardholder_verification_method:
+          description: 'The supplemental method used to verify the cardholder''s identity before revealing the card''s personal identification number (PIN).
+
+
+            The possible cardholder verification methods are:
+
+
+            * *BIOMETRIC_FACE:* In-app authentication via facial recognition
+
+            * *BIOMETRIC_FINGERPRINT:* In-app authentication via biometric fingerprint
+
+            * *EXP_CVV:* In-app authentication by entering the card''s expiration date and card verification value (CVV)
+
+            * *LOGIN:* In-app authentication by re-entering the app password
+
+            * *OTP:* Two-factor authentication involving a one-time password (OTP)
+
+            * *OTP_CVV:* Two-factor authentication involving the card''s CVV and an OTP
+
+            * *OTHER:* Authentication that relies on other secure methods'
+          enum:
+          - BIOMETRIC_FACE
+          - BIOMETRIC_FINGERPRINT
+          - LOGIN
+          - EXP_CVV
+          - OTP_CVV
+          - OTP
+          - OTHER
+          type: string
+        control_token:
+          description: 'Unique value generated as a result of issuing a `POST` request to the `/pins/controltoken` endpoint.
+
+            This value cannot be updated.'
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - cardholder_verification_method
+      - control_token
+      type: object
     control_token_request:
       properties:
         card_token:
@@ -215,48 +257,6 @@ components:
       required:
       - control_token
       - pin
-      type: object
-    pin_reveal_request:
-      properties:
-        cardholder_verification_method:
-          description: 'The supplemental method used to verify the cardholder''s identity before revealing the card''s personal identification number (PIN).
-
-
-            The possible cardholder verification methods are:
-
-
-            * *BIOMETRIC_FACE:* In-app authentication via facial recognition
-
-            * *BIOMETRIC_FINGERPRINT:* In-app authentication via biometric fingerprint
-
-            * *EXP_CVV:* In-app authentication by entering the card''s expiration date and card verification value (CVV)
-
-            * *LOGIN:* In-app authentication by re-entering the app password
-
-            * *OTP:* Two-factor authentication involving a one-time password (OTP)
-
-            * *OTP_CVV:* Two-factor authentication involving the card''s CVV and an OTP
-
-            * *OTHER:* Authentication that relies on other secure methods'
-          enum:
-          - BIOMETRIC_FACE
-          - BIOMETRIC_FINGERPRINT
-          - LOGIN
-          - EXP_CVV
-          - OTP_CVV
-          - OTP
-          - OTHER
-          type: string
-        control_token:
-          description: 'Unique value generated as a result of issuing a `POST` request to the `/pins/controltoken` endpoint.
-
-            This value cannot be updated.'
-          maxLength: 36
-          minLength: 1
-          type: string
-      required:
-      - cardholder_verification_method
-      - control_token
       type: object
     control_token_response:
       properties:

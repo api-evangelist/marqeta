@@ -95,23 +95,36 @@ components:
       - COMPLETED
       - RETURNED
       type: string
-    CurrencyCode:
-      default: USD
-      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
-      enum:
-      - USD
-      type: string
-    RefundType:
-      description: Type of refund.
-      enum:
-      - PAYMENT_REFUND
-      - CREDIT_BALANCE_REFUND
-      type: string
     RefundMethod:
       description: Payment instrument used to issue the refund.
       enum:
       - ACH
       - CHECK
+      type: string
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    SimulateRefundTransitionRequest:
+      description: Specifies the details of simulate refund transition request .
+      properties:
+        status:
+          $ref: '#/components/schemas/RefundStatus'
+        token:
+          description: Unique identifier for the refund.
+          type: string
+      required:
+      - status
+      - token
+      type: object
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
       type: string
     RefundResponse:
       description: Detailed refund response object.
@@ -165,25 +178,12 @@ components:
       - type
       - updated_time
       type: object
-    SimulateRefundTransitionRequest:
-      description: Specifies the details of simulate refund transition request .
-      properties:
-        status:
-          $ref: '#/components/schemas/RefundStatus'
-        token:
-          description: Unique identifier for the refund.
-          type: string
-      required:
-      - status
-      - token
-      type: object
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-      type: object
+    RefundType:
+      description: Type of refund.
+      enum:
+      - PAYMENT_REFUND
+      - CREDIT_BALANCE_REFUND
+      type: string
   securitySchemes:
     mqAppAndAccessToken:
       scheme: basic

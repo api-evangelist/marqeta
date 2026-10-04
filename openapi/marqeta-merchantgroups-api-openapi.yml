@@ -183,6 +183,42 @@ components:
           format: int32
           type: integer
       type: object
+    merchant_group_response:
+      properties:
+        active:
+          default: false
+          type: boolean
+        created_time:
+          format: date-time
+          type: string
+        last_modified_time:
+          format: date-time
+          type: string
+        mids:
+          items:
+            type: string
+          type: array
+        name:
+          type: string
+        token:
+          type: string
+      type: object
+    merchant_group_update_request:
+      properties:
+        active:
+          default: false
+          type: boolean
+        mids:
+          items:
+            type: string
+          maxItems: 4000
+          minItems: 1
+          type: array
+        name:
+          maxLength: 40
+          minLength: 1
+          type: string
+      type: object
     merchant_group_request:
       properties:
         active:
@@ -204,42 +240,6 @@ components:
           type: string
       required:
       - name
-      type: object
-    merchant_group_update_request:
-      properties:
-        active:
-          default: false
-          type: boolean
-        mids:
-          items:
-            type: string
-          maxItems: 4000
-          minItems: 1
-          type: array
-        name:
-          maxLength: 40
-          minLength: 1
-          type: string
-      type: object
-    merchant_group_response:
-      properties:
-        active:
-          default: false
-          type: boolean
-        created_time:
-          format: date-time
-          type: string
-        last_modified_time:
-          format: date-time
-          type: string
-        mids:
-          items:
-            type: string
-          type: array
-        name:
-          type: string
-        token:
-          type: string
       type: object
   securitySchemes:
     mqAppAndAccessToken:

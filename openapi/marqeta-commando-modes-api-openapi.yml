@@ -223,78 +223,6 @@ components:
           format: int32
           type: integer
       type: object
-    real_time_standin_criteria:
-      properties:
-        enabled:
-          default: false
-          type: boolean
-        include_application_errors:
-          default: false
-          type: boolean
-        include_connection_errors:
-          default: false
-          type: boolean
-        include_response_timeouts:
-          default: false
-          type: boolean
-      type: object
-    commando_mode_transition_response:
-      properties:
-        commando_mode_token:
-          type: string
-        created_time:
-          description: yyyy-MM-ddTHH:mm:ssZ
-          format: date-time
-          type: string
-        name:
-          type: string
-        token:
-          type: string
-        transition:
-          $ref: '#/components/schemas/commando_mode_nested_transition'
-        type:
-          type: string
-      required:
-      - created_time
-      type: object
-    CommandoModeListResponse:
-      properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/commando_mode_response'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
-      type: object
-    commando_mode_nested_transition:
-      properties:
-        channel:
-          enum:
-          - API
-          - SYSTEM
-          - ADMIN
-          type: string
-        commando_enabled:
-          default: false
-          type: boolean
-        reason:
-          type: string
-        username:
-          type: string
-      required:
-      - channel
-      - commando_enabled
-      type: object
     commando_mode_enables:
       properties:
         auth_controls:
@@ -317,6 +245,78 @@ components:
           type: array
       required:
       - program_funding_source
+      type: object
+    real_time_standin_criteria:
+      properties:
+        enabled:
+          default: false
+          type: boolean
+        include_application_errors:
+          default: false
+          type: boolean
+        include_connection_errors:
+          default: false
+          type: boolean
+        include_response_timeouts:
+          default: false
+          type: boolean
+      type: object
+    CommandoModeListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/commando_mode_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    commando_mode_transition_response:
+      properties:
+        commando_mode_token:
+          type: string
+        created_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        name:
+          type: string
+        token:
+          type: string
+        transition:
+          $ref: '#/components/schemas/commando_mode_nested_transition'
+        type:
+          type: string
+      required:
+      - created_time
+      type: object
+    commando_mode_nested_transition:
+      properties:
+        channel:
+          enum:
+          - API
+          - SYSTEM
+          - ADMIN
+          type: string
+        commando_enabled:
+          default: false
+          type: boolean
+        reason:
+          type: string
+        username:
+          type: string
+      required:
+      - channel
+      - commando_enabled
       type: object
   securitySchemes:
     mqAppAndAccessToken:

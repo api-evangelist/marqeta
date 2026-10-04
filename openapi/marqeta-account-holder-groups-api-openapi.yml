@@ -157,18 +157,24 @@ paths:
       - account holder groups
 components:
   schemas:
-    account_holder_group_request:
+    AccountHolderGroupListResponse:
       properties:
-        config:
-          $ref: '#/components/schemas/account_holder_group_config'
-        name:
-          maxLength: 40
-          minLength: 1
-          type: string
-        token:
-          maxLength: 36
-          minLength: 1
-          type: string
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/account_holder_group_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
       type: object
     pre_kyc_controls:
       properties:
@@ -188,15 +194,6 @@ components:
         is_reloadable_pre_kyc:
           default: false
           type: boolean
-      type: object
-    account_holder_group_update_request:
-      properties:
-        config:
-          $ref: '#/components/schemas/account_holder_group_config'
-        name:
-          maxLength: 40
-          minLength: 1
-          type: string
       type: object
     account_holder_group_response:
       properties:
@@ -227,24 +224,27 @@ components:
           minLength: 0
           type: string
       type: object
-    AccountHolderGroupListResponse:
+    account_holder_group_request:
       properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/account_holder_group_response'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
+        config:
+          $ref: '#/components/schemas/account_holder_group_config'
+        name:
+          maxLength: 40
+          minLength: 1
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      type: object
+    account_holder_group_update_request:
+      properties:
+        config:
+          $ref: '#/components/schemas/account_holder_group_config'
+        name:
+          maxLength: 40
+          minLength: 1
+          type: string
       type: object
   securitySchemes:
     mqAppAndAccessToken:

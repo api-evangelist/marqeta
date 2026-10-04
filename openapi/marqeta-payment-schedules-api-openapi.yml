@@ -507,14 +507,6 @@ paths:
       - Payment Schedules
 components:
   schemas:
-    PaymentScheduleAmountCategory:
-      description: A category used to determine the actual payment amount.
-      enum:
-      - FIXED
-      - MINIMUM_PAYMENT
-      - REMAINING_STATEMENT_BALANCE
-      - CURRENT_BALANCE
-      type: string
     PaymentScheduleTransitionPage:
       description: Returns paginated information for multiple payment schedule transitions.
       properties:
@@ -542,12 +534,52 @@ components:
       - is_more
       - start_index
       type: object
+    PaymentScheduleStatus:
+      description: Status of the payment schedule.
+      enum:
+      - ACTIVE
+      - COMPLETED
+      - TERMINATED
+      type: string
+    PaymentScheduleFrequency:
+      description: Defines how often to make a scheduled payment.
+      enum:
+      - ONCE
+      - MONTHLY
+      type: string
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    PaymentScheduleAmountCategory:
+      description: A category used to determine the actual payment amount.
+      enum:
+      - FIXED
+      - MINIMUM_PAYMENT
+      - REMAINING_STATEMENT_BALANCE
+      - CURRENT_BALANCE
+      type: string
     CurrencyCode:
       default: USD
       description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
       enum:
       - USD
       type: string
+    PaymentScheduleTransitionCreateReq:
+      description: Details to create a payment schedule transition
+      properties:
+        status:
+          $ref: '#/components/schemas/PaymentScheduleStatus'
+        token:
+          description: Unique identifier of the payment schedule transition.
+          maxLength: 36
+          type: string
+      required:
+      - status
+      type: object
     PaymentScheduleCreateReq:
       description: Information to create a payment schedule.
       properties:
@@ -595,45 +627,6 @@ components:
       - amount_category
       - currency_code
       - frequency
-      type: object
-    PaymentSchedulePage:
-      description: Returns paginated information for multiple payment schedules.
-      properties:
-        count:
-          description: Number of resources returned.
-          type: integer
-        data:
-          description: List of payment schedules.
-          items:
-            $ref: '#/components/schemas/PaymentScheduleResponse'
-          type: array
-        end_index:
-          description: Sort order index of the last resource in the returned array.
-          type: integer
-        is_more:
-          description: A value of `true` indicates that more unreturned resources exist.
-          type: boolean
-        start_index:
-          description: Sort order index of the first resource in the returned array.
-          type: integer
-      required:
-      - count
-      - data
-      - end_index
-      - is_more
-      - start_index
-      type: object
-    PaymentScheduleTransitionCreateReq:
-      description: Details to create a payment schedule transition
-      properties:
-        status:
-          $ref: '#/components/schemas/PaymentScheduleStatus'
-        token:
-          description: Unique identifier of the payment schedule transition.
-          maxLength: 36
-          type: string
-      required:
-      - status
       type: object
     PaymentScheduleResponse:
       description: A future one-time or recurring payment schedule.
@@ -697,19 +690,33 @@ components:
       - status
       - token
       type: object
-    Error:
+    PaymentSchedulePage:
+      description: Returns paginated information for multiple payment schedules.
       properties:
-        code:
+        count:
+          description: Number of resources returned.
           type: integer
-        message:
-          type: string
+        data:
+          description: List of payment schedules.
+          items:
+            $ref: '#/components/schemas/PaymentScheduleResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
       type: object
-    PaymentScheduleFrequency:
-      description: Defines how often to make a scheduled payment.
-      enum:
-      - ONCE
-      - MONTHLY
-      type: string
     PaymentScheduleTransitionResponse:
       description: A payment schedule transition on a credit account.
       properties:
@@ -739,13 +746,6 @@ components:
           format: date-time
           type: string
       type: object
-    PaymentScheduleStatus:
-      description: Status of the payment schedule.
-      enum:
-      - ACTIVE
-      - COMPLETED
-      - TERMINATED
-      type: string
   securitySchemes:
     mqAppAndAccessToken:
       scheme: basic

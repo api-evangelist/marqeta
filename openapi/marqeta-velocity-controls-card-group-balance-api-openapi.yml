@@ -45,111 +45,13 @@ paths:
       - Velocity Controls Card Group Balance
 components:
   schemas:
-    MerchantScope:
-      description: 'Defines the group of merchants to which the velocity control applies.
+    VelocityWindow:
+      description: 'Defines the time period to which the `amount_limit` and `usage_limit` fields apply:
 
-
-        If no fields are populated, the velocity control applies to all merchants.'
-      properties:
-        attribute:
-          description: 'Attribute value corresponding to the chosen scope.
-
-            If ''mcc'' is chosen, provide the Merchant Category Code (MCC).
-
-            If ''mcc_group'' is chosen, provide the token identifying a group of MCCs.'
-          type: string
-        decline_other_merchants:
-          default: false
-          description: 'Indicates whether to decline transactions at merchants not included in the scope.
-
-            If `true`, transactions at merchants not included in the scope will be declined.
-
-            If `false`, transactions at merchants not included in the scope will not be declined.
-
-            *Default value:* `false`'
-          type: boolean
-        scope:
-          description: 'Scope of the merchant category.
-
-            Can be either ''mcc'' or ''mcc_group''.'
-          enum:
-          - mcc
-          - mcc_group
-          type: string
-      type: object
-    Association:
-      description: Defines to which the velocity control applies.
-      properties:
-        card_group_token:
-          description: Unique identifier of the card group.
-          maxLength: 36
-          minLength: 1
-          type: string
-      type: object
-    VelocityControlBalancePage:
-      properties:
-        count:
-          description: 'Number of resources retrieved.
-
-
-            This field is returned if there are resources in your returned array.'
-          format: int32
-          type: integer
-        data:
-          description: 'Array of Card Group objects.
-
-
-            Objects are returned as appropriate to your query.'
-          items:
-            $ref: '#/components/schemas/VelocityControlBalance'
-          type: array
-        end_index:
-          description: 'Sort order index of the last resource in the returned array.
-
-
-            This field is returned if there are resources in your returned array.'
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          description: 'A value of `true` indicates that more unreturned resources exist.
-
-            A value of `false` indicates that no more unreturned resources exist.
-
-
-            This field is returned if there are resources in your returned array.'
-          type: boolean
-        start_index:
-          description: 'Sort order index of the first resource in the returned array.
-
-
-            This field is returned if there are resources in your returned array.'
-          format: int32
-          type: integer
-      type: object
-    VelocityControlBalance:
-      allOf:
-      - $ref: '#/components/schemas/VelocityControlResponse'
-      - properties:
-          available:
-            properties:
-              amount:
-                description: 'Amount of money remaining for the user.
-
-                  This value is returned only if the user has a limit on the amount of money.'
-                type: number
-              days_remaining:
-                description: 'Number of days remaining for the user.
-
-                  This value is returned only if the user has a limit on the number of days.'
-                type: integer
-              uses:
-                description: 'Number of uses remaining for the user.
-
-                  This value is returned only if the user has a limit on the number of uses.'
-                type: integer
-            type: object
-        type: object
+        * *MONTH* – one month; months begin on the first day of month at 00:00:00 ET.'
+      enum:
+      - MONTH
+      type: string
     VelocityControlResponse:
       properties:
         active:
@@ -200,6 +102,38 @@ components:
       - amount_limit
       - currency_code
       type: object
+    MerchantScope:
+      description: 'Defines the group of merchants to which the velocity control applies.
+
+
+        If no fields are populated, the velocity control applies to all merchants.'
+      properties:
+        attribute:
+          description: 'Attribute value corresponding to the chosen scope.
+
+            If ''mcc'' is chosen, provide the Merchant Category Code (MCC).
+
+            If ''mcc_group'' is chosen, provide the token identifying a group of MCCs.'
+          type: string
+        decline_other_merchants:
+          default: false
+          description: 'Indicates whether to decline transactions at merchants not included in the scope.
+
+            If `true`, transactions at merchants not included in the scope will be declined.
+
+            If `false`, transactions at merchants not included in the scope will not be declined.
+
+            *Default value:* `false`'
+          type: boolean
+        scope:
+          description: 'Scope of the merchant category.
+
+            Can be either ''mcc'' or ''mcc_group''.'
+          enum:
+          - mcc
+          - mcc_group
+          type: string
+      type: object
     Error:
       properties:
         code:
@@ -207,13 +141,79 @@ components:
         message:
           type: string
       type: object
-    VelocityWindow:
-      description: 'Defines the time period to which the `amount_limit` and `usage_limit` fields apply:
+    VelocityControlBalancePage:
+      properties:
+        count:
+          description: 'Number of resources retrieved.
 
-        * *MONTH* – one month; months begin on the first day of month at 00:00:00 ET.'
-      enum:
-      - MONTH
-      type: string
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+        data:
+          description: 'Array of Card Group objects.
+
+
+            Objects are returned as appropriate to your query.'
+          items:
+            $ref: '#/components/schemas/VelocityControlBalance'
+          type: array
+        end_index:
+          description: 'Sort order index of the last resource in the returned array.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          description: 'A value of `true` indicates that more unreturned resources exist.
+
+            A value of `false` indicates that no more unreturned resources exist.
+
+
+            This field is returned if there are resources in your returned array.'
+          type: boolean
+        start_index:
+          description: 'Sort order index of the first resource in the returned array.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+      type: object
+    Association:
+      description: Defines to which the velocity control applies.
+      properties:
+        card_group_token:
+          description: Unique identifier of the card group.
+          maxLength: 36
+          minLength: 1
+          type: string
+      type: object
+    VelocityControlBalance:
+      allOf:
+      - $ref: '#/components/schemas/VelocityControlResponse'
+      - properties:
+          available:
+            properties:
+              amount:
+                description: 'Amount of money remaining for the user.
+
+                  This value is returned only if the user has a limit on the amount of money.'
+                type: number
+              days_remaining:
+                description: 'Number of days remaining for the user.
+
+                  This value is returned only if the user has a limit on the number of days.'
+                type: integer
+              uses:
+                description: 'Number of uses remaining for the user.
+
+                  This value is returned only if the user has a limit on the number of uses.'
+                type: integer
+            type: object
+        type: object
   securitySchemes:
     mqAppAndAccessToken:
       scheme: basic

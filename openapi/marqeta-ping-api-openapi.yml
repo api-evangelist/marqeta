@@ -54,14 +54,15 @@ paths:
       - Ping
 components:
   schemas:
-    echo_ping_request:
+    echo_ping_response:
       properties:
+        id:
+          type: string
         payload:
-          description: Payload of the ping request.
           type: string
-        token:
-          description: Unique identifier of the ping request.
-          type: string
+        success:
+          default: false
+          type: boolean
       type: object
     ping_response:
       properties:
@@ -78,15 +79,14 @@ components:
         version:
           type: string
       type: object
-    echo_ping_response:
+    echo_ping_request:
       properties:
-        id:
-          type: string
         payload:
+          description: Payload of the ping request.
           type: string
-        success:
-          default: false
-          type: boolean
+        token:
+          description: Unique identifier of the ping request.
+          type: string
       type: object
   securitySchemes:
     mqAppAndAccessToken:

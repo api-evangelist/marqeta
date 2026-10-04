@@ -244,6 +244,43 @@ components:
           minLength: 1
           type: string
       type: object
+    real_time_fee_group_create_request:
+      properties:
+        active:
+          default: true
+          description: Indicates whether the real-time fee group is active.
+          type: boolean
+        fee_tokens:
+          description: 'Unique identifiers of the fees in this real-time fee group.
+
+            Send a `GET` request to `/fees` to retrieve fee resource tokens.
+
+
+            No two fees in the group can be applicable to the same transaction type (in other words, each fee must have a different value for its `real_time_assessment.transaction_type` field).'
+          items:
+            type: string
+          type: array
+          uniqueItems: true
+        name:
+          description: Descriptive name for the real-time fee group.
+          maxLength: 50
+          minLength: 1
+          type: string
+        token:
+          description: 'Unique identifier of the real-time fee group.
+
+
+            If you do not include a token, the system will generate one automatically.
+
+            This token is necessary for use in other API calls, so we recommend that rather than let the system generate one, you use a simple string that is easy to remember.
+
+            This value cannot be updated.'
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - name
+      type: object
     real_time_fee_group:
       description: Contains information about a real-time fee group.
       properties:
@@ -316,43 +353,6 @@ components:
             This field is returned if there are resources in your returned array.'
           format: int32
           type: integer
-      type: object
-    real_time_fee_group_create_request:
-      properties:
-        active:
-          default: true
-          description: Indicates whether the real-time fee group is active.
-          type: boolean
-        fee_tokens:
-          description: 'Unique identifiers of the fees in this real-time fee group.
-
-            Send a `GET` request to `/fees` to retrieve fee resource tokens.
-
-
-            No two fees in the group can be applicable to the same transaction type (in other words, each fee must have a different value for its `real_time_assessment.transaction_type` field).'
-          items:
-            type: string
-          type: array
-          uniqueItems: true
-        name:
-          description: Descriptive name for the real-time fee group.
-          maxLength: 50
-          minLength: 1
-          type: string
-        token:
-          description: 'Unique identifier of the real-time fee group.
-
-
-            If you do not include a token, the system will generate one automatically.
-
-            This token is necessary for use in other API calls, so we recommend that rather than let the system generate one, you use a simple string that is easy to remember.
-
-            This value cannot be updated.'
-          maxLength: 36
-          minLength: 1
-          type: string
-      required:
-      - name
       type: object
   securitySchemes:
     mqAppAndAccessToken:

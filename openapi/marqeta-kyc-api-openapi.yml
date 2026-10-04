@@ -205,6 +205,13 @@ paths:
       - KYC
 components:
   schemas:
+    result_code:
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      type: object
     kyc_response:
       properties:
         business_token:
@@ -236,41 +243,6 @@ components:
       - created_time
       - last_modified_time
       type: object
-    result:
-      properties:
-        codes:
-          items:
-            $ref: '#/components/schemas/result_code'
-          type: array
-        status:
-          type: string
-      type: object
-    result_code:
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-      type: object
-    KYCListResponse:
-      properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/kyc_response'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
-      type: object
     kyc_request:
       properties:
         business_token:
@@ -297,6 +269,34 @@ components:
           description: Required if 'business_token' is null
           maxLength: 36
           minLength: 1
+          type: string
+      type: object
+    KYCListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/kyc_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    result:
+      properties:
+        codes:
+          items:
+            $ref: '#/components/schemas/result_code'
+          type: array
+        status:
           type: string
       type: object
   securitySchemes:

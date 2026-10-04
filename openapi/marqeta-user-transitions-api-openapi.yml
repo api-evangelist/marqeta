@@ -366,200 +366,6 @@ paths:
       - User Transitions
 components:
   schemas:
-    UserTransitionResponse:
-      properties:
-        channel:
-          description: Mechanism by which the transaction was initiated.
-          enum:
-          - API
-          - IVR
-          - FRAUD
-          - ADMIN
-          - SYSTEM
-          type: string
-        created_time:
-          description: Date and time when the resource was created, in UTC.
-          format: date-time
-          type: string
-        created_timestamp:
-          description: 'Date and time when the resource was created.
-
-            Expressed in UTC, with millisecond precision.'
-          format: date-time
-          type: string
-        last_modified_time:
-          description: Date and time when the resource was last modified, in UTC.
-          format: date-time
-          type: string
-        metadata:
-          additionalProperties:
-            type: string
-          description: 'Associates customer-injected metadata with the user.
-
-            Returned if part of the call to `POST /users`.'
-          type: object
-        reason:
-          description: Additional information about the status change.
-          type: string
-        reason_code:
-          description: 'Identifies the standardized reason for the transition:
-
-
-            *00:* Object activated for the first time.
-
-
-            *01:* Requested by you.
-
-
-            *02:* Inactivity over time.
-
-
-            *03:* This address cannot accept mail or the addressee is unknown.
-
-
-            *04:* Negative account balance.
-
-
-            *05:* Account under review.
-
-
-            *06:* Suspicious activity was identified.
-
-
-            *07:* Activity outside the program parameters was identified.
-
-
-            *08:* Confirmed fraud was identified.
-
-
-            *09:* Matched with an Office of Foreign Assets Control list.
-
-
-            *10:* Card was reported lost.
-
-
-            *11:* Card information was cloned.
-
-
-            *12:* Account or card information was compromised.
-
-
-            *13:* Temporary status change while on hold/leave.
-
-
-            *14:* Initiated by Marqeta.
-
-
-            *15:* Initiated by issuer.
-
-
-            *16:* Card expired.
-
-
-            *17:* Failed KYC.
-
-
-            *18:* Changed to `ACTIVE` because information was properly validated.
-
-
-            *19:* Changed to `ACTIVE` because account activity was properly validated.
-
-
-            *20:* Change occurred prior to the normalization of reason codes.
-
-
-            *21:* Initiated by a third party, often a digital wallet provider.
-
-
-            *22:* PIN retry limit reached.
-
-
-            *23:* Card was reported stolen.
-
-
-            *24:* Address issue.
-
-
-            *25:* Name issue.
-
-
-            *26:* SSN issue.
-
-
-            *27:* DOB issue.
-
-
-            *28:* Email issue.
-
-
-            *29:* Phone issue.
-
-
-            *30:* Account/fulfillment mismatch.
-
-
-            *31:* Other reason.
-
-
-            *86:* Notification of death.'
-          enum:
-          - '00'
-          - '01'
-          - '02'
-          - '03'
-          - '04'
-          - '05'
-          - '06'
-          - '07'
-          - 08
-          - 09
-          - '10'
-          - '11'
-          - '12'
-          - '13'
-          - '14'
-          - '15'
-          - '16'
-          - '17'
-          - '18'
-          - '19'
-          - '20'
-          - '21'
-          - '22'
-          - '23'
-          - '24'
-          - '25'
-          - '26'
-          - '27'
-          - '28'
-          - '29'
-          - '30'
-          - '31'
-          - '32'
-          - '86'
-          type: string
-        status:
-          description: Specifies the new status of the user.
-          enum:
-          - UNVERIFIED
-          - LIMITED
-          - ACTIVE
-          - SUSPENDED
-          - CLOSED
-          - TERMINATED
-          type: string
-        token:
-          description: Unique identifier of the user transition.
-          type: string
-        user_token:
-          description: Unique identifier of the user whose status was transitioned.
-          type: string
-      required:
-      - channel
-      - reason_code
-      - status
-      - token
-      type: object
     UserTransitionListResponse:
       properties:
         count:
@@ -785,6 +591,200 @@ components:
       - reason_code
       - status
       - user_token
+      type: object
+    UserTransitionResponse:
+      properties:
+        channel:
+          description: Mechanism by which the transaction was initiated.
+          enum:
+          - API
+          - IVR
+          - FRAUD
+          - ADMIN
+          - SYSTEM
+          type: string
+        created_time:
+          description: Date and time when the resource was created, in UTC.
+          format: date-time
+          type: string
+        created_timestamp:
+          description: 'Date and time when the resource was created.
+
+            Expressed in UTC, with millisecond precision.'
+          format: date-time
+          type: string
+        last_modified_time:
+          description: Date and time when the resource was last modified, in UTC.
+          format: date-time
+          type: string
+        metadata:
+          additionalProperties:
+            type: string
+          description: 'Associates customer-injected metadata with the user.
+
+            Returned if part of the call to `POST /users`.'
+          type: object
+        reason:
+          description: Additional information about the status change.
+          type: string
+        reason_code:
+          description: 'Identifies the standardized reason for the transition:
+
+
+            *00:* Object activated for the first time.
+
+
+            *01:* Requested by you.
+
+
+            *02:* Inactivity over time.
+
+
+            *03:* This address cannot accept mail or the addressee is unknown.
+
+
+            *04:* Negative account balance.
+
+
+            *05:* Account under review.
+
+
+            *06:* Suspicious activity was identified.
+
+
+            *07:* Activity outside the program parameters was identified.
+
+
+            *08:* Confirmed fraud was identified.
+
+
+            *09:* Matched with an Office of Foreign Assets Control list.
+
+
+            *10:* Card was reported lost.
+
+
+            *11:* Card information was cloned.
+
+
+            *12:* Account or card information was compromised.
+
+
+            *13:* Temporary status change while on hold/leave.
+
+
+            *14:* Initiated by Marqeta.
+
+
+            *15:* Initiated by issuer.
+
+
+            *16:* Card expired.
+
+
+            *17:* Failed KYC.
+
+
+            *18:* Changed to `ACTIVE` because information was properly validated.
+
+
+            *19:* Changed to `ACTIVE` because account activity was properly validated.
+
+
+            *20:* Change occurred prior to the normalization of reason codes.
+
+
+            *21:* Initiated by a third party, often a digital wallet provider.
+
+
+            *22:* PIN retry limit reached.
+
+
+            *23:* Card was reported stolen.
+
+
+            *24:* Address issue.
+
+
+            *25:* Name issue.
+
+
+            *26:* SSN issue.
+
+
+            *27:* DOB issue.
+
+
+            *28:* Email issue.
+
+
+            *29:* Phone issue.
+
+
+            *30:* Account/fulfillment mismatch.
+
+
+            *31:* Other reason.
+
+
+            *86:* Notification of death.'
+          enum:
+          - '00'
+          - '01'
+          - '02'
+          - '03'
+          - '04'
+          - '05'
+          - '06'
+          - '07'
+          - 08
+          - 09
+          - '10'
+          - '11'
+          - '12'
+          - '13'
+          - '14'
+          - '15'
+          - '16'
+          - '17'
+          - '18'
+          - '19'
+          - '20'
+          - '21'
+          - '22'
+          - '23'
+          - '24'
+          - '25'
+          - '26'
+          - '27'
+          - '28'
+          - '29'
+          - '30'
+          - '31'
+          - '32'
+          - '86'
+          type: string
+        status:
+          description: Specifies the new status of the user.
+          enum:
+          - UNVERIFIED
+          - LIMITED
+          - ACTIVE
+          - SUSPENDED
+          - CLOSED
+          - TERMINATED
+          type: string
+        token:
+          description: Unique identifier of the user transition.
+          type: string
+        user_token:
+          description: Unique identifier of the user whose status was transitioned.
+          type: string
+      required:
+      - channel
+      - reason_code
+      - status
+      - token
       type: object
   securitySchemes:
     mqAppAndAccessToken:

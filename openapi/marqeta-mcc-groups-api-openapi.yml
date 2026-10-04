@@ -165,6 +165,46 @@ paths:
       - mcc groups
 components:
   schemas:
+    MCCConfig:
+      properties:
+        authorization_controls:
+          $ref: '#/components/schemas/AuthControls'
+      type: object
+    MCCGroupListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/mcc_group_model'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    mcc_group_update_model:
+      properties:
+        active:
+          default: false
+          type: boolean
+        config:
+          $ref: '#/components/schemas/MCCConfig'
+        mccs:
+          items:
+            type: string
+          maxItems: 500
+          minItems: 1
+          type: array
+        name:
+          type: string
+      type: object
     mcc_group_model:
       properties:
         active:
@@ -191,34 +231,6 @@ components:
       - mccs
       - name
       type: object
-    MCCGroupListResponse:
-      properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/mcc_group_model'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
-      type: object
-    AuthControls:
-      properties:
-        hold_expiration_days:
-          default: 7
-          format: int32
-          type: integer
-        hold_increase:
-          $ref: '#/components/schemas/hold_increase'
-      type: object
     hold_increase:
       properties:
         type:
@@ -234,26 +246,14 @@ components:
       - type
       - value
       type: object
-    MCCConfig:
+    AuthControls:
       properties:
-        authorization_controls:
-          $ref: '#/components/schemas/AuthControls'
-      type: object
-    mcc_group_update_model:
-      properties:
-        active:
-          default: false
-          type: boolean
-        config:
-          $ref: '#/components/schemas/MCCConfig'
-        mccs:
-          items:
-            type: string
-          maxItems: 500
-          minItems: 1
-          type: array
-        name:
-          type: string
+        hold_expiration_days:
+          default: 7
+          format: int32
+          type: integer
+        hold_increase:
+          $ref: '#/components/schemas/hold_increase'
       type: object
   securitySchemes:
     mqAppAndAccessToken:

@@ -136,20 +136,6 @@ paths:
       - Migrations
 components:
   schemas:
-    MigrationResponse:
-      properties:
-        success:
-          type: boolean
-      type: object
-    CalculatedBalanceResponse:
-      properties:
-        available_credit:
-          description: the latest balance of the account from the migrated program
-          type: number
-        current_balance:
-          description: the latest balance of the account from the migrated program
-          type: number
-      type: object
     FinalizeMigrationStatusResponse:
       description: Finalize status of a migrated account.
       properties:
@@ -199,6 +185,13 @@ components:
           maxLength: 36
           type: string
       type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
     SyncStatementAssetReq:
       properties:
         asset_token:
@@ -212,12 +205,19 @@ components:
       - asset_token
       - short_code
       type: object
-    Error:
+    CalculatedBalanceResponse:
       properties:
-        code:
-          type: integer
-        message:
-          type: string
+        available_credit:
+          description: the latest balance of the account from the migrated program
+          type: number
+        current_balance:
+          description: the latest balance of the account from the migrated program
+          type: number
+      type: object
+    MigrationResponse:
+      properties:
+        success:
+          type: boolean
       type: object
   securitySchemes:
     mqAppAndAccessToken:

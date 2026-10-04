@@ -352,88 +352,24 @@ paths:
       - auth controls
 components:
   schemas:
-    auth_control_exempt_mids_update_request:
+    AuthControlExemptMidsListResponse:
       properties:
-        active:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/auth_control_exempt_mids_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
           default: false
           type: boolean
-      type: object
-    auth_control_response:
-      properties:
-        active:
-          default: true
-          type: boolean
-        association:
-          $ref: '#/components/schemas/spend_control_association'
-        end_time:
-          format: date-time
-          type: string
-        merchant_scope:
-          $ref: '#/components/schemas/auth_control_merchant_scope'
-        name:
-          maxLength: 255
-          minLength: 0
-          type: string
-        start_time:
-          format: date-time
-          type: string
-        token:
-          maxLength: 36
-          minLength: 1
-          type: string
-      required:
-      - name
-      type: object
-    auth_control_merchant_scope:
-      properties:
-        mcc:
-          description: 4 char max
-          maxLength: 4
-          minLength: 1
-          type: string
-        mcc_group:
-          description: 36 char max
-          maxLength: 36
-          minLength: 1
-          type: string
-        merchant_group_token:
-          description: 36 char max
-          maxLength: 36
-          minLength: 1
-          type: string
-        mid:
-          description: 36 char max
-          maxLength: 36
-          minLength: 1
-          type: string
-      type: object
-    auth_control_exempt_mids_request:
-      properties:
-        association:
-          $ref: '#/components/schemas/spend_control_association'
-        end_time:
-          format: date-time
-          type: string
-        merchant_group_token:
-          description: 36 char max
-          maxLength: 36
-          minLength: 1
-          type: string
-        mid:
-          maxLength: 36
-          minLength: 1
-          type: string
-        name:
-          maxLength: 255
-          minLength: 0
-          type: string
-        start_time:
-          format: date-time
-          type: string
-        token:
-          type: string
-      required:
-      - name
+        start_index:
+          format: int32
+          type: integer
       type: object
     merchant_scope:
       description: 'Defines the group of merchants to which the velocity control applies.
@@ -474,77 +410,6 @@ components:
           minLength: 1
           type: string
       type: object
-    auth_control_update_request:
-      properties:
-        active:
-          default: true
-          type: boolean
-        association:
-          $ref: '#/components/schemas/spend_control_association'
-        end_time:
-          format: date-time
-          type: string
-        merchant_scope:
-          $ref: '#/components/schemas/merchant_scope'
-        name:
-          maxLength: 255
-          minLength: 0
-          type: string
-        start_time:
-          format: date-time
-          type: string
-        token:
-          maxLength: 36
-          minLength: 1
-          type: string
-      required:
-      - token
-      type: object
-    auth_control_request:
-      properties:
-        active:
-          default: true
-          type: boolean
-        association:
-          $ref: '#/components/schemas/spend_control_association'
-        end_time:
-          format: date-time
-          type: string
-        merchant_scope:
-          $ref: '#/components/schemas/auth_control_merchant_scope'
-        name:
-          maxLength: 255
-          minLength: 0
-          type: string
-        start_time:
-          format: date-time
-          type: string
-        token:
-          maxLength: 36
-          minLength: 1
-          type: string
-      required:
-      - name
-      type: object
-    AuthControlListResponse:
-      properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/auth_control_response'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
-      type: object
     auth_control_exempt_mids_response:
       properties:
         active:
@@ -582,24 +447,117 @@ components:
       required:
       - name
       type: object
-    AuthControlExemptMidsListResponse:
+    auth_control_request:
       properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/auth_control_exempt_mids_response'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
+        active:
+          default: true
+          type: boolean
+        association:
+          $ref: '#/components/schemas/spend_control_association'
+        end_time:
+          format: date-time
+          type: string
+        merchant_scope:
+          $ref: '#/components/schemas/auth_control_merchant_scope'
+        name:
+          maxLength: 255
+          minLength: 0
+          type: string
+        start_time:
+          format: date-time
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - name
+      type: object
+    auth_control_exempt_mids_update_request:
+      properties:
+        active:
           default: false
           type: boolean
-        start_index:
-          format: int32
-          type: integer
+      type: object
+    auth_control_response:
+      properties:
+        active:
+          default: true
+          type: boolean
+        association:
+          $ref: '#/components/schemas/spend_control_association'
+        end_time:
+          format: date-time
+          type: string
+        merchant_scope:
+          $ref: '#/components/schemas/auth_control_merchant_scope'
+        name:
+          maxLength: 255
+          minLength: 0
+          type: string
+        start_time:
+          format: date-time
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - name
+      type: object
+    auth_control_exempt_mids_request:
+      properties:
+        association:
+          $ref: '#/components/schemas/spend_control_association'
+        end_time:
+          format: date-time
+          type: string
+        merchant_group_token:
+          description: 36 char max
+          maxLength: 36
+          minLength: 1
+          type: string
+        mid:
+          maxLength: 36
+          minLength: 1
+          type: string
+        name:
+          maxLength: 255
+          minLength: 0
+          type: string
+        start_time:
+          format: date-time
+          type: string
+        token:
+          type: string
+      required:
+      - name
+      type: object
+    auth_control_update_request:
+      properties:
+        active:
+          default: true
+          type: boolean
+        association:
+          $ref: '#/components/schemas/spend_control_association'
+        end_time:
+          format: date-time
+          type: string
+        merchant_scope:
+          $ref: '#/components/schemas/merchant_scope'
+        name:
+          maxLength: 255
+          minLength: 0
+          type: string
+        start_time:
+          format: date-time
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - token
       type: object
     spend_control_association:
       description: Defines the group of users to which the velocity control applies.
@@ -624,6 +582,48 @@ components:
           maxLength: 36
           minLength: 1
           type: string
+      type: object
+    auth_control_merchant_scope:
+      properties:
+        mcc:
+          description: 4 char max
+          maxLength: 4
+          minLength: 1
+          type: string
+        mcc_group:
+          description: 36 char max
+          maxLength: 36
+          minLength: 1
+          type: string
+        merchant_group_token:
+          description: 36 char max
+          maxLength: 36
+          minLength: 1
+          type: string
+        mid:
+          description: 36 char max
+          maxLength: 36
+          minLength: 1
+          type: string
+      type: object
+    AuthControlListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/auth_control_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
       type: object
   securitySchemes:
     mqAppAndAccessToken:

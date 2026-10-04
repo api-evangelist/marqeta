@@ -98,6 +98,24 @@ paths:
       - Accounts
 components:
   schemas:
+    RefundStatus:
+      description: Current status of the refund.
+      enum:
+      - INITIATED
+      - PENDING
+      - PROCESSING
+      - SUBMITTED
+      - CANCELLED
+      - COMPLETED
+      - RETURNED
+      type: string
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
     RefundTransitionsPage:
       description: Return paginated refund transition response.
       properties:
@@ -124,24 +142,6 @@ components:
       - end_index
       - is_more
       - start_index
-      type: object
-    RefundStatus:
-      description: Current status of the refund.
-      enum:
-      - INITIATED
-      - PENDING
-      - PROCESSING
-      - SUBMITTED
-      - CANCELLED
-      - COMPLETED
-      - RETURNED
-      type: string
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
       type: object
     RefundTransitionResponse:
       description: Response containing refund transition information.

@@ -345,160 +345,6 @@ paths:
       - direct deposits
 components:
   schemas:
-    DirectDepositTransitionResponse:
-      properties:
-        channel:
-          enum:
-          - API
-          - IVR
-          - FRAUD
-          - ADMIN
-          - SYSTEM
-          - NETWORK
-          - PROD_SUPPORT
-          - UNSUPPORTED
-          type: string
-        created_time:
-          format: date-time
-          type: string
-        direct_deposit_account_token:
-          type: string
-        direct_deposit_token:
-          type: string
-        reason:
-          type: string
-        reason_code:
-          type: string
-        state:
-          enum:
-          - PENDING
-          - APPLIED
-          - REVERSED
-          - REJECTED
-          type: string
-        token:
-          type: string
-        transaction_token:
-          type: string
-        type:
-          type: string
-      type: object
-    DepositAccountResponse:
-      properties:
-        account_number:
-          type: string
-        allow_immediate_credit:
-          default: false
-          type: boolean
-        business_token:
-          type: string
-        routing_number:
-          type: string
-        token:
-          type: string
-        user_token:
-          type: string
-      required:
-      - account_number
-      - routing_number
-      - token
-      type: object
-    DirectDepositListResponse:
-      properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/DepositDepositResponse'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
-      type: object
-    DirectDepositTransitionRequest:
-      properties:
-        channel:
-          enum:
-          - API
-          - SYSTEM
-          - PROD_SUPPORT
-          type: string
-        direct_deposit_token:
-          type: string
-        idempotentHash:
-          type: string
-        reason:
-          maxLength: 255
-          minLength: 0
-          type: string
-        reason_code:
-          enum:
-          - R01
-          - R02
-          - R03
-          - R04
-          - R06
-          - R08
-          - R09
-          - R10
-          - R11
-          - R14
-          - R15
-          - R16
-          - R17
-          - R18
-          - R20
-          - R23
-          - R24
-          - R29
-          type: string
-        state:
-          enum:
-          - PENDING
-          - APPLIED
-          - REVERSED
-          - REJECTED
-          type: string
-        token:
-          type: string
-      required:
-      - channel
-      - direct_deposit_token
-      - reason
-      - state
-      type: object
-    DepositAccountUpdateRequest:
-      properties:
-        allow_immediate_credit:
-          default: false
-          type: boolean
-      type: object
-    DirectDepositTransitionListResponse:
-      properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/DirectDepositTransitionResponse'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
-      type: object
     DepositDepositResponse:
       description: Contains information about a direct deposit.
       properties:
@@ -570,6 +416,160 @@ components:
         user_token:
           description: The unique identifier of the user account holder.
           type: string
+      type: object
+    DirectDepositTransitionListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/DirectDepositTransitionResponse'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    DirectDepositListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/DepositDepositResponse'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    DirectDepositTransitionResponse:
+      properties:
+        channel:
+          enum:
+          - API
+          - IVR
+          - FRAUD
+          - ADMIN
+          - SYSTEM
+          - NETWORK
+          - PROD_SUPPORT
+          - UNSUPPORTED
+          type: string
+        created_time:
+          format: date-time
+          type: string
+        direct_deposit_account_token:
+          type: string
+        direct_deposit_token:
+          type: string
+        reason:
+          type: string
+        reason_code:
+          type: string
+        state:
+          enum:
+          - PENDING
+          - APPLIED
+          - REVERSED
+          - REJECTED
+          type: string
+        token:
+          type: string
+        transaction_token:
+          type: string
+        type:
+          type: string
+      type: object
+    DepositAccountUpdateRequest:
+      properties:
+        allow_immediate_credit:
+          default: false
+          type: boolean
+      type: object
+    DepositAccountResponse:
+      properties:
+        account_number:
+          type: string
+        allow_immediate_credit:
+          default: false
+          type: boolean
+        business_token:
+          type: string
+        routing_number:
+          type: string
+        token:
+          type: string
+        user_token:
+          type: string
+      required:
+      - account_number
+      - routing_number
+      - token
+      type: object
+    DirectDepositTransitionRequest:
+      properties:
+        channel:
+          enum:
+          - API
+          - SYSTEM
+          - PROD_SUPPORT
+          type: string
+        direct_deposit_token:
+          type: string
+        idempotentHash:
+          type: string
+        reason:
+          maxLength: 255
+          minLength: 0
+          type: string
+        reason_code:
+          enum:
+          - R01
+          - R02
+          - R03
+          - R04
+          - R06
+          - R08
+          - R09
+          - R10
+          - R11
+          - R14
+          - R15
+          - R16
+          - R17
+          - R18
+          - R20
+          - R23
+          - R24
+          - R29
+          type: string
+        state:
+          enum:
+          - PENDING
+          - APPLIED
+          - REVERSED
+          - REJECTED
+          type: string
+        token:
+          type: string
+      required:
+      - channel
+      - direct_deposit_token
+      - reason
+      - state
       type: object
   securitySchemes:
     mqAppAndAccessToken:

@@ -89,17 +89,6 @@ paths:
       - Account Rewards
 components:
   schemas:
-    Method:
-      description: 'Method, either a flat amount or a percentage.
-
-
-        *NOTE:*
-
-        Only `FLAT` is currently supported.'
-      enum:
-      - PERCENTAGE
-      - FLAT
-      type: string
     RewardCreateReq:
       properties:
         amount:
@@ -133,12 +122,36 @@ components:
       - description
       - type
       type: object
+    Method:
+      description: 'Method, either a flat amount or a percentage.
+
+
+        *NOTE:*
+
+        Only `FLAT` is currently supported.'
+      enum:
+      - PERCENTAGE
+      - FLAT
+      type: string
     RewardType:
       description: Type of reward.
       enum:
       - AUTO_CASH_BACK
       - CASH_BACK
       - STATEMENT_CREDIT
+      type: string
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
       type: string
     RewardResponse:
       properties:
@@ -200,19 +213,6 @@ components:
       - type
       - updated_time
       type: object
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-      type: object
-    CurrencyCode:
-      default: USD
-      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
-      enum:
-      - USD
-      type: string
   securitySchemes:
     mqAppAndAccessToken:
       scheme: basic

@@ -51,14 +51,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-  parameters:
-    program:
-      name: program
-      in: query
-      required: true
-      description: The name of your Marqeta card program. This parameter is required for most DiVA API endpoints to scope the data to your program.
-      schema:
-        type: string
   schemas:
     ErrorResponse:
       type: object
@@ -94,6 +86,14 @@ components:
                 description: Supported time aggregation levels for this view.
                 items:
                   type: string
+  parameters:
+    program:
+      name: program
+      in: query
+      required: true
+      description: The name of your Marqeta card program. This parameter is required for most DiVA API endpoints to scope the data to your program.
+      schema:
+        type: string
   securitySchemes:
     basicAuth:
       type: http

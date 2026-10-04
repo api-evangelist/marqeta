@@ -590,163 +590,15 @@ components:
       - events
       - name
       type: object
-    webhook_config_response_model:
-      description: Contains the configuration information for the webhook.
+    webhook_ping_model:
       properties:
-        basic_auth_password:
-          description: Password for accessing your webhook endpoint.
-          maxLength: 12
-          minLength: 12
-          type: string
-        basic_auth_username:
-          description: Username for accessing your webhook endpoint.
-          maxLength: 12
-          minLength: 12
-          type: string
-        custom_header:
-          additionalProperties:
-            type: string
-          description: Custom headers to be passed along with the request.
-          type: object
-        secret:
-          description: 'Randomly chosen string used for implementing HMAC-SHA1 or HMAC-SHA256 depending on value in signature_algorithm.
-
-            A signature provides an added layer of security by authenticating the message and validating message integrity.
-
-            Using this functionality requires that your webhook endpoint verify the message signature.
-
-            For information about implementing this functionality, see <</developer-guides/signature-verification, Signature Verification>>.'
-          maxLength: 12
-          minLength: 12
-          type: string
-        signature_algorithm:
-          description: 'The algorithm used for signature verification.
-
-            A signature provides an added layer of security by authenticating the message and validating message integrity.
-
-            Using this functionality requires that your webhook endpoint verify the message signature.
-
-            For information about implementing this functionality, see <</developer-guides/signature-verification, Signature Verification>>.'
-          maxLength: 20
-          minLength: 1
-          type: string
-        url:
-          description: URL of your webhook endpoint.
-          maxLength: 255
-          minLength: 1
-          type: string
-        use_mtls:
-          default: false
-          description: 'Set to `true` to use use mutual transport layer security (mTLS) authentication for the webhook.
-
-
-            mTLS authentication is in the beta testing phase, and is not yet generally available.
-
-            Contact your Marqeta representative for more information about using mTLS authentication.'
-          type: boolean
-      required:
-      - basic_auth_password
-      - basic_auth_username
-      - url
-      type: object
-    WebhookResponseModelListResponse:
-      properties:
-        count:
-          description: 'Number of resources to retrieve.
-
-
-            This field is returned if there are resources in your returned array.'
-          format: int32
-          type: integer
-        data:
-          description: 'Array of webhooks resources.
-
-
-            Resources are returned as appropriate to your query.'
+        pings:
+          description: Array of ping requests to your webhook endpoint.
           items:
-            $ref: '#/components/schemas/webhook_response_model'
+            $ref: '#/components/schemas/echo_ping_request'
           type: array
-        end_index:
-          description: 'Sort order index of the last resource in the returned array.
-
-
-            This field is returned if there are resources in your returned array.'
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          description: 'A value of `true` indicates that more unreturned resources exist.
-
-            A value of `false` indicates that no more unreturned resources exist.
-
-
-            This field is returned if there are resources in your returned array.'
-          type: boolean
-        start_index:
-          description: 'Sort order index of the first resource in the returned array.
-
-
-            This field is returned if there are resources in your returned array.'
-          format: int32
-          type: integer
-      type: object
-    webhook_config_request_model:
-      description: Contains the configuration information for the webhook.
-      properties:
-        basic_auth_password:
-          description: Password for accessing your webhook endpoint.
-          maxLength: 50
-          minLength: 20
-          type: string
-        basic_auth_username:
-          description: Username for accessing your webhook endpoint.
-          maxLength: 50
-          minLength: 1
-          type: string
-        custom_header:
-          additionalProperties:
-            type: string
-          description: Custom headers to be passed along with the request.
-          type: object
-        secret:
-          description: 'Randomly chosen string used for implementing HMAC-SHA1 or HMAC-SHA256 depending on value in `signature_algorithm`.
-
-            A signature provides an added layer of security by authenticating the message and validating message integrity.
-
-            Using this functionality requires that your webhook endpoint verify the message signature.
-
-            For information about implementing this functionality, see <</developer-guides/signature-verification, Signature Verification>>.'
-          maxLength: 50
-          minLength: 20
-          type: string
-        signature_algorithm:
-          description: 'The algorithm used for signature verification.
-
-            A signature provides an added layer of security by authenticating the message and validating message integrity.
-
-            Using this functionality requires that your webhook endpoint verify the message signature.
-
-            For information about implementing this functionality, see <</developer-guides/signature-verification, Signature Verification>>.'
-          maxLength: 20
-          minLength: 1
-          type: string
-        url:
-          description: URL of your webhook endpoint.
-          maxLength: 255
-          minLength: 1
-          type: string
-        use_mtls:
-          default: false
-          description: 'Set to `true` to use use mutual transport layer security (mTLS) authentication for the webhook.
-
-            mTLS authentication is in the beta testing phase, and is not yet generally available.
-
-            Contact your Marqeta representative for more information about using mTLS authentication.'
-          type: boolean
       required:
-      - basic_auth_password
-      - basic_auth_username
-      - url
+      - pings
       type: object
     webhook_base_model:
       properties:
@@ -829,25 +681,6 @@ components:
       - events
       - name
       type: object
-    webhook_ping_model:
-      properties:
-        pings:
-          description: Array of ping requests to your webhook endpoint.
-          items:
-            $ref: '#/components/schemas/echo_ping_request'
-          type: array
-      required:
-      - pings
-      type: object
-    echo_ping_request:
-      properties:
-        payload:
-          description: Payload of the ping request.
-          type: string
-        token:
-          description: Unique identifier of the ping request.
-          type: string
-      type: object
     WebhookUpdateCustomHeaderRequest:
       properties:
         custom_header:
@@ -857,6 +690,173 @@ components:
 
             For example, this might contain security information, along with Basic Authentication, when making a JIT Funding request.'
           type: object
+      type: object
+    webhook_config_request_model:
+      description: Contains the configuration information for the webhook.
+      properties:
+        basic_auth_password:
+          description: Password for accessing your webhook endpoint.
+          maxLength: 50
+          minLength: 20
+          type: string
+        basic_auth_username:
+          description: Username for accessing your webhook endpoint.
+          maxLength: 50
+          minLength: 1
+          type: string
+        custom_header:
+          additionalProperties:
+            type: string
+          description: Custom headers to be passed along with the request.
+          type: object
+        secret:
+          description: 'Randomly chosen string used for implementing HMAC-SHA1 or HMAC-SHA256 depending on value in `signature_algorithm`.
+
+            A signature provides an added layer of security by authenticating the message and validating message integrity.
+
+            Using this functionality requires that your webhook endpoint verify the message signature.
+
+            For information about implementing this functionality, see <</developer-guides/signature-verification, Signature Verification>>.'
+          maxLength: 50
+          minLength: 20
+          type: string
+        signature_algorithm:
+          description: 'The algorithm used for signature verification.
+
+            A signature provides an added layer of security by authenticating the message and validating message integrity.
+
+            Using this functionality requires that your webhook endpoint verify the message signature.
+
+            For information about implementing this functionality, see <</developer-guides/signature-verification, Signature Verification>>.'
+          maxLength: 20
+          minLength: 1
+          type: string
+        url:
+          description: URL of your webhook endpoint.
+          maxLength: 255
+          minLength: 1
+          type: string
+        use_mtls:
+          default: false
+          description: 'Set to `true` to use use mutual transport layer security (mTLS) authentication for the webhook.
+
+            mTLS authentication is in the beta testing phase, and is not yet generally available.
+
+            Contact your Marqeta representative for more information about using mTLS authentication.'
+          type: boolean
+      required:
+      - basic_auth_password
+      - basic_auth_username
+      - url
+      type: object
+    WebhookResponseModelListResponse:
+      properties:
+        count:
+          description: 'Number of resources to retrieve.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+        data:
+          description: 'Array of webhooks resources.
+
+
+            Resources are returned as appropriate to your query.'
+          items:
+            $ref: '#/components/schemas/webhook_response_model'
+          type: array
+        end_index:
+          description: 'Sort order index of the last resource in the returned array.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          description: 'A value of `true` indicates that more unreturned resources exist.
+
+            A value of `false` indicates that no more unreturned resources exist.
+
+
+            This field is returned if there are resources in your returned array.'
+          type: boolean
+        start_index:
+          description: 'Sort order index of the first resource in the returned array.
+
+
+            This field is returned if there are resources in your returned array.'
+          format: int32
+          type: integer
+      type: object
+    webhook_config_response_model:
+      description: Contains the configuration information for the webhook.
+      properties:
+        basic_auth_password:
+          description: Password for accessing your webhook endpoint.
+          maxLength: 12
+          minLength: 12
+          type: string
+        basic_auth_username:
+          description: Username for accessing your webhook endpoint.
+          maxLength: 12
+          minLength: 12
+          type: string
+        custom_header:
+          additionalProperties:
+            type: string
+          description: Custom headers to be passed along with the request.
+          type: object
+        secret:
+          description: 'Randomly chosen string used for implementing HMAC-SHA1 or HMAC-SHA256 depending on value in signature_algorithm.
+
+            A signature provides an added layer of security by authenticating the message and validating message integrity.
+
+            Using this functionality requires that your webhook endpoint verify the message signature.
+
+            For information about implementing this functionality, see <</developer-guides/signature-verification, Signature Verification>>.'
+          maxLength: 12
+          minLength: 12
+          type: string
+        signature_algorithm:
+          description: 'The algorithm used for signature verification.
+
+            A signature provides an added layer of security by authenticating the message and validating message integrity.
+
+            Using this functionality requires that your webhook endpoint verify the message signature.
+
+            For information about implementing this functionality, see <</developer-guides/signature-verification, Signature Verification>>.'
+          maxLength: 20
+          minLength: 1
+          type: string
+        url:
+          description: URL of your webhook endpoint.
+          maxLength: 255
+          minLength: 1
+          type: string
+        use_mtls:
+          default: false
+          description: 'Set to `true` to use use mutual transport layer security (mTLS) authentication for the webhook.
+
+
+            mTLS authentication is in the beta testing phase, and is not yet generally available.
+
+            Contact your Marqeta representative for more information about using mTLS authentication.'
+          type: boolean
+      required:
+      - basic_auth_password
+      - basic_auth_username
+      - url
+      type: object
+    echo_ping_request:
+      properties:
+        payload:
+          description: Payload of the ping request.
+          type: string
+        token:
+          description: Unique identifier of the ping request.
+          type: string
       type: object
   securitySchemes:
     mqAppAndAccessToken:

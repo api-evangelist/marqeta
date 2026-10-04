@@ -665,6 +665,88 @@ paths:
       - Credit Products
 components:
   schemas:
+    InterestOnGraceReactivationEnum:
+      description: Determines whether to charge or waive interest for the billing period when the balance is paid off.
+      enum:
+      - ACCRUE_FULL_CYCLE
+      - ACCRUE_PAYMENT_DATE
+      - WAIVE
+      type: string
+    ProductConfig:
+      description: Contains information on configurations for billing cycle day, payment due day, and fees.
+      properties:
+        billing_cycle_day:
+          description: Day of the month when the billing cycle starts.
+          maximum: 28
+          minimum: 1
+          type: integer
+        billing_cycle_day_strategy:
+          default: MANUAL
+          description: Determines if the billing cycle day is manually set or determined dynamically during account creation based on cycling logic.
+          enum:
+          - MANUAL
+          type: string
+        billing_cycle_frequency:
+          default: MONTHLY
+          description: Frequency at which the account is billed.
+          enum:
+          - MONTHLY
+          type: string
+        fees:
+          description: One or more fee types.
+          items:
+            $ref: '#/components/schemas/ProductFeeType'
+          type: array
+        payment_due_day:
+          deprecated: true
+          description: 'Day of month the payment for the previous billing cycle is due.
+
+
+            This field is deprecated.
+
+            Use the `product.payment_due_interval` field instead.
+
+            To retrieve `payment_due_interval`, see <</core-api/credit-products#retrieveProduct, Retrieve credit product, config.payment_due_interval>>.'
+          maximum: 31
+          minimum: 31
+          type: integer
+        payment_due_interval:
+          default: -1
+          description: 'Specifies the payment due interval that is used to determine the payment due date for a billing cycle.
+
+            A value of -1 indicates one day prior to the next billing cycle date.
+
+
+            For consumer programs, a minimum gap of 21 days is required between when a statement is delivered and the payment due date.'
+          minimum: -1
+          type: integer
+        periodic_fees:
+          description: Contains one or more periodic fees.
+          items:
+            description: Contains information on a periodic fee.
+            properties:
+              frequency:
+                description: How frequently the fee is charged.
+                enum:
+                - ANNUAL
+                - MONTHLY
+                type: string
+              number_of_days_post_activation:
+                description: 'Number of days after an account is activated that the initial fee is charged.
+
+                  For example, if the value in this field is `30`, then the initial fee is charged 30 days after an account is activated.'
+                maximum: 1000
+                minimum: 1
+                type: integer
+            required:
+            - frequency
+            - number_of_days_post_activation
+            title: ProductConfigPeriodicFees
+            type: object
+          type: array
+      required:
+      - billing_cycle_day
+      type: object
     ProductResponse:
       description: 'Specifies shared details for a credit program.
 
@@ -741,82 +823,6 @@ components:
           minItems: 1
           type: array
       type: object
-    InterestOnGraceReactivationEnum:
-      description: Determines whether to charge or waive interest for the billing period when the balance is paid off.
-      enum:
-      - ACCRUE_FULL_CYCLE
-      - ACCRUE_PAYMENT_DATE
-      - WAIVE
-      type: string
-    ProductFeeType:
-      description: Type of fee.
-      enum:
-      - LATE_PAYMENT_FEE
-      - RETURNED_PAYMENT_FEE
-      - FOREIGN_TRANSACTION_FEE
-      type: string
-    ProductMinPaymentPercentage:
-      description: Contains information used to calculate the minimum payment percentage.
-      properties:
-        include_all_fees_charged:
-          description: Whether to include all fees charged when calculating the minimum payments.
-          type: boolean
-        include_fees_charged:
-          description: One or more fee types to include when calculating the minimum payment.
-          items:
-            $ref: '#/components/schemas/ProductFeeType'
-          type: array
-        percentage_of_balance:
-          description: Minimum payment, expressed as a percentage of the total statement balance, due on the payment due day.
-          maximum: 100
-          minimum: 0.0001
-          type: number
-      required:
-      - include_fees_charged
-      - include_interest_charged
-      - percentage_of_balance
-      type: object
-    ProductType:
-      default: REVOLVING
-      description: 'Type of credit product.
-
-
-        `REVOLVING` - Allows users to continuously borrow and pay debts up to the credit limit.'
-      enum:
-      - REVOLVING
-      type: string
-    BalanceType:
-      description: 'Type of balance.
-
-
-        * `PURCHASE` - The balance on purchases.'
-      enum:
-      - PURCHASE
-      type: string
-    PaymentAllocationOrderEnum:
-      description: Ordered list of balance types to which payments are allocated, from first to last.
-      enum:
-      - INTEREST
-      - FEES
-      - PRINCIPAL
-      type: string
-    ProductCreditLine:
-      description: Contains information on the credit line range.
-      properties:
-        max:
-          description: Maximum credit limit.
-          maximum: 9.9999999999999E11
-          minimum: 0
-          type: number
-        min:
-          description: Minimum credit limit.
-          maximum: 9.9999999999999E11
-          minimum: 0
-          type: number
-      required:
-      - max
-      - min
-      type: object
     ProductsPage:
       description: Returns paginated products.
       properties:
@@ -844,93 +850,44 @@ components:
       - is_more
       - start_index
       type: object
-    ProductConfig:
-      description: Contains information on configurations for billing cycle day, payment due day, and fees.
+    ProductCreditLine:
+      description: Contains information on the credit line range.
       properties:
-        billing_cycle_day:
-          description: Day of the month when the billing cycle starts.
-          maximum: 28
-          minimum: 1
-          type: integer
-        billing_cycle_day_strategy:
-          default: MANUAL
-          description: Determines if the billing cycle day is manually set or determined dynamically during account creation based on cycling logic.
-          enum:
-          - MANUAL
-          type: string
-        billing_cycle_frequency:
-          default: MONTHLY
-          description: Frequency at which the account is billed.
-          enum:
-          - MONTHLY
-          type: string
-        fees:
-          description: One or more fee types.
+        max:
+          description: Maximum credit limit.
+          maximum: 9.9999999999999E11
+          minimum: 0
+          type: number
+        min:
+          description: Minimum credit limit.
+          maximum: 9.9999999999999E11
+          minimum: 0
+          type: number
+      required:
+      - max
+      - min
+      type: object
+    ProductMinPaymentPercentage:
+      description: Contains information used to calculate the minimum payment percentage.
+      properties:
+        include_all_fees_charged:
+          description: Whether to include all fees charged when calculating the minimum payments.
+          type: boolean
+        include_fees_charged:
+          description: One or more fee types to include when calculating the minimum payment.
           items:
             $ref: '#/components/schemas/ProductFeeType'
           type: array
-        payment_due_day:
-          deprecated: true
-          description: 'Day of month the payment for the previous billing cycle is due.
-
-
-            This field is deprecated.
-
-            Use the `product.payment_due_interval` field instead.
-
-            To retrieve `payment_due_interval`, see <</core-api/credit-products#retrieveProduct, Retrieve credit product, config.payment_due_interval>>.'
-          maximum: 31
-          minimum: 31
-          type: integer
-        payment_due_interval:
-          default: -1
-          description: 'Specifies the payment due interval that is used to determine the payment due date for a billing cycle.
-
-            A value of -1 indicates one day prior to the next billing cycle date.
-
-
-            For consumer programs, a minimum gap of 21 days is required between when a statement is delivered and the payment due date.'
-          minimum: -1
-          type: integer
-        periodic_fees:
-          description: Contains one or more periodic fees.
-          items:
-            description: Contains information on a periodic fee.
-            properties:
-              frequency:
-                description: How frequently the fee is charged.
-                enum:
-                - ANNUAL
-                - MONTHLY
-                type: string
-              number_of_days_post_activation:
-                description: 'Number of days after an account is activated that the initial fee is charged.
-
-                  For example, if the value in this field is `30`, then the initial fee is charged 30 days after an account is activated.'
-                maximum: 1000
-                minimum: 1
-                type: integer
-            required:
-            - frequency
-            - number_of_days_post_activation
-            title: ProductConfigPeriodicFees
-            type: object
-          type: array
+        percentage_of_balance:
+          description: Minimum payment, expressed as a percentage of the total statement balance, due on the payment due day.
+          maximum: 100
+          minimum: 0.0001
+          type: number
       required:
-      - billing_cycle_day
+      - include_fees_charged
+      - include_interest_charged
+      - percentage_of_balance
       type: object
-    ProductSubType:
-      default: CREDIT_CARD
-      description: 'Subtype of the credit product type.
-
-
-        * `CREDIT_CARD` - Card that enables the cardholder to make purchases on credit.
-
-        * `SECURED_CARD` - Card backed by a user-funded deposit that enables the cardholder to make purchases on credit.'
-      enum:
-      - CREDIT_CARD
-      - SECURED_CARD
-      type: string
     ProductCreateReq:
       description: 'Specifies shared details for a credit program.
 
@@ -1014,6 +971,19 @@ components:
       - product_type
       - usage
       type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
+      type: string
     ProductMinPaymentCalculation:
       description: Contains information used to calculate the minimum payment amount.
       properties:
@@ -1032,18 +1002,6 @@ components:
       - min_payment_flat_amount
       - min_payment_percentage
       type: object
-    ProductClassification:
-      default: CONSUMER
-      description: 'Specifies for whom the credit product is intended.
-
-
-        * `CONSUMER` - The credit product is intended for individual consumers.
-
-        * `SMALL_AND_MEDIUM_BUSINESS` - The credit product is intended for small and medium business.'
-      enum:
-      - CONSUMER
-      - SMALL_AND_MEDIUM_BUSINESS
-      type: string
     InterestCalculation:
       description: Contains the configurations for interest calculation.
       properties:
@@ -1108,18 +1066,17 @@ components:
       - method
       - minimum_interest
       type: object
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-      type: object
-    CurrencyCode:
-      default: USD
-      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+    ProductSubType:
+      default: CREDIT_CARD
+      description: 'Subtype of the credit product type.
+
+
+        * `CREDIT_CARD` - Card that enables the cardholder to make purchases on credit.
+
+        * `SECURED_CARD` - Card backed by a user-funded deposit that enables the cardholder to make purchases on credit.'
       enum:
-      - USD
+      - CREDIT_CARD
+      - SECURED_CARD
       type: string
     ResourceStatus:
       description: 'Status of the credit product.
@@ -1143,6 +1100,49 @@ components:
       - ACTIVE
       - REJECTED
       - ARCHIVED
+      type: string
+    BalanceType:
+      description: 'Type of balance.
+
+
+        * `PURCHASE` - The balance on purchases.'
+      enum:
+      - PURCHASE
+      type: string
+    ProductClassification:
+      default: CONSUMER
+      description: 'Specifies for whom the credit product is intended.
+
+
+        * `CONSUMER` - The credit product is intended for individual consumers.
+
+        * `SMALL_AND_MEDIUM_BUSINESS` - The credit product is intended for small and medium business.'
+      enum:
+      - CONSUMER
+      - SMALL_AND_MEDIUM_BUSINESS
+      type: string
+    ProductType:
+      default: REVOLVING
+      description: 'Type of credit product.
+
+
+        `REVOLVING` - Allows users to continuously borrow and pay debts up to the credit limit.'
+      enum:
+      - REVOLVING
+      type: string
+    PaymentAllocationOrderEnum:
+      description: Ordered list of balance types to which payments are allocated, from first to last.
+      enum:
+      - INTEREST
+      - FEES
+      - PRINCIPAL
+      type: string
+    ProductFeeType:
+      description: Type of fee.
+      enum:
+      - LATE_PAYMENT_FEE
+      - RETURNED_PAYMENT_FEE
+      - FOREIGN_TRANSACTION_FEE
       type: string
   securitySchemes:
     mqAppAndAccessToken:

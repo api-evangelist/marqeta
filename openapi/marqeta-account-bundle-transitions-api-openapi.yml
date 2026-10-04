@@ -180,39 +180,18 @@ paths:
       - Account Bundle Transitions
 components:
   schemas:
-    AccountBundleTransitionsPage:
-      description: Return paginated account bundle transitions.
+    AccountBundleTransitionReq:
+      description: Information on the credit account bundle transition request.
       properties:
-        count:
-          description: Number of resources returned.
-          type: integer
-        data:
-          description: Contains one or more account bundle transitions.
-          items:
-            $ref: '#/components/schemas/AccountBundleTransitionResponse'
-          type: array
-        end_index:
-          description: Sort order index of the last resource in the returned array.
-          type: integer
-        is_more:
-          description: A value of `true` indicates that more unreturned resources exist.
-          type: boolean
-        start_index:
-          description: Sort order index of the first resource in the returned array.
-          type: integer
-      required:
-      - count
-      - data
-      - end_index
-      - is_more
-      - start_index
-      type: object
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
+        new_bundle_token:
+          description: Unique identifier of the new bundle to transition to.
+          maxLength: 36
           type: string
+        token:
+          description: Unique identifier of the credit account bundle transition.
+          type: string
+      required:
+      - new_bundle_token
       type: object
     AccountBundleTransitionResponse:
       description: The credit account bundle transition.
@@ -251,18 +230,39 @@ components:
       - transition_state
       - updated_time
       type: object
-    AccountBundleTransitionReq:
-      description: Information on the credit account bundle transition request.
+    AccountBundleTransitionsPage:
+      description: Return paginated account bundle transitions.
       properties:
-        new_bundle_token:
-          description: Unique identifier of the new bundle to transition to.
-          maxLength: 36
-          type: string
-        token:
-          description: Unique identifier of the credit account bundle transition.
-          type: string
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: Contains one or more account bundle transitions.
+          items:
+            $ref: '#/components/schemas/AccountBundleTransitionResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
       required:
-      - new_bundle_token
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
       type: object
   securitySchemes:
     mqAppAndAccessToken:

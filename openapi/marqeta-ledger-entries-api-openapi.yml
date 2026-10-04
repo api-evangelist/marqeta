@@ -1066,22 +1066,18 @@ paths:
       - Ledger Entries
 components:
   schemas:
-    OriginalCurrency:
-      description: Original Currency
-      properties:
-        amount:
-          description: original amount
-          example: 2
-          type: number
-        code:
-          description: Currency code, such as EUR or USD.
-          type: string
-      type: object
     WebhookEventResendContainerResponse:
       description: Contains information about a webhook event.
       properties:
         unused:
           description: Event notification that was resent to your webhook endpoint.
+          type: string
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
           type: string
       type: object
     LedgerEntry:
@@ -1272,11 +1268,21 @@ components:
       - token
       - type
       type: object
-    Error:
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
+      type: string
+    OriginalCurrency:
+      description: Original Currency
       properties:
+        amount:
+          description: original amount
+          example: 2
+          type: number
         code:
-          type: integer
-        message:
+          description: Currency code, such as EUR or USD.
           type: string
       type: object
     LedgerEntriesPage:
@@ -1307,12 +1313,6 @@ components:
       - is_more
       - start_index
       type: object
-    CurrencyCode:
-      default: USD
-      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
-      enum:
-      - USD
-      type: string
   securitySchemes:
     mqAppAndAccessToken:
       scheme: basic

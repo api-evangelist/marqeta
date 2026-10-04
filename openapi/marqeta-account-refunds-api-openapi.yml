@@ -337,35 +337,6 @@ paths:
       - Account Refunds
 components:
   schemas:
-    RefundStatus:
-      description: Current status of the refund.
-      enum:
-      - INITIATED
-      - PENDING
-      - PROCESSING
-      - SUBMITTED
-      - CANCELLED
-      - COMPLETED
-      - RETURNED
-      type: string
-    RefundTransitionRequest:
-      description: Request used to transition the status of a refund.
-      properties:
-        status:
-          $ref: '#/components/schemas/RefundStatus'
-        token:
-          description: Unique identifier of the refund status transition.
-          maxLength: 36
-          type: string
-      required:
-      - status
-      type: object
-    RefundType:
-      description: Type of refund.
-      enum:
-      - PAYMENT_REFUND
-      - CREDIT_BALANCE_REFUND
-      type: string
     RefundCreateRequest:
       description: Specifies the details of a refund creation request.
       properties:
@@ -398,12 +369,63 @@ components:
       - method
       - type
       type: object
+    RefundStatus:
+      description: Current status of the refund.
+      enum:
+      - INITIATED
+      - PENDING
+      - PROCESSING
+      - SUBMITTED
+      - CANCELLED
+      - COMPLETED
+      - RETURNED
+      type: string
     RefundMethod:
       description: Payment instrument used to issue the refund.
       enum:
       - ACH
       - CHECK
       type: string
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+      enum:
+      - USD
+      type: string
+    RefundsPage:
+      description: Returns paginated  list of refund resources.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: Contains one or more refunds on a credit account.
+          items:
+            $ref: '#/components/schemas/RefundResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
     RefundResponse:
       description: Detailed refund response object.
       properties:
@@ -456,46 +478,24 @@ components:
       - type
       - updated_time
       type: object
-    RefundsPage:
-      description: Returns paginated  list of refund resources.
-      properties:
-        count:
-          description: Number of resources returned.
-          type: integer
-        data:
-          description: Contains one or more refunds on a credit account.
-          items:
-            $ref: '#/components/schemas/RefundResponse'
-          type: array
-        end_index:
-          description: Sort order index of the last resource in the returned array.
-          type: integer
-        is_more:
-          description: A value of `true` indicates that more unreturned resources exist.
-          type: boolean
-        start_index:
-          description: Sort order index of the first resource in the returned array.
-          type: integer
-      required:
-      - count
-      - data
-      - end_index
-      - is_more
-      - start_index
-      type: object
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-      type: object
-    CurrencyCode:
-      default: USD
-      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+    RefundType:
+      description: Type of refund.
       enum:
-      - USD
+      - PAYMENT_REFUND
+      - CREDIT_BALANCE_REFUND
       type: string
+    RefundTransitionRequest:
+      description: Request used to transition the status of a refund.
+      properties:
+        status:
+          $ref: '#/components/schemas/RefundStatus'
+        token:
+          description: Unique identifier of the refund status transition.
+          maxLength: 36
+          type: string
+      required:
+      - status
+      type: object
   securitySchemes:
     mqAppAndAccessToken:
       scheme: basic

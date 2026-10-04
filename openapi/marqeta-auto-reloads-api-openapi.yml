@@ -197,6 +197,14 @@ paths:
       - auto reloads
 components:
   schemas:
+    OrderScope:
+      description: Defines the scope of the AutoReload, either GPA or MSA
+      properties:
+        gpa:
+          $ref: '#/components/schemas/gpa'
+        msa:
+          $ref: '#/components/schemas/msa'
+      type: object
     auto_reload_association:
       description: 'Specifies the scope of the auto reload.
 
@@ -240,6 +248,59 @@ components:
         gpa:
           $ref: '#/components/schemas/gpa'
       type: object
+    msa:
+      properties:
+        campaign_token:
+          type: string
+        reload_amount:
+          minimum: 0.01
+          type: number
+        trigger_amount:
+          minimum: 0.01
+          type: number
+      required:
+      - campaign_token
+      - reload_amount
+      - trigger_amount
+      type: object
+    auto_reload_response_model:
+      properties:
+        active:
+          default: true
+          type: boolean
+        association:
+          $ref: '#/components/schemas/auto_reload_association'
+        created_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        currency_code:
+          type: string
+        funding_source_address_token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        funding_source_token:
+          description: Required when order scope is GPA
+          maxLength: 36
+          minLength: 1
+          type: string
+        last_modified_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        order_scope:
+          $ref: '#/components/schemas/OrderScope'
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - created_time
+      - currency_code
+      - last_modified_time
+      - order_scope
+      type: object
     auto_reload_update_model:
       properties:
         active:
@@ -263,6 +324,25 @@ components:
           maxLength: 36
           minLength: 1
           type: string
+      type: object
+    AutoReloadListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/auto_reload_response_model'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
       type: object
     auto_reload_model:
       description: 'Contains information about an auto reload.
@@ -328,86 +408,6 @@ components:
       required:
       - currency_code
       - order_scope
-      type: object
-    OrderScope:
-      description: Defines the scope of the AutoReload, either GPA or MSA
-      properties:
-        gpa:
-          $ref: '#/components/schemas/gpa'
-        msa:
-          $ref: '#/components/schemas/msa'
-      type: object
-    msa:
-      properties:
-        campaign_token:
-          type: string
-        reload_amount:
-          minimum: 0.01
-          type: number
-        trigger_amount:
-          minimum: 0.01
-          type: number
-      required:
-      - campaign_token
-      - reload_amount
-      - trigger_amount
-      type: object
-    auto_reload_response_model:
-      properties:
-        active:
-          default: true
-          type: boolean
-        association:
-          $ref: '#/components/schemas/auto_reload_association'
-        created_time:
-          description: yyyy-MM-ddTHH:mm:ssZ
-          format: date-time
-          type: string
-        currency_code:
-          type: string
-        funding_source_address_token:
-          maxLength: 36
-          minLength: 1
-          type: string
-        funding_source_token:
-          description: Required when order scope is GPA
-          maxLength: 36
-          minLength: 1
-          type: string
-        last_modified_time:
-          description: yyyy-MM-ddTHH:mm:ssZ
-          format: date-time
-          type: string
-        order_scope:
-          $ref: '#/components/schemas/OrderScope'
-        token:
-          maxLength: 36
-          minLength: 1
-          type: string
-      required:
-      - created_time
-      - currency_code
-      - last_modified_time
-      - order_scope
-      type: object
-    AutoReloadListResponse:
-      properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/auto_reload_response_model'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
       type: object
     gpa:
       description: Defines the type of order.
