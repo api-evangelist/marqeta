@@ -647,68 +647,6 @@ paths:
       - Account Transitions
 components:
   schemas:
-    WebhookEventResendContainerResponse:
-      description: Contains information about a webhook event.
-      properties:
-        unused:
-          description: Event notification that was resent to your webhook endpoint.
-          type: string
-      type: object
-    AccountStatusEnum:
-      description: 'Status of the credit account.
-
-
-        *NOTE* `CHARGE_OFF` is not an allowable value for `original_status`.'
-      enum:
-      - UNACTIVATED
-      - ACTIVE
-      - SUSPENDED
-      - TERMINATED
-      - CHARGE_OFF
-      type: string
-    AccountTransitionResponse:
-      description: Information on the credit account transition.
-      properties:
-        account_token:
-          description: Unique identifier of the credit account for which to transition a status.
-          maxLength: 36
-          type: string
-        created_time:
-          description: Date and time when the transition record was created on Marqeta's credit platform, in UTC.
-          format: date-time
-          type: string
-        original_status:
-          $ref: '#/components/schemas/AccountStatusEnum'
-        status:
-          $ref: '#/components/schemas/AccountStatusEnum'
-        token:
-          description: Unique identifier of the credit account transition.
-          type: string
-      required:
-      - account_token
-      - created_time
-      - original_status
-      - status
-      - token
-      type: object
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-      type: object
-    AccountTransitionReq:
-      description: Information on the credit account transition.
-      properties:
-        status:
-          $ref: '#/components/schemas/AccountStatusEnum'
-        token:
-          description: Unique identifier of the credit account transition.
-          type: string
-      required:
-      - status
-      type: object
     AccountTransitionsPage:
       description: Return paginated account transitions.
       properties:
@@ -736,6 +674,68 @@ components:
       - is_more
       - start_index
       type: object
+    AccountTransitionResponse:
+      description: Information on the credit account transition.
+      properties:
+        account_token:
+          description: Unique identifier of the credit account for which to transition a status.
+          maxLength: 36
+          type: string
+        created_time:
+          description: Date and time when the transition record was created on Marqeta's credit platform, in UTC.
+          format: date-time
+          type: string
+        original_status:
+          $ref: '#/components/schemas/AccountStatusEnum'
+        status:
+          $ref: '#/components/schemas/AccountStatusEnum'
+        token:
+          description: Unique identifier of the credit account transition.
+          type: string
+      required:
+      - account_token
+      - created_time
+      - original_status
+      - status
+      - token
+      type: object
+    WebhookEventResendContainerResponse:
+      description: Contains information about a webhook event.
+      properties:
+        unused:
+          description: Event notification that was resent to your webhook endpoint.
+          type: string
+      type: object
+    AccountTransitionReq:
+      description: Information on the credit account transition.
+      properties:
+        status:
+          $ref: '#/components/schemas/AccountStatusEnum'
+        token:
+          description: Unique identifier of the credit account transition.
+          type: string
+      required:
+      - status
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    AccountStatusEnum:
+      description: 'Status of the credit account.
+
+
+        *NOTE* `CHARGE_OFF` is not an allowable value for `original_status`.'
+      enum:
+      - UNACTIVATED
+      - ACTIVE
+      - SUSPENDED
+      - TERMINATED
+      - CHARGE_OFF
+      type: string
   securitySchemes:
     mqAppAndAccessToken:
       scheme: basic

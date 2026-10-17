@@ -193,6 +193,33 @@ components:
       required:
       - new_bundle_token
       type: object
+    AccountBundleTransitionsPage:
+      description: Return paginated account bundle transitions.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: Contains one or more account bundle transitions.
+          items:
+            $ref: '#/components/schemas/AccountBundleTransitionResponse'
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
     AccountBundleTransitionResponse:
       description: The credit account bundle transition.
       properties:
@@ -229,33 +256,6 @@ components:
       - token
       - transition_state
       - updated_time
-      type: object
-    AccountBundleTransitionsPage:
-      description: Return paginated account bundle transitions.
-      properties:
-        count:
-          description: Number of resources returned.
-          type: integer
-        data:
-          description: Contains one or more account bundle transitions.
-          items:
-            $ref: '#/components/schemas/AccountBundleTransitionResponse'
-          type: array
-        end_index:
-          description: Sort order index of the last resource in the returned array.
-          type: integer
-        is_more:
-          description: A value of `true` indicates that more unreturned resources exist.
-          type: boolean
-        start_index:
-          description: Sort order index of the first resource in the returned array.
-          type: integer
-      required:
-      - count
-      - data
-      - end_index
-      - is_more
-      - start_index
       type: object
     Error:
       properties:

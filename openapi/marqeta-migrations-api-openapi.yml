@@ -192,6 +192,20 @@ components:
         message:
           type: string
       type: object
+    MigrationResponse:
+      properties:
+        success:
+          type: boolean
+      type: object
+    CalculatedBalanceResponse:
+      properties:
+        available_credit:
+          description: the latest balance of the account from the migrated program
+          type: number
+        current_balance:
+          description: the latest balance of the account from the migrated program
+          type: number
+      type: object
     SyncStatementAssetReq:
       properties:
         asset_token:
@@ -204,20 +218,6 @@ components:
       required:
       - asset_token
       - short_code
-      type: object
-    CalculatedBalanceResponse:
-      properties:
-        available_credit:
-          description: the latest balance of the account from the migrated program
-          type: number
-        current_balance:
-          description: the latest balance of the account from the migrated program
-          type: number
-      type: object
-    MigrationResponse:
-      properties:
-        success:
-          type: boolean
       type: object
   securitySchemes:
     mqAppAndAccessToken:

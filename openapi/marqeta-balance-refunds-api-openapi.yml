@@ -84,6 +84,33 @@ paths:
       - Balance Refunds
 components:
   schemas:
+    PaymentStatus:
+      description: Current status of the payment or refund.
+      enum:
+      - INITIATED
+      - PENDING
+      - PROCESSING
+      - SUBMITTED
+      - CANCELLED
+      - COMPLETED
+      - RETURNED
+      - REFUNDED
+      - SYS_ERROR
+      - ACH_ERROR
+      type: string
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    RefundMethod:
+      description: Payment instrument used to issue the refund.
+      enum:
+      - ACH
+      - CHECK
+      type: string
     AccountCreditBalanceRefundReq:
       description: Contains details on a credit balance refund.
       properties:
@@ -112,25 +139,6 @@ components:
       - description
       - method
       type: object
-    RefundMethod:
-      description: Payment instrument used to issue the refund.
-      enum:
-      - ACH
-      - CHECK
-      type: string
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-      type: object
-    CurrencyCode:
-      default: USD
-      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
-      enum:
-      - USD
-      type: string
     AccountCreditBalanceRefundResponse:
       description: Contains details on a credit balance refund.
       properties:
@@ -177,19 +185,11 @@ components:
       - token
       - updated_time
       type: object
-    PaymentStatus:
-      description: Current status of the payment or refund.
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
       enum:
-      - INITIATED
-      - PENDING
-      - PROCESSING
-      - SUBMITTED
-      - CANCELLED
-      - COMPLETED
-      - RETURNED
-      - REFUNDED
-      - SYS_ERROR
-      - ACH_ERROR
+      - USD
       type: string
   securitySchemes:
     mqAppAndAccessToken:

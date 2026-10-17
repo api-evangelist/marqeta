@@ -111,35 +111,6 @@ paths:
       - cardholder balances
 components:
   schemas:
-    CurrencyBalance:
-      properties:
-        available_balance:
-          type: number
-        cached_balance:
-          type: number
-        credit_balance:
-          type: number
-        impacted_amount:
-          type: number
-        ledger_balance:
-          type: number
-        pending_credits:
-          type: number
-      type: object
-    link:
-      properties:
-        href:
-          readOnly: true
-          type: string
-        method:
-          type: string
-        rel:
-          type: string
-      required:
-      - href
-      - method
-      - rel
-      type: object
     user_accounts_balance_response:
       properties:
         account_balances:
@@ -175,6 +146,20 @@ components:
           type: string
         type:
           type: string
+      type: object
+    link:
+      properties:
+        href:
+          readOnly: true
+          type: string
+        method:
+          type: string
+        rel:
+          type: string
+      required:
+      - href
+      - method
+      - rel
       type: object
     cardholder_balances:
       properties:
@@ -236,6 +221,21 @@ components:
       - last_updated_time
       - ledger_balance
       - pending_credits
+      type: object
+    CurrencyBalance:
+      properties:
+        available_balance:
+          type: number
+        cached_balance:
+          type: number
+        credit_balance:
+          type: number
+        impacted_amount:
+          type: number
+        ledger_balance:
+          type: number
+        pending_credits:
+          type: number
       type: object
   securitySchemes:
     mqAppAndAccessToken:

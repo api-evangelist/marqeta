@@ -384,6 +384,138 @@ paths:
       - direct deposit accounts
 components:
   schemas:
+    DepositAccountUpdateRequest:
+      properties:
+        allow_immediate_credit:
+          default: false
+          type: boolean
+      type: object
+    direct_deposit_account_transition_response:
+      properties:
+        account_token:
+          maxLength: 36
+          minLength: 36
+          type: string
+        business_token:
+          maxLength: 36
+          minLength: 36
+          type: string
+        channel:
+          maxLength: 10
+          minLength: 6
+          type: string
+        created_time:
+          description: yyyy-MM-ddTHH:mm:ssZ
+          format: date-time
+          type: string
+        reason:
+          maxLength: 255
+          minLength: 0
+          type: string
+        state:
+          maxLength: 10
+          minLength: 6
+          type: string
+        token:
+          maxLength: 36
+          minLength: 36
+          type: string
+        user_token:
+          maxLength: 36
+          minLength: 36
+          type: string
+      required:
+      - account_token
+      - business_token
+      - channel
+      - created_time
+      - reason
+      - state
+      - token
+      - user_token
+      type: object
+    DirectDepositAccountListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/direct_deposit_account_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    CustomerDueDiligenceUpdateRequest:
+      properties:
+        answer:
+          type: string
+      type: object
+    DirectDepositAccountTransitionRequest:
+      properties:
+        account_token:
+          maxLength: 36
+          minLength: 1
+          type: string
+        channel:
+          enum:
+          - API
+          - IVR
+          - FRAUD
+          - ADMIN
+          - SYSTEM
+          - NETWORK
+          - PROD_SUPPORT
+          - UNSUPPORTED
+          type: string
+        reason:
+          maxLength: 255
+          minLength: 1
+          type: string
+        state:
+          enum:
+          - ACTIVE
+          - SUSPENDED
+          - TERMINATED
+          - UNSUPPORTED
+          - UNACTIVATED
+          - LIMITED
+          type: string
+        token:
+          type: string
+      required:
+      - account_token
+      - channel
+      type: object
+    customer_due_diligence_response:
+      properties:
+        account_token:
+          type: string
+        answer:
+          type: string
+        bank:
+          type: string
+        question:
+          type: string
+        token:
+          type: string
+        type:
+          type: string
+      required:
+      - account_token
+      - answer
+      - bank
+      - question
+      - token
+      - type
+      type: object
     direct_deposit_account_response:
       properties:
         account_number:
@@ -436,72 +568,6 @@ components:
       - token
       - user_token
       type: object
-    customer_due_diligence_response:
-      properties:
-        account_token:
-          type: string
-        answer:
-          type: string
-        bank:
-          type: string
-        question:
-          type: string
-        token:
-          type: string
-        type:
-          type: string
-      required:
-      - account_token
-      - answer
-      - bank
-      - question
-      - token
-      - type
-      type: object
-    direct_deposit_account_transition_response:
-      properties:
-        account_token:
-          maxLength: 36
-          minLength: 36
-          type: string
-        business_token:
-          maxLength: 36
-          minLength: 36
-          type: string
-        channel:
-          maxLength: 10
-          minLength: 6
-          type: string
-        created_time:
-          description: yyyy-MM-ddTHH:mm:ssZ
-          format: date-time
-          type: string
-        reason:
-          maxLength: 255
-          minLength: 0
-          type: string
-        state:
-          maxLength: 10
-          minLength: 6
-          type: string
-        token:
-          maxLength: 36
-          minLength: 36
-          type: string
-        user_token:
-          maxLength: 36
-          minLength: 36
-          type: string
-      required:
-      - account_token
-      - business_token
-      - channel
-      - created_time
-      - reason
-      - state
-      - token
-      - user_token
-      type: object
     DirectDepositAccountRequest:
       properties:
         allow_immediate_credit:
@@ -531,72 +597,6 @@ components:
           maxLength: 36
           minLength: 1
           type: string
-      type: object
-    DirectDepositAccountListResponse:
-      properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/direct_deposit_account_response'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
-      type: object
-    DirectDepositAccountTransitionRequest:
-      properties:
-        account_token:
-          maxLength: 36
-          minLength: 1
-          type: string
-        channel:
-          enum:
-          - API
-          - IVR
-          - FRAUD
-          - ADMIN
-          - SYSTEM
-          - NETWORK
-          - PROD_SUPPORT
-          - UNSUPPORTED
-          type: string
-        reason:
-          maxLength: 255
-          minLength: 1
-          type: string
-        state:
-          enum:
-          - ACTIVE
-          - SUSPENDED
-          - TERMINATED
-          - UNSUPPORTED
-          - UNACTIVATED
-          - LIMITED
-          type: string
-        token:
-          type: string
-      required:
-      - account_token
-      - channel
-      type: object
-    CustomerDueDiligenceUpdateRequest:
-      properties:
-        answer:
-          type: string
-      type: object
-    DepositAccountUpdateRequest:
-      properties:
-        allow_immediate_credit:
-          default: false
-          type: boolean
       type: object
     CustomerDueDiligenceRequest:
       properties:

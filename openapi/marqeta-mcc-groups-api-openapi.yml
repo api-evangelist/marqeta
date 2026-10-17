@@ -165,10 +165,20 @@ paths:
       - mcc groups
 components:
   schemas:
-    MCCConfig:
+    hold_increase:
       properties:
-        authorization_controls:
-          $ref: '#/components/schemas/AuthControls'
+        type:
+          default: AMOUNT
+          enum:
+          - AMOUNT
+          - PERCENT
+          - UP_TO_LIMIT
+          type: string
+        value:
+          type: number
+      required:
+      - type
+      - value
       type: object
     MCCGroupListResponse:
       properties:
@@ -205,6 +215,15 @@ components:
         name:
           type: string
       type: object
+    AuthControls:
+      properties:
+        hold_expiration_days:
+          default: 7
+          format: int32
+          type: integer
+        hold_increase:
+          $ref: '#/components/schemas/hold_increase'
+      type: object
     mcc_group_model:
       properties:
         active:
@@ -231,29 +250,10 @@ components:
       - mccs
       - name
       type: object
-    hold_increase:
+    MCCConfig:
       properties:
-        type:
-          default: AMOUNT
-          enum:
-          - AMOUNT
-          - PERCENT
-          - UP_TO_LIMIT
-          type: string
-        value:
-          type: number
-      required:
-      - type
-      - value
-      type: object
-    AuthControls:
-      properties:
-        hold_expiration_days:
-          default: 7
-          format: int32
-          type: integer
-        hold_increase:
-          $ref: '#/components/schemas/hold_increase'
+        authorization_controls:
+          $ref: '#/components/schemas/AuthControls'
       type: object
   securitySchemes:
     mqAppAndAccessToken:

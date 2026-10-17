@@ -1066,6 +1066,45 @@ paths:
       - Ledger Entries
 components:
   schemas:
+    OriginalCurrency:
+      description: Original Currency
+      properties:
+        amount:
+          description: original amount
+          example: 2
+          type: number
+        code:
+          description: Currency code, such as EUR or USD.
+          type: string
+      type: object
+    LedgerEntriesPage:
+      description: Return filtered transactions.
+      properties:
+        count:
+          description: Number of resources returned.
+          type: integer
+        data:
+          description: Contains one or more ledger entries on a credit account.
+          items:
+            $ref: '#/components/schemas/LedgerEntry'
+          minItems: 1
+          type: array
+        end_index:
+          description: Sort order index of the last resource in the returned array.
+          type: integer
+        is_more:
+          description: A value of `true` indicates that more unreturned resources exist.
+          type: boolean
+        start_index:
+          description: Sort order index of the first resource in the returned array.
+          type: integer
+      required:
+      - count
+      - data
+      - end_index
+      - is_more
+      - start_index
+      type: object
     WebhookEventResendContainerResponse:
       description: Contains information about a webhook event.
       properties:
@@ -1274,45 +1313,6 @@ components:
       enum:
       - USD
       type: string
-    OriginalCurrency:
-      description: Original Currency
-      properties:
-        amount:
-          description: original amount
-          example: 2
-          type: number
-        code:
-          description: Currency code, such as EUR or USD.
-          type: string
-      type: object
-    LedgerEntriesPage:
-      description: Return filtered transactions.
-      properties:
-        count:
-          description: Number of resources returned.
-          type: integer
-        data:
-          description: Contains one or more ledger entries on a credit account.
-          items:
-            $ref: '#/components/schemas/LedgerEntry'
-          minItems: 1
-          type: array
-        end_index:
-          description: Sort order index of the last resource in the returned array.
-          type: integer
-        is_more:
-          description: A value of `true` indicates that more unreturned resources exist.
-          type: boolean
-        start_index:
-          description: Sort order index of the first resource in the returned array.
-          type: integer
-      required:
-      - count
-      - data
-      - end_index
-      - is_more
-      - start_index
-      type: object
   securitySchemes:
     mqAppAndAccessToken:
       scheme: basic

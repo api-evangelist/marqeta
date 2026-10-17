@@ -157,73 +157,6 @@ paths:
       - account holder groups
 components:
   schemas:
-    AccountHolderGroupListResponse:
-      properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/account_holder_group_response'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
-      type: object
-    pre_kyc_controls:
-      properties:
-        balance_max:
-          description: Minimum is 0
-          minimum: 0
-          type: number
-        cash_access_enabled:
-          default: false
-          type: boolean
-        enable_non_program_loads:
-          default: false
-          type: boolean
-        international_enabled:
-          default: false
-          type: boolean
-        is_reloadable_pre_kyc:
-          default: false
-          type: boolean
-      type: object
-    account_holder_group_response:
-      properties:
-        config:
-          $ref: '#/components/schemas/account_holder_group_config'
-        name:
-          description: 40 char max
-          type: string
-        token:
-          description: 36 char max
-          type: string
-      type: object
-    account_holder_group_config:
-      properties:
-        is_reloadable:
-          default: false
-          type: boolean
-        kyc_required:
-          enum:
-          - ALWAYS
-          - CONDITIONAL
-          - NEVER
-          type: string
-        pre_kyc_controls:
-          $ref: '#/components/schemas/pre_kyc_controls'
-        real_time_fee_group_token:
-          maxLength: 36
-          minLength: 0
-          type: string
-      type: object
     account_holder_group_request:
       properties:
         config:
@@ -244,6 +177,73 @@ components:
         name:
           maxLength: 40
           minLength: 1
+          type: string
+      type: object
+    account_holder_group_response:
+      properties:
+        config:
+          $ref: '#/components/schemas/account_holder_group_config'
+        name:
+          description: 40 char max
+          type: string
+        token:
+          description: 36 char max
+          type: string
+      type: object
+    pre_kyc_controls:
+      properties:
+        balance_max:
+          description: Minimum is 0
+          minimum: 0
+          type: number
+        cash_access_enabled:
+          default: false
+          type: boolean
+        enable_non_program_loads:
+          default: false
+          type: boolean
+        international_enabled:
+          default: false
+          type: boolean
+        is_reloadable_pre_kyc:
+          default: false
+          type: boolean
+      type: object
+    AccountHolderGroupListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/account_holder_group_response'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    account_holder_group_config:
+      properties:
+        is_reloadable:
+          default: false
+          type: boolean
+        kyc_required:
+          enum:
+          - ALWAYS
+          - CONDITIONAL
+          - NEVER
+          type: string
+        pre_kyc_controls:
+          $ref: '#/components/schemas/pre_kyc_controls'
+        real_time_fee_group_token:
+          maxLength: 36
+          minLength: 0
           type: string
       type: object
   securitySchemes:

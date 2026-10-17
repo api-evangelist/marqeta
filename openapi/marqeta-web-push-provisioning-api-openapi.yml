@@ -91,14 +91,17 @@ paths:
       - web push provisioning
 components:
   schemas:
-    request_for_wpp_parameters:
+    web_push_provisioning:
       properties:
-        card_token:
-          description: Unique identifier of the card resource.
-          example: 5855opl9-abcc-4cb7-a330-xyze5799ea5
+        wpp_apple_card_template_id:
+          description: Identifier that Apple uses to identify the program to process the request for.
           type: string
-      required:
-      - card_token
+        wpp_apple_partner_id:
+          description: Identifier that Apple uses to identify the program to provide the correct card art for.
+          type: string
+        wpp_google_piaid:
+          description: Identifier that Google uses to identify the program to process the request for and to provide the correct card art for.
+          type: string
       type: object
     error_message_from_web_push_provisioning_request:
       properties:
@@ -114,17 +117,14 @@ components:
       - error_code
       - error_message
       type: object
-    web_push_provisioning:
+    request_for_wpp_parameters:
       properties:
-        wpp_apple_card_template_id:
-          description: Identifier that Apple uses to identify the program to process the request for.
+        card_token:
+          description: Unique identifier of the card resource.
+          example: 5855opl9-abcc-4cb7-a330-xyze5799ea5
           type: string
-        wpp_apple_partner_id:
-          description: Identifier that Apple uses to identify the program to provide the correct card art for.
-          type: string
-        wpp_google_piaid:
-          description: Identifier that Google uses to identify the program to process the request for and to provide the correct card art for.
-          type: string
+      required:
+      - card_token
       type: object
   securitySchemes:
     mqAppAndAccessToken:

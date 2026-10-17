@@ -72,6 +72,18 @@ components:
       required:
       - message
       type: object
+    UnauthorizedError:
+      properties:
+        error_code:
+          enum:
+          - '401'
+          type: string
+        error_message:
+          type: string
+      required:
+      - error_code
+      - error_message
+      type: object
     ForbiddenError:
       properties:
         error_code:
@@ -120,18 +132,6 @@ components:
         error_code:
           enum:
           - '400'
-          type: string
-        error_message:
-          type: string
-      required:
-      - error_code
-      - error_message
-      type: object
-    UnauthorizedError:
-      properties:
-        error_code:
-          enum:
-          - '401'
           type: string
         error_message:
           type: string

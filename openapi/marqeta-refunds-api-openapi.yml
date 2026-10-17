@@ -84,30 +84,6 @@ paths:
       - Refunds
 components:
   schemas:
-    RefundStatus:
-      description: Current status of the refund.
-      enum:
-      - INITIATED
-      - PENDING
-      - PROCESSING
-      - SUBMITTED
-      - CANCELLED
-      - COMPLETED
-      - RETURNED
-      type: string
-    RefundMethod:
-      description: Payment instrument used to issue the refund.
-      enum:
-      - ACH
-      - CHECK
-      type: string
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-      type: object
     SimulateRefundTransitionRequest:
       description: Specifies the details of simulate refund transition request .
       properties:
@@ -120,11 +96,35 @@ components:
       - status
       - token
       type: object
-    CurrencyCode:
-      default: USD
-      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
+    RefundStatus:
+      description: Current status of the refund.
       enum:
-      - USD
+      - INITIATED
+      - PENDING
+      - PROCESSING
+      - SUBMITTED
+      - CANCELLED
+      - COMPLETED
+      - RETURNED
+      type: string
+    RefundType:
+      description: Type of refund.
+      enum:
+      - PAYMENT_REFUND
+      - CREDIT_BALANCE_REFUND
+      type: string
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    RefundMethod:
+      description: Payment instrument used to issue the refund.
+      enum:
+      - ACH
+      - CHECK
       type: string
     RefundResponse:
       description: Detailed refund response object.
@@ -178,11 +178,11 @@ components:
       - type
       - updated_time
       type: object
-    RefundType:
-      description: Type of refund.
+    CurrencyCode:
+      default: USD
+      description: Valid three-digit link:https://www.iso.org/iso-4217-currency-codes.html[ISO 4217 currency code, window="_blank"].
       enum:
-      - PAYMENT_REFUND
-      - CREDIT_BALANCE_REFUND
+      - USD
       type: string
   securitySchemes:
     mqAppAndAccessToken:

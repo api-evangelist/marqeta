@@ -136,25 +136,6 @@ paths:
       - accepted countries
 components:
   schemas:
-    AcceptedCountriesListResponse:
-      properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/accepted_countries_model'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
-      type: object
     accepted_countries_model:
       properties:
         country_codes:
@@ -180,6 +161,25 @@ components:
       - country_codes
       - is_whitelist
       - name
+      type: object
+    AcceptedCountriesListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/accepted_countries_model'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
       type: object
   securitySchemes:
     mqAppAndAccessToken:

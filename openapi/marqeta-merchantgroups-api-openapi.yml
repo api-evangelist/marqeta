@@ -164,6 +164,44 @@ paths:
       - merchantgroups
 components:
   schemas:
+    merchant_group_update_request:
+      properties:
+        active:
+          default: false
+          type: boolean
+        mids:
+          items:
+            type: string
+          maxItems: 4000
+          minItems: 1
+          type: array
+        name:
+          maxLength: 40
+          minLength: 1
+          type: string
+      type: object
+    merchant_group_request:
+      properties:
+        active:
+          default: false
+          type: boolean
+        mids:
+          items:
+            type: string
+          maxItems: 4000
+          minItems: 1
+          type: array
+        name:
+          maxLength: 40
+          minLength: 1
+          type: string
+        token:
+          maxLength: 36
+          minLength: 1
+          type: string
+      required:
+      - name
+      type: object
     MerchantGroupListResponse:
       properties:
         count:
@@ -202,44 +240,6 @@ components:
           type: string
         token:
           type: string
-      type: object
-    merchant_group_update_request:
-      properties:
-        active:
-          default: false
-          type: boolean
-        mids:
-          items:
-            type: string
-          maxItems: 4000
-          minItems: 1
-          type: array
-        name:
-          maxLength: 40
-          minLength: 1
-          type: string
-      type: object
-    merchant_group_request:
-      properties:
-        active:
-          default: false
-          type: boolean
-        mids:
-          items:
-            type: string
-          maxItems: 4000
-          minItems: 1
-          type: array
-        name:
-          maxLength: 40
-          minLength: 1
-          type: string
-        token:
-          maxLength: 36
-          minLength: 1
-          type: string
-      required:
-      - name
       type: object
   securitySchemes:
     mqAppAndAccessToken:

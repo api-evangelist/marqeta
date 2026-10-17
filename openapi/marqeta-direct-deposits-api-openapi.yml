@@ -345,115 +345,11 @@ paths:
       - direct deposits
 components:
   schemas:
-    DepositDepositResponse:
-      description: Contains information about a direct deposit.
+    DepositAccountUpdateRequest:
       properties:
-        amount:
-          description: Amount being debited or credited.
-          type: number
-        business_token:
-          description: The unique identifier of the business account holder.
-          type: string
-        company_discretionary_data:
-          description: Company-specific data provided by the direct deposit originator.
-          type: string
-        company_entry_description:
-          description: Company-specific data provided by the direct deposit originator.
-          type: string
-        company_identification:
-          description: Alphanumeric code that identifies the direct deposit originator.
-          type: string
-        company_name:
-          description: Name of the direct deposit originator.
-          type: string
-        created_time:
-          description: Date and time when the direct deposit account was created.
-          format: date-time
-          type: string
-        direct_deposit_account_token:
-          description: The unique identifier of the direct deposit account.
-          type: string
-        individual_identification_number:
-          description: Accounting number by which the recipient is known to the direct deposit originator.
-          type: string
-        individual_name:
-          description: Name of the direct deposit recipient.
-          type: string
-        last_modified_time:
-          description: Date and time when the direct deposit account was last modified.
-          format: date-time
-          type: string
-        settlement_date:
-          description: Date and time when the credit or debit is applied.
-          format: date-time
-          type: string
-        standard_entry_class_code:
-          description: Three-letter code identifying the type of entry.
-          type: string
-        state:
-          description: Current status of the direct deposit record.
-          enum:
-          - PENDING
-          - APPLIED
-          - REVERSED
-          - REJECTED
-          type: string
-        state_reason:
-          description: Explanation for why the direct deposit record is in the current state.
-          type: string
-        state_reason_code:
-          description: Standard code describing the reason for the current state.
-          type: string
-        token:
-          description: The unique identifier of the direct deposit record.
-          type: string
-        type:
-          description: Determines whether funds are being debited from or credited to the account.
-          enum:
-          - CREDIT
-          - DEBIT
-          type: string
-        user_token:
-          description: The unique identifier of the user account holder.
-          type: string
-      type: object
-    DirectDepositTransitionListResponse:
-      properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/DirectDepositTransitionResponse'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
+        allow_immediate_credit:
           default: false
           type: boolean
-        start_index:
-          format: int32
-          type: integer
-      type: object
-    DirectDepositListResponse:
-      properties:
-        count:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/DepositDepositResponse'
-          type: array
-        end_index:
-          format: int32
-          type: integer
-        is_more:
-          default: false
-          type: boolean
-        start_index:
-          format: int32
-          type: integer
       type: object
     DirectDepositTransitionResponse:
       properties:
@@ -492,12 +388,6 @@ components:
           type: string
         type:
           type: string
-      type: object
-    DepositAccountUpdateRequest:
-      properties:
-        allow_immediate_credit:
-          default: false
-          type: boolean
       type: object
     DepositAccountResponse:
       properties:
@@ -570,6 +460,116 @@ components:
       - direct_deposit_token
       - reason
       - state
+      type: object
+    DirectDepositTransitionListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/DirectDepositTransitionResponse'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    DirectDepositListResponse:
+      properties:
+        count:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/DepositDepositResponse'
+          type: array
+        end_index:
+          format: int32
+          type: integer
+        is_more:
+          default: false
+          type: boolean
+        start_index:
+          format: int32
+          type: integer
+      type: object
+    DepositDepositResponse:
+      description: Contains information about a direct deposit.
+      properties:
+        amount:
+          description: Amount being debited or credited.
+          type: number
+        business_token:
+          description: The unique identifier of the business account holder.
+          type: string
+        company_discretionary_data:
+          description: Company-specific data provided by the direct deposit originator.
+          type: string
+        company_entry_description:
+          description: Company-specific data provided by the direct deposit originator.
+          type: string
+        company_identification:
+          description: Alphanumeric code that identifies the direct deposit originator.
+          type: string
+        company_name:
+          description: Name of the direct deposit originator.
+          type: string
+        created_time:
+          description: Date and time when the direct deposit account was created.
+          format: date-time
+          type: string
+        direct_deposit_account_token:
+          description: The unique identifier of the direct deposit account.
+          type: string
+        individual_identification_number:
+          description: Accounting number by which the recipient is known to the direct deposit originator.
+          type: string
+        individual_name:
+          description: Name of the direct deposit recipient.
+          type: string
+        last_modified_time:
+          description: Date and time when the direct deposit account was last modified.
+          format: date-time
+          type: string
+        settlement_date:
+          description: Date and time when the credit or debit is applied.
+          format: date-time
+          type: string
+        standard_entry_class_code:
+          description: Three-letter code identifying the type of entry.
+          type: string
+        state:
+          description: Current status of the direct deposit record.
+          enum:
+          - PENDING
+          - APPLIED
+          - REVERSED
+          - REJECTED
+          type: string
+        state_reason:
+          description: Explanation for why the direct deposit record is in the current state.
+          type: string
+        state_reason_code:
+          description: Standard code describing the reason for the current state.
+          type: string
+        token:
+          description: The unique identifier of the direct deposit record.
+          type: string
+        type:
+          description: Determines whether funds are being debited from or credited to the account.
+          enum:
+          - CREDIT
+          - DEBIT
+          type: string
+        user_token:
+          description: The unique identifier of the user account holder.
+          type: string
       type: object
   securitySchemes:
     mqAppAndAccessToken:
